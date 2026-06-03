@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "id": "github-example-project-42",
+      "repository": {
+        "full_name": "example/project"
+      },
+      "number": 42,
+      "title": "Reduce flaky integration test timeout",
+      "html_url": "https://github.com/example/project/issues/42",
+      "amount_usd": 250,
+      "language": "python",
+      "labels": [
+        {"name": "ci"},
+        {"name": "tests"},
+        {"name": "good first issue"}
+      ],
+      "body": "Steps to reproduce are included in the failing workflow summary.",
+      "contribution_guidelines_url": "https://github.com/example/project/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "id": "github-example-toolkit-17",
+      "repo": "example/toolkit",
+      "number": 17,
+      "title": "Rewrite broad plugin architecture",
+      "html_url": "https://github.com/example/toolkit/issues/17",
+      "amount_usd": 1500,
+      "language": "typescript",
+      "labels": [
+        {"name": "architecture"},
+        {"name": "bounty"}
+      ]
+    }
+  ]
+}

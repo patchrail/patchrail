@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 import unittest
 
 
@@ -94,6 +96,74 @@ class PatchRailFundedIssuesTests(unittest.TestCase):
 
         self.assertEqual(proc.returncode, 1)
         self.assertIn("Unknown funded issue", proc.stderr)
+
+    def test_funded_issues_import_normalizes_local_provider_export(self) -> None:
+        proc = run_patchrail(
+            [
+                "funded-issues",
+                "import",
+                "--provider",
+                "github",
+                "--source",
+                "examples/funded-issues-readonly/provider-github-export.json",
+                "--format",
+                "json",
+            ]
+        )
+
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["schema_version"], "patchrail.funded_issues.v1")
+        self.assertEqual(payload["read_only"], True)
+        self.assertEqual(payload["import_source"]["provider"], "github")
+        self.assertEqual(payload["import_source"]["local_file_only"], True)
+        self.assertEqual(payload["import_source"]["records_loaded"], 2)
+        self.assertEqual(payload["requirements"]["network_required"], False)
+        self.assertEqual(payload["requirements"]["github_write_permission_required"], False)
+        safe_issue = payload["issues"][0]
+        self.assertEqual(safe_issue["reference"], "example/project#42")
+        self.assertEqual(safe_issue["funding"]["display"], "250 USD")
+        self.assertEqual(safe_issue["risk_level"], "low")
+        self.assertIn("contribution guidelines linked", safe_issue["contribution_signals"])
+        risky_issue = payload["issues"][1]
+        self.assertEqual(risky_issue["reference"], "example/toolkit#17")
+        self.assertEqual(risky_issue["risk_level"], "high")
+        self.assertIn("ambiguous_scope", risky_issue["risk_flags"])
+        self.assertIn("automatic_issue_comments", payload["blocked_actions"])
+
+    def test_imported_provider_export_can_feed_safe_only_list(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            normalized = Path(tmp) / "funded-issues.json"
+            import_proc = run_patchrail(
+                [
+                    "funded-issues",
+                    "import",
+                    "--provider",
+                    "github",
+                    "--source",
+                    "examples/funded-issues-readonly/provider-github-export.json",
+                    "--out",
+                    str(normalized),
+                ]
+            )
+            self.assertEqual(import_proc.returncode, 0, import_proc.stderr)
+
+            list_proc = run_patchrail(
+                [
+                    "funded-issues",
+                    "list",
+                    "--source",
+                    str(normalized),
+                    "--format",
+                    "json",
+                ]
+            )
+
+        self.assertEqual(list_proc.returncode, 0, list_proc.stderr)
+        payload = json.loads(list_proc.stdout)
+        self.assertEqual(payload["total_loaded"], 2)
+        self.assertEqual(payload["total_returned"], 1)
+        self.assertEqual(payload["issues"][0]["reference"], "example/project#42")
 
 
 if __name__ == "__main__":

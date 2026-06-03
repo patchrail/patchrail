@@ -45,9 +45,25 @@ No comment, pull request, claim or contact action happens from these commands.
 The default list view filters out high-risk records. `--include-risky` only
 changes local output visibility; it still does not permit write actions.
 
+Provider exports can be normalized from local files:
+
+```bash
+patchrail funded-issues import \
+  --provider github \
+  --source examples/funded-issues-readonly/provider-github-export.json \
+  --format json \
+  --out .patchrail-funded-issues.json
+```
+
+Supported provider export labels are `algora`, `github`, `openpledge`, and
+`polar`. This is an offline import path: PatchRail reads a JSON file already on
+disk and converts it into `patchrail.funded_issues.v1`. It does not fetch
+provider APIs, scrape websites, require credentials, or request GitHub write
+permission.
+
 ## Local Source Contract
 
-The first public implementation reads a local JSON file only. It does not fetch
+The public implementation reads local JSON files only. It does not fetch
 platform APIs, scrape websites, call models, require billing, or ask for GitHub
 write permissions.
 

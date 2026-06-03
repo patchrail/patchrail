@@ -48,7 +48,10 @@
 ## v0.4
 
 - Experimental `patchrail funded-issues list/explain` over local JSON metadata.
+- Offline `patchrail funded-issues import` normalizes local provider exports for
+  `algora`, `github`, `openpledge`, and `polar` into PatchRail's read-only schema.
 - Safe-only filtering by default, with `--include-risky` limited to local output visibility.
 - Contribution etiquette and anti-abuse guardrails.
 - Risk explanations for ambiguous scope, spam-attractive work, and missing contribution guidelines.
-- No automatic claims, comments, pull requests, maintainer contact, external API fetch, or model call.
+- No automatic claims, comments, pull requests, maintainer contact, external API fetch, scraping,
+  credential use, or model call.

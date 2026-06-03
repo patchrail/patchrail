@@ -150,6 +150,28 @@ def load_funded_issues(source: Path) -> list[FundedIssue]:
     return issues
 
 
+def funded_issues_payload(
+    issues: list[FundedIssue],
+    *,
+    import_source: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    payload: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "read_only": True,
+        "blocked_actions": BLOCKED_ACTIONS,
+        "issues": [issue.to_dict() for issue in issues],
+        "requirements": {
+            "network_required": False,
+            "github_write_permission_required": False,
+            "external_model_required": False,
+            "billing_required": False,
+        },
+    }
+    if import_source:
+        payload["import_source"] = import_source
+    return payload
+
+
 def summarize_issues(
     issues: list[FundedIssue],
     *,

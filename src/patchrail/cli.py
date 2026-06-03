@@ -9,7 +9,13 @@ from typing import Any
 
 from patchrail import __version__
 from patchrail.ci import classify_ci_log, redact_ci_log
-from patchrail.funded_issues import explain_issue, load_funded_issues, summarize_issues
+from patchrail.funded_issues import (
+    SUPPORTED_PROVIDERS,
+    explain_issue,
+    import_provider_export,
+    load_funded_issues,
+    summarize_issues,
+)
 from patchrail.queue import (
     DEFAULT_QUEUE_PATH,
     add_proposal,
@@ -789,6 +795,47 @@ def _render_funded_issue_explain_markdown(payload: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _render_funded_issues_import_markdown(payload: dict[str, Any]) -> str:
+    source = payload["import_source"]
+    lines = [
+        "# PatchRail Funded Issue Import",
+        "",
+        f"- Provider: `{source['provider']}`",
+        f"- Local file only: `{source['local_file_only']}`",
+        f"- Records loaded: `{source['records_loaded']}`",
+        f"- Read-only: `{payload['read_only']}`",
+        f"- Issues exported: `{len(payload['issues'])}`",
+        "",
+        "## Issues",
+        "",
+    ]
+    if not payload["issues"]:
+        lines.append("No issues were normalized from the provider export.")
+    for issue in payload["issues"]:
+        lines.extend(
+            [
+                f"### {issue['reference']}",
+                "",
+                f"- Title: {issue['title']}",
+                f"- Funding: `{issue['funding']['display']}`",
+                f"- Risk level: `{issue['risk_level']}`",
+                f"- Safe to list: `{issue['safe_to_list']}`",
+                "",
+            ]
+        )
+    lines.extend(
+        [
+            "## Boundary",
+            "",
+            (
+                "This command normalizes a local provider export. It does not fetch APIs, "
+                "scrape websites, claim rewards, post comments, open pull requests, or contact maintainers."
+            ),
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
 def _default_funded_issues_source() -> Path:
     return Path("examples") / "funded-issues-readonly" / "issues.json"
 
@@ -840,6 +887,22 @@ def _funded_issues_explain(args: argparse.Namespace) -> int:
         text = _render_funded_issue_explain_markdown(payload)
     else:
         text = _render_funded_issues_text([payload["issue"]])
+    _write_or_print(text, args.out)
+    return 0
+
+
+def _funded_issues_import(args: argparse.Namespace) -> int:
+    try:
+        payload = import_provider_export(args.provider, args.source)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Invalid provider export: {exc}", file=sys.stderr)
+        return 1
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_funded_issues_import_markdown(payload)
+    else:
+        text = _render_funded_issues_text(payload["issues"])
     _write_or_print(text, args.out)
     return 0
 
@@ -1190,6 +1253,31 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     funded_explain.add_argument("--out", type=Path, help="Optional output path.")
     funded_explain.set_defaults(func=_funded_issues_explain)
+
+    funded_import = funded_subparsers.add_parser(
+        "import",
+        help="Normalize a local provider export into PatchRail's read-only funded issue schema.",
+    )
+    funded_import.add_argument(
+        "--provider",
+        required=True,
+        choices=SUPPORTED_PROVIDERS,
+        help="Provider export format to normalize.",
+    )
+    funded_import.add_argument(
+        "--source",
+        required=True,
+        type=Path,
+        help="Local JSON export file. PatchRail does not fetch provider APIs.",
+    )
+    funded_import.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="json",
+        help="Output format.",
+    )
+    funded_import.add_argument("--out", type=Path, help="Optional output path.")
+    funded_import.set_defaults(func=_funded_issues_import)
 
     return parser
 
