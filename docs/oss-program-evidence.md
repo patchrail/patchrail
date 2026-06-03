@@ -20,6 +20,8 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Adopter list: [ADOPTERS.md](../ADOPTERS.md) is permission-only and currently
   has no public external adopters listed
 - Public CI fixtures: 101 sanitized synthetic fixtures in the local benchmark
+- Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`
+  validates 101 / 101 fixtures before sharing
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
   contributions
@@ -33,6 +35,9 @@ PatchRail's public safety posture is local-first and human-approved:
 
 - CI failure triage produces Markdown, JSON or text reports.
 - Redaction runs locally before fixture sharing.
+- `patchrail ci fixture-check` verifies neighboring expected metadata,
+  classifier agreement, confidence floors, and redaction hygiene before a
+  fixture is proposed.
 - `patchrail doctor` reports that v0.1 requires no billing, network, external model, or GitHub write permission.
 - GitHub Actions triage produces a read-only artifact and does not comment,
   open pull requests, call external models, or request write permissions.
@@ -58,9 +63,10 @@ Last verified: 2026-06-03.
   review, public CI run, and remaining manual gates.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 34 passed.
+- Tests: `uv run --extra dev pytest -q` -> 37 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 18 files already formatted.
+- Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 101/101 fixtures passed.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 101/101 fixtures passed.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:

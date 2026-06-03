@@ -17,6 +17,7 @@ Last updated: 2026-06-03.
 | External contributors | 0 | GitHub contributors |
 | Public releases | 1 | <https://github.com/patchrail/patchrail/releases/tag/v0.1.0> |
 | Public CI fixtures | 101 | `examples/ci-triage` benchmark |
+| Fixture hygiene gate | 101 / 101 passing | `patchrail ci fixture-check examples/ci-triage --format json` |
 | Supported benchmark categories | Python, Node, TypeScript, Go, Rust, GitHub Actions | `docs/ci-failure-zoo.md` |
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
 | Funded issue read-only demos | 1 | `examples/funded-issues-readonly` |
@@ -43,6 +44,7 @@ Before increasing a metric in public docs:
 - External repos testing PatchRail:
 - External contributors:
 - New sanitized fixtures:
+- Fixture-check total / passed:
 - Benchmark total / passed:
 - Issues opened / closed:
 - PRs opened / merged:
@@ -59,6 +61,7 @@ current evidence gaps are:
 
 - first PyPI release and download telemetry;
 - external maintainer pilots with permission to cite outcomes;
+- permissioned pilot fixture submissions that pass `fixture-check`;
 - public PRs reviewed with Codex;
 - public issues triaged with Codex;
 - real adopter entries approved for [ADOPTERS.md](../ADOPTERS.md).
