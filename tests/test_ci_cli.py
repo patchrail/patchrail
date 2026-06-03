@@ -46,6 +46,7 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(schema["properties"]["schema_version"]["const"], "patchrail.ci_result.v1")
         self.assertIn("python_test_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("java_build_failure", schema["properties"]["failure_class"]["enum"])
+        self.assertIn("dotnet_build_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("docker_build_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("browser_test_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("ruby_bundle_failure", schema["properties"]["failure_class"]["enum"])
@@ -71,7 +72,7 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "patchrail.doctor.v1")
         self.assertEqual(payload["status"], "ok")
         self.assertEqual(payload["local_first"], True)
-        self.assertEqual(payload["checks"]["ci_fixture_count"], 135)
+        self.assertEqual(payload["checks"]["ci_fixture_count"], 138)
         self.assertEqual(payload["checks"]["ci_result_schema_available"], True)
         self.assertEqual(payload["requirements"]["billing_required"], False)
         self.assertEqual(payload["requirements"]["external_model_required"], False)
@@ -98,8 +99,8 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         payload = json.loads(proc.stdout)
         self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
-        self.assertEqual(payload["total_cases"], 135)
-        self.assertEqual(payload["passed"], 135)
+        self.assertEqual(payload["total_cases"], 138)
+        self.assertEqual(payload["passed"], 138)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
         self.assertEqual(payload["root"], "examples/ci-triage")
@@ -107,6 +108,7 @@ class PatchRailCITests(unittest.TestCase):
             payload["class_summary"],
             {
                 "browser_test_failure": {"failed": 0, "passed": 3, "total_cases": 3},
+                "dotnet_build_failure": {"failed": 0, "passed": 3, "total_cases": 3},
                 "docker_build_failure": {"failed": 0, "passed": 3, "total_cases": 3},
                 "github_actions_workflow": {"failed": 0, "passed": 10, "total_cases": 10},
                 "go_test_failure": {"failed": 0, "passed": 10, "total_cases": 10},
@@ -126,6 +128,7 @@ class PatchRailCITests(unittest.TestCase):
             actual_classes,
             {
                 "browser_test_failure",
+                "dotnet_build_failure",
                 "docker_build_failure",
                 "github_actions_workflow",
                 "go_test_failure",
@@ -163,8 +166,8 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(json_proc.returncode, 0, json_proc.stderr)
         payload = json.loads(json_proc.stdout)
         self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
-        self.assertEqual(payload["total_cases"], 135)
-        self.assertEqual(payload["passed"], 135)
+        self.assertEqual(payload["total_cases"], 138)
+        self.assertEqual(payload["passed"], 138)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
         self.assertIn("class_summary", payload)
@@ -189,7 +192,7 @@ class PatchRailCITests(unittest.TestCase):
 
         self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
         self.assertIn("# PatchRail CI Benchmark", markdown_proc.stdout)
-        self.assertIn("- Total cases: `135`", markdown_proc.stdout)
+        self.assertIn("- Total cases: `138`", markdown_proc.stdout)
         self.assertIn("## Class summary", markdown_proc.stdout)
         self.assertNotIn("## Cases", markdown_proc.stdout)
 
@@ -298,6 +301,29 @@ class PatchRailCITests(unittest.TestCase):
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["failure_class"], "java_build_failure")
             self.assertIn("gradlew", payload["reproduction_command"])
+            self.assertEqual(payload["requirements"]["external_model_required"], False)
+
+    def test_ci_classify_detects_dotnet_build_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log = Path(tmpdir) / "dotnet.log"
+            log.write_text(
+                "Run dotnet restore src/App/App.csproj\n"
+                "error NU1107: Version conflict detected for Microsoft.Extensions.Logging.\n"
+                "Install/reference Microsoft.Extensions.Logging 8.0.0 directly to project.\n",
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [sys.executable, "-m", "patchrail", "ci", "classify", "--log", str(log)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["failure_class"], "dotnet_build_failure")
+            self.assertIn("dotnet restore", payload["reproduction_command"])
             self.assertEqual(payload["requirements"]["external_model_required"], False)
 
     def test_ci_classify_detects_ruby_bundle_failures(self) -> None:

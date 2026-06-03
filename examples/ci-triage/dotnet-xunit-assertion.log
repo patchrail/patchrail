@@ -1,0 +1,9 @@
+Run dotnet test tests/App.Tests/App.Tests.csproj --configuration Release --no-build --logger trx
+  App.Tests -> /workspace/example/tests/App.Tests/bin/Release/net8.0/App.Tests.dll
+  Failed App.Tests.CiClassifierTests.ClassifiesNuGetDowngrade [43 ms]
+  Error Message:
+   Xunit.Sdk.EqualException: Assert.Equal() Failure
+Expected: dotnet_build_failure
+Actual:   unknown
+
+Failed!  - Failed:     1, Passed:    84, Skipped:     0, Total:    85, Duration: 2 s - App.Tests.dll (net8.0)

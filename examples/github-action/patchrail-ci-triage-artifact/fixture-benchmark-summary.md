@@ -1,7 +1,7 @@
 # PatchRail CI Benchmark
 
-- Total cases: `135`
-- Passed: `135`
+- Total cases: `138`
+- Passed: `138`
 - Failed: `0`
 - Top-1 fixture accuracy: `1.0`
 
@@ -9,6 +9,7 @@
 
 - `browser_test_failure`: `3` / `3` passed
 - `docker_build_failure`: `3` / `3` passed
+- `dotnet_build_failure`: `3` / `3` passed
 - `github_actions_workflow`: `10` / `10` passed
 - `go_test_failure`: `10` / `10` passed
 - `java_build_failure`: `3` / `3` passed

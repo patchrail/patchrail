@@ -49,6 +49,33 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "dotnet_build_failure",
+      "expected_failure_class": "dotnet_build_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "dotnet-csharp-compile-error.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "dotnet_build_failure",
+      "expected_failure_class": "dotnet_build_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "dotnet-nuget-version-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "dotnet_build_failure",
+      "expected_failure_class": "dotnet_build_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "dotnet-xunit-assertion.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.71,
       "actual_failure_class": "github_actions_workflow",
       "expected_failure_class": "github_actions_workflow",
@@ -1230,6 +1257,11 @@
       "passed": 3,
       "total_cases": 3
     },
+    "dotnet_build_failure": {
+      "failed": 0,
+      "passed": 3,
+      "total_cases": 3
+    },
     "github_actions_workflow": {
       "failed": 0,
       "passed": 10,
@@ -1287,7 +1319,7 @@
     }
   },
   "failed": 0,
-  "passed": 135,
+  "passed": 138,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -1295,5 +1327,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 135
+  "total_cases": 138
 }

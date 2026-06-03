@@ -1,0 +1,7 @@
+Run dotnet restore src/App/App.csproj --locked-mode
+  Determining projects to restore...
+src/App/App.csproj : error NU1107: Version conflict detected for Microsoft.Extensions.Logging.
+src/App/App.csproj : error NU1107: Install/reference Microsoft.Extensions.Logging 8.0.0 directly to project App to resolve this issue.
+src/App/App.csproj : error NU1107:  App -> Microsoft.Extensions.Hosting 8.0.0 -> Microsoft.Extensions.Logging (>= 8.0.0)
+src/App/App.csproj : error NU1107:  App -> Demo.Library -> Microsoft.Extensions.Logging (>= 7.0.0 && < 8.0.0).
+Restore failed in 1.2 sec.

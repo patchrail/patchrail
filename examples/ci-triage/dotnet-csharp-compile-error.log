@@ -1,0 +1,8 @@
+Run dotnet build src/App/App.csproj --configuration Release --no-restore
+Microsoft (R) Build Engine version 17.10.4 for .NET
+src/App/Handlers/BuildReportHandler.cs(42,18): error CS0246: The type or namespace name 'CiFailureSummary' could not be found (are you missing a using directive or an assembly reference?) [src/App/App.csproj]
+src/App/Handlers/BuildReportHandler.cs(67,27): error CS0103: The name 'RenderMaintainerAction' does not exist in the current context [src/App/App.csproj]
+
+Build FAILED.
+    0 Warning(s)
+    2 Error(s)

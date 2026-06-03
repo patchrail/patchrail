@@ -28,6 +28,7 @@
         "typescript_typecheck",
         "javascript_lint",
         "github_actions_workflow",
+        "dotnet_build_failure",
         "java_build_failure",
         "docker_build_failure",
         "browser_test_failure",

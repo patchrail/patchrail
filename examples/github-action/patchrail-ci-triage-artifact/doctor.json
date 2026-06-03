@@ -1,6 +1,6 @@
 {
   "checks": {
-    "ci_fixture_count": 135,
+    "ci_fixture_count": 138,
     "ci_fixture_directory": "examples/ci-triage",
     "ci_result_schema_available": true
   },

@@ -110,6 +110,29 @@ RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "failure_class": "dotnet_build_failure",
+        "likely_subsystem": ".NET restore, build, or test lifecycle",
+        "patterns": [
+            r"\bdotnet restore\b",
+            r"\bdotnet build\b",
+            r"\bdotnet test\b",
+            r"\bNU\d{4}\b",
+            r"\bCS\d{4}\b",
+            r"error NETSDK\d+",
+            r"package downgrade",
+            r"Version conflict detected",
+            r"Unable to resolve",
+            r"Xunit\.Sdk",
+            r"Failed!  - Failed:",
+            r"Build FAILED",
+        ],
+        "reproduction_command": "dotnet restore && dotnet test",
+        "minimal_repair_strategy": (
+            "Reproduce the failing dotnet restore, build, or test command, then fix the narrow "
+            "NuGet graph, target framework, compiler, or test assertion drift before rerunning it."
+        ),
+    },
+    {
         "failure_class": "java_build_failure",
         "likely_subsystem": "Java build or test lifecycle",
         "patterns": [

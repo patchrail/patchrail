@@ -2,9 +2,11 @@
 
 ## 0.2.0 - draft
 
-- Prepared the CI Janitor v0.2 evidence bundle around the 101-case fixture zoo,
+- Prepared the CI Janitor v0.2 evidence bundle around the 138-case fixture zoo,
   `fixture-check`, read-only GitHub Actions triage artifact, maintainer pilot
   guide, and public metrics/adopter surfaces.
+- Added .NET/NuGet/C# and xUnit fixture coverage for `dotnet restore`,
+  `dotnet build`, and `dotnet test` failure modes.
 - v0.2 remains a maintainer-gated release candidate until the maintainer
   explicitly bumps `pyproject.toml`, tags the release, publishes package
   artifacts, and records final CI/PyPI evidence.

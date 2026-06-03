@@ -1,0 +1,4 @@
+{
+  "failure_class": "dotnet_build_failure",
+  "minimum_confidence": 0.85
+}
