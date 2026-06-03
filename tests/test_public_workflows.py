@@ -191,7 +191,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
     )
-    assert "Tests: `uv run --extra dev pytest -q` -> 42 passed." in oss_program_evidence
+    assert "Tests: `uv run --extra dev pytest -q` -> 46 passed." in oss_program_evidence
     assert (
         "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
         "examples/ci-triage --format json` -> 115 / 115 fixtures passed."
@@ -200,6 +200,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         oss_program_evidence
     )
     assert "Agent Control Plane demo" in oss_program_evidence
+    assert "Pilot pack importer: `patchrail queue add --from-pilot-pack patchrail-pilot-pack`" in (
+        oss_program_evidence
+    )
+    assert "validates `pilot-manifest.json`, confirms the raw log was not copied" in (
+        oss_program_evidence
+    )
     assert "Local queue API: `patchrail serve --host 127.0.0.1 --port 8765`" in (
         oss_program_evidence
     )
@@ -216,6 +222,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail redact --log failed-ci.log" in pilot_guide
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
+    assert "patchrail queue --db patchrail-pilot.sqlite add --from-pilot-pack" in pilot_guide
+    assert "The importer validates that the manifest did not copy the raw log" in pilot_guide
     assert "patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack" in (
         pilot_guide
     )
@@ -225,6 +233,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci pilot-pack" in release_v02
     assert "local redacted bundle generated without copying the raw log" in release_v02
     assert "Pilot pack command: `patchrail ci pilot-pack`" in evidence
+    assert "Pilot pack queue importer: `patchrail queue add --from-pilot-pack`" in evidence
     assert "no raw log copy" in evidence
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
     assert "Sanitized fixture contribution path" in contributing
@@ -301,6 +310,7 @@ def test_release_evidence_pages_cover_v01_to_v04_without_publish_actions() -> No
     assert "v0.4.0 release-candidate evidence page" in roadmap
 
     assert "examples/local-agent-queue/run_demo.py" in v03
+    assert "queue add --from-pilot-pack" in v03
     assert "patchrail schema queue-work-item" in v03
     assert "patchrail serve --host 127.0.0.1 --port 8765" in v03
     assert "Proposal approval/rejection records human decisions only" in release_process
@@ -342,7 +352,7 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
         for artifact in expected["artifact_files"]:
             assert (Path(tmpdir) / artifact).exists()
 
-        report = (Path(tmpdir) / "ci-report.md").read_text(encoding="utf-8")
+        report = (Path(tmpdir) / "pilot-pack" / "patchrail-report.md").read_text(encoding="utf-8")
         item = json.loads((Path(tmpdir) / "approved.json").read_text(encoding="utf-8"))
         rejected_item = json.loads(
             (Path(tmpdir) / "rejected-item.json").read_text(encoding="utf-8")
@@ -367,8 +377,10 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
         assert "PatchRail classified this log locally" in report
         assert "did not create a pull request" in report
         assert item["write_actions_allowed"] is False
-        assert item["payload"]["markdown_report"] == "ci-report.md"
+        assert item["payload"]["markdown_report"] == "pilot-pack/patchrail-report.md"
         assert item["payload"]["ci_result"]["requirements"]["external_model_required"] is False
+        assert item["payload"]["pilot_pack"]["raw_log_copied"] is False
+        assert item["payload"]["pilot_pack"]["maintainer_review_required_before_sharing"] is True
         assert rejected_item["approval_state"] == "rejected"
         assert rejected_item["write_actions_allowed"] is False
         assert len(queue_before_decisions["work_items"]) == 2

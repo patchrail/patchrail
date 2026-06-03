@@ -267,6 +267,142 @@ class PatchRailQueueTests(unittest.TestCase):
                 False,
             )
 
+    def test_queue_add_from_pilot_pack_keeps_pack_local_and_pending(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            pack_dir = Path(tmpdir) / "pilot-pack"
+            pack_proc = run_patchrail(
+                [
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    "examples/ci-triage/dependency-failure.log",
+                    "--out-dir",
+                    str(pack_dir),
+                ]
+            )
+            self.assertEqual(pack_proc.returncode, 0, pack_proc.stderr)
+
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--from-pilot-pack",
+                    str(pack_dir),
+                ]
+            )
+
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+            added = json.loads(add_proc.stdout)
+            self.assertEqual(added["kind"], "ci_failure")
+            self.assertEqual(added["title"], "Review python_dependency_resolution CI pilot pack")
+            self.assertEqual(added["source"], str(pack_dir / "pilot-manifest.json"))
+            self.assertEqual(added["approval_state"], "pending")
+            self.assertEqual(added["write_actions_allowed"], False)
+            self.assertEqual(added["payload"]["failure_class"], "python_dependency_resolution")
+            self.assertEqual(
+                added["payload"]["ci_result"]["schema_version"],
+                "patchrail.ci_result.v1",
+            )
+            self.assertEqual(
+                added["payload"]["pilot_pack"]["manifest"]["schema_version"],
+                "patchrail.ci_pilot_pack.v1",
+            )
+            self.assertEqual(added["payload"]["pilot_pack"]["raw_log_copied"], False)
+            self.assertEqual(
+                added["payload"]["pilot_pack"]["maintainer_review_required_before_sharing"],
+                True,
+            )
+            self.assertEqual(
+                added["payload"]["pilot_pack"]["files"]["redacted_log"],
+                "failed-ci.redacted.log",
+            )
+            self.assertEqual(
+                added["payload"]["pilot_pack"]["files"]["markdown_report"],
+                "patchrail-report.md",
+            )
+            self.assertEqual(
+                added["payload"]["pilot_pack"]["manifest"]["requirements"][
+                    "github_write_permission_required"
+                ],
+                False,
+            )
+
+    def test_queue_add_from_pilot_pack_manifest_path_is_supported(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            pack_dir = Path(tmpdir) / "pilot-pack"
+            pack_proc = run_patchrail(
+                [
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    "examples/ci-triage/dependency-failure.log",
+                    "--out-dir",
+                    str(pack_dir),
+                ]
+            )
+            self.assertEqual(pack_proc.returncode, 0, pack_proc.stderr)
+
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--from-pilot-pack",
+                    str(pack_dir / "pilot-manifest.json"),
+                ]
+            )
+
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+            added = json.loads(add_proc.stdout)
+            self.assertEqual(added["source"], str(pack_dir / "pilot-manifest.json"))
+            self.assertEqual(
+                added["payload"]["report_source"], str(pack_dir / "patchrail-result.json")
+            )
+
+    def test_queue_add_from_pilot_pack_rejects_raw_log_copy_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            pack_dir = Path(tmpdir) / "pilot-pack"
+            pack_proc = run_patchrail(
+                [
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    "examples/ci-triage/dependency-failure.log",
+                    "--out-dir",
+                    str(pack_dir),
+                ]
+            )
+            self.assertEqual(pack_proc.returncode, 0, pack_proc.stderr)
+            manifest_path = pack_dir / "pilot-manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["source"]["raw_log_copied"] = True
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+            add_proc = run_patchrail(["queue", "add", "--from-pilot-pack", str(pack_dir)])
+
+            self.assertEqual(add_proc.returncode, 1)
+            self.assertIn("must not copy the raw CI log", add_proc.stderr)
+
+    def test_queue_add_rejects_multiple_import_sources(self) -> None:
+        proc = run_patchrail(
+            [
+                "queue",
+                "add",
+                "--from-ci-result",
+                "patchrail-result.json",
+                "--from-pilot-pack",
+                "pilot-pack",
+            ]
+        )
+
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("only one import source", proc.stderr)
+
     def test_queue_proposal_flow_records_reviewable_patch_plan(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             db = Path(tmpdir) / "queue.sqlite"

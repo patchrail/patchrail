@@ -41,6 +41,9 @@ PatchRail's public safety posture is local-first and human-approved:
 - `patchrail doctor` reports that v0.1 requires no billing, network, external model, or GitHub write permission.
 - GitHub Actions triage produces a read-only artifact and does not comment,
   open pull requests, call external models, or request write permissions.
+- `patchrail queue add --from-pilot-pack` validates a consent-only pilot pack
+  and imports it as a pending local work item without copying raw logs or
+  granting write permissions.
 - Agent Control Plane work items, proposal records, approval decisions, and
   audit events stay local in SQLite unless a maintainer exports them.
 - Funded Issue Scout is read-only, safe-only by default, and local-source only
@@ -68,7 +71,7 @@ Last verified: 2026-06-03.
   bump, tag, PyPI publish, announcement, or external application.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 42 passed.
+- Tests: `uv run --extra dev pytest -q` -> 46 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 19 files already formatted.
 - Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 115 / 115 fixtures passed.
@@ -81,6 +84,10 @@ Last verified: 2026-06-03.
 - CI result importer: `patchrail queue add --from-ci-result ci-result.json`
   turns the read-only CI artifact JSON into a pending local queue item while
   keeping `write_actions_allowed=false`.
+- Pilot pack importer: `patchrail queue add --from-pilot-pack patchrail-pilot-pack`
+  validates `pilot-manifest.json`, confirms the raw log was not copied, stores
+  references to the redacted log/report/result, and keeps
+  `write_actions_allowed=false`.
 - Queue audit trail: `patchrail queue audit --format jsonl` exports local
   `work_item_added`, `work_item_approved`, `work_item_rejected`, and
   `work_items_exported` events without granting GitHub write permissions.
