@@ -12,10 +12,10 @@ Last updated: 2026-06-03.
 | --- | ---: | --- |
 | GitHub repository | `patchrail/patchrail` | <https://github.com/patchrail/patchrail> |
 | GitHub stars | 0 | Fresh public launch snapshot |
-| Monthly PyPI downloads | Pending first PyPI release | PyPI |
+| Monthly PyPI downloads | Pending first PyPI release | PyPI returned `Not Found` on 2026-06-03 |
 | Public external adopters | 0 | [ADOPTERS.md](../ADOPTERS.md) |
 | External contributors | 0 | GitHub contributors |
-| Public releases | 0 | GitHub Releases / PyPI |
+| Public releases | 1 | <https://github.com/patchrail/patchrail/releases/tag/v0.1.0> |
 | Public CI fixtures | 101 | `examples/ci-triage` benchmark |
 | Supported benchmark categories | Python, Node, TypeScript, Go, Rust, GitHub Actions | `docs/ci-failure-zoo.md` |
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
@@ -58,7 +58,6 @@ PatchRail should not apply to external programs from placeholder metrics. The
 current evidence gaps are:
 
 - first PyPI release and download telemetry;
-- public release tags and GitHub Release notes;
 - external maintainer pilots with permission to cite outcomes;
 - public PRs reviewed with Codex;
 - public issues triaged with Codex;

@@ -1,10 +1,9 @@
 # v0.1.0 Release Evidence
 
-This page records the release-prep evidence for PatchRail v0.1.0.
+This page records the release evidence for PatchRail v0.1.0.
 
-It is intentionally a prep artifact only. It does not create a tag, publish to
-PyPI, create a GitHub Release, announce the project, or submit any external
-application. Those actions stay behind a manual maintainer gate.
+The GitHub Release is published with package artifacts. PyPI publication,
+announcements, and external applications remain separate steps.
 
 ## Scope
 
@@ -63,6 +62,20 @@ Results:
 - Twine: both artifacts passed.
 - Diff whitespace check: passed.
 
+Re-verified before GitHub Release publication:
+
+- Tests: 34 passed.
+- Lint: all checks passed.
+- Format: 18 files already formatted.
+- Benchmark: 101 total, 101 passed, 0 failed.
+- Doctor: `status=ok`, `local_first=true`, no billing, network, external model,
+  or GitHub write permission required.
+- Build: produced `patchrail-0.1.0.tar.gz` and
+  `patchrail-0.1.0-py3-none-any.whl`.
+- Twine: both artifacts passed.
+- Wheel smoke: installed `patchrail-0.1.0` from the local wheel on Python 3.14
+  and verified `doctor`, `ci explain`, `funded-issues list`, and `queue init`.
+
 ## Wheel Smoke Test
 
 The wheel was installed into a fresh temporary virtual environment:
@@ -95,8 +108,8 @@ Release-prep preserved the public safety boundary:
 - no external model calls by default;
 - no billing, KYC, payment, or payout setup;
 - local-first CI log processing;
-- manual maintainer gate for tags, PyPI publishing, GitHub Releases, public
-  announcements, and external applications.
+- manual maintainer gate remains for PyPI publishing, public announcements, and
+  external applications.
 
 ## Public CI Evidence
 
@@ -113,13 +126,26 @@ Remote jobs passed:
 - `test (3.13)`;
 - `package-smoke`.
 
+## GitHub Release
+
+Published release:
+<https://github.com/patchrail/patchrail/releases/tag/v0.1.0>
+
+Release target:
+`07b4934d91866c3ea2978c2aff265f923cd232bf`
+
+Release assets:
+
+- `patchrail-0.1.0.tar.gz`
+  - SHA256: `1e8381b6f9a47cfcbae9ca66e2773c2bbd4f40029deb4c4d8c97b25ce2e40223`
+- `patchrail-0.1.0-py3-none-any.whl`
+  - SHA256: `5f1f91e36fce4197a6cf8405da2ac5bfcbb6cefa1cb393464349c868e9719dfd`
+
 ## Manual Gates Remaining
 
-These steps are intentionally not performed by automation:
+These steps remain intentionally separate:
 
-- create or push a `v0.1.0` tag;
-- publish the package to PyPI;
-- create a GitHub Release;
+- publish the package to PyPI when package index credentials are available;
 - announce the release publicly;
 - submit the Codex for Open Source application.
 

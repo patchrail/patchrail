@@ -125,7 +125,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
     assert "PatchRail tracks adoption and quality metrics" in metrics
     assert "Monthly PyPI downloads" in metrics
+    assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
+    assert "Public releases | 1" in metrics
     assert "Do not use placeholders as evidence" in metrics
     assert "public PRs reviewed with Codex" in metrics
     assert "only with explicit maintainer permission" in adopters
@@ -231,11 +233,14 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "dist/patchrail-0.1.0.tar.gz" in release_evidence
     assert "dist/patchrail-0.1.0-py3-none-any.whl" in release_evidence
     assert "Tests: 32 passed." in release_evidence
+    assert "Tests: 34 passed." in release_evidence
     assert "Benchmark: 101 total, 101 passed, 0 failed." in release_evidence
     assert "https://github.com/patchrail/patchrail/pull/17" in release_evidence
     assert "https://github.com/patchrail/patchrail/actions/runs/26869827161" in release_evidence
+    assert "https://github.com/patchrail/patchrail/releases/tag/v0.1.0" in release_evidence
+    assert "07b4934d91866c3ea2978c2aff265f923cd232bf" in release_evidence
+    assert "5f1f91e36fce4197a6cf8405da2ac5bfcbb6cefa1cb393464349c868e9719dfd" in release_evidence
     assert "package-smoke" in release_evidence
     assert "manual maintainer gate" in release_evidence
-    assert "create or push a `v0.1.0` tag" in release_evidence
     assert "publish the package to PyPI" in release_evidence
     assert "no automatic pull requests" in release_evidence
