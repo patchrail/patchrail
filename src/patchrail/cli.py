@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from importlib.resources import files
 from pathlib import Path
 from typing import Any
@@ -653,12 +654,32 @@ def _run_ci_benchmark(path: Path) -> dict[str, Any]:
     cases = [_benchmark_case(root, log_path) for log_path in log_paths]
     passed = sum(1 for case in cases if case["passed"])
     failed = len(cases) - passed
+    class_counts: Counter[str] = Counter(
+        str(case["expected_failure_class"] or "missing_expected") for case in cases
+    )
+    class_passed: Counter[str] = Counter(
+        str(case["expected_failure_class"] or "missing_expected")
+        for case in cases
+        if case["passed"]
+    )
+    class_summary = {
+        failure_class: {
+            "total_cases": total,
+            "passed": class_passed[failure_class],
+            "failed": total - class_passed[failure_class],
+        }
+        for failure_class, total in sorted(class_counts.items())
+    }
     return {
         "schema_version": "patchrail.ci_benchmark.v1",
         "root": _display_path(display_root),
         "total_cases": len(cases),
         "passed": passed,
         "failed": failed,
+        "accuracy": {
+            "top_1": round(passed / len(cases), 4) if cases else 0.0,
+        },
+        "class_summary": class_summary,
         "cases": cases,
         "requirements": {
             "billing_required": False,
@@ -754,10 +775,22 @@ def _render_benchmark_markdown(result: dict[str, Any]) -> str:
         f"- Total cases: `{result['total_cases']}`",
         f"- Passed: `{result['passed']}`",
         f"- Failed: `{result['failed']}`",
+        f"- Top-1 fixture accuracy: `{result['accuracy']['top_1']}`",
         "",
-        "## Cases",
+        "## Class summary",
         "",
     ]
+    for failure_class, summary in result["class_summary"].items():
+        lines.append(
+            f"- `{failure_class}`: `{summary['passed']}` / `{summary['total_cases']}` passed"
+        )
+    lines.extend(
+        [
+            "",
+            "## Cases",
+            "",
+        ]
+    )
     for case in result["cases"]:
         status = "pass" if case["passed"] else "fail"
         lines.append(
@@ -774,7 +807,10 @@ def _render_benchmark_text(result: dict[str, Any]) -> str:
         f"Total cases: {result['total_cases']}",
         f"Passed: {result['passed']}",
         f"Failed: {result['failed']}",
+        f"Top-1 fixture accuracy: {result['accuracy']['top_1']}",
     ]
+    for failure_class, summary in result["class_summary"].items():
+        lines.append(f"{failure_class}: {summary['passed']} / {summary['total_cases']} passed")
     for case in result["cases"]:
         status = "PASS" if case["passed"] else "FAIL"
         lines.append(f"{status} {case['log']}: {case['actual_failure_class']}")

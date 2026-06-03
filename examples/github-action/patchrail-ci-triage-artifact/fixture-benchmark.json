@@ -1,4 +1,7 @@
 {
+  "accuracy": {
+    "top_1": 1.0
+  },
   "cases": [
     {
       "actual_confidence": 0.95,
@@ -1036,6 +1039,48 @@
       "passed": true
     }
   ],
+  "class_summary": {
+    "github_actions_workflow": {
+      "failed": 0,
+      "passed": 10,
+      "total_cases": 10
+    },
+    "go_test_failure": {
+      "failed": 0,
+      "passed": 10,
+      "total_cases": 10
+    },
+    "javascript_lint": {
+      "failed": 0,
+      "passed": 11,
+      "total_cases": 11
+    },
+    "node_dependency_install": {
+      "failed": 0,
+      "passed": 19,
+      "total_cases": 19
+    },
+    "python_dependency_resolution": {
+      "failed": 0,
+      "passed": 27,
+      "total_cases": 27
+    },
+    "python_test_failure": {
+      "failed": 0,
+      "passed": 9,
+      "total_cases": 9
+    },
+    "rust_test_failure": {
+      "failed": 0,
+      "passed": 10,
+      "total_cases": 10
+    },
+    "typescript_typecheck": {
+      "failed": 0,
+      "passed": 19,
+      "total_cases": 19
+    }
+  },
   "failed": 0,
   "passed": 115,
   "requirements": {

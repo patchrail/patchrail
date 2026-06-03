@@ -72,7 +72,7 @@ Last verified: 2026-06-03.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 19 files already formatted.
 - Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 115 / 115 fixtures passed.
-- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 115 / 115 fixtures passed.
+- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 115 / 115 fixtures passed, top-1 fixture accuracy 1.0, and 8 root-cause families covered.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:
   [`examples/local-agent-queue`](../examples/local-agent-queue/README.md)

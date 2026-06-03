@@ -44,6 +44,8 @@ Current evidence snapshot from 2026-06-03:
 - Format: 19 files already formatted.
 - Fixture hygiene: 115 / 115 fixtures passed.
 - Benchmark: 115 total, 115 passed, 0 failed.
+- Top-1 fixture accuracy: 1.0.
+- Class coverage: 8 root-cause families.
 - Safety doctor: `status=ok`, `local_first=true`, and no billing, network,
   external model, or GitHub write permission required.
 - v0.1.0 package artifacts already passed build, `twine check`, and wheel smoke;
