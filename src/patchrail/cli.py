@@ -441,6 +441,293 @@ def _evidence_snapshot(args: argparse.Namespace) -> int:
     return 0
 
 
+def _exists(root: Path, relative_path: str) -> bool:
+    return (root / relative_path).exists()
+
+
+def _roadmap_audit_payload(root: Path) -> dict[str, Any]:
+    snapshot = _evidence_snapshot_payload(root)
+    signals = snapshot["signals"]
+    workstreams = snapshot["workstreams"]
+
+    return {
+        "schema_version": "patchrail.roadmap_audit.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "local_checkout",
+        "status": "active_not_ready_for_external_application",
+        "versions": {
+            "v0.1.0": {
+                "status": "github_release_ready_pypi_blocked",
+                "evidence": [
+                    "docs/release-v0.1.0-evidence.md",
+                    "dist/patchrail-0.1.0-py3-none-any.whl",
+                    "dist/patchrail-0.1.0.tar.gz",
+                    "README.md",
+                    "ETHICS.md",
+                    "SECURITY.md",
+                    "AGENTS.md",
+                ],
+                "gaps": [
+                    "first PyPI publish and clean install verification",
+                    "PyPI download telemetry",
+                ],
+            },
+            "v0.2.0": {
+                "status": "benchmark_and_action_artifact_ready",
+                "evidence": [
+                    "docs/release-v0.2.0-evidence.md",
+                    ".github/workflows/ci-triage.yml",
+                    "examples/github-action/README.md",
+                    "docs/ci-failure-zoo.md",
+                    "docs/pilot-request-package.md",
+                ],
+                "signals": {
+                    "ci_fixtures": signals["ci_fixtures"],
+                    "ci_benchmark_failed": signals["ci_benchmark_failed"],
+                    "read_only_github_action": workstreams["github_action"][
+                        "read_only_permissions"
+                    ],
+                },
+                "gaps": [
+                    "permissioned external maintainer pilots",
+                    "external repositories testing PatchRail",
+                ],
+            },
+            "v0.3.0": {
+                "status": "local_agent_control_plane_demo_ready",
+                "evidence": [
+                    "docs/release-v0.3.0-evidence.md",
+                    "docs/agent-control-plane.md",
+                    "docs/api-reference.md",
+                    "examples/local-agent-queue/run_demo.py",
+                    "src/patchrail/queue/store.py",
+                    "src/patchrail/queue/server.py",
+                ],
+                "signals": {
+                    "demo_present": workstreams["agent_control_plane"]["demo_present"],
+                    "owned_repo_issue_pr_cycles": signals["owned_repo_issue_pr_cycles"],
+                },
+                "gaps": [
+                    "formal visible review links",
+                    "external maintainer triage examples with permission",
+                ],
+            },
+            "v0.4.0": {
+                "status": "read_only_demo_kept_secondary_no_money_goal",
+                "evidence": [
+                    "docs/release-v0.4.0-evidence.md",
+                    "docs/funded-issues-ethics.md",
+                    "examples/funded-issues-readonly/run_demo.py",
+                    "src/patchrail/funded_issues/discovery.py",
+                ],
+                "signals": {
+                    "demo_present": workstreams["funded_issue_scout"]["demo_present"],
+                    "money_goal_retired": True,
+                },
+                "gaps": [
+                    "keep funded issue discovery out of the primary narrative",
+                    "do not process bounties, payouts, claims, outbound, or money-ranked leads",
+                ],
+            },
+        },
+        "weeks": {
+            "week_1": {
+                "status": "substantially_done",
+                "focus": "sanitization, repositioning, CI Janitor CLI, docs, Apache-2.0, CI",
+                "evidence": [
+                    "README.md",
+                    "LICENSE",
+                    ".github/workflows/ci.yml",
+                    "examples/ci-triage",
+                ],
+                "gaps": [],
+            },
+            "week_2": {
+                "status": "partial_pypi_blocked",
+                "focus": "v0.1.0 public release, JSON/Markdown outputs, redaction, fixtures",
+                "evidence": ["docs/release-v0.1.0-evidence.md"],
+                "gaps": ["PyPI publish requires maintainer package index credential"],
+            },
+            "week_3": {
+                "status": "partial_owned_repo_evidence_only",
+                "focus": "reviewable agent workflows and public evidence pack",
+                "evidence": [
+                    "docs/codex-workflows.md",
+                    "docs/openai-codex-for-oss-evidence.md",
+                    "docs/public-workflow-ledger.md",
+                ],
+                "gaps": ["formal visible review links remain pending"],
+            },
+            "week_4": {
+                "status": "blocked_by_external_launch_gate",
+                "focus": "initial launch and feedback",
+                "evidence": ["docs/metrics.md", "docs/pilot-request-package.md"],
+                "gaps": ["no public announcement or third-party outreach in this audit"],
+            },
+            "week_5": {
+                "status": "partial",
+                "focus": "GitHub Action and external fixture intake",
+                "evidence": [
+                    ".github/workflows/ci-triage.yml",
+                    "examples/github-action/README.md",
+                ],
+                "gaps": ["permissioned maintainer logs and external fixtures"],
+            },
+            "week_6": {
+                "status": "not_ready",
+                "focus": "v0.2.0 launch and benchmark publication",
+                "evidence": ["docs/release-v0.2.0-evidence.md"],
+                "gaps": ["external metrics and launch feedback are not present"],
+            },
+            "week_7": {
+                "status": "local_demo_ready",
+                "focus": "Agent Control Plane v0.3 alpha",
+                "evidence": [
+                    "docs/agent-control-plane.md",
+                    "examples/local-agent-queue/run_demo.py",
+                ],
+                "gaps": ["permissioned end-to-end external demo"],
+            },
+            "week_8": {
+                "status": "pending_external_permission",
+                "focus": "pilots and case studies",
+                "evidence": ["docs/pilot-guide.md", "ADOPTERS.md"],
+                "gaps": ["public external adopters remain 0"],
+            },
+            "week_9": {
+                "status": "guardrailed_no_money_goal",
+                "focus": "funded issue scout remains read-only and secondary",
+                "evidence": ["docs/funded-issues-ethics.md"],
+                "gaps": ["no bounty, payout, claim, outbound, or money-ranked work"],
+            },
+            "week_10": {
+                "status": "partial",
+                "focus": "release workflow and visible maintenance",
+                "evidence": ["docs/release-process.md", "CHANGELOG.md"],
+                "gaps": ["external contributors and release cadence evidence"],
+            },
+            "week_11": {
+                "status": "pending_metrics",
+                "focus": "application evidence preparation",
+                "evidence": ["docs/openai-codex-for-oss-evidence.md", "docs/metrics.md"],
+                "gaps": ["stars/downloads/adopters/review links are insufficient"],
+            },
+            "week_12": {
+                "status": "not_ready",
+                "focus": "apply or wait with criteria",
+                "evidence": ["docs/oss-program-evidence.md"],
+                "gaps": ["do not apply from placeholder metrics"],
+            },
+        },
+        "safety": {
+            "network_required": False,
+            "github_write_permission_required": False,
+            "billing_required": False,
+            "external_model_required": False,
+            "money_goal_retired": True,
+            "manual_gates": [
+                "PyPI publish",
+                "public announcements",
+                "external applications",
+                "third-party repository writes",
+                "payments, KYC, banking, tax, or destructive changes",
+            ],
+        },
+        "artifact_presence": {
+            "release_v0_1": _exists(root, "docs/release-v0.1.0-evidence.md"),
+            "release_v0_2": _exists(root, "docs/release-v0.2.0-evidence.md"),
+            "release_v0_3": _exists(root, "docs/release-v0.3.0-evidence.md"),
+            "release_v0_4": _exists(root, "docs/release-v0.4.0-evidence.md"),
+            "agent_control_plane_demo": _exists(root, "examples/local-agent-queue/run_demo.py"),
+            "funded_issues_read_only_demo": _exists(
+                root, "examples/funded-issues-readonly/run_demo.py"
+            ),
+            "github_action_example": _exists(root, "examples/github-action/README.md"),
+        },
+    }
+
+
+def _render_roadmap_audit_markdown(payload: dict[str, Any]) -> str:
+    lines = [
+        "# PatchRail Roadmap Audit",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Generated from: `{payload['generated_from']}`",
+        "",
+        "## Versions",
+        "",
+    ]
+    for version, item in payload["versions"].items():
+        lines.append(f"### {version}")
+        lines.append("")
+        lines.append(f"- Status: `{item['status']}`")
+        if "signals" in item:
+            lines.append("- Signals:")
+            for key, value in item["signals"].items():
+                lines.append(f"  - `{key}`: `{value}`")
+        lines.append("- Evidence:")
+        lines.extend(f"  - `{path}`" for path in item["evidence"])
+        lines.append("- Gaps:")
+        lines.extend(f"  - {gap}" for gap in item["gaps"])
+        lines.append("")
+
+    lines.extend(["## Week Plan", ""])
+    for week, item in payload["weeks"].items():
+        lines.append(f"- `{week}`: `{item['status']}` - {item['focus']}")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            f"- Network required: `{payload['safety']['network_required']}`",
+            (
+                "- GitHub write permission required: "
+                f"`{payload['safety']['github_write_permission_required']}`"
+            ),
+            f"- Billing required: `{payload['safety']['billing_required']}`",
+            f"- External model required: `{payload['safety']['external_model_required']}`",
+            f"- Money goal retired: `{payload['safety']['money_goal_retired']}`",
+            "- Manual gates:",
+        ]
+    )
+    lines.extend(f"  - {gate}" for gate in payload["safety"]["manual_gates"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_roadmap_audit_text(payload: dict[str, Any]) -> str:
+    version_lines = [
+        f"{version}: {item['status']}" for version, item in payload["versions"].items()
+    ]
+    week_lines = [f"{week}: {item['status']}" for week, item in payload["weeks"].items()]
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                "Versions:",
+                *version_lines,
+                "Weeks:",
+                *week_lines,
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_roadmap(args: argparse.Namespace) -> int:
+    payload = _roadmap_audit_payload(Path("."))
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_roadmap_audit_markdown(payload)
+    else:
+        text = _render_roadmap_audit_text(payload)
+    _write_or_print(text, args.out)
+    return 0
+
+
 def _queue_db(args: argparse.Namespace) -> Path:
     return Path(args.db) if args.db else DEFAULT_QUEUE_PATH
 
@@ -1938,6 +2225,19 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_snapshot.add_argument("--out", type=Path, help="Optional output path.")
     evidence_snapshot.set_defaults(func=_evidence_snapshot)
+
+    evidence_roadmap = evidence_subparsers.add_parser(
+        "roadmap",
+        help="Audit v0.1.0-v0.4.0 and 12-week OSS roadmap progress from local artifacts.",
+    )
+    evidence_roadmap.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_roadmap.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_roadmap.set_defaults(func=_evidence_roadmap)
 
     serve = subparsers.add_parser(
         "serve",

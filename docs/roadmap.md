@@ -1,5 +1,17 @@
 # Roadmap
 
+PatchRail keeps the roadmap auditable from local repository artifacts:
+
+```bash
+patchrail evidence roadmap --format markdown
+```
+
+The audit reports progress for v0.1.0 through v0.4.0 and the 12-week OSS plan
+without network access, billing, external models, GitHub write permission,
+public announcements, or third-party repository actions. Treat it as a local
+progress check. It does not replace public PyPI download telemetry, consented
+external adopter evidence, or visible review links.
+
 ## v0.1
 
 - Local CI failure classifier.

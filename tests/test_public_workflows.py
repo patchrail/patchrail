@@ -120,6 +120,57 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert "/home/" not in proc.stdout
 
 
+def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "roadmap", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.roadmap_audit.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "local_checkout"
+    assert payload["status"] == "active_not_ready_for_external_application"
+    assert set(payload["versions"]) == {"v0.1.0", "v0.2.0", "v0.3.0", "v0.4.0"}
+    assert len(payload["weeks"]) == 12
+    assert payload["versions"]["v0.1.0"]["status"] == "github_release_ready_pypi_blocked"
+    assert (
+        "first PyPI publish and clean install verification"
+        in (payload["versions"]["v0.1.0"]["gaps"])
+    )
+    assert payload["versions"]["v0.2.0"]["signals"]["ci_fixtures"] == 115
+    assert payload["versions"]["v0.2.0"]["signals"]["ci_benchmark_failed"] == 0
+    assert payload["versions"]["v0.2.0"]["signals"]["read_only_github_action"] is True
+    assert payload["versions"]["v0.3.0"]["signals"]["owned_repo_issue_pr_cycles"] == 20
+    assert payload["versions"]["v0.4.0"]["signals"]["money_goal_retired"] is True
+    assert (
+        "do not process bounties, payouts, claims, outbound, or money-ranked leads"
+        in (payload["versions"]["v0.4.0"]["gaps"])
+    )
+    assert payload["weeks"]["week_2"]["status"] == "partial_pypi_blocked"
+    assert payload["weeks"]["week_8"]["status"] == "pending_external_permission"
+    assert payload["weeks"]["week_12"]["status"] == "not_ready"
+    assert payload["safety"]["network_required"] is False
+    assert payload["safety"]["github_write_permission_required"] is False
+    assert payload["safety"]["billing_required"] is False
+    assert payload["safety"]["external_model_required"] is False
+    assert payload["safety"]["money_goal_retired"] is True
+    assert payload["artifact_presence"]["release_v0_1"] is True
+    assert payload["artifact_presence"]["agent_control_plane_demo"] is True
+    assert payload["artifact_presence"]["funded_issues_read_only_demo"] is True
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
+
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    assert "patchrail evidence roadmap --format markdown" in roadmap
+    assert "does not replace public PyPI download telemetry" in roadmap
+
+
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     artifact_dir = ROOT / "examples" / "github-action" / "patchrail-ci-triage-artifact"
     readme = (ROOT / "examples" / "github-action" / "README.md").read_text(encoding="utf-8")
