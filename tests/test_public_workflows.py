@@ -140,6 +140,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     oss_program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
+    security = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
+    threat_model = (ROOT / "docs" / "threat-model.md").read_text(encoding="utf-8")
     metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
     adopters = (ROOT / "ADOPTERS.md").read_text(encoding="utf-8")
     adopter_report = (ROOT / ".github" / "ISSUE_TEMPLATE" / "adopter_report.md").read_text(
@@ -228,6 +230,17 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         pilot_guide
     )
     assert "It does not copy the raw log into the output directory" in pilot_guide
+    assert "## Pilot pack boundary" in security
+    assert "schema_version=patchrail.ci_pilot_pack.v1" in security
+    assert "source.raw_log_copied=false" in security
+    assert "creates a pending work item with `write_actions_allowed=false`" in security
+    assert "## Pilot pack trust boundary" in threat_model
+    assert "`patchrail queue add --from-pilot-pack` accepts either the pack directory" in (
+        threat_model
+    )
+    assert "rejects manifests where" in threat_model
+    assert "`source.raw_log_copied` is not `false`" in threat_model
+    assert "Queue approval remains local" in threat_model
     assert "pilot-manifest.json" in pilot_guide
     assert "patchrail ci pilot-pack" in roadmap
     assert "patchrail ci pilot-pack" in release_v02
