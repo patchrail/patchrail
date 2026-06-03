@@ -416,6 +416,135 @@ class PatchRailCITests(unittest.TestCase):
             self.assertIn("<email>", redacted_log)
             self.assertIn("/Users/<user>/project", redacted_log)
 
+    def test_ci_pilot_summary_defaults_to_private_repository_mention(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "failed-ci.log"
+            out_dir = root / "pilot-pack"
+            log.write_text(
+                "python -m pip install -r requirements.txt\n"
+                "ERROR: Could not find a version that satisfies the requirement demo==99\n"
+                "ResolutionImpossible\n",
+                encoding="utf-8",
+            )
+            pack_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    str(log),
+                    "--out-dir",
+                    str(out_dir),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(pack_proc.returncode, 0, pack_proc.stderr)
+
+            summary_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-summary",
+                    "--pack",
+                    str(out_dir),
+                    "--repository",
+                    "private-owner/private-repo",
+                    "--ci-provider",
+                    "GitHub Actions",
+                    "--toolchain",
+                    "Python",
+                    "--classification-correct",
+                    "yes",
+                    "--maintainer-action-useful",
+                    "yes",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(summary_proc.returncode, 0, summary_proc.stderr)
+            self.assertIn("# PatchRail Consent-Only Pilot Summary", summary_proc.stdout)
+            self.assertIn("Repository approved for public mention: `false`", summary_proc.stdout)
+            self.assertIn("Repository: `not approved for public listing`", summary_proc.stdout)
+            self.assertIn("Root cause: `python_dependency_resolution`", summary_proc.stdout)
+            self.assertIn("Classification correct: `yes`", summary_proc.stdout)
+            self.assertIn("Suggested maintainer action useful: `yes`", summary_proc.stdout)
+            self.assertIn("PatchRail ran locally", summary_proc.stdout)
+            self.assertIn("did not copy the raw log", summary_proc.stdout)
+            self.assertNotIn("private-owner/private-repo", summary_proc.stdout)
+
+    def test_ci_pilot_summary_json_includes_repository_only_when_approved(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "failed-ci.log"
+            out_dir = root / "pilot-pack"
+            log.write_text(
+                "cargo test\nthread 'tests::demo' panicked at src/lib.rs:7\n",
+                encoding="utf-8",
+            )
+            pack_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    str(log),
+                    "--out-dir",
+                    str(out_dir),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(pack_proc.returncode, 0, pack_proc.stderr)
+
+            summary_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-summary",
+                    "--pack",
+                    str(out_dir / "pilot-manifest.json"),
+                    "--repository",
+                    "patchrail/example",
+                    "--repository-mention-approved",
+                    "yes",
+                    "--ci-provider",
+                    "GitHub Actions",
+                    "--toolchain",
+                    "Rust",
+                    "--format",
+                    "json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(summary_proc.returncode, 0, summary_proc.stderr)
+            payload = json.loads(summary_proc.stdout)
+            self.assertEqual(payload["schema_version"], "patchrail.ci_pilot_summary.v1")
+            self.assertEqual(payload["public_listing"]["repository_mention_approved"], True)
+            self.assertEqual(payload["public_listing"]["repository"], "patchrail/example")
+            self.assertEqual(payload["pilot_context"]["ci_provider"], "GitHub Actions")
+            self.assertEqual(payload["pilot_context"]["toolchain"], "Rust")
+            self.assertEqual(payload["classification"]["failure_class"], "rust_test_failure")
+            self.assertEqual(payload["pilot_pack"]["raw_log_copied"], False)
+            self.assertEqual(payload["requirements"]["network_required"], False)
+            self.assertIn("open_pull_request", payload["blocked_actions"])
+
     def test_redact_command_emits_redacted_text(self) -> None:
         proc = subprocess.run(
             [sys.executable, "-m", "patchrail", "redact"],

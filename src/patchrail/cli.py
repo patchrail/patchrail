@@ -663,6 +663,110 @@ def _pilot_pack_readme(manifest: dict[str, Any]) -> str:
     )
 
 
+def _pilot_manifest_path(path: Path) -> Path:
+    return path / "pilot-manifest.json" if path.is_dir() else path
+
+
+def _load_pilot_pack(path: Path) -> tuple[Path, dict[str, Any], dict[str, Any]]:
+    manifest_path = _pilot_manifest_path(path)
+    manifest_dir = manifest_path.parent
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != "patchrail.ci_pilot_pack.v1":
+        raise ValueError("pilot pack must use schema_version patchrail.ci_pilot_pack.v1")
+    source = manifest.get("source") or {}
+    if source.get("raw_log_copied") is not False:
+        raise ValueError("pilot pack must not copy the raw CI log")
+    files_payload = manifest.get("files") or {}
+    result_name = files_payload.get("json_result")
+    if not result_name:
+        raise ValueError("pilot pack manifest must include files.json_result")
+    result = json.loads((manifest_dir / str(result_name)).read_text(encoding="utf-8"))
+    if result.get("schema_version") != "patchrail.ci_result.v1":
+        raise ValueError("pilot pack result must use schema_version patchrail.ci_result.v1")
+    return manifest_path, manifest, result
+
+
+def _pilot_summary_payload(args: argparse.Namespace) -> dict[str, Any]:
+    manifest_path, manifest, result = _load_pilot_pack(args.pack)
+    repository_mention_approved = args.repository_mention_approved == "yes"
+    repository_public_name = (
+        args.repository if repository_mention_approved and args.repository else None
+    )
+    return {
+        "schema_version": "patchrail.ci_pilot_summary.v1",
+        "pilot_pack": {
+            "manifest_path": str(manifest_path),
+            "raw_log_copied": False,
+            "redaction_local_only": True,
+            "maintainer_review_required_before_sharing": True,
+        },
+        "public_listing": {
+            "repository_mention_approved": repository_mention_approved,
+            "repository": repository_public_name,
+        },
+        "pilot_context": {
+            "ci_provider": args.ci_provider,
+            "toolchain": args.toolchain,
+            "classification_correct": args.classification_correct,
+            "maintainer_action_useful": args.maintainer_action_useful,
+        },
+        "classification": {
+            "failure_class": result["failure_class"],
+            "confidence": result["confidence"],
+            "likely_subsystem": result["likely_subsystem"],
+            "minimal_repair_strategy": result["minimal_repair_strategy"],
+        },
+        "requirements": manifest["requirements"],
+        "blocked_actions": manifest["blocked_actions"],
+    }
+
+
+def _render_pilot_summary_markdown(payload: dict[str, Any]) -> str:
+    public_listing = payload["public_listing"]
+    pilot_context = payload["pilot_context"]
+    classification = payload["classification"]
+    repository = public_listing["repository"] or "not approved for public listing"
+    repository_approved = str(public_listing["repository_mention_approved"]).lower()
+    return (
+        "\n".join(
+            [
+                "# PatchRail Consent-Only Pilot Summary",
+                "",
+                "## Consent",
+                "",
+                "- Maintainer permission: required before running or publishing pilot results.",
+                f"- Repository approved for public mention: `{repository_approved}`",
+                f"- Repository: `{repository}`",
+                "- Raw CI log copied into pack: `false`",
+                "- Maintainer review required before sharing: `true`",
+                "",
+                "## Pilot Context",
+                "",
+                f"- CI provider: `{pilot_context['ci_provider']}`",
+                f"- Toolchain: `{pilot_context['toolchain']}`",
+                f"- Classification correct: `{pilot_context['classification_correct']}`",
+                f"- Suggested maintainer action useful: `{pilot_context['maintainer_action_useful']}`",
+                "",
+                "## Result",
+                "",
+                f"- Root cause: `{classification['failure_class']}`",
+                f"- Confidence: `{classification['confidence']}`",
+                f"- Subsystem: `{classification['likely_subsystem']}`",
+                f"- Suggested action: {classification['minimal_repair_strategy']}",
+                "",
+                "## Safety",
+                "",
+                "PatchRail ran locally. It did not copy the raw log, call external models, "
+                "open a pull request, post a comment, contact a maintainer, claim funding, "
+                "or request repository write access.",
+                "",
+                "Before publishing this summary, review the redacted log and report manually.",
+            ]
+        )
+        + "\n"
+    )
+
+
 def _ci_pilot_pack(args: argparse.Namespace) -> int:
     raw_log = _read_log(args.log)
     out_dir = args.out_dir
@@ -734,6 +838,17 @@ def _ci_pilot_pack(args: argparse.Namespace) -> int:
             "blocked_actions": manifest["blocked_actions"],
         }
     )
+    _write_or_print(text, args.out)
+    return 0
+
+
+def _ci_pilot_summary(args: argparse.Namespace) -> int:
+    try:
+        payload = _pilot_summary_payload(args)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Invalid pilot pack: {exc}", file=sys.stderr)
+        return 1
+    text = _json_dump(payload) if args.format == "json" else _render_pilot_summary_markdown(payload)
     _write_or_print(text, args.out)
     return 0
 
@@ -1365,6 +1480,58 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     pilot_pack.add_argument("--out", type=Path, help="Optional JSON summary output path.")
     pilot_pack.set_defaults(func=_ci_pilot_pack)
+
+    pilot_summary = ci_subparsers.add_parser(
+        "pilot-summary",
+        help="Create a safe consent-only pilot outcome summary from a pilot pack.",
+    )
+    pilot_summary.add_argument(
+        "--pack",
+        type=Path,
+        required=True,
+        help="Pilot pack directory or pilot-manifest.json path.",
+    )
+    pilot_summary.add_argument(
+        "--repository",
+        default="",
+        help="Repository name to include only when public mention is explicitly approved.",
+    )
+    pilot_summary.add_argument(
+        "--repository-mention-approved",
+        choices=["yes", "no"],
+        default="no",
+        help="Whether the maintainer explicitly approved public repository listing.",
+    )
+    pilot_summary.add_argument(
+        "--ci-provider",
+        default="unknown",
+        help="CI provider label, for example GitHub Actions.",
+    )
+    pilot_summary.add_argument(
+        "--toolchain",
+        default="unknown",
+        help="Toolchain label, for example Python, Node, TypeScript, Go, or Rust.",
+    )
+    pilot_summary.add_argument(
+        "--classification-correct",
+        choices=["yes", "no", "unknown"],
+        default="unknown",
+        help="Maintainer-reviewed classification outcome.",
+    )
+    pilot_summary.add_argument(
+        "--maintainer-action-useful",
+        choices=["yes", "no", "unknown"],
+        default="unknown",
+        help="Maintainer-reviewed usefulness of the suggested action.",
+    )
+    pilot_summary.add_argument(
+        "--format",
+        choices=["markdown", "json"],
+        default="markdown",
+        help="Output format.",
+    )
+    pilot_summary.add_argument("--out", type=Path, help="Optional output path.")
+    pilot_summary.set_defaults(func=_ci_pilot_summary)
 
     redact = subparsers.add_parser("redact", help="Redact secrets, emails and home paths locally.")
     redact.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")

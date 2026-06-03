@@ -55,6 +55,7 @@ Or generate the same review bundle in one local command:
 
 ```bash
 patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack
+patchrail ci pilot-summary --pack patchrail-pilot-pack --ci-provider "GitHub Actions" --toolchain Python > pilot-summary.md
 ```
 
 The pack contains:
@@ -67,6 +68,26 @@ The pack contains:
 
 It does not copy the raw log into the output directory. Review the redacted log
 manually before sharing the pack or citing the result publicly.
+
+`patchrail ci pilot-summary` turns the pack into a short Markdown or JSON
+outcome summary for an adopter-report issue. It defaults to `--repository-mention-approved no`,
+so a repository name passed on the command line is not printed unless the
+maintainer explicitly approved public listing:
+
+```bash
+patchrail ci pilot-summary \
+  --pack patchrail-pilot-pack \
+  --repository owner/repo \
+  --repository-mention-approved yes \
+  --ci-provider "GitHub Actions" \
+  --toolchain Python \
+  --classification-correct yes \
+  --maintainer-action-useful yes
+```
+
+Use `--format json` if you want structured evidence for local records. The
+summary still does not copy raw logs, open pull requests, post comments, call
+external models, claim funding, or request write access.
 
 Review the report manually. Useful pilot notes are:
 

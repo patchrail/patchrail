@@ -35,6 +35,7 @@ Create a local pilot pack for maintainer review:
 
 ```bash
 patchrail ci pilot-pack --log failed-github-actions.log --out-dir patchrail-pilot-pack
+patchrail ci pilot-summary --pack patchrail-pilot-pack --ci-provider "GitHub Actions" --toolchain Python
 ```
 
 From a source checkout, run the bundled fixture and benchmark:

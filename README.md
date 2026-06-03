@@ -74,6 +74,7 @@ uv run --extra dev patchrail doctor --format markdown
 uv run --extra dev patchrail redact --log failed.log > failed.redacted.log
 uv run --extra dev patchrail ci explain --redact --log failed.log
 uv run --extra dev patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack
+uv run --extra dev patchrail ci pilot-summary --pack patchrail-pilot-pack --ci-provider "GitHub Actions" --toolchain Python
 uv run --extra dev patchrail schema ci-result > ci-result.schema.json
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format markdown
 ```
@@ -128,7 +129,10 @@ with a redacted log excerpt and the `fixture-check` result.
 
 If you are testing PatchRail on a repository you maintain, use the adopter
 report issue template. `patchrail ci pilot-pack` creates a local redacted pack
-for that review path. Public adopter listings require explicit permission.
+for that review path. `patchrail ci pilot-summary` creates a safe outcome
+snippet and keeps repository names private unless
+`--repository-mention-approved yes` is set. Public adopter listings require
+explicit permission.
 
 ## License
 
