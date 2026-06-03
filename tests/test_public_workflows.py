@@ -219,6 +219,13 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Approval does not open a pull request" in api_reference
     assert "patchrail schema queue-work-item" in api_reference
     assert "schemas/queue_work_item.schema.json" in api_reference
+    assert "## CLI Queue Imports" in api_reference
+    assert "patchrail queue --db patchrail-pilot.sqlite add" in api_reference
+    assert "--from-pilot-pack patchrail-pilot-pack" in api_reference
+    assert "requires `schema_version=patchrail.ci_pilot_pack.v1`" in api_reference
+    assert "rejects manifests where `source.raw_log_copied` is not `false`" in api_reference
+    assert "keeps `write_actions_allowed=false`" in api_reference
+    assert "does not read or store the original raw CI log" in api_reference
     assert "consent-only" in pilot_guide
     assert "does not give PatchRail write access" in pilot_guide
     assert "patchrail redact --log failed-ci.log" in pilot_guide
