@@ -12,6 +12,7 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Repository: <https://github.com/patchrail/patchrail>
 - GitHub stars: 0 on 2026-06-03, immediately after public launch
 - Monthly PyPI downloads: pending first PyPI release
+- GitHub Release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>
 - External repositories using PatchRail: pending pilots
 - External contributors: pending external contributions
 - Public metrics tracker: [docs/metrics.md](metrics.md) records current public
@@ -64,8 +65,12 @@ Last verified: 2026-06-03.
   [docs/release-v0.1.0-evidence.md](release-v0.1.0-evidence.md) records the
   checked sdist/wheel names, local command results, wheel smoke test, safety
   review, public CI run, and remaining manual gates.
-- Manual gates: release tags, PyPI publish, GitHub releases, public
-  announcements, and external applications remain explicit maintainer actions.
+- Published GitHub Release:
+  <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>
+  targets `07b4934d91866c3ea2978c2aff265f923cd232bf` and includes checked
+  sdist/wheel assets.
+- Manual gates: PyPI publish, public announcements, and external applications
+  remain explicit maintainer actions.
 - Tests: `uv run --extra dev pytest -q` -> 32 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 17 files already formatted.
@@ -147,7 +152,7 @@ Last verified: 2026-06-03.
 - Public PR links reviewed with Codex
 - Public issues triaged with Codex
 - Release-prep PR prepared with Codex
-- Release links
+- PyPI release link after package index publish
 - PyPI download stats
 - External adopter feedback
 - Pilot outcomes from maintainers who opted into read-only local trials

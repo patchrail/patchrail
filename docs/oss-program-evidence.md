@@ -34,8 +34,10 @@ Last verified: 2026-06-03.
 - Release-prep checklist: [docs/release-process.md](release-process.md) requires
   test, lint, benchmark, doctor, build, wheel smoke, safety, privacy, and public
   CI evidence before any publish step.
-- Manual gates: release tags, PyPI publish, GitHub releases, public
-  announcements, and external applications remain explicit maintainer actions.
+- Published GitHub Release:
+  <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>
+- Manual gates: PyPI publish, public announcements, and external applications
+  remain explicit maintainer actions.
 - Tests: `uv run --extra dev pytest -q` -> 16 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 101/101 fixtures passed.
