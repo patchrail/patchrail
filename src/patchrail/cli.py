@@ -116,11 +116,16 @@ def _json_dump(payload: Any) -> str:
 
 
 def _load_schema(name: str) -> str:
-    if name != "ci-result":
+    schema_files = {
+        "ci-result": "ci-result.v1.schema.json",
+        "queue-audit-event": "queue-audit-event.v1.schema.json",
+        "queue-proposal": "queue-proposal.v1.schema.json",
+        "queue-work-item": "queue-work-item.v1.schema.json",
+    }
+    schema_file = schema_files.get(name)
+    if schema_file is None:
         raise ValueError(f"unknown schema: {name}")
-    return (
-        files("patchrail.schemas").joinpath("ci-result.v1.schema.json").read_text(encoding="utf-8")
-    )
+    return files("patchrail.schemas").joinpath(schema_file).read_text(encoding="utf-8")
 
 
 def _doctor_payload(root: Path) -> dict[str, Any]:
@@ -921,7 +926,7 @@ def _build_parser() -> argparse.ArgumentParser:
     schema = subparsers.add_parser("schema", help="Print PatchRail's versioned JSON schemas.")
     schema.add_argument(
         "schema",
-        choices=["ci-result"],
+        choices=["ci-result", "queue-audit-event", "queue-proposal", "queue-work-item"],
         help="Schema name to emit.",
     )
     schema.add_argument("--out", type=Path, help="Optional output path.")
