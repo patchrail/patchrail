@@ -229,6 +229,33 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "java_build_failure",
+      "expected_failure_class": "java_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "java-gradle-dependency-resolution.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "java_build_failure",
+      "expected_failure_class": "java_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "java-gradle-toolchain-version.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "java_build_failure",
+      "expected_failure_class": "java_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "java-maven-compilation.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.71,
       "actual_failure_class": "javascript_lint",
       "expected_failure_class": "javascript_lint",
@@ -1114,6 +1141,11 @@
       "passed": 10,
       "total_cases": 10
     },
+    "java_build_failure": {
+      "failed": 0,
+      "passed": 3,
+      "total_cases": 3
+    },
     "javascript_lint": {
       "failed": 0,
       "passed": 11,
@@ -1146,7 +1178,7 @@
     }
   },
   "failed": 0,
-  "passed": 121,
+  "passed": 124,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -1154,5 +1186,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 121
+  "total_cases": 124
 }

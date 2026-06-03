@@ -110,6 +110,30 @@ RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "failure_class": "java_build_failure",
+        "likely_subsystem": "Java build or test lifecycle",
+        "patterns": [
+            r"\bmvn\b",
+            r"\bgradle\b",
+            r"COMPILATION ERROR",
+            r"Failed to execute goal",
+            r"Execution failed for task",
+            r"Could not resolve all files",
+            r"Could not resolve dependencies",
+            r"Could not determine java version",
+            r"Unsupported class file major version",
+            r"No tests found for given includes",
+            r"BUILD FAILED",
+            r"cannot find symbol",
+            r"package .* does not exist",
+        ],
+        "reproduction_command": "./gradlew test || mvn test",
+        "minimal_repair_strategy": (
+            "Reproduce the failing Maven or Gradle task, then fix the narrow dependency, "
+            "toolchain, compiler, or test-selection drift before rerunning the same task."
+        ),
+    },
+    {
         "failure_class": "docker_build_failure",
         "likely_subsystem": "Container image build",
         "patterns": [

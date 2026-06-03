@@ -55,7 +55,7 @@ The expectation file declares the target `failure_class` and an optional
 patchrail ci benchmark examples/ci-triage --format markdown
 ```
 
-The fixture set contains 121 sanitized synthetic examples across ten supported
+The fixture set contains 124 sanitized synthetic examples across eleven supported
 root-cause families. The benchmark does not require network access, billing, a
 GitHub App, or an external model. It exits non-zero when any fixture expectation
 fails.

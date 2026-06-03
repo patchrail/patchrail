@@ -1,7 +1,7 @@
 # PatchRail CI Benchmark
 
-- Total cases: `121`
-- Passed: `121`
+- Total cases: `124`
+- Passed: `124`
 - Failed: `0`
 - Top-1 fixture accuracy: `1.0`
 
@@ -11,6 +11,7 @@
 - `docker_build_failure`: `3` / `3` passed
 - `github_actions_workflow`: `10` / `10` passed
 - `go_test_failure`: `10` / `10` passed
+- `java_build_failure`: `3` / `3` passed
 - `javascript_lint`: `11` / `11` passed
 - `node_dependency_install`: `19` / `19` passed
 - `python_dependency_resolution`: `27` / `27` passed

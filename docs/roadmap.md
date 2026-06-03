@@ -20,7 +20,7 @@ external adopter evidence, or visible review links.
 - Local redaction helper for shared logs.
 - Fixture-backed tests.
 - Local fixture benchmark command.
-- Initial 40-fixture CI failure zoo, now expanded to 121 public benchmark fixtures.
+- Initial 40-fixture CI failure zoo, now expanded to 124 public benchmark fixtures.
 - Safety, ethics, and security documentation.
 - Release-prep evidence checklist for tests, lint, benchmark, doctor, package
   artifacts, safety review, and manual publish gates.
