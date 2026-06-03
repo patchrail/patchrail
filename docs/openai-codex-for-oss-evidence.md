@@ -123,6 +123,7 @@ Last verified: 2026-06-03.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format after the shared queue status contract: `uv run --extra dev ruff format --check .` -> 21 files already formatted.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 121 / 121 fixtures passed.
+- Consent-only pilot metrics: `uv run --extra dev patchrail ci pilot-metrics examples/pilot-outcome/*.summary.json --format json` separates owned-repo public mentions from external repository mentions so `patchrail/*` outcomes are not counted as external adopters.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:
   [`examples/local-agent-queue`](../examples/local-agent-queue/README.md)
