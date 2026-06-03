@@ -1,0 +1,31 @@
+{
+  "artifact_files": [
+    "normalized-provider-export.json",
+    "safe-list.json",
+    "all-issues.json",
+    "safe-explain.md",
+    "risky-explain.json",
+    "summary.json"
+  ],
+  "blocked_actions": [
+    "automatic_claims",
+    "automatic_pull_requests",
+    "automatic_issue_comments",
+    "mass_outreach",
+    "ranking_by_money_only"
+  ],
+  "include_risky_total_returned": 2,
+  "local_first": true,
+  "provider_records_loaded": 2,
+  "read_only": true,
+  "requirements": {
+    "billing_required": false,
+    "external_model_required": false,
+    "github_write_permission_required": false,
+    "network_required": false
+  },
+  "risky_issue_risk_level": "high",
+  "risky_recommendation": "Do not pursue automatically. Keep this as read-only metadata unless a maintainer explicitly invites help and the scope is clarified.",
+  "safe_only_total_returned": 1,
+  "schema_version": "patchrail.funded_issues_readonly_demo.v1"
+}
