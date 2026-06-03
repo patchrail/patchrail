@@ -286,6 +286,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack" in (
         pilot_guide
     )
+    assert "patchrail ci pilot-summary --pack patchrail-pilot-pack" in pilot_guide
+    assert "--repository-mention-approved yes" in pilot_guide
+    assert "defaults to `--repository-mention-approved no`" in pilot_guide
     assert "It does not copy the raw log into the output directory" in pilot_guide
     assert "## Pilot pack boundary" in security
     assert "schema_version=patchrail.ci_pilot_pack.v1" in security
@@ -304,7 +307,11 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Synthetic pilot outcome example for safe adopter feedback summaries" in release_v02
     assert "local redacted bundle generated without copying the raw log" in release_v02
     assert "Pilot pack command: `patchrail ci pilot-pack`" in evidence
+    assert "Pilot summary command: `patchrail ci pilot-summary`" in evidence
     assert "Pilot pack queue importer: `patchrail queue add --from-pilot-pack`" in evidence
+    assert "Pilot summary command: `patchrail ci pilot-summary --pack patchrail-pilot-pack`" in (
+        oss_program_evidence
+    )
     assert "no raw log copy" in evidence
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
     assert "Sanitized fixture contribution path" in contributing
@@ -334,6 +341,10 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     )
     assert "Write actions: not allowed" in pilot_outcome
     assert "External models: not used" in pilot_outcome
+    assert "patchrail ci pilot-summary --pack patchrail-pilot-pack" in pilot_outcome
+    assert "`--repository-mention-approved yes` only after the maintainer explicitly" in (
+        pilot_outcome
+    )
     assert "Repository approved for public mention: no" in pilot_outcome
     assert "The raw log remains private and was not copied into the pilot pack" in pilot_outcome
     assert "claims that PatchRail fixed code, opened a pull request" in pilot_outcome

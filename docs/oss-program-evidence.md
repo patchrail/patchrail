@@ -102,6 +102,9 @@ Last verified: 2026-06-03.
   validates `pilot-manifest.json`, confirms the raw log was not copied, stores
   references to the redacted log/report/result, and keeps
   `write_actions_allowed=false`.
+- Pilot summary command: `patchrail ci pilot-summary --pack patchrail-pilot-pack`
+  creates a safe Markdown/JSON outcome record and suppresses repository names
+  unless public mention was explicitly approved.
 - Queue audit trail: `patchrail queue audit --format jsonl` exports local
   `work_item_added`, `work_item_approved`, `work_item_rejected`, and
   `work_items_exported` events without granting GitHub write permissions.

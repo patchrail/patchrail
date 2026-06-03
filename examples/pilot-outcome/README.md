@@ -22,6 +22,7 @@ The repository name, log path, and outcome below are synthetic. Do not count thi
 ```bash
 patchrail doctor --format markdown
 patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack
+patchrail ci pilot-summary --pack patchrail-pilot-pack --ci-provider "GitHub Actions" --toolchain Python > pilot-summary.md
 patchrail queue --db patchrail-pilot.sqlite init
 patchrail queue --db patchrail-pilot.sqlite add --from-pilot-pack patchrail-pilot-pack
 patchrail queue --db patchrail-pilot.sqlite audit --format jsonl
@@ -80,6 +81,10 @@ maintainer action from redacted evidence.
 
 Only redacted report excerpts and the pilot manifest are safe to share. The raw log remains private and was not copied into the pilot pack.
 ```
+
+`patchrail ci pilot-summary` defaults to keeping the repository unlisted. Pass
+`--repository-mention-approved yes` only after the maintainer explicitly
+approves public listing.
 
 ## Do Not Include
 

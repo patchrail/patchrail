@@ -31,6 +31,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
   issues to focused pull requests without claiming external adoption
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
+- Pilot summary command: `patchrail ci pilot-summary` turns a reviewed pack into
+  a safe Markdown/JSON outcome and keeps repository names private unless
+  `--repository-mention-approved yes` is set
 - Pilot pack queue importer: `patchrail queue add --from-pilot-pack` turns that
   consent-only bundle into a pending Agent Control Plane item without raw logs
   or GitHub write permissions
