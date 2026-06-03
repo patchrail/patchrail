@@ -1,0 +1,5 @@
+uv pip compile requirements.in -c constraints.txt
+No solution found when resolving dependencies:
+  Because api-client==3.4.0 depends on pydantic>=2.8,<2.9
+  and constraints.txt pins pydantic==2.10.3, requirements are unsatisfiable.
+The conflict is caused by incompatible versions in the resolved dependencies.

@@ -487,6 +487,15 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.8,
+      "log": "python-pip-constraint-marker-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
@@ -519,6 +528,15 @@
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.7,
       "log": "python-pip-marker-py310.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.8,
+      "log": "python-pip-missing-musllinux-wheel.log",
       "mismatches": [],
       "passed": true
     },
@@ -586,6 +604,15 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-tools-extra-marker-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.95,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
@@ -600,6 +627,15 @@
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.8,
       "log": "python-pip-yanked-release.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.8,
+      "log": "python-poetry-python-range-drift.log",
       "mismatches": [],
       "passed": true
     },
@@ -703,11 +739,29 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.8,
+      "log": "python-uv-constraint-backtrack-fail.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.7,
       "log": "python-uv-extra-marker-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.8,
+      "log": "python-uv-extra-python-marker-drift.log",
       "mismatches": [],
       "passed": true
     },
@@ -983,7 +1037,7 @@
     }
   ],
   "failed": 0,
-  "passed": 109,
+  "passed": 115,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -991,5 +1045,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 109
+  "total_cases": 115
 }

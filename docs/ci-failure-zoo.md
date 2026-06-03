@@ -11,7 +11,7 @@ access, repository write permissions, billing, or an external model call.
 
 ## Current Coverage
 
-The fixture zoo currently contains 109 cases across these root-cause families:
+The fixture zoo currently contains 115 cases across these root-cause families:
 
 - `github_actions_workflow`
 - `go_test_failure`

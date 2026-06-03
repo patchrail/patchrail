@@ -1,0 +1,5 @@
+python -m pip install -r requirements.txt
+ERROR: Could not find a version that satisfies the requirement native-metrics==2.7.0
+ERROR: No matching distribution found for native-metrics==2.7.0
+Ignored the following versions that require a different python version: 2.7.0 Requires-Python >=3.12
+No matching distribution found for platform tag musllinux_1_2_x86_64

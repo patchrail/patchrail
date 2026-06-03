@@ -1,0 +1,5 @@
+poetry lock --no-update
+SolverProblemError
+Because project-service depends on report-core (^5.0) which requires Python >=3.12,<4.0, version solving failed.
+The current project's supported Python range (>=3.10,<3.12) is not compatible with some of the required packages Python requirement.
+requires a different python version: report-core 5.0.0 Requires-Python >=3.12

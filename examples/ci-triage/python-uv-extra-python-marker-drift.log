@@ -1,0 +1,6 @@
+uv pip install "worker[redis]" -r requirements.txt
+No solution found when resolving dependencies:
+  redis-queue[redis] depends on hiredis>=3.0; python_version >= "3.12"
+  requirements.txt pins hiredis==2.3.2
+Because only hiredis==2.3.2 is allowed and redis-queue[redis] requires hiredis>=3.0, requirements are unsatisfiable.
+Requires-Python marker drift changed the selected extra dependency set.
