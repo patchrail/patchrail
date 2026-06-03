@@ -39,6 +39,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
   ledger into a local owned-repo review packet while explicitly leaving external
   adoption, formal Codex review links, PyPI downloads, and third-party write
   actions unclaimed
+- Application gate:
+  `patchrail evidence application-gate --format markdown` fails closed until
+  PyPI telemetry, permissioned external evidence, and visible review links are
+  real rather than placeholder-derived
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
 - Pilot summary command: `patchrail ci pilot-summary` turns a reviewed pack into
@@ -223,6 +227,11 @@ Last verified: 2026-06-03.
   ledger locally and reports owned-repo review items without network, GitHub
   write permission, external model, billing, external-adopter claims, PyPI
   download claims, or formal review claims.
+- Application gate smoke:
+  `uv run --extra dev patchrail evidence application-gate --format json`
+  currently returns `not_ready` and `do_not_apply_yet`; it keeps the external
+  application blocked while PyPI telemetry, permissioned external adopters, and
+  formal visible review links remain missing.
 
 ## Public Launch Issues
 

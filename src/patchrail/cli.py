@@ -928,6 +928,136 @@ def _evidence_roadmap(args: argparse.Namespace) -> int:
     return 0
 
 
+def _application_gate_payload(root: Path) -> dict[str, Any]:
+    snapshot = _evidence_snapshot_payload(root)
+    roadmap = _roadmap_audit_payload(root)
+    signals = snapshot["signals"]
+    safety = snapshot["safety"]
+    review_triage = snapshot["workstreams"]["public_review_triage"]
+
+    checks = {
+        "public_repository_present": True,
+        "github_release_present": roadmap["artifact_presence"]["release_v0_1"],
+        "ci_benchmark_green": snapshot["workstreams"]["ci_janitor"]["benchmark_green"],
+        "required_docs_present": safety["missing_required_docs"] == [],
+        "read_only_ci_triage_workflow": safety["read_only_ci_triage_workflow"],
+        "agent_control_plane_demo_ready": snapshot["workstreams"]["agent_control_plane"][
+            "demo_present"
+        ],
+        "funded_issue_scout_secondary_read_only": snapshot["workstreams"]["funded_issue_scout"][
+            "demo_present"
+        ],
+        "owned_repo_review_packet_ready": review_triage["status"] == "owned_repo_visible",
+        "pypi_release_published": "first PyPI publish and download telemetry"
+        not in snapshot["remaining_evidence_gaps"],
+        "external_adopters_present": bool(signals["public_external_adopters"]),
+        "formal_visible_review_links_present": review_triage["formal_codex_review_links"],
+        "no_placeholder_metrics_in_application_copy": True,
+        "money_goal_retired": roadmap["safety"]["money_goal_retired"],
+        "no_network_or_write_required": all(
+            safety[key] is False
+            for key in [
+                "github_write_permission_required",
+                "external_model_required",
+                "billing_required",
+                "network_required",
+            ]
+        ),
+    }
+    blocker_map = {
+        "pypi_release_published": "first PyPI publish and download telemetry",
+        "external_adopters_present": "permissioned external maintainer pilots or adopters",
+        "formal_visible_review_links_present": "formal visible review links",
+        "no_placeholder_metrics_in_application_copy": "placeholder metrics in application copy",
+    }
+    blockers = [reason for key, reason in blocker_map.items() if not checks[key]]
+    ready = not blockers and all(checks.values())
+    return {
+        "schema_version": "patchrail.application_gate.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "local_checkout",
+        "status": "ready_to_apply" if ready else "not_ready",
+        "decision": "application_allowed" if ready else "do_not_apply_yet",
+        "checks": checks,
+        "signals": {
+            "ci_fixtures": signals["ci_fixtures"],
+            "ci_benchmark_failed": signals["ci_benchmark_failed"],
+            "public_release_count": signals["public_release_count"],
+            "public_external_adopters": signals["public_external_adopters"],
+            "pilot_summary_count": signals["pilot_summary_count"],
+            "owned_repo_issue_pr_cycles": signals["owned_repo_issue_pr_cycles"],
+            "focused_maintainer_prs": review_triage["focused_maintainer_prs"],
+        },
+        "blockers": blockers,
+        "safe_next_actions": [
+            "publish to PyPI only after maintainer package-index credentials are configured",
+            "record permissioned external maintainer pilots before counting adopter evidence",
+            "add formal visible review links only when public review artifacts exist",
+            "keep application copy blocked while any metric is pending or placeholder-derived",
+        ],
+        "safety": {
+            "local_first": True,
+            "network_required": False,
+            "github_write_permission_required": False,
+            "external_model_required": False,
+            "billing_required": False,
+            "money_goal_retired": True,
+            "third_party_write_actions_allowed": False,
+        },
+    }
+
+
+def _render_application_gate_markdown(payload: dict[str, Any]) -> str:
+    lines = [
+        "# PatchRail Application Gate",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Decision: `{payload['decision']}`",
+        "",
+        "## Checks",
+        "",
+    ]
+    lines.extend(f"- `{key}`: `{value}`" for key, value in payload["checks"].items())
+    lines.extend(["", "## Current Signals", ""])
+    lines.extend(f"- `{key}`: `{value}`" for key, value in payload["signals"].items())
+    lines.extend(["", "## Blockers", ""])
+    if payload["blockers"]:
+        lines.extend(f"- {blocker}" for blocker in payload["blockers"])
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Safe Next Actions", ""])
+    lines.extend(f"- {action}" for action in payload["safe_next_actions"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_application_gate_text(payload: dict[str, Any]) -> str:
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                f"Decision: {payload['decision']}",
+                f"Blockers: {len(payload['blockers'])}",
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_application_gate(args: argparse.Namespace) -> int:
+    payload = _application_gate_payload(Path("."))
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_application_gate_markdown(payload)
+    else:
+        text = _render_application_gate_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "ready_to_apply" else 1
+
+
 def _release_readiness_payload(args: argparse.Namespace) -> dict[str, Any]:
     root = Path(".")
     script = root / "scripts" / "release_readiness.py"
@@ -3568,6 +3698,19 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_review_packet.add_argument("--out", type=Path, help="Optional output path.")
     evidence_review_packet.set_defaults(func=_evidence_review_packet)
+
+    evidence_application_gate = evidence_subparsers.add_parser(
+        "application-gate",
+        help="Fail closed until external application evidence is real and non-placeholder.",
+    )
+    evidence_application_gate.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_application_gate.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_application_gate.set_defaults(func=_evidence_application_gate)
 
     serve = subparsers.add_parser(
         "serve",

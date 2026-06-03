@@ -86,6 +86,7 @@ uv run --extra dev pytest -q
 uv run --extra dev ruff check .
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format json
 uv run --extra dev patchrail evidence snapshot --format markdown
+uv run --extra dev patchrail evidence application-gate --format markdown
 uv run --extra dev patchrail evidence release-readiness --clean-dist --format markdown
 ```
 
@@ -152,6 +153,15 @@ Agent Control Plane, Funded Issue Scout, release evidence, and adopter gaps:
 ```bash
 uv run --extra dev patchrail evidence snapshot --format markdown
 ```
+
+Before drafting an external program application, run the fail-closed gate:
+
+```bash
+uv run --extra dev patchrail evidence application-gate --format markdown
+```
+
+The gate exits non-zero until PyPI telemetry, permissioned external evidence,
+and visible review links are real rather than placeholder-derived.
 
 ## License
 
