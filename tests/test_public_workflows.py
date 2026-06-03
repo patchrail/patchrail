@@ -138,6 +138,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     codex_workflows = (ROOT / "docs" / "codex-workflows.md").read_text(encoding="utf-8")
     evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
     oss_program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
+    workflow_ledger = (ROOT / "docs" / "public-workflow-ledger.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
     security = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
@@ -164,6 +165,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
 
     assert "docs/codex-workflows.md" in readme
     assert "docs/openai-codex-for-oss-evidence.md" in readme
+    assert "docs/public-workflow-ledger.md" in readme
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
     assert "examples/pilot-outcome/README.md" in readme
@@ -178,15 +180,24 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci pilot-pack --log failed-github-actions.log" in quickstart
     assert "The v0.1 release does not require Codex or any external model" in codex_workflows
     assert "no automatic pull requests" in codex_workflows
+    assert "public-workflow-ledger.md" in codex_workflows
+    assert "own-repo evidence, not third-party adoption" in codex_workflows
     assert "patchrail-ci-triage" in codex_workflows
     assert "patchrail-release-captain" in codex_workflows
     assert "patchrail-review-guardrails" in codex_workflows
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
+    assert "Public maintenance workflow ledger" in evidence
+    assert "public-workflow-ledger.md" in evidence
+    assert "formal visible Codex" in evidence
+    assert "#59 -> #60" in evidence
     assert "Consent-only pilot outcome example" in evidence
     assert "examples/pilot-outcome" in evidence
     assert "Public CI fixtures: 115 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Public maintenance workflow ledger" in oss_program_evidence
+    assert "owned-repo issue-to-PR cycles" in oss_program_evidence
+    assert "#59 -> #60" in oss_program_evidence
     assert "Consent-only pilot outcome example" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/27" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/37" in oss_program_evidence
@@ -219,6 +230,21 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Funded issue read-only demo" in oss_program_evidence
     assert "External repositories using PatchRail: pending pilots" in oss_program_evidence
     assert "PyPI release link after package index publish" in oss_program_evidence
+    assert "This ledger tracks public PatchRail maintenance cycles" in workflow_ledger
+    assert "it does not claim external adoption" in workflow_ledger
+    assert "it does not claim formal Codex review unless a visible review link exists" in (
+        workflow_ledger
+    )
+    assert "Consent-only pilot outcome example" in workflow_ledger
+    assert "[#59](https://github.com/patchrail/patchrail/issues/59)" in workflow_ledger
+    assert "[#60](https://github.com/patchrail/patchrail/pull/60)" in workflow_ledger
+    assert "[#57](https://github.com/patchrail/patchrail/issues/57)" in workflow_ledger
+    assert "[#58](https://github.com/patchrail/patchrail/pull/58)" in workflow_ledger
+    assert "[#37](https://github.com/patchrail/patchrail/issues/37)" in workflow_ledger
+    assert "[#43](https://github.com/patchrail/patchrail/pull/43)" in workflow_ledger
+    assert "external adopters: pending consent-only pilots" in workflow_ledger
+    assert "formal Codex review examples: pending visible review links" in workflow_ledger
+    assert "This is not a substitute for external adoption" in workflow_ledger
     assert "patchrail.queue_api.v1" in api_reference
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference

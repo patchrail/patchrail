@@ -19,6 +19,21 @@ Maintainer checklist:
 3. Run `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json`.
 4. Review Codex suggestions manually before merge.
 
+## Public Maintenance Ledger
+
+PatchRail now tracks owned-repository maintenance cycles in
+[public-workflow-ledger.md](public-workflow-ledger.md). The ledger is useful
+program evidence because it links scoped issues to focused pull requests, tests,
+and CI-visible maintenance work.
+
+Boundary:
+
+- the ledger is own-repo evidence, not third-party adoption;
+- it does not claim formal Codex review unless a visible review link exists;
+- it does not grant write permissions or automate pull requests;
+- it keeps PyPI publish, public announcements, and external applications behind
+  explicit maintainer gates.
+
 ## Issue Triage
 
 Use Codex to summarize fixture requests or classifier bugs, not to close issues

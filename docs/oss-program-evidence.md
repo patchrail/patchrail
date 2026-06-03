@@ -28,6 +28,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows how to
   summarize a pilot without raw logs or unapproved repository mentions
+- Public maintenance workflow ledger:
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
+  issues to focused pull requests without claiming external adoption
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, the Agent
   Control Plane, and the read-only Funded Issue Scout
@@ -44,6 +47,8 @@ PatchRail's public safety posture is local-first and human-approved:
 - `patchrail doctor` reports that v0.1 requires no billing, network, external model, or GitHub write permission.
 - GitHub Actions triage produces a read-only artifact and does not comment,
   open pull requests, call external models, or request write permissions.
+- [Public maintenance workflow ledger](public-workflow-ledger.md) records
+  owned-repo issue-to-PR cycles separately from external adoption metrics.
 - `patchrail queue add --from-pilot-pack` validates a consent-only pilot pack
   and imports it as a pending local work item without copying raw logs or
   granting write permissions.
@@ -127,6 +132,10 @@ Last verified: 2026-06-03.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) is synthetic and
   does not count as adoption evidence.
+- Public maintenance workflow ledger:
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md) records owned-repo
+  maintenance cycles including #59 -> #60, #57 -> #58, #55 -> #56, #53 -> #54,
+  and #51 -> #52.
 
 ## Public Launch Issues
 
@@ -144,9 +153,9 @@ Last verified: 2026-06-03.
 
 ## Evidence To Add Before Applying
 
-- PR review examples for parser, redaction or workflow changes.
-- Issue triage examples for CI fixture requests.
-- Release-prep examples showing changelog, version and quickstart checks.
+- Formal PR review examples for parser, redaction or workflow changes.
+- Formal issue triage examples for CI fixture requests.
+- Formal release-prep examples showing changelog, version and quickstart checks.
 - PyPI release link after package index publish.
 - PyPI download stats.
 - External adopter feedback and permissioned adopter entries.
