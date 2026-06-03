@@ -192,6 +192,9 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "dist/patchrail-0.1.0-py3-none-any.whl" in release_evidence
     assert "Tests: 32 passed." in release_evidence
     assert "Benchmark: 101 total, 101 passed, 0 failed." in release_evidence
+    assert "https://github.com/patchrail/patchrail/pull/17" in release_evidence
+    assert "https://github.com/patchrail/patchrail/actions/runs/26869827161" in release_evidence
+    assert "package-smoke" in release_evidence
     assert "manual maintainer gate" in release_evidence
     assert "create or push a `v0.1.0` tag" in release_evidence
     assert "publish the package to PyPI" in release_evidence
