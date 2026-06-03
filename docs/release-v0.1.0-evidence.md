@@ -37,13 +37,14 @@ Checking dist/patchrail-0.1.0.tar.gz: PASSED
 Reusable local evidence command:
 
 ```bash
-uv run --extra dev python scripts/release_readiness.py --clean-dist
+uv run --extra dev patchrail evidence release-readiness --clean-dist --format markdown
 ```
 
-The command builds the local sdist/wheel, runs `twine check`, installs the wheel
-into a fresh local virtual environment, verifies `patchrail doctor`, and
-classifies the dependency fixture. It does not publish to PyPI, create a tag,
-announce the release, contact third parties, or require GitHub write permission.
+The command wraps `scripts/release_readiness.py`, builds the local sdist/wheel,
+runs `twine check`, installs the wheel into a fresh local virtual environment,
+verifies `patchrail doctor`, and classifies the dependency fixture. It does not
+publish to PyPI, create a tag, announce the release, contact third parties, or
+require GitHub write permission.
 
 ## Local Verification
 

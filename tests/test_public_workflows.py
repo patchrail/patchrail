@@ -975,9 +975,10 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "patchrail-oss-evidence/evidence-snapshot.json" in workflow
     assert "patchrail-oss-evidence/evidence-snapshot.md" in workflow
 
-    assert "scripts/release_readiness.py --clean-dist" in readme
-    assert "scripts/release_readiness.py --clean-dist" in release_process
-    assert "scripts/release_readiness.py --clean-dist" in release_evidence
+    assert "patchrail evidence release-readiness --clean-dist" in readme
+    assert "patchrail evidence release-readiness --clean-dist" in release_process
+    assert "patchrail evidence release-readiness --clean-dist" in release_evidence
+    assert "scripts/release_readiness.py" in release_evidence
     assert "patchrail.release_readiness.v1" in script
     assert "--no-index" in script
     assert "published_to_pypi" in script
@@ -1027,3 +1028,25 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "manual maintainer gate" in release_evidence
     assert "publish the package to PyPI" in release_evidence
     assert "no automatic pull requests" in release_evidence
+
+
+def test_release_readiness_evidence_cli_is_documented_and_non_publishing() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "release-readiness", "--help"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    cli = (ROOT / "src" / "patchrail" / "cli.py").read_text(encoding="utf-8")
+    script = (ROOT / "scripts" / "release_readiness.py").read_text(encoding="utf-8")
+
+    assert proc.returncode == 0, proc.stderr
+    assert "Build and smoke-test local release artifacts without publishing" in proc.stdout
+    assert "--clean-dist" in proc.stdout
+    assert "--dist-dir" in proc.stdout
+    assert "_evidence_release_readiness" in cli
+    assert "scripts/release_readiness.py" in cli
+    assert "published_to_pypi" in script
+    assert "created_release_tag" in script
+    assert "contacted_third_parties" in script
