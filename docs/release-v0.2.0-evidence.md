@@ -64,6 +64,7 @@ Current evidence snapshot from 2026-06-03:
 - Example triage artifact: [examples/github-action](../examples/github-action/README.md)
 - Pilot guide: [docs/pilot-guide.md](pilot-guide.md)
 - Pilot outcome example: [examples/pilot-outcome](../examples/pilot-outcome/README.md)
+- Public workflow ledger: [docs/public-workflow-ledger.md](public-workflow-ledger.md)
 - Metrics tracker: [docs/metrics.md](metrics.md)
 - Adopter policy: [ADOPTERS.md](../ADOPTERS.md)
 - OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
@@ -84,7 +85,9 @@ These actions remain maintainer gates:
 
 - PyPI publishing is blocked by missing local publishing credentials.
 - External adoption evidence is still pending consent-only pilots.
-- Public Codex review/triage evidence is still pending real PR/issue examples.
+- Owned-repo issue-to-PR evidence now exists in
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md); formal visible
+  Codex review links remain pending.
 
 These blockers do not prevent local v0.2.0 preparation, docs, tests, metrics, or
 pilot-readiness work.

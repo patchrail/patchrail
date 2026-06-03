@@ -74,6 +74,7 @@ Current evidence snapshot from 2026-06-03:
 - Queue work item schema: [schemas/queue_work_item.schema.json](../schemas/queue_work_item.schema.json)
 - Queue proposal schema: [schemas/queue_proposal.schema.json](../schemas/queue_proposal.schema.json)
 - Queue audit event schema: [schemas/queue_audit_event.schema.json](../schemas/queue_audit_event.schema.json)
+- Public workflow ledger: [docs/public-workflow-ledger.md](public-workflow-ledger.md)
 - OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
 
 ## Manual Gates Before Publishing
@@ -92,7 +93,9 @@ These actions remain maintainer gates:
 
 - PyPI publishing is blocked by missing local publishing credentials.
 - External adoption evidence is still pending consent-only pilots.
-- Public Codex review/triage evidence is still pending real PR/issue examples.
+- Owned-repo issue-to-PR evidence now exists in
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md); formal visible
+  Codex review links remain pending.
 
 These blockers do not prevent local v0.3.0 preparation, docs, tests, schemas, or
 demo hardening.

@@ -165,7 +165,7 @@ Last verified: 2026-06-03.
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) records issue-to-PR
   cycles for owned-repo work such as #59 -> #60, #57 -> #58, #55 -> #56,
-  #53 -> #54, and #51 -> #52.
+  #53 -> #54, #51 -> #52, and #61 -> #62.
 
 ## Public Launch Issues
 
