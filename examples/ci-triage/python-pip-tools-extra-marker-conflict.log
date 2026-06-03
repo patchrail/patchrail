@@ -1,0 +1,6 @@
+pip-compile pyproject.toml --extra postgres --resolver=backtracking
+Could not find a version that matches db-driver<2.0,>=1.8,>=2.1
+Tried: 1.8.0, 1.9.1, 2.1.0
+There are incompatible versions in the resolved dependencies:
+  db-driver>=2.1; extra == "postgres"
+  db-driver<2.0; python_version < "3.11"

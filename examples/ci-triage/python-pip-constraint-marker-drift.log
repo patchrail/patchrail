@@ -1,0 +1,6 @@
+python -m pip install -r requirements.txt -c constraints.txt
+ERROR: Cannot install analytics-client==4.2.0 because these package versions have conflicting dependencies.
+The conflict is caused by:
+    analytics-client 4.2.0 depends on httpx<0.27 and >=0.25; python_version < "3.12"
+    constraints.txt pins httpx==0.28.1
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/
