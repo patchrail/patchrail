@@ -313,6 +313,7 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
             "agent_control_plane": {
                 "status": "local_demo",
                 "demo_present": (root / "examples" / "local-agent-queue" / "run_demo.py").exists(),
+                "evidence_command": "patchrail evidence control-plane",
             },
             "funded_issue_scout": {
                 "status": "read_only_demo",
@@ -445,6 +446,13 @@ def _exists(root: Path, relative_path: str) -> bool:
     return (root / relative_path).exists()
 
 
+def _safe_evidence_path(root: Path, path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return path.name
+
+
 def _roadmap_audit_payload(root: Path) -> dict[str, Any]:
     snapshot = _evidence_snapshot_payload(root)
     signals = snapshot["signals"]
@@ -501,11 +509,13 @@ def _roadmap_audit_payload(root: Path) -> dict[str, Any]:
                     "docs/agent-control-plane.md",
                     "docs/api-reference.md",
                     "examples/local-agent-queue/run_demo.py",
+                    "examples/local-agent-queue/demo-summary.expected.json",
                     "src/patchrail/queue/store.py",
                     "src/patchrail/queue/server.py",
                 ],
                 "signals": {
                     "demo_present": workstreams["agent_control_plane"]["demo_present"],
+                    "evidence_command": workstreams["agent_control_plane"]["evidence_command"],
                     "owned_repo_issue_pr_cycles": signals["owned_repo_issue_pr_cycles"],
                 },
                 "gaps": [
@@ -726,6 +736,197 @@ def _evidence_roadmap(args: argparse.Namespace) -> int:
         text = _render_roadmap_audit_text(payload)
     _write_or_print(text, args.out)
     return 0
+
+
+def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> dict[str, Any]:
+    summary_file = summary_path or (
+        root / "examples" / "local-agent-queue" / "demo-summary.expected.json"
+    )
+    summary = json.loads(summary_file.read_text(encoding="utf-8"))
+    if summary.get("schema_version") != "patchrail.local_agent_queue_demo.v1":
+        raise ValueError("control plane summary must use patchrail.local_agent_queue_demo.v1")
+
+    required_events = [
+        "work_item_added",
+        "proposal_added",
+        "proposal_approved",
+        "proposal_rejected",
+        "work_item_approved",
+        "work_item_rejected",
+        "work_items_exported",
+    ]
+    audit_events = list(summary.get("audit_event_types") or [])
+    missing_events = [event for event in required_events if event not in audit_events]
+    artifact_files = list(summary.get("artifact_files") or [])
+    required_artifacts = [
+        "pilot-pack/pilot-manifest.json",
+        "pilot-pack/patchrail-result.json",
+        "item.json",
+        "proposal-approved.json",
+        "proposal-rejected.json",
+        "approved.json",
+        "rejected-item.json",
+        "queue.jsonl",
+        "audit-events.jsonl",
+    ]
+    missing_artifacts = [
+        artifact for artifact in required_artifacts if artifact not in artifact_files
+    ]
+    source_files = [
+        "src/patchrail/queue/store.py",
+        "src/patchrail/queue/server.py",
+        "examples/local-agent-queue/run_demo.py",
+        "docs/agent-control-plane.md",
+        "docs/api-reference.md",
+        "docs/release-v0.3.0-evidence.md",
+    ]
+    missing_source_files = [path for path in source_files if not (root / path).exists()]
+    write_actions_allowed = summary.get("write_actions_allowed")
+    rejected_write_actions_allowed = summary.get("rejected_item_write_actions_allowed")
+    write_actions_blocked = write_actions_allowed is False
+    rejected_write_actions_blocked = rejected_write_actions_allowed is False
+    proposal_rejected = summary.get("rejected_proposal_approval_state") == "rejected"
+    proposal_approved = summary.get("proposal_approval_state") == "approved"
+    item_approved = summary.get("item_approval_state") == "approved"
+    local_first = summary.get("local_first") is True
+    safety_gaps = []
+    if not local_first:
+        safety_gaps.append("local_first")
+    if not write_actions_blocked:
+        safety_gaps.append("write_actions_allowed_false")
+    if not rejected_write_actions_blocked:
+        safety_gaps.append("rejected_item_write_actions_allowed_false")
+    if not item_approved:
+        safety_gaps.append("human_approval_gate_exercised")
+    if not proposal_approved:
+        safety_gaps.append("proposal_approval_gate_exercised")
+    if not proposal_rejected:
+        safety_gaps.append("risky_proposal_rejection_exercised")
+    gaps = [*missing_events, *missing_artifacts, *missing_source_files, *safety_gaps]
+    return {
+        "schema_version": "patchrail.control_plane_evidence.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "local_checkout",
+        "summary_file": _safe_evidence_path(root, summary_file),
+        "status": "local_demo_ready" if not gaps else "needs_attention",
+        "signals": {
+            "artifact_count": len(artifact_files),
+            "audit_event_count": len(audit_events),
+            "pending_items_before_decisions": summary.get("pending_items_before_decisions"),
+            "source_failure_class": summary.get("source_failure_class"),
+            "item_approval_state": summary.get("item_approval_state"),
+            "proposal_approval_state": summary.get("proposal_approval_state"),
+            "proposal_risk_level": summary.get("proposal_risk_level"),
+            "rejected_item_approval_state": summary.get("rejected_item_approval_state"),
+            "rejected_proposal_approval_state": summary.get("rejected_proposal_approval_state"),
+        },
+        "safety": {
+            "local_first": local_first,
+            "write_actions_allowed": write_actions_allowed,
+            "rejected_item_write_actions_allowed": rejected_write_actions_allowed,
+            "human_approval_gate_exercised": item_approved,
+            "proposal_approval_gate_exercised": proposal_approved,
+            "risky_proposal_rejection_exercised": proposal_rejected,
+            "github_write_permission_required": False,
+            "external_model_required": False,
+            "billing_required": False,
+            "network_required": False,
+        },
+        "artifact_presence": {
+            "required_events_present": missing_events == [],
+            "required_artifacts_present": missing_artifacts == [],
+            "source_files_present": missing_source_files == [],
+            "missing_events": missing_events,
+            "missing_artifacts": missing_artifacts,
+            "missing_source_files": missing_source_files,
+            "safety_gaps": safety_gaps,
+        },
+        "remaining_evidence_gaps": [
+            "permissioned external maintainer control-plane demo",
+            "formal visible review links for agent handoff examples",
+            "public adopter report that explicitly approves repository listing",
+        ],
+    }
+
+
+def _render_control_plane_evidence_markdown(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    safety = payload["safety"]
+    artifacts = payload["artifact_presence"]
+    lines = [
+        "# PatchRail Agent Control Plane Evidence",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Summary file: `{payload['summary_file']}`",
+        f"- Artifact count: `{signals['artifact_count']}`",
+        f"- Audit event count: `{signals['audit_event_count']}`",
+        f"- Source failure class: `{signals['source_failure_class']}`",
+        f"- Proposal approval state: `{signals['proposal_approval_state']}`",
+        f"- Risky proposal rejection state: `{signals['rejected_proposal_approval_state']}`",
+        "",
+        "## Safety",
+        "",
+        f"- Local-first: `{safety['local_first']}`",
+        f"- Write actions allowed: `{safety['write_actions_allowed']}`",
+        f"- Rejected item write actions allowed: `{safety['rejected_item_write_actions_allowed']}`",
+        f"- Human approval gate exercised: `{safety['human_approval_gate_exercised']}`",
+        f"- Proposal approval gate exercised: `{safety['proposal_approval_gate_exercised']}`",
+        f"- Risky proposal rejection exercised: `{safety['risky_proposal_rejection_exercised']}`",
+        f"- GitHub write permission required: `{safety['github_write_permission_required']}`",
+        f"- External model required: `{safety['external_model_required']}`",
+        f"- Billing required: `{safety['billing_required']}`",
+        f"- Network required: `{safety['network_required']}`",
+        "",
+        "## Artifact Presence",
+        "",
+        f"- Required events present: `{artifacts['required_events_present']}`",
+        f"- Required artifacts present: `{artifacts['required_artifacts_present']}`",
+        f"- Source files present: `{artifacts['source_files_present']}`",
+        "",
+        "## Remaining Evidence Gaps",
+        "",
+    ]
+    lines.extend(f"- {gap}" for gap in payload["remaining_evidence_gaps"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_control_plane_evidence_text(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                f"Summary file: {payload['summary_file']}",
+                f"Artifacts: {signals['artifact_count']}",
+                f"Audit events: {signals['audit_event_count']}",
+                f"Write actions allowed: {payload['safety']['write_actions_allowed']}",
+                (
+                    "Risky proposal rejected: "
+                    f"{payload['safety']['risky_proposal_rejection_exercised']}"
+                ),
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_control_plane(args: argparse.Namespace) -> int:
+    try:
+        payload = _control_plane_evidence_payload(Path("."), args.summary)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Invalid control-plane evidence input: {exc}", file=sys.stderr)
+        return 1
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_control_plane_evidence_markdown(payload)
+    else:
+        text = _render_control_plane_evidence_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "local_demo_ready" else 1
 
 
 def _queue_db(args: argparse.Namespace) -> Path:
@@ -2238,6 +2439,27 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_roadmap.add_argument("--out", type=Path, help="Optional output path.")
     evidence_roadmap.set_defaults(func=_evidence_roadmap)
+
+    evidence_control_plane = evidence_subparsers.add_parser(
+        "control-plane",
+        help="Audit local Agent Control Plane demo evidence from repository artifacts.",
+    )
+    evidence_control_plane.add_argument(
+        "--summary",
+        type=Path,
+        help=(
+            "Optional local agent-queue demo summary JSON. Defaults to "
+            "examples/local-agent-queue/demo-summary.expected.json."
+        ),
+    )
+    evidence_control_plane.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_control_plane.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_control_plane.set_defaults(func=_evidence_control_plane)
 
     serve = subparsers.add_parser(
         "serve",

@@ -4,6 +4,7 @@ PatchRail keeps the roadmap auditable from local repository artifacts:
 
 ```bash
 patchrail evidence roadmap --format markdown
+patchrail evidence control-plane --format markdown
 ```
 
 The audit reports progress for v0.1.0 through v0.4.0 and the 12-week OSS plan
@@ -63,6 +64,8 @@ external adopter evidence, or visible review links.
 - Proposal approval/rejection audit events without granting write permission.
 - Local-only HTTP API for queue health, status, work items, proposals,
   approvals, and audit events.
+- Local evidence audit command for the checked-in Agent Control Plane demo
+  summary, required artifacts, audit events, and human approval gates.
 - v0.3.0 release-candidate evidence page tying queue CLI/API, schemas, demo,
   audit exports, proposal gates, and remaining manual gates.
 

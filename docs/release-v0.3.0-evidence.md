@@ -41,6 +41,7 @@ uv run --extra dev python examples/local-agent-queue/run_demo.py --output .patch
 uv run --extra dev patchrail schema queue-work-item
 uv run --extra dev patchrail schema queue-proposal
 uv run --extra dev patchrail schema queue-audit-event
+uv run --extra dev patchrail evidence control-plane --format markdown
 uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail queue --db .patchrail-pilot.sqlite add --from-pilot-pack .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail serve --host 127.0.0.1 --port 8765 --db .patchrail-queue-demo/queue.sqlite
@@ -59,6 +60,10 @@ Current evidence snapshot from 2026-06-03:
 - The local-agent-queue demo runs end-to-end and produces a stable
   `summary.json` matching
   [demo-summary.expected.json](../examples/local-agent-queue/demo-summary.expected.json).
+- `patchrail evidence control-plane --format markdown` reports
+  `local_demo_ready` from the checked-in summary when required audit events,
+  artifacts, source docs, human approval, proposal approval, and risky-proposal
+  rejection are all present.
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
 - `queue add --from-pilot-pack` links the v0.2 consent-only pilot pack to the

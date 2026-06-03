@@ -74,6 +74,22 @@ The schemas preserve the human-approval boundary: work items require
 `write_actions_allowed=false`, proposals are local patch-plan records, and audit
 events are local append-only records of queue operations.
 
+## Local Evidence Audit
+
+PatchRail also exposes a local evidence command for the Agent Control Plane
+demo:
+
+```bash
+patchrail evidence control-plane --format markdown
+```
+
+It validates `examples/local-agent-queue/demo-summary.expected.json`, confirms
+the required audit events and artifacts are present, and reports whether the
+human approval, proposal approval, and risky-proposal rejection gates were
+exercised. It is a local release guardrail: it does not bind a server, contact
+GitHub, call external models, require billing, or grant repository write
+permission.
+
 ## Health And Status
 
 ### `GET /health`
