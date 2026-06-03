@@ -160,6 +160,10 @@ Last verified: 2026-06-03.
   `/health`, `/status`, `/work-items`, `/proposals`, and `/audit-events` for
   local dashboards/demos. The API rejects non-local bind hosts and reports no
   billing, external model, network, or GitHub write permission requirement.
+- HTTP API evidence: `patchrail evidence http-api --format json` starts an
+  ephemeral `127.0.0.1` server, exercises work-item/proposal create, approve,
+  reject, status, list, and audit endpoints, and reports `local_http_api_ready`
+  without exposing local temporary database paths.
 - Shared queue status contract: `patchrail queue status --format json` and
   `GET /status` both expose `patchrail.queue_status.v1`; the public schema is
   available through `patchrail schema queue-status` and

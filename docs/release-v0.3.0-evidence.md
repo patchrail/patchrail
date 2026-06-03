@@ -51,6 +51,7 @@ uv run --extra dev patchrail schema queue-audit-summary
 uv run --extra dev patchrail schema queue-status
 uv run --extra dev patchrail queue --db .patchrail-queue-demo/queue.sqlite audit-summary --format markdown
 uv run --extra dev patchrail evidence control-plane --format markdown
+uv run --extra dev patchrail evidence http-api --format markdown
 uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail queue --db .patchrail-pilot.sqlite add --from-pilot-pack .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail serve --host 127.0.0.1 --port 8765 --db .patchrail-queue-demo/queue.sqlite
@@ -76,6 +77,11 @@ Current evidence snapshot from 2026-06-03:
   `local_demo_ready` from the checked-in summary when required audit events,
   artifacts, source docs, human approval, proposal approval, risky-proposal
   rejection, and audit-summary gate coverage are all present.
+- `patchrail evidence http-api --format markdown` starts an ephemeral
+  `127.0.0.1` server, creates local work items and proposals, approves and
+  rejects records, reads `/status`, lists queue/proposal state, exports
+  `/audit-events`, and reports `local_http_api_ready` without printing local
+  filesystem paths.
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
 - `patchrail queue status --format json` and `GET /status` share

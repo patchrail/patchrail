@@ -106,6 +106,7 @@ demo:
 
 ```bash
 patchrail evidence control-plane --format markdown
+patchrail evidence http-api --format markdown
 ```
 
 It validates `examples/local-agent-queue/demo-summary.expected.json`, confirms
@@ -114,6 +115,14 @@ human approval, proposal approval, and risky-proposal rejection gates were
 exercised. It is a local release guardrail: it does not bind a server, contact
 GitHub, call external models, require billing, or grant repository write
 permission.
+
+`patchrail evidence http-api` complements that artifact check by starting an
+ephemeral server bound to `127.0.0.1`, creating local work items and proposals,
+recording approval and rejection decisions, reading `/status`, and exporting
+`/audit-events`. The command reports `local_http_api_ready` only when the
+required endpoints, human-gate events, and local-first safety flags are present.
+It stores data in a temporary SQLite database and does not print the local
+filesystem path.
 
 ## Health And Status
 
