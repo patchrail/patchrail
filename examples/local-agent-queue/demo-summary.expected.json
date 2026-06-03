@@ -1,7 +1,10 @@
 {
   "artifact_files": [
-    "ci-report.md",
-    "ci-result.json",
+    "pilot-pack/failed-ci.redacted.log",
+    "pilot-pack/patchrail-report.md",
+    "pilot-pack/patchrail-result.json",
+    "pilot-pack/pilot-manifest.json",
+    "pilot-pack/README.md",
     "item.json",
     "item.md",
     "rejected-item.json",

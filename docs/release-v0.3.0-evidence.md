@@ -14,6 +14,8 @@ candidate evidence covers:
 
 - SQLite-backed work items for reviewable maintainer tasks.
 - CI result import into pending local queue items.
+- Pilot pack import into pending local queue items, including manifest
+  validation that the raw CI log was not copied.
 - Human approval and rejection states for work items.
 - Local proposal records linked to queue items.
 - Proposal approval and rejection audit events.
@@ -39,6 +41,8 @@ uv run --extra dev python examples/local-agent-queue/run_demo.py --output .patch
 uv run --extra dev patchrail schema queue-work-item
 uv run --extra dev patchrail schema queue-proposal
 uv run --extra dev patchrail schema queue-audit-event
+uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
+uv run --extra dev patchrail queue --db .patchrail-pilot.sqlite add --from-pilot-pack .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail serve --host 127.0.0.1 --port 8765 --db .patchrail-queue-demo/queue.sqlite
 uv run --extra dev patchrail doctor --format json
 uv run --extra dev python -m build
@@ -57,6 +61,8 @@ Current evidence snapshot from 2026-06-03:
   [demo-summary.expected.json](../examples/local-agent-queue/demo-summary.expected.json).
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
+- `queue add --from-pilot-pack` links the v0.2 consent-only pilot pack to the
+  v0.3 local queue while keeping `write_actions_allowed=false`.
 - Safety boundary remains explicit: approving a work item or proposal records a
   local human decision only.
 

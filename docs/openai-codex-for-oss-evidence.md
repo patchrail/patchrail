@@ -25,6 +25,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
   contributions
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
+- Pilot pack queue importer: `patchrail queue add --from-pilot-pack` turns that
+  consent-only bundle into a pending Agent Control Plane item without raw logs
+  or GitHub write permissions
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, and the
   Agent Control Plane
@@ -85,7 +88,7 @@ Last verified: 2026-06-03.
   sdist/wheel assets.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 42 passed.
+- Tests: `uv run --extra dev pytest -q` -> 46 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 19 files already formatted.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 115 / 115 fixtures passed.
@@ -101,6 +104,10 @@ Last verified: 2026-06-03.
 - CI result importer: `patchrail queue add --from-ci-result ci-result.json`
   turns the read-only CI artifact JSON into a pending local queue item while
   keeping `write_actions_allowed=false`.
+- Pilot pack importer: `patchrail queue add --from-pilot-pack patchrail-pilot-pack`
+  validates `pilot-manifest.json`, confirms the raw log was not copied, stores
+  references to the redacted log/report/result, and keeps
+  `write_actions_allowed=false`.
 - Queue audit trail: `patchrail queue audit --format jsonl` exports local
   `work_item_added`, `work_item_approved`, `work_item_rejected`, and
   `work_items_exported` events without granting GitHub write permissions.

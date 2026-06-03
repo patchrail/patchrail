@@ -82,14 +82,25 @@ SQLite queue:
 
 ```bash
 patchrail queue --db patchrail-pilot.sqlite init
-patchrail queue --db patchrail-pilot.sqlite add --from-ci-result patchrail-result.json
+patchrail queue --db patchrail-pilot.sqlite add --from-pilot-pack patchrail-pilot-pack
 patchrail queue --db patchrail-pilot.sqlite list
 patchrail queue --db patchrail-pilot.sqlite audit --format jsonl
 ```
 
-The queue stores a pending local work item. Approval records do not open pull
-requests, do not comment on issues, and do not grant repository write
-permissions.
+The queue stores a pending local work item with references to
+`failed-ci.redacted.log`, `patchrail-report.md`, `patchrail-result.json`, and
+`pilot-manifest.json`.
+
+The importer validates that the manifest did not copy the raw log. Approval
+records do not open pull requests, do not comment on issues, and do not grant
+repository write permissions.
+
+If you are not using a pilot pack, a standalone classifier JSON is still
+accepted:
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite add --from-ci-result patchrail-result.json
+```
 
 ## Contribute A Fixture
 

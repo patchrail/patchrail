@@ -10,8 +10,11 @@ from typing import Any
 
 
 ARTIFACTS = [
-    "ci-report.md",
-    "ci-result.json",
+    "pilot-pack/failed-ci.redacted.log",
+    "pilot-pack/patchrail-report.md",
+    "pilot-pack/patchrail-result.json",
+    "pilot-pack/pilot-manifest.json",
+    "pilot-pack/README.md",
     "item.json",
     "item.md",
     "rejected-item.json",
@@ -88,8 +91,8 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     _prepare_output(output, force=force)
 
     db = output / "queue.sqlite"
-    ci_report = output / "ci-report.md"
-    ci_result = output / "ci-result.json"
+    pilot_pack = output / "pilot-pack"
+    ci_result = pilot_pack / "patchrail-result.json"
     init_json = output / "init.json"
     item_json = output / "item.json"
     item_md = output / "item.md"
@@ -111,18 +114,12 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         root,
         [
             "ci",
-            "explain",
+            "pilot-pack",
             "--log",
             str(fixture_log),
-            "--format",
-            "markdown",
-            "--out",
-            str(ci_report),
+            "--out-dir",
+            str(pilot_pack),
         ],
-    )
-    _run_patchrail(
-        root,
-        ["ci", "classify", "--log", str(fixture_log), "--format", "json", "--out", str(ci_result)],
     )
     _run_patchrail(root, ["queue", "--db", str(db), "init", "--out", str(init_json)])
     _run_patchrail(
@@ -132,10 +129,10 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
             "--db",
             str(db),
             "add",
-            "--from-ci-result",
-            str(ci_result),
+            "--from-pilot-pack",
+            str(pilot_pack),
             "--payload-json",
-            json.dumps({"markdown_report": "ci-report.md"}, sort_keys=True),
+            json.dumps({"markdown_report": "pilot-pack/patchrail-report.md"}, sort_keys=True),
             "--out",
             str(item_json),
         ],

@@ -21,22 +21,16 @@ Manual equivalent:
 ```bash
 mkdir -p .patchrail-demo
 
-patchrail ci explain \
+patchrail ci pilot-pack \
   --log examples/ci-triage/dependency-failure.log \
-  --format markdown \
-  --out .patchrail-demo/ci-report.md
-
-patchrail ci classify \
-  --log examples/ci-triage/dependency-failure.log \
-  --format json \
-  --out .patchrail-demo/ci-result.json
+  --out-dir .patchrail-demo/pilot-pack
 
 patchrail queue --db .patchrail-demo/queue.sqlite init \
   --out .patchrail-demo/init.json
 
 patchrail queue --db .patchrail-demo/queue.sqlite add \
-  --from-ci-result .patchrail-demo/ci-result.json \
-  --payload-json '{"markdown_report": ".patchrail-demo/ci-report.md"}' \
+  --from-pilot-pack .patchrail-demo/pilot-pack \
+  --payload-json '{"markdown_report": "pilot-pack/patchrail-report.md"}' \
   --out .patchrail-demo/item.json
 
 ITEM_ID=$(python3 -c 'import json; print(json.load(open(".patchrail-demo/item.json"))["id"])')
@@ -133,8 +127,14 @@ curl -sS "http://127.0.0.1:8765/audit-events?work_item_id=$ITEM_ID"
 
 Expected local artifacts:
 
-- `.patchrail-demo/ci-report.md`: the local CI explanation.
-- `.patchrail-demo/ci-result.json`: the machine-readable CI result.
+- `.patchrail-demo/pilot-pack/failed-ci.redacted.log`: the locally redacted CI
+  log.
+- `.patchrail-demo/pilot-pack/patchrail-report.md`: the local CI explanation.
+- `.patchrail-demo/pilot-pack/patchrail-result.json`: the machine-readable CI
+  result.
+- `.patchrail-demo/pilot-pack/pilot-manifest.json`: the local consent and
+  safety manifest.
+- `.patchrail-demo/pilot-pack/README.md`: pilot-pack handoff notes.
 - `.patchrail-demo/item.json`: the pending work item.
 - `.patchrail-demo/item.md`: a human-readable queue item.
 - `.patchrail-demo/rejected-item.json`: the rejected duplicate item decision.
@@ -154,6 +154,8 @@ Expected local artifacts:
   add, proposal, approve, and export decisions.
 - `.patchrail-demo/summary.json`: stable demo summary matching
   `demo-summary.expected.json`.
+- The work item is imported from `pilot-pack/pilot-manifest.json`, which
+  records that the raw log was not copied into the pack.
 - Local API responses expose the same local SQLite state for dashboard or demo
   use without GitHub write permissions or external model calls.
 

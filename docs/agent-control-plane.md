@@ -27,7 +27,22 @@ Create a local queue:
 patchrail queue init
 ```
 
-Add a work item from a CI report:
+Add a work item from a local pilot pack:
+
+```bash
+patchrail ci pilot-pack \
+  --log examples/ci-triage/dependency-failure.log \
+  --out-dir patchrail-pilot-pack
+
+patchrail queue add \
+  --from-pilot-pack patchrail-pilot-pack
+```
+
+The pilot-pack importer reads `pilot-manifest.json`, validates that the raw log
+was not copied, loads `patchrail-result.json`, and stores references to the
+redacted log and Markdown report in the local work item payload.
+
+You can also add a work item from a standalone CI result:
 
 ```bash
 patchrail ci classify \

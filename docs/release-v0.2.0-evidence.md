@@ -43,7 +43,7 @@ uv run --extra dev twine check dist/*
 
 Current evidence snapshot from 2026-06-03:
 
-- Tests: 42 passed.
+- Tests: 46 passed.
 - Lint: all checks passed.
 - Format: 19 files already formatted.
 - Fixture hygiene: 115 / 115 fixtures passed.

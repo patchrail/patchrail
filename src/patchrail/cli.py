@@ -239,6 +239,46 @@ def _queue_payload_from_ci_result(path: Path) -> tuple[str, str, str, dict[str, 
     return "ci_failure", title, str(path), payload
 
 
+def _queue_payload_from_pilot_pack(path: Path) -> tuple[str, str, str, dict[str, Any]]:
+    manifest_path = path / "pilot-manifest.json" if path.is_dir() else path
+    manifest_dir = manifest_path.parent
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != "patchrail.ci_pilot_pack.v1":
+        raise ValueError("pilot pack must use schema_version patchrail.ci_pilot_pack.v1")
+    source = manifest.get("source") or {}
+    if source.get("raw_log_copied") is not False:
+        raise ValueError("pilot pack must not copy the raw CI log")
+
+    files_payload = manifest.get("files") or {}
+    result_name = files_payload.get("json_result")
+    if not result_name:
+        raise ValueError("pilot pack manifest must include files.json_result")
+    result_path = manifest_dir / str(result_name)
+    ci_result = json.loads(result_path.read_text(encoding="utf-8"))
+    if ci_result.get("schema_version") != "patchrail.ci_result.v1":
+        raise ValueError("pilot pack result must use schema_version patchrail.ci_result.v1")
+
+    failure_class = str(ci_result.get("failure_class") or "unknown")
+    likely_subsystem = str(ci_result.get("likely_subsystem") or "unknown subsystem")
+    title = f"Review {failure_class} CI pilot pack"
+    pack_files = {key: str(value) for key, value in files_payload.items() if isinstance(value, str)}
+    payload = {
+        "ci_result": ci_result,
+        "failure_class": failure_class,
+        "likely_subsystem": likely_subsystem,
+        "minimal_repair_strategy": ci_result.get("minimal_repair_strategy"),
+        "pilot_pack": {
+            "manifest": manifest,
+            "manifest_path": str(manifest_path),
+            "files": pack_files,
+            "raw_log_copied": False,
+            "maintainer_review_required_before_sharing": True,
+        },
+        "report_source": str(result_path),
+    }
+    return "ci_failure", title, str(manifest_path), payload
+
+
 def _render_queue_items_text(items: list[dict[str, Any]]) -> str:
     if not items:
         return "No work items.\n"
@@ -353,6 +393,9 @@ def _queue_add(args: argparse.Namespace) -> int:
     kind = args.kind
     title = args.title
     source = args.source
+    if args.from_ci_result and args.from_pilot_pack:
+        print("queue add accepts only one import source", file=sys.stderr)
+        return 1
     if args.from_ci_result:
         try:
             imported_kind, imported_title, imported_source, item_payload = (
@@ -360,6 +403,17 @@ def _queue_add(args: argparse.Namespace) -> int:
             )
         except (json.JSONDecodeError, ValueError) as exc:
             print(f"Invalid CI result: {exc}", file=sys.stderr)
+            return 1
+        kind = kind or imported_kind
+        title = title or imported_title
+        source = source if source != "manual" else imported_source
+    if args.from_pilot_pack:
+        try:
+            imported_kind, imported_title, imported_source, item_payload = (
+                _queue_payload_from_pilot_pack(args.from_pilot_pack)
+            )
+        except (FileNotFoundError, json.JSONDecodeError, ValueError) as exc:
+            print(f"Invalid pilot pack: {exc}", file=sys.stderr)
             return 1
         kind = kind or imported_kind
         title = title or imported_title
@@ -1388,6 +1442,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--from-ci-result",
         type=Path,
         help="Import a local patchrail.ci_result.v1 JSON file as a pending ci_failure item.",
+    )
+    queue_add.add_argument(
+        "--from-pilot-pack",
+        type=Path,
+        help=(
+            "Import a local pilot-pack directory or pilot-manifest.json as a pending "
+            "ci_failure item."
+        ),
     )
     queue_add.add_argument("--out", type=Path, help="Optional output path.")
     queue_add.set_defaults(func=_queue_add)
