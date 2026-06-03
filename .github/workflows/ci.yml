@@ -79,7 +79,7 @@ jobs:
           uv run patchrail evidence snapshot --format json --out patchrail-oss-evidence/evidence-snapshot.json
           uv run patchrail evidence snapshot --format markdown --out patchrail-oss-evidence/evidence-snapshot.md
       - name: Upload OSS evidence snapshot
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: patchrail-oss-evidence
           path: patchrail-oss-evidence/
