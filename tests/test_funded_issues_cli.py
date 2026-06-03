@@ -165,6 +165,46 @@ class PatchRailFundedIssuesTests(unittest.TestCase):
         self.assertEqual(payload["total_returned"], 1)
         self.assertEqual(payload["issues"][0]["reference"], "example/project#42")
 
+    def test_funded_issues_readonly_demo_has_stable_summary(self) -> None:
+        expected = json.loads(
+            Path("examples/funded-issues-readonly/demo-summary.expected.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "examples/funded-issues-readonly/run_demo.py",
+                    "--output",
+                    tmp,
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            summary = json.loads((Path(tmp) / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary, expected)
+
+            for artifact in expected["artifact_files"]:
+                self.assertTrue((Path(tmp) / artifact).exists())
+
+            safe_list = json.loads((Path(tmp) / "safe-list.json").read_text(encoding="utf-8"))
+            all_issues = json.loads((Path(tmp) / "all-issues.json").read_text(encoding="utf-8"))
+            risky = json.loads((Path(tmp) / "risky-explain.json").read_text(encoding="utf-8"))
+            safe_explain = (Path(tmp) / "safe-explain.md").read_text(encoding="utf-8")
+
+        self.assertEqual(safe_list["total_returned"], 1)
+        self.assertEqual(all_issues["total_returned"], 2)
+        self.assertEqual(risky["issue"]["risk_level"], "high")
+        self.assertIn("automatic_claims", risky["ethics"]["blocked"])
+        self.assertIn("automatic_issue_comments", risky["ethics"]["blocked"])
+        self.assertIn("Safe to keep in a local funded-maintenance shortlist", safe_explain)
+        self.assertFalse(summary["requirements"]["network_required"])
+        self.assertFalse(summary["requirements"]["github_write_permission_required"])
+
 
 if __name__ == "__main__":
     unittest.main()
