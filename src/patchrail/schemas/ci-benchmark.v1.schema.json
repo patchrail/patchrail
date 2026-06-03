@@ -12,6 +12,7 @@
     "failed",
     "accuracy",
     "class_summary",
+    "coverage_gate",
     "requirements"
   ],
   "properties": {
@@ -67,6 +68,42 @@
         },
         "additionalProperties": false
       }
+    },
+    "coverage_gate": {
+      "type": "object",
+      "required": ["min_cases_per_class", "passed", "failures"],
+      "properties": {
+        "min_cases_per_class": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["failure_class", "total_cases", "minimum_cases"],
+            "properties": {
+              "failure_class": {
+                "type": "string",
+                "minLength": 1
+              },
+              "total_cases": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minimum_cases": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "cases": {
       "type": "array",

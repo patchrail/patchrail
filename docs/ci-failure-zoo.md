@@ -70,16 +70,22 @@ Run the benchmark:
 patchrail ci benchmark examples/ci-triage --format markdown
 patchrail ci benchmark examples/ci-triage --format markdown --summary-only
 patchrail ci benchmark examples/ci-triage --format json
+patchrail ci benchmark examples/ci-triage --format json --summary-only --min-cases-per-class 3
 patchrail ci fixture-check examples/ci-triage --format json
 ```
 
 The command exits with status `0` only when every fixture matches its expected
-classification and confidence floor.
+classification and confidence floor. If `--min-cases-per-class` is set, it also
+exits non-zero when any covered root-cause family has fewer fixtures than that
+minimum. This turns the zoo into a release gate for depth, not just a count of
+passing cases.
 
 `benchmark` also emits maintainer-readable aggregate evidence:
 
 - `accuracy.top_1`: passed fixtures divided by total fixtures.
 - `class_summary`: total, passed and failed cases per root-cause family.
+- `coverage_gate`: optional depth gate results when
+  `--min-cases-per-class` is used.
 - `--summary-only`: omit per-fixture cases and keep only aggregate evidence for
   GitHub artifact summaries, release notes, or local review.
 
@@ -87,6 +93,7 @@ Current aggregate snapshot:
 
 - Top-1 fixture accuracy: `1.0`.
 - Root-cause families covered: `14`.
+- Coverage gate: `--min-cases-per-class 3` passes across every covered family.
 - Largest families: `python_dependency_resolution` (`27` cases),
   `node_dependency_install` (`19` cases), and `typescript_typecheck`
   (`19` cases).

@@ -2680,7 +2680,26 @@ def _benchmark_case(root: Path, log_path: Path) -> dict[str, Any]:
     }
 
 
-def _run_ci_benchmark(path: Path) -> dict[str, Any]:
+def _coverage_gate_payload(
+    class_summary: dict[str, dict[str, int]], min_cases_per_class: int
+) -> dict[str, Any]:
+    failures = [
+        {
+            "failure_class": failure_class,
+            "total_cases": summary["total_cases"],
+            "minimum_cases": min_cases_per_class,
+        }
+        for failure_class, summary in class_summary.items()
+        if summary["total_cases"] < min_cases_per_class
+    ]
+    return {
+        "min_cases_per_class": min_cases_per_class,
+        "passed": not failures,
+        "failures": failures,
+    }
+
+
+def _run_ci_benchmark(path: Path, *, min_cases_per_class: int = 0) -> dict[str, Any]:
     resolved_path = path.resolve()
     root = resolved_path
     if root.is_file():
@@ -2710,6 +2729,7 @@ def _run_ci_benchmark(path: Path) -> dict[str, Any]:
         }
         for failure_class, total in sorted(class_counts.items())
     }
+    coverage_gate = _coverage_gate_payload(class_summary, min_cases_per_class)
     return {
         "schema_version": "patchrail.ci_benchmark.v1",
         "root": _display_path(display_root),
@@ -2720,6 +2740,7 @@ def _run_ci_benchmark(path: Path) -> dict[str, Any]:
             "top_1": round(passed / len(cases), 4) if cases else 0.0,
         },
         "class_summary": class_summary,
+        "coverage_gate": coverage_gate,
         "cases": cases,
         "requirements": {
             "billing_required": False,
@@ -2820,6 +2841,8 @@ def _render_benchmark_markdown(result: dict[str, Any], *, include_cases: bool = 
         f"- Passed: `{result['passed']}`",
         f"- Failed: `{result['failed']}`",
         f"- Top-1 fixture accuracy: `{result['accuracy']['top_1']}`",
+        f"- Coverage gate passed: `{result['coverage_gate']['passed']}`",
+        f"- Minimum cases per class: `{result['coverage_gate']['min_cases_per_class']}`",
         "",
         "## Class summary",
         "",
@@ -2830,6 +2853,22 @@ def _render_benchmark_markdown(result: dict[str, Any], *, include_cases: bool = 
         )
     if not include_cases:
         return "\n".join(lines) + "\n"
+    lines.extend(
+        [
+            "",
+            "## Coverage gate failures",
+            "",
+        ]
+    )
+    failures = result["coverage_gate"]["failures"]
+    if failures:
+        for failure in failures:
+            lines.append(
+                f"- `{failure['failure_class']}` has `{failure['total_cases']}` cases; "
+                f"minimum is `{failure['minimum_cases']}`"
+            )
+    else:
+        lines.append("- None.")
     lines.extend(
         [
             "",
@@ -2854,9 +2893,16 @@ def _render_benchmark_text(result: dict[str, Any], *, include_cases: bool = True
         f"Passed: {result['passed']}",
         f"Failed: {result['failed']}",
         f"Top-1 fixture accuracy: {result['accuracy']['top_1']}",
+        f"Coverage gate passed: {result['coverage_gate']['passed']}",
+        f"Minimum cases per class: {result['coverage_gate']['min_cases_per_class']}",
     ]
     for failure_class, summary in result["class_summary"].items():
         lines.append(f"{failure_class}: {summary['passed']} / {summary['total_cases']} passed")
+    for failure in result["coverage_gate"]["failures"]:
+        lines.append(
+            f"COVERAGE FAIL {failure['failure_class']}: "
+            f"{failure['total_cases']} < {failure['minimum_cases']}"
+        )
     if not include_cases:
         return "\n".join(lines) + "\n"
     for case in result["cases"]:
@@ -3126,7 +3172,10 @@ def _funded_issues_import(args: argparse.Namespace) -> int:
 
 
 def _ci_benchmark(args: argparse.Namespace) -> int:
-    result = _run_ci_benchmark(args.path)
+    if args.min_cases_per_class < 0:
+        print("--min-cases-per-class must be >= 0", file=sys.stderr)
+        return 2
+    result = _run_ci_benchmark(args.path, min_cases_per_class=args.min_cases_per_class)
     if args.format == "json":
         payload = _benchmark_summary(result) if args.summary_only else result
         text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
@@ -3135,7 +3184,7 @@ def _ci_benchmark(args: argparse.Namespace) -> int:
     else:
         text = _render_benchmark_text(result, include_cases=not args.summary_only)
     _write_or_print(text, args.out)
-    return 0 if result["failed"] == 0 else 1
+    return 0 if result["failed"] == 0 and result["coverage_gate"]["passed"] else 1
 
 
 def _ci_fixture_check(args: argparse.Namespace) -> int:
@@ -3207,6 +3256,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--summary-only",
         action="store_true",
         help="Omit per-case benchmark details and emit only aggregate evidence.",
+    )
+    benchmark.add_argument(
+        "--min-cases-per-class",
+        type=int,
+        default=0,
+        help=(
+            "Fail the benchmark if any covered root-cause family has fewer than this many fixtures."
+        ),
     )
     benchmark.add_argument("--out", type=Path, help="Optional output path.")
     benchmark.set_defaults(func=_ci_benchmark)
