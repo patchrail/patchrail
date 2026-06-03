@@ -281,6 +281,11 @@ def test_http_api_evidence_smokes_ephemeral_local_server_without_write_actions()
     assert payload["signals"]["rejected_work_items"] == 1
     assert payload["signals"]["approved_proposals"] == 1
     assert payload["signals"]["rejected_proposals"] == 1
+    assert payload["signals"]["human_gate_status"] == "no_pending_decisions"
+    assert payload["signals"]["human_gate_total_pending_decisions"] == 0
+    assert payload["signals"]["human_gate_pending_work_items"] == 0
+    assert payload["signals"]["human_gate_pending_proposals"] == 0
+    assert payload["signals"]["human_gate_write_actions_unlocked"] is False
     assert payload["safety"]["local_first"] is True
     assert payload["safety"]["bind_host_local_only"] is True
     assert payload["safety"]["network_required"] is False
@@ -292,6 +297,8 @@ def test_http_api_evidence_smokes_ephemeral_local_server_without_write_actions()
     assert payload["safety"]["rejected_item_write_actions_allowed"] is False
     assert payload["safety"]["proposal_approval_gate_exercised"] is True
     assert payload["safety"]["proposal_rejection_gate_exercised"] is True
+    assert payload["safety"]["human_gate_summary_exposed"] is True
+    assert payload["safety"]["human_gate_write_actions_unlocked"] is False
     assert payload["artifact_presence"]["required_events_present"] is True
     assert payload["artifact_presence"]["required_endpoints_present"] is True
     assert payload["artifact_presence"]["missing_events"] == []
@@ -552,6 +559,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Local queue API: `patchrail serve --host 127.0.0.1 --port 8765`" in (
         oss_program_evidence
     )
+    assert "human gate summary" in oss_program_evidence
+    assert "write actions remain locked" in oss_program_evidence
     assert "Funded issue read-only demo" in oss_program_evidence
     assert "External repositories using PatchRail: pending pilots" in oss_program_evidence
     assert "PyPI release link after package index publish" in oss_program_evidence
@@ -589,6 +598,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail.queue_api.v1" in api_reference
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference
+    assert "human gate summary" in api_reference
+    assert "write actions remain locked" in api_reference
     assert "patchrail schema queue-work-item" in api_reference
     assert "patchrail schema queue-audit-summary" in api_reference
     assert "schemas/queue_work_item.schema.json" in api_reference

@@ -163,7 +163,8 @@ Last verified: 2026-06-03.
 - HTTP API evidence: `patchrail evidence http-api --format json` starts an
   ephemeral `127.0.0.1` server, exercises work-item/proposal create, approve,
   reject, status, list, and audit endpoints, and reports `local_http_api_ready`
-  without exposing local temporary database paths.
+  without exposing local temporary database paths. The artifact includes the
+  `/status` human gate summary and verifies that write actions remain locked.
 - Shared queue status contract: `patchrail queue status --format json` and
   `GET /status` both expose `patchrail.queue_status.v1`; the public schema is
   available through `patchrail schema queue-status` and
