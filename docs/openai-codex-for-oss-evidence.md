@@ -51,11 +51,15 @@ Last verified: 2026-06-03.
 - Release-prep checklist: [docs/release-process.md](release-process.md) now
   requires test, lint, benchmark, doctor, build, wheel smoke, safety, privacy,
   and public CI evidence before any publish step.
+- v0.1.0 release-prep artifact:
+  [docs/release-v0.1.0-evidence.md](release-v0.1.0-evidence.md) records the
+  checked sdist/wheel names, local command results, wheel smoke test, safety
+  review, and remaining manual gates.
 - Manual gates: release tags, PyPI publish, GitHub releases, public
   announcements, and external applications remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 29 passed.
+- Tests: `uv run --extra dev pytest -q` -> 32 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
-- Format: `uv run --extra dev ruff format --check .` -> 14 files already formatted.
+- Format: `uv run --extra dev ruff format --check .` -> 17 files already formatted.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 101/101 fixtures passed.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:

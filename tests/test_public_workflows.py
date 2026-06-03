@@ -170,6 +170,9 @@ def test_funded_issues_docs_preserve_read_only_boundary() -> None:
 def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     release_process = (ROOT / "docs" / "release-process.md").read_text(encoding="utf-8")
+    release_evidence = (ROOT / "docs" / "release-v0.1.0-evidence.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    oss_evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
 
     assert "package-smoke:" in workflow
     assert "uv run --extra dev python -m build" in workflow
@@ -181,3 +184,15 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
 
     assert "python -m pip install dist/*.whl" in release_process
     assert "patchrail ci explain --log examples/ci-triage/dependency-failure.log" in release_process
+    assert "release-v0.1.0-evidence.md" in release_process
+    assert "docs/release-v0.1.0-evidence.md" in readme
+    assert "release-v0.1.0-evidence.md" in oss_evidence
+
+    assert "dist/patchrail-0.1.0.tar.gz" in release_evidence
+    assert "dist/patchrail-0.1.0-py3-none-any.whl" in release_evidence
+    assert "Tests: 32 passed." in release_evidence
+    assert "Benchmark: 101 total, 101 passed, 0 failed." in release_evidence
+    assert "manual maintainer gate" in release_evidence
+    assert "create or push a `v0.1.0` tag" in release_evidence
+    assert "publish the package to PyPI" in release_evidence
+    assert "no automatic pull requests" in release_evidence

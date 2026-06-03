@@ -6,6 +6,9 @@ This process is a release-prep workflow. It collects evidence for a maintainer t
 review before tagging or publishing. It does not publish to PyPI, create tags, or
 announce a release.
 
+The current v0.1.0 prep artifact is tracked in
+[release-v0.1.0-evidence.md](release-v0.1.0-evidence.md).
+
 ## v0.1.0 Release-Prep Evidence Checklist
 
 Use this checklist before preparing the first public package release.
@@ -126,6 +129,9 @@ release-prep:
 - [ ] Create a GitHub release.
 - [ ] Announce the release publicly.
 - [ ] Apply to external programs with placeholder metrics.
+
+Record completed prep evidence in `docs/release-v0.1.0-evidence.md` before any
+manual publish step.
 
 ## Minimum Local Checks
 
