@@ -34,6 +34,11 @@ Pablo Guillén is the primary maintainer of PatchRail.
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
   issues to focused pull requests and tracks focused maintainer PR evidence
   without claiming external adoption
+- Public review packet:
+  `patchrail evidence review-packet --format markdown` turns the workflow
+  ledger into a local owned-repo review packet while explicitly leaving external
+  adoption, formal Codex review links, PyPI downloads, and third-party write
+  actions unclaimed
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
 - Pilot summary command: `patchrail ci pilot-summary` turns a reviewed pack into
@@ -199,8 +204,15 @@ Last verified: 2026-06-03.
   #53 -> #54, #51 -> #52, and #61 -> #62, plus recent focused maintainer PRs including
   [#83](https://github.com/patchrail/patchrail/pull/83),
   [#84](https://github.com/patchrail/patchrail/pull/84), and
-  [#85](https://github.com/patchrail/patchrail/pull/85). These remain
+  [#85](https://github.com/patchrail/patchrail/pull/85),
+  [#86](https://github.com/patchrail/patchrail/pull/86), and
+  [#87](https://github.com/patchrail/patchrail/pull/87). These remain
   owned-repo workflow evidence, not external adoption.
+- Public review packet smoke:
+  `uv run --extra dev patchrail evidence review-packet --format json` reads the
+  ledger locally and reports owned-repo review items without network, GitHub
+  write permission, external model, billing, external-adopter claims, PyPI
+  download claims, or formal review claims.
 
 ## Public Launch Issues
 

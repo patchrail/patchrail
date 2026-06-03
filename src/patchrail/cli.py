@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import Counter
 from importlib.resources import files
@@ -225,6 +226,175 @@ def _read_optional_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
+def _extract_markdown_links(text: str) -> list[dict[str, str]]:
+    return [
+        {"label": label, "url": url}
+        for label, url in re.findall(r"\[([^\]]+)\]\((https://[^)]+)\)", text)
+    ]
+
+
+def _public_review_packet_payload(root: Path) -> dict[str, Any]:
+    ledger_path = root / "docs" / "public-workflow-ledger.md"
+    ledger_text = ledger_path.read_text(encoding="utf-8")
+    issue_to_pr_cycles: list[dict[str, Any]] = []
+    focused_prs: list[dict[str, Any]] = []
+    section = ""
+    for raw_line in ledger_text.splitlines():
+        line = raw_line.strip()
+        if line == "## Issue-To-PR Cycles":
+            section = "issue_to_pr_cycles"
+            continue
+        if line == "## Focused Maintainer PR Evidence":
+            section = "focused_prs"
+            continue
+        if line.startswith("## ") and section:
+            section = ""
+            continue
+        if not line.startswith("|") or "---" in line or " Area " in line:
+            continue
+
+        columns = [column.strip() for column in line.strip("|").split("|")]
+        if section == "issue_to_pr_cycles" and len(columns) >= 4:
+            issue_links = _extract_markdown_links(columns[1])
+            pull_request_links = _extract_markdown_links(columns[2])
+            issue_to_pr_cycles.append(
+                {
+                    "area": columns[0],
+                    "issue": issue_links[0] if issue_links else None,
+                    "pull_request": pull_request_links[0] if pull_request_links else None,
+                    "evidence_type": columns[3],
+                }
+            )
+        elif section == "focused_prs" and len(columns) >= 4:
+            pull_request_links = _extract_markdown_links(columns[1])
+            ci_links = _extract_markdown_links(columns[2])
+            focused_prs.append(
+                {
+                    "area": columns[0],
+                    "pull_request": pull_request_links[0] if pull_request_links else None,
+                    "public_ci_evidence": ci_links[0] if ci_links else None,
+                    "evidence_type": columns[3],
+                }
+            )
+
+    gaps = [
+        "formal visible Codex review links",
+        "permissioned external maintainer triage examples",
+        "PyPI publish and download telemetry",
+    ]
+    return {
+        "schema_version": "patchrail.review_packet.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "local_checkout",
+        "source_file": _safe_evidence_path(root, ledger_path),
+        "status": (
+            "owned_repo_review_packet_ready"
+            if issue_to_pr_cycles and focused_prs
+            else "needs_attention"
+        ),
+        "signals": {
+            "issue_to_pr_cycles": len(issue_to_pr_cycles),
+            "focused_maintainer_prs": len(focused_prs),
+            "total_owned_review_items": len(issue_to_pr_cycles) + len(focused_prs),
+        },
+        "boundaries": {
+            "owned_repository_only": True,
+            "external_adoption_claimed": False,
+            "formal_codex_review_claimed": False,
+            "pypi_download_claimed": False,
+            "third_party_write_actions_claimed": False,
+        },
+        "requirements": {
+            "billing_required": False,
+            "external_model_required": False,
+            "network_required": False,
+            "github_write_permission_required": False,
+        },
+        "issue_to_pr_cycles": issue_to_pr_cycles,
+        "focused_maintainer_prs": focused_prs,
+        "remaining_evidence_gaps": gaps,
+    }
+
+
+def _render_review_packet_markdown(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    boundaries = payload["boundaries"]
+    lines = [
+        "# PatchRail Public Review Packet",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Source file: `{payload['source_file']}`",
+        f"- Issue-to-PR cycles: `{signals['issue_to_pr_cycles']}`",
+        f"- Focused maintainer PRs: `{signals['focused_maintainer_prs']}`",
+        f"- Total owned review items: `{signals['total_owned_review_items']}`",
+        "",
+        "## Boundary",
+        "",
+        f"- Owned repository only: `{boundaries['owned_repository_only']}`",
+        f"- External adoption claimed: `{boundaries['external_adoption_claimed']}`",
+        f"- Formal Codex review claimed: `{boundaries['formal_codex_review_claimed']}`",
+        f"- PyPI download claimed: `{boundaries['pypi_download_claimed']}`",
+        f"- Third-party write actions claimed: `{boundaries['third_party_write_actions_claimed']}`",
+        "",
+        "## Issue-To-PR Cycles",
+        "",
+    ]
+    for item in payload["issue_to_pr_cycles"]:
+        issue = item["issue"] or {}
+        pull_request = item["pull_request"] or {}
+        lines.append(
+            f"- {item['area']}: {issue.get('url', 'missing issue')} -> "
+            f"{pull_request.get('url', 'missing pull request')} ({item['evidence_type']})"
+        )
+    lines.extend(["", "## Focused Maintainer PRs", ""])
+    for item in payload["focused_maintainer_prs"]:
+        pull_request = item["pull_request"] or {}
+        ci = item["public_ci_evidence"] or {}
+        lines.append(
+            f"- {item['area']}: {pull_request.get('url', 'missing pull request')} "
+            f"with CI {ci.get('url', 'missing CI evidence')} ({item['evidence_type']})"
+        )
+    lines.extend(["", "## Remaining Evidence Gaps", ""])
+    lines.extend(f"- {gap}" for gap in payload["remaining_evidence_gaps"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_review_packet_text(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                f"Issue-to-PR cycles: {signals['issue_to_pr_cycles']}",
+                f"Focused maintainer PRs: {signals['focused_maintainer_prs']}",
+                f"Total owned review items: {signals['total_owned_review_items']}",
+                "External adoption claimed: False",
+                "Formal Codex review claimed: False",
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_review_packet(args: argparse.Namespace) -> int:
+    try:
+        payload = _public_review_packet_payload(Path("."))
+    except FileNotFoundError as exc:
+        print(f"Invalid review packet input: {exc}", file=sys.stderr)
+        return 1
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_review_packet_markdown(payload)
+    else:
+        text = _render_review_packet_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "owned_repo_review_packet_ready" else 1
+
+
 def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
     fixture_root = root / "examples" / "ci-triage"
     log_paths = sorted(fixture_root.glob("*.log")) if fixture_root.exists() else []
@@ -279,6 +449,7 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
     benchmark_failed = int(benchmark.get("failed", 0))
     total_fixtures = len(log_paths)
     owned_issue_pr_cycles = _count_owned_issue_pr_cycles(workflow_ledger)
+    review_packet = _public_review_packet_payload(root)
     return {
         "schema_version": "patchrail.evidence_snapshot.v1",
         "patchrail_version": __version__,
@@ -332,6 +503,8 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
                 "status": "owned_repo_visible",
                 "ledger_present": bool(workflow_ledger.strip()),
                 "owned_issue_pr_cycles": owned_issue_pr_cycles,
+                "focused_maintainer_prs": review_packet["signals"]["focused_maintainer_prs"],
+                "review_packet_command": "patchrail evidence review-packet",
                 "formal_codex_review_links": False,
             },
         },
@@ -2590,6 +2763,19 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_control_plane.add_argument("--out", type=Path, help="Optional output path.")
     evidence_control_plane.set_defaults(func=_evidence_control_plane)
+
+    evidence_review_packet = evidence_subparsers.add_parser(
+        "review-packet",
+        help="Summarize public owned-repo review and triage evidence from the workflow ledger.",
+    )
+    evidence_review_packet.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_review_packet.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_review_packet.set_defaults(func=_evidence_review_packet)
 
     serve = subparsers.add_parser(
         "serve",

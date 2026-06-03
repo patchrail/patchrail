@@ -103,6 +103,11 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert payload["workstreams"]["release_packaging"]["package_smoke_in_ci"] is True
     assert payload["workstreams"]["public_review_triage"]["status"] == "owned_repo_visible"
     assert payload["workstreams"]["public_review_triage"]["owned_issue_pr_cycles"] == 20
+    assert payload["workstreams"]["public_review_triage"]["focused_maintainer_prs"] == 5
+    assert (
+        payload["workstreams"]["public_review_triage"]["review_packet_command"]
+        == "patchrail evidence review-packet"
+    )
     assert payload["workstreams"]["public_review_triage"]["formal_codex_review_links"] is False
     assert payload["safety"]["read_only_ci_triage_workflow"] is True
     assert payload["safety"]["github_write_permission_required"] is False
@@ -235,6 +240,66 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
     assert "patchrail evidence control-plane --format markdown" in docs
     assert "local_demo_ready" in docs
     assert "risky-proposal rejection" in docs
+
+
+def test_review_packet_summarizes_owned_repo_workflows_without_external_claims() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "review-packet", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.review_packet.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "local_checkout"
+    assert payload["source_file"] == "docs/public-workflow-ledger.md"
+    assert payload["status"] == "owned_repo_review_packet_ready"
+    assert payload["signals"]["issue_to_pr_cycles"] == 20
+    assert payload["signals"]["focused_maintainer_prs"] == 5
+    assert payload["signals"]["total_owned_review_items"] == 25
+    assert payload["boundaries"]["owned_repository_only"] is True
+    assert payload["boundaries"]["external_adoption_claimed"] is False
+    assert payload["boundaries"]["formal_codex_review_claimed"] is False
+    assert payload["boundaries"]["pypi_download_claimed"] is False
+    assert payload["boundaries"]["third_party_write_actions_claimed"] is False
+    assert payload["requirements"]["billing_required"] is False
+    assert payload["requirements"]["external_model_required"] is False
+    assert payload["requirements"]["network_required"] is False
+    assert payload["requirements"]["github_write_permission_required"] is False
+    assert payload["issue_to_pr_cycles"][0]["issue"]["url"].endswith("/issues/69")
+    assert payload["issue_to_pr_cycles"][0]["pull_request"]["url"].endswith("/pull/79")
+    assert payload["focused_maintainer_prs"][-1]["pull_request"]["url"].endswith("/pull/87")
+    assert payload["focused_maintainer_prs"][-1]["public_ci_evidence"]["url"].endswith(
+        "/actions/runs/26896840989"
+    )
+    assert "formal visible Codex review links" in payload["remaining_evidence_gaps"]
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
+
+    markdown_proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "patchrail",
+            "evidence",
+            "review-packet",
+            "--format",
+            "markdown",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert markdown_proc.returncode == 0, markdown_proc.stderr
+    assert "# PatchRail Public Review Packet" in markdown_proc.stdout
+    assert "- External adoption claimed: `False`" in markdown_proc.stdout
+    assert "https://github.com/patchrail/patchrail/pull/87" in markdown_proc.stdout
 
 
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
@@ -376,6 +441,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     )
     assert "Public maintenance workflow ledger" in oss_program_evidence
     assert "owned-repo issue-to-PR cycles" in oss_program_evidence
+    assert "patchrail evidence review-packet --format markdown" in oss_program_evidence
+    assert "patchrail evidence review-packet --format json" in oss_program_evidence
     assert "#61 -> #62" in oss_program_evidence
     assert "#59 -> #60" in oss_program_evidence
     assert "Consent-only pilot outcome example" in oss_program_evidence
@@ -395,6 +462,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "[#76](https://github.com/patchrail/patchrail/pull/76)" in workflow_ledger
     assert "[#68](https://github.com/patchrail/patchrail/issues/68)" in workflow_ledger
     assert "[#75](https://github.com/patchrail/patchrail/pull/75)" in workflow_ledger
+    assert "[#86](https://github.com/patchrail/patchrail/pull/86)" in workflow_ledger
+    assert "[#87](https://github.com/patchrail/patchrail/pull/87)" in workflow_ledger
+    assert "patchrail evidence review-packet --format markdown" in workflow_ledger
     assert (
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
@@ -547,6 +617,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Consent-only pilot request package" in oss_program_evidence
     assert "Pilot request package" in oss_program_evidence
     assert "Consent-only pilot metrics: `uv run --extra dev patchrail ci pilot-metrics" in (
+        oss_program_evidence
+    )
+    assert "Public review packet: `uv run --extra dev patchrail evidence review-packet" in (
         oss_program_evidence
     )
     assert "Sanitized fixture contribution path" in contributing

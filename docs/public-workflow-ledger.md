@@ -70,6 +70,8 @@ count as issue-to-PR cycles because no public issue was linked by the PR.
 | CI Janitor Docker/browser coverage | [#83](https://github.com/patchrail/patchrail/pull/83) | [CI run 26893931040](https://github.com/patchrail/patchrail/actions/runs/26893931040) | classifier and benchmark expansion |
 | Agent Control Plane queue status CLI | [#84](https://github.com/patchrail/patchrail/pull/84) | [CI run 26894698571](https://github.com/patchrail/patchrail/actions/runs/26894698571) | local control-plane observability |
 | Shared queue status CLI/API contract | [#85](https://github.com/patchrail/patchrail/pull/85) | [CI run 26895362360](https://github.com/patchrail/patchrail/actions/runs/26895362360) | versioned status schema and API parity |
+| Recent owned workflow evidence | [#86](https://github.com/patchrail/patchrail/pull/86) | [CI run 26896092846](https://github.com/patchrail/patchrail/actions/runs/26896092846) | public evidence ledger maintenance |
+| Pilot metrics evidence boundary | [#87](https://github.com/patchrail/patchrail/pull/87) | [CI run 26896840989](https://github.com/patchrail/patchrail/actions/runs/26896840989) | owned-repo vs external-adopter boundary |
 
 ## How To Read This Ledger
 
@@ -84,3 +86,15 @@ These links demonstrate that PatchRail can run a disciplined maintenance loop:
 This is not a substitute for external adoption. Before applying to external
 support programs, PatchRail still needs permissioned pilots, real download
 metrics, and visible examples of formal review/triage workflows where applicable.
+
+## Local Review Packet
+
+Maintainers can turn this ledger into a reproducible local evidence packet:
+
+```bash
+patchrail evidence review-packet --format markdown
+```
+
+The command parses this file only. It does not call GitHub, request write
+permissions, count external adopters, claim PyPI downloads, or claim formal
+Codex review links.

@@ -52,6 +52,11 @@ Pablo Guillén is the primary maintainer of PatchRail.
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
   issues to focused pull requests and tracks focused maintainer PR evidence
   without claiming external adoption
+- Public review packet:
+  `patchrail evidence review-packet --format markdown` parses the workflow
+  ledger into an owned-repo issue-to-PR and focused-maintainer-PR packet without
+  network, GitHub write permission, external model calls, PyPI download claims,
+  external-adopter claims, or formal Codex review claims
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, the Agent
   Control Plane, and the read-only Funded Issue Scout
@@ -191,8 +196,14 @@ Last verified: 2026-06-03.
   #51 -> #52, and #61 -> #62, plus recent focused PR evidence including
   [#83](https://github.com/patchrail/patchrail/pull/83),
   [#84](https://github.com/patchrail/patchrail/pull/84), and
-  [#85](https://github.com/patchrail/patchrail/pull/85), each with public CI
+  [#85](https://github.com/patchrail/patchrail/pull/85),
+  [#86](https://github.com/patchrail/patchrail/pull/86), and
+  [#87](https://github.com/patchrail/patchrail/pull/87), each with public CI
   success. These PRs are owned-repo workflow evidence, not external adoption.
+- Public review packet: `uv run --extra dev patchrail evidence review-packet --format json`
+  reports owned-repo review evidence from the ledger while keeping external
+  adoption, formal Codex review, PyPI downloads, and third-party write-action
+  claims set to false.
 
 ## Public Launch Issues
 
