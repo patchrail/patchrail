@@ -647,6 +647,14 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "python -m pip install dist/*.whl" in workflow
     assert "patchrail doctor --format json" in workflow
     assert '"/ADOPTERS.md"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "oss-evidence-snapshot:" in workflow
+    assert "needs: [test, package-smoke]" in workflow
+    assert "uv run patchrail evidence snapshot --format json" in workflow
+    assert "uv run patchrail evidence snapshot --format markdown" in workflow
+    assert "actions/upload-artifact@v4" in workflow
+    assert "name: patchrail-oss-evidence" in workflow
+    assert "patchrail-oss-evidence/evidence-snapshot.json" in workflow
+    assert "patchrail-oss-evidence/evidence-snapshot.md" in workflow
 
     assert "scripts/release_readiness.py --clean-dist" in readme
     assert "scripts/release_readiness.py --clean-dist" in release_process

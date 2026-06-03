@@ -54,6 +54,11 @@ patchrail evidence snapshot --format markdown
 The snapshot is a consistency check over the checkout. It does not replace
 public GitHub, PyPI, or adopter metrics.
 
+The main CI workflow also publishes this output as the read-only
+`patchrail-oss-evidence` artifact after tests, fixture benchmark, and package
+smoke pass. Treat that artifact as reproducible project-health evidence, not as
+external adoption or PyPI download evidence.
+
 Use [docs/pilot-request-package.md](pilot-request-package.md) before promoting
 any pilot to public evidence. It records the maintainer consent checklist,
 evidence intake rules, and `ADOPTERS.md` listing boundary.
