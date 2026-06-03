@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 - draft
+
+- Prepared the CI Janitor v0.2 evidence bundle around the 101-case fixture zoo,
+  `fixture-check`, read-only GitHub Actions triage artifact, maintainer pilot
+  guide, and public metrics/adopter surfaces.
+- v0.2 remains a maintainer-gated release candidate until the maintainer
+  explicitly bumps `pyproject.toml`, tags the release, publishes package
+  artifacts, and records final CI/PyPI evidence.
+
 ## 0.1.0 - 2026-06-02
 
 - Initial public CI Janitor snapshot.

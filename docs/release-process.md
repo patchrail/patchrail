@@ -7,7 +7,9 @@ review before tagging or publishing. It does not publish to PyPI, create tags, o
 announce a release.
 
 The current v0.1.0 prep artifact is tracked in
-[release-v0.1.0-evidence.md](release-v0.1.0-evidence.md).
+[release-v0.1.0-evidence.md](release-v0.1.0-evidence.md). The current
+v0.2.0 release-candidate evidence is tracked in
+[release-v0.2.0-evidence.md](release-v0.2.0-evidence.md).
 
 ## v0.1.0 Release-Prep Evidence Checklist
 
@@ -132,6 +134,28 @@ release-prep:
 
 Record completed prep evidence in `docs/release-v0.1.0-evidence.md` before any
 manual publish step.
+
+## v0.2.0 Release-Candidate Evidence Checklist
+
+Use [docs/release-v0.2.0-evidence.md](release-v0.2.0-evidence.md) to track the
+CI Janitor v0.2 milestone before any version bump, tag, PyPI publish, public
+announcement, or external application.
+
+- [ ] `patchrail ci fixture-check examples/ci-triage --format json` reports
+  `101 / 101` fixtures passing.
+- [ ] `patchrail ci benchmark examples/ci-triage --format json` reports
+  `101` total and `0` failed.
+- [ ] GitHub Actions triage remains read-only with `contents: read` and
+  `actions: read`.
+- [ ] The example `patchrail-ci-triage` artifact includes Markdown, JSON,
+  fixture benchmark, and doctor outputs.
+- [ ] The pilot guide stays consent-only and does not require repository write
+  access.
+- [ ] `docs/metrics.md` does not promote placeholder adoption, PyPI, or Codex
+  evidence.
+- [ ] `ADOPTERS.md` lists only permissioned adopters.
+- [ ] Manual gates are clear for version bump, tag, PyPI publish, announcements,
+  and external program applications.
 
 ## Minimum Local Checks
 
