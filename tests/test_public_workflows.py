@@ -114,6 +114,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
     assert "Public CI fixtures: 101 sanitized synthetic fixtures" in oss_program_evidence
+    assert "https://github.com/patchrail/patchrail/issues/27" in oss_program_evidence
+    assert "https://github.com/patchrail/patchrail/issues/37" in oss_program_evidence
+    assert "https://github.com/patchrail/patchrail/issues/1>" not in oss_program_evidence
+    assert "https://github.com/patchrail/patchrail/issues/27" in evidence
+    assert "https://github.com/patchrail/patchrail/issues/37" in evidence
+    assert "https://github.com/patchrail/patchrail/issues/1>" not in evidence
     assert (
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
