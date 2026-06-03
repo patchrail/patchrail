@@ -81,6 +81,12 @@ patchrail queue proposal show prp_example --format markdown
 patchrail queue proposal approve prp_example --note "Plan reviewed locally."
 ```
 
+Reject a proposal that skips review or attempts a write action too early:
+
+```bash
+patchrail queue proposal reject prp_risky --note "Rejected: automatic PRs stay gated."
+```
+
 Record a maintainer decision:
 
 ```bash
@@ -149,9 +155,11 @@ means a maintainer reviewed the local item. It does not grant GitHub write
 permissions, push commits, open a pull request, post a comment, or contact
 anyone.
 
-Proposal approval is equally bounded. `patchrail queue proposal approve` records
-that a maintainer accepted a local patch plan for handoff. It does not execute
-the plan or authorize repository writes.
+Proposal decisions are equally bounded. `patchrail queue proposal approve`
+records that a maintainer accepted a local patch plan for handoff.
+`patchrail queue proposal reject` records that a plan was declined, for example
+because it tried to skip review or automate a write action. Neither decision
+executes the plan or authorizes repository writes.
 
 That boundary is the product value: maintainers can structure work for coding
 agents while keeping write actions explicit, reviewable, and human-approved.

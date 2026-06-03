@@ -10,6 +10,8 @@
     "proposal.json",
     "proposal.md",
     "proposal-approved.json",
+    "proposal-rejected.json",
+    "proposal-rejected.md",
     "approved.json",
     "queue.jsonl",
     "audit-events.jsonl"
@@ -18,7 +20,9 @@
     "work_item_added",
     "work_item_added",
     "proposal_added",
+    "proposal_added",
     "proposal_approved",
+    "proposal_rejected",
     "work_item_approved",
     "work_item_rejected",
     "work_items_exported"
@@ -30,6 +34,8 @@
   "proposal_risk_level": "low",
   "rejected_item_approval_state": "rejected",
   "rejected_item_write_actions_allowed": false,
+  "rejected_proposal_approval_state": "rejected",
+  "rejected_proposal_risk_level": "high",
   "schema_version": "patchrail.local_agent_queue_demo.v1",
   "source_failure_class": "python_dependency_resolution",
   "write_actions_allowed": false
