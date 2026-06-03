@@ -25,7 +25,8 @@
     "proposal_rejection_gate_exercised": true,
     "queue_export_recorded": true,
     "work_item_approval_gate_exercised": true,
-    "work_item_rejection_gate_exercised": true
+    "work_item_rejection_gate_exercised": true,
+    "work_item_skip_gate_exercised": false
   },
   "audit_summary_missing_required_events": [],
   "audit_summary_status": "human_gates_exercised",

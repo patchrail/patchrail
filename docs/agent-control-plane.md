@@ -13,7 +13,7 @@ The queue is local-first:
 - proposal records link a work item to a reviewable patch plan before handoff;
 - export is JSON or JSONL for audit, handoff, or demos;
 - audit events are local, append-only SQLite records for queue add, approve,
-  reject, proposal, and export decisions;
+  reject, skip, proposal, and export decisions;
 - an optional HTTP API binds to `127.0.0.1` by default for local dashboards,
   demos, and handoffs;
 - no command posts comments, opens pull requests, contacts third-party repos,
@@ -123,7 +123,14 @@ Record a maintainer decision:
 ```bash
 patchrail queue approve prq_example --note "Reviewed local evidence."
 patchrail queue reject prq_example --note "Needs a smaller reproduction."
+patchrail queue skip prq_example --reason "Retired by current maintainer policy."
 ```
+
+`patchrail queue skip` is for work that should remain visible but must not be
+processed, such as retired workflows or out-of-scope automation. It marks the
+item `status=skipped`, keeps `approval_state=rejected`, records the reason in
+`decision_note`, and appends a `work_item_skipped` audit event. It does not
+delete historical data or execute any action.
 
 Export the local audit trail:
 
@@ -231,7 +238,7 @@ The current queue is enough for local demos and release evidence:
 - initialize SQLite;
 - add work items manually or from `patchrail.ci_result.v1` JSON;
 - list and show items;
-- approve or reject items;
+- approve, reject, or skip items while preserving the audit trail;
 - add, list, show, approve, and reject local proposal records;
 - run a local HTTP API for `health`, `status`, work items, proposals,
   approval decisions, and audit events;

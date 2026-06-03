@@ -547,6 +547,88 @@ class PatchRailQueueTests(unittest.TestCase):
             self.assertEqual(rejected["status"], "rejected")
             self.assertIn("Needs more evidence", rejected["decision_note"])
 
+    def test_queue_skip_preserves_retired_work_with_audit_reason(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "retired_workflow",
+                    "--title",
+                    "Skip work that is outside current maintainer policy",
+                ]
+            )
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+            item_id = json.loads(add_proc.stdout)["id"]
+
+            skip_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "skip",
+                    item_id,
+                    "--reason",
+                    "retired by current maintainer policy",
+                ]
+            )
+
+            self.assertEqual(skip_proc.returncode, 0, skip_proc.stderr)
+            skipped = json.loads(skip_proc.stdout)
+            self.assertEqual(skipped["approval_state"], "rejected")
+            self.assertEqual(skipped["status"], "skipped")
+            self.assertEqual(skipped["write_actions_allowed"], False)
+            self.assertEqual(skipped["decision_note"], "retired by current maintainer policy")
+
+            list_proc = run_patchrail(
+                ["queue", "--db", str(db), "list", "--status", "skipped", "--format", "json"]
+            )
+            self.assertEqual(list_proc.returncode, 0, list_proc.stderr)
+            listed = json.loads(list_proc.stdout)["work_items"]
+            self.assertEqual([item["id"] for item in listed], [item_id])
+
+            status_proc = run_patchrail(["queue", "--db", str(db), "status", "--format", "json"])
+            self.assertEqual(status_proc.returncode, 0, status_proc.stderr)
+            status = json.loads(status_proc.stdout)
+            self.assertEqual(status["counts"]["work_items_by_status"]["skipped"], 1)
+            self.assertEqual(status["counts"]["work_items_by_approval_state"]["rejected"], 1)
+            self.assertEqual(status["safety"]["approval_records_execute_actions"], False)
+
+            audit_proc = run_patchrail(
+                ["queue", "--db", str(db), "audit", "--item-id", item_id, "--format", "json"]
+            )
+            self.assertEqual(audit_proc.returncode, 0, audit_proc.stderr)
+            audit_events = json.loads(audit_proc.stdout)["audit_events"]
+            self.assertEqual(
+                [event["event_type"] for event in audit_events],
+                ["work_item_added", "work_item_skipped"],
+            )
+            self.assertEqual(
+                audit_events[1]["payload"]["decision_note"],
+                "retired by current maintainer policy",
+            )
+
+            summary_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "audit-summary",
+                    "--format",
+                    "json",
+                    "--require-event",
+                    "work_item_skipped",
+                ]
+            )
+            self.assertEqual(summary_proc.returncode, 0, summary_proc.stderr)
+            summary = json.loads(summary_proc.stdout)
+            self.assertEqual(summary["status"], "human_gates_exercised")
+            self.assertEqual(summary["gates"]["work_item_skip_gate_exercised"], True)
+
     def test_queue_add_from_ci_result_keeps_import_local_and_pending(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             db = Path(tmpdir) / "queue.sqlite"

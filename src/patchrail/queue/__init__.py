@@ -19,6 +19,7 @@ from patchrail.queue.store import (
     reject_work_item,
     show_proposal,
     show_work_item,
+    skip_work_item,
 )
 from patchrail.queue.status import (
     QUEUE_BUNDLE_SCHEMA_VERSION,
@@ -53,6 +54,7 @@ __all__ = [
     "reject_work_item",
     "show_proposal",
     "show_work_item",
+    "skip_work_item",
     "QUEUE_BUNDLE_SCHEMA_VERSION",
     "QUEUE_STATUS_SCHEMA_VERSION",
     "SAFE_QUEUE_REQUIREMENTS",

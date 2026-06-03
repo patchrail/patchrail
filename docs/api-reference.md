@@ -66,7 +66,32 @@ patchrail schema queue-audit-event
 patchrail schema queue-audit-summary
 ```
 
-The same schema files are mirrored in `schemas/` for repository consumers:
+CI Janitor, benchmark, and consent-only pilot outputs are versioned too:
+
+```bash
+patchrail schema ci-result
+patchrail schema ci-benchmark
+patchrail schema ci-fixture-check
+patchrail schema ci-pilot-summary
+patchrail schema ci-pilot-metrics
+```
+
+The same schema files are mirrored in `src/patchrail/schemas/` for package
+consumers:
+
+- `src/patchrail/schemas/ci-result.v1.schema.json`
+- `src/patchrail/schemas/ci-benchmark.v1.schema.json`
+- `src/patchrail/schemas/ci-fixture-check.v1.schema.json`
+- `src/patchrail/schemas/ci-pilot-summary.v1.schema.json`
+- `src/patchrail/schemas/ci-pilot-metrics.v1.schema.json`
+- `src/patchrail/schemas/queue-work-item.v1.schema.json`
+- `src/patchrail/schemas/queue-proposal.v1.schema.json`
+- `src/patchrail/schemas/queue-audit-event.v1.schema.json`
+- `src/patchrail/schemas/queue-audit-summary.v1.schema.json`
+- `src/patchrail/schemas/queue-status.v1.schema.json`
+
+Queue schema mirrors also remain available at the repository root for consumers
+that read schemas without installing the package:
 
 - `schemas/queue_work_item.schema.json`
 - `schemas/queue_proposal.schema.json`
@@ -76,7 +101,10 @@ The same schema files are mirrored in `schemas/` for repository consumers:
 
 The schemas preserve the human-approval boundary: work items require
 `write_actions_allowed=false`, proposals are local patch-plan records, and audit
-events are local append-only records of queue operations.
+events are local append-only records of queue operations. The CI schemas
+preserve the local-first boundary for benchmark and pilot artifacts: no billing,
+external model, network access, GitHub write permission, raw-log copying, or
+unapproved external adopter counting is required by those outputs.
 
 ## CLI Audit Summary
 
@@ -98,6 +126,22 @@ The command exits with success only when the required events are present. A
 failed audit summary is still local evidence: it reports the missing event
 types without contacting GitHub, calling external models, opening pull requests,
 posting comments, or requiring billing.
+
+## CLI Queue Skip
+
+`patchrail queue skip` records that a work item should stay in history but must
+not be processed:
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite skip prq_example \
+  --reason "Retired by current maintainer policy."
+```
+
+The command updates the item to `status=skipped`,
+`approval_state=rejected`, stores the reason in `decision_note`, and appends a
+`work_item_skipped` audit event. It does not delete rows, execute proposals,
+open pull requests, post comments, contact repositories, call external models,
+require billing, or ask for GitHub write permission.
 
 ## CLI Queue Bundle
 

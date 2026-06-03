@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/ci-benchmark.v1.schema.json",
+  "title": "PatchRail CI Benchmark",
+  "description": "Aggregate fixture benchmark emitted by patchrail ci benchmark --format json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "root",
+    "total_cases",
+    "passed",
+    "failed",
+    "accuracy",
+    "class_summary",
+    "requirements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.ci_benchmark.v1"
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "total_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "passed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "accuracy": {
+      "type": "object",
+      "required": ["top_1"],
+      "properties": {
+        "top_1": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "class_summary": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["total_cases", "passed", "failed"],
+        "properties": {
+          "total_cases": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "passed": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "log",
+          "expected_failure_class",
+          "actual_failure_class",
+          "expected_minimum_confidence",
+          "actual_confidence",
+          "passed",
+          "mismatches"
+        ],
+        "properties": {
+          "log": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_failure_class": {
+            "type": ["string", "null"]
+          },
+          "actual_failure_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_minimum_confidence": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "actual_confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "mismatches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "required": ["billing_required", "external_model_required", "network_required"],
+      "properties": {
+        "billing_required": {
+          "const": false
+        },
+        "external_model_required": {
+          "const": false
+        },
+        "network_required": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

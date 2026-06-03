@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/ci-pilot-metrics.v1.schema.json",
+  "title": "PatchRail CI Pilot Metrics",
+  "description": "Safe aggregate pilot metrics emitted by patchrail ci pilot-metrics --format json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "total_pilot_summaries",
+    "public_repository_mentions",
+    "private_or_unapproved_repository_mentions",
+    "owned_repository_mentions",
+    "external_repository_mentions",
+    "public_repositories",
+    "owned_repositories",
+    "external_repositories",
+    "evidence_readiness",
+    "classification_correct",
+    "maintainer_action_useful",
+    "local_only_and_no_raw_log",
+    "requirements",
+    "source_files"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.ci_pilot_metrics.v1"
+    },
+    "total_pilot_summaries": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "public_repository_mentions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "private_or_unapproved_repository_mentions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "owned_repository_mentions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "external_repository_mentions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "public_repositories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "owned_repositories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "external_repositories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_readiness": {
+      "type": "object",
+      "required": [
+        "status",
+        "external_adopters_countable",
+        "owned_repo_evidence_countable",
+        "private_feedback_count",
+        "do_not_count_private_or_unapproved_as_public"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "external_evidence_ready",
+            "owned_repo_evidence_only",
+            "private_feedback_only"
+          ]
+        },
+        "external_adopters_countable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "owned_repo_evidence_countable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "private_feedback_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "do_not_count_private_or_unapproved_as_public": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "classification_correct": {
+      "$ref": "#/$defs/yes_no_unknown_counts"
+    },
+    "maintainer_action_useful": {
+      "$ref": "#/$defs/yes_no_unknown_counts"
+    },
+    "local_only_and_no_raw_log": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "requirements": {
+      "type": "object",
+      "required": [
+        "billing_required",
+        "external_model_required",
+        "network_required",
+        "github_write_permission_required"
+      ],
+      "properties": {
+        "billing_required": {
+          "const": false
+        },
+        "external_model_required": {
+          "const": false
+        },
+        "network_required": {
+          "const": false
+        },
+        "github_write_permission_required": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "source_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "yes_no_unknown_counts": {
+      "type": "object",
+      "required": ["yes", "no", "unknown"],
+      "properties": {
+        "yes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "no": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

@@ -124,6 +124,7 @@ def queue_audit_summary_payload(
     gates = {
         "work_item_approval_gate_exercised": event_counts.get("work_item_approved", 0) > 0,
         "work_item_rejection_gate_exercised": event_counts.get("work_item_rejected", 0) > 0,
+        "work_item_skip_gate_exercised": event_counts.get("work_item_skipped", 0) > 0,
         "proposal_approval_gate_exercised": event_counts.get("proposal_approved", 0) > 0,
         "proposal_rejection_gate_exercised": event_counts.get("proposal_rejected", 0) > 0,
         "queue_export_recorded": event_counts.get("work_items_exported", 0) > 0,
