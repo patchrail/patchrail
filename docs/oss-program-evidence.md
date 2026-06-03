@@ -25,6 +25,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
   contributions
+- Consent-only pilot outcome example:
+  [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows how to
+  summarize a pilot without raw logs or unapproved repository mentions
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, the Agent
   Control Plane, and the read-only Funded Issue Scout
@@ -121,6 +124,9 @@ Last verified: 2026-06-03.
 - Maintainer pilot guide: [docs/pilot-guide.md](pilot-guide.md) gives external
   maintainers a no-write-access path to run `doctor`, `redact`, `ci explain`,
   `ci classify`, optional local queue import, and fixture contribution.
+- Consent-only pilot outcome example:
+  [examples/pilot-outcome](../examples/pilot-outcome/README.md) is synthetic and
+  does not count as adoption evidence.
 
 ## Public Launch Issues
 
@@ -145,6 +151,8 @@ Last verified: 2026-06-03.
 - PyPI download stats.
 - External adopter feedback and permissioned adopter entries.
 - Pilot outcomes from maintainers who opted into read-only local trials.
+- Pilot outcome summaries following
+  [examples/pilot-outcome](../examples/pilot-outcome/README.md).
 
 ## Safety Posture
 

@@ -146,6 +146,14 @@ Useful pilot evidence is small and reviewable:
 Do not share raw logs that contain secrets or personal data. Do not grant write
 permissions for a pilot.
 
+## Example Outcome
+
+See [examples/pilot-outcome](../examples/pilot-outcome/README.md) for a
+synthetic, copyable pilot outcome. It shows how to summarize a useful read-only
+pilot while keeping raw logs private, marking repository public mention as
+unapproved, and avoiding any claim that PatchRail opened a pull request,
+commented on an issue, contacted a maintainer, or used external models.
+
 ## Non-Goals
 
 PatchRail pilots are not bounty automation, mass outreach, or automatic

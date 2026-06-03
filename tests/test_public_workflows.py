@@ -144,6 +144,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     threat_model = (ROOT / "docs" / "threat-model.md").read_text(encoding="utf-8")
     metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
     adopters = (ROOT / "ADOPTERS.md").read_text(encoding="utf-8")
+    pilot_outcome = (ROOT / "examples" / "pilot-outcome" / "README.md").read_text(encoding="utf-8")
     adopter_report = (ROOT / ".github" / "ISSUE_TEMPLATE" / "adopter_report.md").read_text(
         encoding="utf-8"
     )
@@ -165,6 +166,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "docs/openai-codex-for-oss-evidence.md" in readme
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
+    assert "examples/pilot-outcome/README.md" in readme
     assert "docs/metrics.md" in readme
     assert "patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack" in readme
     assert "ADOPTERS.md" in readme
@@ -182,7 +184,10 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
+    assert "Consent-only pilot outcome example" in evidence
+    assert "examples/pilot-outcome" in evidence
     assert "Public CI fixtures: 115 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Consent-only pilot outcome example" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/27" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/37" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/1>" not in oss_program_evidence
@@ -228,6 +233,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "does not read or store the original raw CI log" in api_reference
     assert "consent-only" in pilot_guide
     assert "does not give PatchRail write access" in pilot_guide
+    assert "See [examples/pilot-outcome](../examples/pilot-outcome/README.md)" in pilot_guide
     assert "patchrail redact --log failed-ci.log" in pilot_guide
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
@@ -251,6 +257,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "pilot-manifest.json" in pilot_guide
     assert "patchrail ci pilot-pack" in roadmap
     assert "patchrail ci pilot-pack" in release_v02
+    assert "Synthetic pilot outcome example for safe adopter feedback summaries" in release_v02
     assert "local redacted bundle generated without copying the raw log" in release_v02
     assert "Pilot pack command: `patchrail ci pilot-pack`" in evidence
     assert "Pilot pack queue importer: `patchrail queue add --from-pilot-pack`" in evidence
@@ -266,13 +273,28 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Monthly PyPI downloads" in metrics
     assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
+    assert "Consent-only pilot outcome examples | 1" in metrics
     assert "Public releases | 1" in metrics
     assert "Fixture hygiene gate | 115 / 115 passing" in metrics
     assert "Do not use placeholders as evidence" in metrics
     assert "public PRs reviewed with Codex" in metrics
     assert "only with explicit maintainer permission" in adopters
     assert "There are no public external adopters listed yet" in adopters
+    assert "examples/pilot-outcome" in adopters
     assert "Use `patchrail redact`" in adopters
+    assert "Consent-Only Pilot Outcome Example" in pilot_outcome
+    assert "The repository name, log path, and outcome below are synthetic" in pilot_outcome
+    assert "Do not count this example as adoption evidence" in pilot_outcome
+    assert "Raw CI log: kept outside the report and never copied into the pilot pack" in (
+        pilot_outcome
+    )
+    assert "Write actions: not allowed" in pilot_outcome
+    assert "External models: not used" in pilot_outcome
+    assert "Repository approved for public mention: no" in pilot_outcome
+    assert "The raw log remains private and was not copied into the pilot pack" in pilot_outcome
+    assert "claims that PatchRail fixed code, opened a pull request" in pilot_outcome
+    assert "/Volumes/" not in pilot_outcome
+    assert "/Users/" not in pilot_outcome
     assert "Adopter or pilot report" in adopter_report
     assert "I maintain this repository or have permission" in adopter_report
     assert "PatchRail may list the repository in `ADOPTERS.md`" in adopter_report

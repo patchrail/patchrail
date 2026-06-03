@@ -20,6 +20,7 @@ plan. The current candidate evidence covers:
 - `patchrail ci pilot-pack` for a local redacted maintainer pilot bundle.
 - Read-only GitHub Actions triage workflow and artifact example.
 - Maintainer pilot guide for consent-only, local-first trials.
+- Synthetic pilot outcome example for safe adopter feedback summaries.
 - Permission-only `ADOPTERS.md` and public metrics tracker.
 - No automatic pull requests, issue comments, funded issue claims, mass
   outreach, external model calls, billing, or GitHub write permissions.
@@ -62,6 +63,7 @@ Current evidence snapshot from 2026-06-03:
 - GitHub Action guide: [docs/github-action.md](github-action.md)
 - Example triage artifact: [examples/github-action](../examples/github-action/README.md)
 - Pilot guide: [docs/pilot-guide.md](pilot-guide.md)
+- Pilot outcome example: [examples/pilot-outcome](../examples/pilot-outcome/README.md)
 - Metrics tracker: [docs/metrics.md](metrics.md)
 - Adopter policy: [ADOPTERS.md](../ADOPTERS.md)
 - OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
