@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/ci-pilot-summary.v1.schema.json",
+  "title": "PatchRail CI Pilot Summary",
+  "description": "Consent-only pilot outcome emitted by patchrail ci pilot-summary --format json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pilot_pack",
+    "public_listing",
+    "pilot_context",
+    "classification",
+    "requirements",
+    "blocked_actions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.ci_pilot_summary.v1"
+    },
+    "pilot_pack": {
+      "type": "object",
+      "required": [
+        "manifest_path",
+        "raw_log_copied",
+        "redaction_local_only",
+        "maintainer_review_required_before_sharing"
+      ],
+      "properties": {
+        "manifest_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_log_copied": {
+          "const": false
+        },
+        "redaction_local_only": {
+          "const": true
+        },
+        "maintainer_review_required_before_sharing": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "public_listing": {
+      "type": "object",
+      "required": ["repository_mention_approved", "repository"],
+      "properties": {
+        "repository_mention_approved": {
+          "type": "boolean"
+        },
+        "repository": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "pilot_context": {
+      "type": "object",
+      "required": [
+        "ci_provider",
+        "toolchain",
+        "classification_correct",
+        "maintainer_action_useful"
+      ],
+      "properties": {
+        "ci_provider": {
+          "type": "string"
+        },
+        "toolchain": {
+          "type": "string"
+        },
+        "classification_correct": {
+          "enum": ["yes", "no", "unknown"]
+        },
+        "maintainer_action_useful": {
+          "enum": ["yes", "no", "unknown"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "failure_class",
+        "confidence",
+        "likely_subsystem",
+        "minimal_repair_strategy"
+      ],
+      "properties": {
+        "failure_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "likely_subsystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimal_repair_strategy": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "required": [
+        "billing_required",
+        "external_model_required",
+        "network_required",
+        "github_write_permission_required"
+      ],
+      "properties": {
+        "billing_required": {
+          "const": false
+        },
+        "external_model_required": {
+          "const": false
+        },
+        "network_required": {
+          "const": false
+        },
+        "github_write_permission_required": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "blocked_actions": {
+      "type": "array",
+      "contains": {
+        "const": "copy_raw_log"
+      },
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

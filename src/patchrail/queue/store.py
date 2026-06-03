@@ -369,6 +369,39 @@ def reject_work_item(
     )
 
 
+def skip_work_item(
+    *,
+    db_path: Path = DEFAULT_QUEUE_PATH,
+    item_id: str,
+    decision_note: str,
+) -> QueueItem:
+    init_queue(db_path)
+    ts = _now()
+    with _connect(db_path) as conn:
+        current = conn.execute("SELECT id FROM work_items WHERE id = ?", (item_id,)).fetchone()
+        if current is None:
+            raise KeyError(item_id)
+        conn.execute(
+            """
+            UPDATE work_items
+            SET approval_state = ?, status = ?, decision_note = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            ("rejected", "skipped", decision_note, ts, item_id),
+        )
+        _write_audit_event(
+            conn,
+            event_type="work_item_skipped",
+            work_item_id=item_id,
+            payload={
+                "approval_state": "rejected",
+                "status": "skipped",
+                "decision_note": decision_note,
+            },
+        )
+    return show_work_item(db_path=db_path, item_id=item_id)
+
+
 def add_proposal(
     *,
     db_path: Path = DEFAULT_QUEUE_PATH,

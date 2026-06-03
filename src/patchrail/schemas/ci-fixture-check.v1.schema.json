@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/ci-fixture-check.v1.schema.json",
+  "title": "PatchRail CI Fixture Check",
+  "description": "Fixture hygiene report emitted by patchrail ci fixture-check --format json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "root",
+    "total_cases",
+    "passed",
+    "failed",
+    "cases",
+    "requirements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.ci_fixture_check.v1"
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "total_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "passed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "log",
+          "expected_file",
+          "expected_failure_class",
+          "actual_failure_class",
+          "expected_minimum_confidence",
+          "actual_confidence",
+          "redactions",
+          "passed",
+          "issues"
+        ],
+        "properties": {
+          "log": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_file": {
+            "type": ["string", "null"]
+          },
+          "expected_failure_class": {
+            "type": ["string", "null"]
+          },
+          "actual_failure_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_minimum_confidence": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "actual_confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "redactions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "required": [
+        "billing_required",
+        "external_model_required",
+        "network_required",
+        "github_write_permission_required"
+      ],
+      "properties": {
+        "billing_required": {
+          "const": false
+        },
+        "external_model_required": {
+          "const": false
+        },
+        "network_required": {
+          "const": false
+        },
+        "github_write_permission_required": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

@@ -37,6 +37,7 @@ from patchrail.queue import (
     reject_work_item,
     show_proposal,
     show_work_item,
+    skip_work_item,
 )
 from patchrail.queue.server import make_queue_api_handler, serve_queue_api
 from patchrail.queue.status import (
@@ -139,6 +140,10 @@ def _display_path(path: Path) -> str:
 
 def _load_schema(name: str) -> str:
     schema_files = {
+        "ci-benchmark": "ci-benchmark.v1.schema.json",
+        "ci-fixture-check": "ci-fixture-check.v1.schema.json",
+        "ci-pilot-metrics": "ci-pilot-metrics.v1.schema.json",
+        "ci-pilot-summary": "ci-pilot-summary.v1.schema.json",
         "ci-result": "ci-result.v1.schema.json",
         "queue-audit-event": "queue-audit-event.v1.schema.json",
         "queue-audit-summary": "queue-audit-summary.v1.schema.json",
@@ -1944,6 +1949,20 @@ def _queue_reject(args: argparse.Namespace) -> int:
     return 0
 
 
+def _queue_skip(args: argparse.Namespace) -> int:
+    try:
+        item = skip_work_item(
+            db_path=_queue_db(args),
+            item_id=args.item_id,
+            decision_note=args.reason,
+        ).to_dict()
+    except KeyError:
+        print(f"Unknown work item: {args.item_id}", file=sys.stderr)
+        return 1
+    _write_or_print(_json_dump(item), args.out)
+    return 0
+
+
 def _queue_export(args: argparse.Namespace) -> int:
     payload = export_work_items(db_path=_queue_db(args))
     if args.format == "jsonl":
@@ -3197,6 +3216,10 @@ def _build_parser() -> argparse.ArgumentParser:
     schema.add_argument(
         "schema",
         choices=[
+            "ci-benchmark",
+            "ci-fixture-check",
+            "ci-pilot-metrics",
+            "ci-pilot-summary",
             "ci-result",
             "queue-audit-event",
             "queue-audit-summary",
@@ -3412,6 +3435,19 @@ def _build_parser() -> argparse.ArgumentParser:
     queue_reject.add_argument("--note", help="Decision note to keep in the local audit trail.")
     queue_reject.add_argument("--out", type=Path, help="Optional output path.")
     queue_reject.set_defaults(func=_queue_reject)
+
+    queue_skip = queue_subparsers.add_parser(
+        "skip",
+        help="Skip a local work item while preserving it in the audit trail.",
+    )
+    queue_skip.add_argument("item_id")
+    queue_skip.add_argument(
+        "--reason",
+        required=True,
+        help="Reason recorded in the local audit trail.",
+    )
+    queue_skip.add_argument("--out", type=Path, help="Optional output path.")
+    queue_skip.set_defaults(func=_queue_skip)
 
     queue_export = queue_subparsers.add_parser(
         "export",
