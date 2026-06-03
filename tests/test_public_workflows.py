@@ -191,12 +191,14 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Public maintenance workflow ledger" in evidence
     assert "public-workflow-ledger.md" in evidence
     assert "formal visible Codex" in evidence
+    assert "#61 -> #62" in evidence
     assert "#59 -> #60" in evidence
     assert "Consent-only pilot outcome example" in evidence
     assert "examples/pilot-outcome" in evidence
     assert "Public CI fixtures: 115 sanitized synthetic fixtures" in oss_program_evidence
     assert "Public maintenance workflow ledger" in oss_program_evidence
     assert "owned-repo issue-to-PR cycles" in oss_program_evidence
+    assert "#61 -> #62" in oss_program_evidence
     assert "#59 -> #60" in oss_program_evidence
     assert "Consent-only pilot outcome example" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/27" in oss_program_evidence
@@ -235,6 +237,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "it does not claim formal Codex review unless a visible review link exists" in (
         workflow_ledger
     )
+    assert "Public workflow evidence ledger" in workflow_ledger
+    assert "[#61](https://github.com/patchrail/patchrail/issues/61)" in workflow_ledger
+    assert "[#62](https://github.com/patchrail/patchrail/pull/62)" in workflow_ledger
     assert "Consent-only pilot outcome example" in workflow_ledger
     assert "[#59](https://github.com/patchrail/patchrail/issues/59)" in workflow_ledger
     assert "[#60](https://github.com/patchrail/patchrail/pull/60)" in workflow_ledger
@@ -245,6 +250,19 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "external adopters: pending consent-only pilots" in workflow_ledger
     assert "formal Codex review examples: pending visible review links" in workflow_ledger
     assert "This is not a substitute for external adoption" in workflow_ledger
+    for release_page in [
+        ROOT / "docs" / "release-v0.2.0-evidence.md",
+        ROOT / "docs" / "release-v0.3.0-evidence.md",
+        ROOT / "docs" / "release-v0.4.0-evidence.md",
+    ]:
+        release_text = release_page.read_text(encoding="utf-8")
+        assert "Public workflow ledger: [docs/public-workflow-ledger.md]" in release_text
+        assert "Owned-repo issue-to-PR evidence now exists" in release_text
+        assert "formal visible\n  Codex review links remain pending" in release_text
+        assert (
+            "Public Codex review/triage evidence is still pending real PR/issue examples"
+            not in (release_text)
+        )
     assert "patchrail.queue_api.v1" in api_reference
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference

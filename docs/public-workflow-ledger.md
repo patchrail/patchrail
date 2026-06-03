@@ -27,6 +27,7 @@ As of 2026-06-03:
 
 | Area | Issue | Pull request | Evidence type |
 | --- | --- | --- | --- |
+| Public workflow evidence ledger | [#61](https://github.com/patchrail/patchrail/issues/61) | [#62](https://github.com/patchrail/patchrail/pull/62) | evidence tracking |
 | Consent-only pilot outcome example | [#59](https://github.com/patchrail/patchrail/issues/59) | [#60](https://github.com/patchrail/patchrail/pull/60) | adopter evidence surface |
 | Pilot-pack importer API reference | [#57](https://github.com/patchrail/patchrail/issues/57) | [#58](https://github.com/patchrail/patchrail/pull/58) | Agent Control Plane docs |
 | Pilot-pack threat boundary | [#55](https://github.com/patchrail/patchrail/issues/55) | [#56](https://github.com/patchrail/patchrail/pull/56) | security and privacy docs |
@@ -55,4 +56,3 @@ These links demonstrate that PatchRail can run a disciplined maintenance loop:
 This is not a substitute for external adoption. Before applying to external
 support programs, PatchRail still needs permissioned pilots, real download
 metrics, and visible examples of formal review/triage workflows where applicable.
-

@@ -62,6 +62,7 @@ Current evidence snapshot from 2026-06-03:
 
 - Funded issue ethics: [docs/funded-issues-ethics.md](funded-issues-ethics.md)
 - Read-only demo: [examples/funded-issues-readonly](../examples/funded-issues-readonly/README.md)
+- Public workflow ledger: [docs/public-workflow-ledger.md](public-workflow-ledger.md)
 - OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
 - Codex for OSS evidence: [docs/openai-codex-for-oss-evidence.md](openai-codex-for-oss-evidence.md)
 
@@ -81,7 +82,9 @@ These actions remain maintainer gates:
 
 - PyPI publishing is blocked by missing local publishing credentials.
 - External adoption evidence is still pending consent-only pilots.
-- Public Codex review/triage evidence is still pending real PR/issue examples.
+- Owned-repo issue-to-PR evidence now exists in
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md); formal visible
+  Codex review links remain pending.
 
 These blockers do not prevent local v0.4.0 preparation, docs, tests, or read-only
 demo hardening.

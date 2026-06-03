@@ -135,7 +135,7 @@ Last verified: 2026-06-03.
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) records owned-repo
   maintenance cycles including #59 -> #60, #57 -> #58, #55 -> #56, #53 -> #54,
-  and #51 -> #52.
+  #51 -> #52, and #61 -> #62.
 
 ## Public Launch Issues
 
