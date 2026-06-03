@@ -22,6 +22,7 @@ CI Janitor is PatchRail's first public module. It turns failed CI logs into:
 - Playwright and Cypress browser test failures.
 - Rust test failures.
 - Ruby Bundler, Rake and RSpec failures.
+- PHP Composer and PHPUnit failures.
 - Go test failures.
 
 ## Output formats
@@ -56,7 +57,7 @@ The expectation file declares the target `failure_class` and an optional
 patchrail ci benchmark examples/ci-triage --format markdown
 ```
 
-The fixture set contains 132 sanitized synthetic examples across twelve supported
+The fixture set contains 135 sanitized synthetic examples across thirteen supported
 root-cause families. The benchmark does not require network access, billing, a
 GitHub App, or an external model. It exits non-zero when any fixture expectation
 fails.

@@ -209,6 +209,30 @@ RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "failure_class": "php_composer_failure",
+        "likely_subsystem": "PHP Composer dependency installation or PHPUnit lifecycle",
+        "patterns": [
+            r"\bcomposer install\b",
+            r"\bcomposer update\b",
+            r"Your requirements could not be resolved to an installable set of packages",
+            r"requires php",
+            r"Problem \d+",
+            r"lock file is not up to date",
+            r"not present in the lock file",
+            r"\bvendor/bin/phpunit\b",
+            r"\bphpunit\b",
+            r"FAILURES!",
+            r"Tests: .*Failures?:",
+            r"Failed asserting",
+            r"Class .* not found",
+        ],
+        "reproduction_command": "composer install && vendor/bin/phpunit",
+        "minimal_repair_strategy": (
+            "Reproduce the failing Composer or PHPUnit command, then fix the narrow "
+            "composer.json, lockfile, PHP platform, autoload, or test drift before rerunning it."
+        ),
+    },
+    {
         "failure_class": "go_test_failure",
         "likely_subsystem": "Go tests",
         "patterns": [r"\bgo test\b", r"FAIL\t", r"undefined:", r"panic: test timed out"],

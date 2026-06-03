@@ -1,0 +1,10 @@
+Run vendor/bin/phpunit --testsuite unit
+PHPUnit 10.5.0 by The PHPUnit Project.
+
+There was 1 failure:
+
+1) Tests\Feature\WidgetTest::test_widget_status
+Failed asserting that false is true.
+
+FAILURES!
+Tests: 42, Assertions: 120, Failures: 1.

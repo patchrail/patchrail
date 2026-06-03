@@ -71,7 +71,7 @@ python -m json.tool patchrail-ci-triage/doctor.json
   requirements showing no billing, external model, webhook, GitHub App, or PR
   creation requirement.
 - `fixture-benchmark.json`: benchmark result over the public CI Failure Zoo. The
-  example records `132` total cases, `132` passed, `0` failed, top-1 fixture
+  example records `135` total cases, `135` passed, `0` failed, top-1 fixture
   accuracy `1.0`, and per-class coverage for the supported root-cause families.
 - `fixture-benchmark-summary.md`: short Markdown benchmark summary for
   maintainers who want aggregate evidence without the full per-fixture JSON.

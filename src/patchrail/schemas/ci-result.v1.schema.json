@@ -33,6 +33,7 @@
         "browser_test_failure",
         "rust_test_failure",
         "ruby_bundle_failure",
+        "php_composer_failure",
         "go_test_failure"
       ]
     },
