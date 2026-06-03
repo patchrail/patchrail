@@ -44,6 +44,16 @@ repository names:
 patchrail ci pilot-metrics pilot-summary-*.json --format markdown
 ```
 
+To regenerate a local cross-workstream evidence snapshot without network,
+external models, billing, or GitHub write permission:
+
+```bash
+patchrail evidence snapshot --format markdown
+```
+
+The snapshot is a consistency check over the checkout. It does not replace
+public GitHub, PyPI, or adopter metrics.
+
 Use [docs/pilot-request-package.md](pilot-request-package.md) before promoting
 any pilot to public evidence. It records the maintainer consent checklist,
 evidence intake rules, and `ADOPTERS.md` listing boundary.
