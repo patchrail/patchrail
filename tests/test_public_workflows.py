@@ -180,6 +180,68 @@ def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> No
     assert "does not replace public PyPI download telemetry" in roadmap
 
 
+def test_application_gate_fails_closed_until_public_evidence_is_real() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "application-gate", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 1, proc.stdout
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.application_gate.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "local_checkout"
+    assert payload["status"] == "not_ready"
+    assert payload["decision"] == "do_not_apply_yet"
+    assert payload["checks"]["public_repository_present"] is True
+    assert payload["checks"]["ci_benchmark_green"] is True
+    assert payload["checks"]["read_only_ci_triage_workflow"] is True
+    assert payload["checks"]["agent_control_plane_demo_ready"] is True
+    assert payload["checks"]["pypi_release_published"] is False
+    assert payload["checks"]["external_adopters_present"] is False
+    assert payload["checks"]["formal_visible_review_links_present"] is False
+    assert payload["checks"]["no_placeholder_metrics_in_application_copy"] is True
+    assert payload["checks"]["money_goal_retired"] is True
+    assert payload["checks"]["no_network_or_write_required"] is True
+    assert "first PyPI publish and download telemetry" in payload["blockers"]
+    assert "permissioned external maintainer pilots or adopters" in payload["blockers"]
+    assert "formal visible review links" in payload["blockers"]
+    assert payload["signals"]["ci_fixtures"] == 138
+    assert payload["signals"]["public_external_adopters"] == 0
+    assert payload["signals"]["owned_repo_issue_pr_cycles"] == 20
+    assert payload["safety"]["network_required"] is False
+    assert payload["safety"]["github_write_permission_required"] is False
+    assert payload["safety"]["external_model_required"] is False
+    assert payload["safety"]["billing_required"] is False
+    assert payload["safety"]["money_goal_retired"] is True
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
+
+    markdown_proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "patchrail",
+            "evidence",
+            "application-gate",
+            "--format",
+            "markdown",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert markdown_proc.returncode == 1, markdown_proc.stdout
+    assert "# PatchRail Application Gate" in markdown_proc.stdout
+    assert "- Decision: `do_not_apply_yet`" in markdown_proc.stdout
+    assert "keep application copy blocked while any metric is pending" in markdown_proc.stdout
+
+
 def test_control_plane_evidence_audits_local_demo_without_write_actions() -> None:
     proc = subprocess.run(
         [sys.executable, "-m", "patchrail", "evidence", "control-plane", "--format", "json"],

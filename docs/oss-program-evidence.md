@@ -21,6 +21,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
   summarizes CI fixtures, read-only workflow posture, release evidence pages,
   Agent Control Plane demo, Funded Issue Scout demo, pilot summaries, and
   remaining evidence gaps without network or write actions
+- Application gate:
+  `patchrail evidence application-gate --format markdown` fails closed until
+  PyPI telemetry, permissioned external evidence, and visible review links are
+  real rather than placeholder-derived
 - Agent Control Plane evidence audit:
   `patchrail evidence control-plane --format markdown` verifies the checked-in
   local queue demo summary, required audit events, required artifacts, human
@@ -213,6 +217,10 @@ Last verified: 2026-06-03.
   reports owned-repo review evidence from the ledger while keeping external
   adoption, formal Codex review, PyPI downloads, and third-party write-action
   claims set to false.
+- Application gate: `uv run --extra dev patchrail evidence application-gate --format json`
+  currently returns `not_ready` and `do_not_apply_yet` because PyPI telemetry,
+  permissioned external adopters, and formal visible review links are still
+  missing.
 
 ## Public Launch Issues
 
