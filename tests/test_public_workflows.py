@@ -275,6 +275,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "rejects manifests where `source.raw_log_copied` is not `false`" in api_reference
     assert "keeps `write_actions_allowed=false`" in api_reference
     assert "does not read or store the original raw CI log" in api_reference
+    assert "## CLI Pilot Metrics" in api_reference
+    assert "patchrail ci pilot-metrics pilot-summary-*.json --format markdown" in api_reference
+    assert "repository_mention_approved=true" in api_reference
+    assert "requires no network, external model, billing, or GitHub write permission" in (
+        api_reference
+    )
     assert "consent-only" in pilot_guide
     assert "does not give PatchRail write access" in pilot_guide
     assert "See [examples/pilot-outcome](../examples/pilot-outcome/README.md)" in pilot_guide
@@ -289,6 +295,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci pilot-summary --pack patchrail-pilot-pack" in pilot_guide
     assert "--repository-mention-approved yes" in pilot_guide
     assert "defaults to `--repository-mention-approved no`" in pilot_guide
+    assert "patchrail ci pilot-metrics pilot-summary-*.json --format markdown" in pilot_guide
+    assert "Private or unapproved\nrepository names remain excluded" in pilot_guide
     assert "It does not copy the raw log into the output directory" in pilot_guide
     assert "## Pilot pack boundary" in security
     assert "schema_version=patchrail.ci_pilot_pack.v1" in security

@@ -853,6 +853,118 @@ def _ci_pilot_summary(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_pilot_summary_file(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != "patchrail.ci_pilot_summary.v1":
+        raise ValueError(f"{path} must use schema_version patchrail.ci_pilot_summary.v1")
+    return payload
+
+
+def _pilot_metric_counter(values: list[str]) -> dict[str, int]:
+    counts = Counter(values)
+    return {key: counts.get(key, 0) for key in ("yes", "no", "unknown")}
+
+
+def _pilot_metrics_payload(paths: list[Path]) -> dict[str, Any]:
+    summaries = [_load_pilot_summary_file(path) for path in paths]
+    public_mentions = [
+        item["public_listing"]["repository"]
+        for item in summaries
+        if item["public_listing"].get("repository_mention_approved") is True
+        and item["public_listing"].get("repository")
+    ]
+    private_count = len(summaries) - len(public_mentions)
+    classification_values = [
+        str(item["pilot_context"].get("classification_correct", "unknown")) for item in summaries
+    ]
+    usefulness_values = [
+        str(item["pilot_context"].get("maintainer_action_useful", "unknown")) for item in summaries
+    ]
+    local_only_count = sum(
+        1
+        for item in summaries
+        if item["pilot_pack"].get("raw_log_copied") is False
+        and item["pilot_pack"].get("redaction_local_only") is True
+    )
+    return {
+        "schema_version": "patchrail.ci_pilot_metrics.v1",
+        "total_pilot_summaries": len(summaries),
+        "public_repository_mentions": len(public_mentions),
+        "private_or_unapproved_repository_mentions": private_count,
+        "public_repositories": public_mentions,
+        "classification_correct": _pilot_metric_counter(classification_values),
+        "maintainer_action_useful": _pilot_metric_counter(usefulness_values),
+        "local_only_and_no_raw_log": local_only_count,
+        "requirements": {
+            "billing_required": False,
+            "external_model_required": False,
+            "network_required": False,
+            "github_write_permission_required": False,
+        },
+        "source_files": [str(path) for path in paths],
+    }
+
+
+def _render_pilot_metrics_markdown(payload: dict[str, Any]) -> str:
+    lines = [
+        "# PatchRail Consent-Only Pilot Metrics",
+        "",
+        f"- Total pilot summaries: `{payload['total_pilot_summaries']}`",
+        f"- Public repository mentions: `{payload['public_repository_mentions']}`",
+        (
+            "- Private or unapproved repository mentions: "
+            f"`{payload['private_or_unapproved_repository_mentions']}`"
+        ),
+        f"- Local-only summaries with no raw log copied: `{payload['local_only_and_no_raw_log']}`",
+        "",
+        "## Maintainer Review Outcomes",
+        "",
+        (
+            "- Classification correct: "
+            f"`yes={payload['classification_correct']['yes']}`, "
+            f"`no={payload['classification_correct']['no']}`, "
+            f"`unknown={payload['classification_correct']['unknown']}`"
+        ),
+        (
+            "- Suggested action useful: "
+            f"`yes={payload['maintainer_action_useful']['yes']}`, "
+            f"`no={payload['maintainer_action_useful']['no']}`, "
+            f"`unknown={payload['maintainer_action_useful']['unknown']}`"
+        ),
+        "",
+        "## Public Repositories",
+        "",
+    ]
+    public_repositories = payload["public_repositories"]
+    if public_repositories:
+        lines.extend(f"- `{repo}`" for repo in public_repositories)
+    else:
+        lines.append("- None approved for public listing.")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            (
+                "These metrics are derived from local pilot-summary JSON files. "
+                "They do not count private or unapproved repository names as public adoption."
+            ),
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _ci_pilot_metrics(args: argparse.Namespace) -> int:
+    try:
+        payload = _pilot_metrics_payload(args.summary_json)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError, KeyError) as exc:
+        print(f"Invalid pilot summary input: {exc}", file=sys.stderr)
+        return 1
+    text = _json_dump(payload) if args.format == "json" else _render_pilot_metrics_markdown(payload)
+    _write_or_print(text, args.out)
+    return 0
+
+
 def _redact(args: argparse.Namespace) -> int:
     redaction = redact_ci_log(_read_log(args.log))
     if args.format == "json":
@@ -1532,6 +1644,25 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     pilot_summary.add_argument("--out", type=Path, help="Optional output path.")
     pilot_summary.set_defaults(func=_ci_pilot_summary)
+
+    pilot_metrics = ci_subparsers.add_parser(
+        "pilot-metrics",
+        help="Aggregate consent-only pilot-summary JSON files into safe public metrics.",
+    )
+    pilot_metrics.add_argument(
+        "summary_json",
+        type=Path,
+        nargs="+",
+        help="One or more files created by `patchrail ci pilot-summary --format json`.",
+    )
+    pilot_metrics.add_argument(
+        "--format",
+        choices=["markdown", "json"],
+        default="markdown",
+        help="Output format.",
+    )
+    pilot_metrics.add_argument("--out", type=Path, help="Optional output path.")
+    pilot_metrics.set_defaults(func=_ci_pilot_metrics)
 
     redact = subparsers.add_parser("redact", help="Redact secrets, emails and home paths locally.")
     redact.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")
