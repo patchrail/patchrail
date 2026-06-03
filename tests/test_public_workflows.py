@@ -507,16 +507,28 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
     roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    script = (ROOT / "scripts" / "release_readiness.py").read_text(encoding="utf-8")
 
     assert "package-smoke:" in workflow
     assert "uv run --extra dev python -m build" in workflow
     assert "uv run --extra dev twine check dist/*" in workflow
     assert "uv run ruff format --check ." in workflow
     assert '"/.agents"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert '"/scripts"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert "python -m venv .pkg-smoke" in workflow
     assert "python -m pip install dist/*.whl" in workflow
     assert "patchrail doctor --format json" in workflow
     assert '"/ADOPTERS.md"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+    assert "scripts/release_readiness.py --clean-dist" in readme
+    assert "scripts/release_readiness.py --clean-dist" in release_process
+    assert "scripts/release_readiness.py --clean-dist" in release_evidence
+    assert "patchrail.release_readiness.v1" in script
+    assert "--no-index" in script
+    assert "published_to_pypi" in script
+    assert "created_release_tag" in script
+    assert "contacted_third_parties" in script
+    assert "github_write_permission_required" in script
 
     assert "python -m pip install dist/*.whl" in release_process
     assert "patchrail ci explain --log examples/ci-triage/dependency-failure.log" in release_process

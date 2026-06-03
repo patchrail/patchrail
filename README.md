@@ -84,6 +84,7 @@ Run the public checks from a fresh checkout:
 uv run --extra dev pytest -q
 uv run --extra dev ruff check .
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format json
+uv run --extra dev python scripts/release_readiness.py --clean-dist
 ```
 
 See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
