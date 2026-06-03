@@ -95,6 +95,7 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
 - [GitHub Actions CI triage](docs/github-action.md)
 - [Agent Control Plane](docs/agent-control-plane.md)
+- [API reference](docs/api-reference.md)
 - [Codex workflows](docs/codex-workflows.md)
 - [Reviewable automation workflows](docs/agent-workflows.md)
 - [Threat model](docs/threat-model.md)

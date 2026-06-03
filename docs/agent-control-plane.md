@@ -111,6 +111,9 @@ curl -sS http://127.0.0.1:8765/proposals
 curl -sS http://127.0.0.1:8765/audit-events
 ```
 
+See [`docs/api-reference.md`](api-reference.md) for the endpoint contract,
+request fields, filters, and approval boundary.
+
 Create and approve local records through the API:
 
 ```bash

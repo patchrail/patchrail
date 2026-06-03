@@ -1,0 +1,238 @@
+# PatchRail API Reference
+
+PatchRail exposes a local HTTP API for the Agent Control Plane. It is intended
+for local dashboards, demos, and handoffs where a maintainer wants to inspect
+queue state without granting repository write permissions.
+
+The API is local-first:
+
+- it binds to `127.0.0.1` or `localhost`;
+- it stores state in a local SQLite database;
+- it does not require billing, network access, external models, or GitHub write
+  permission;
+- new work items and proposals start with `approval_state=pending`;
+- approval records a maintainer decision but does not execute a write action.
+
+## Start The Server
+
+```bash
+patchrail serve --host 127.0.0.1 --port 8765 --db .patchrail/queue.sqlite
+```
+
+The server rejects non-local hosts such as `0.0.0.0`:
+
+```bash
+patchrail serve --host 0.0.0.0
+# PatchRail queue API is local-only; use host 127.0.0.1 or localhost
+```
+
+## Response Envelope
+
+Every endpoint returns JSON with UTF-8 encoding. Safety metadata appears on
+health and status responses:
+
+```json
+{
+  "local_first": true,
+  "requirements": {
+    "billing_required": false,
+    "external_model_required": false,
+    "github_write_permission_required": false,
+    "network_required": false,
+    "write_actions_allowed_by_default": false
+  }
+}
+```
+
+Errors use an `error` field:
+
+```json
+{
+  "error": "unknown work item: prq_missing"
+}
+```
+
+## Health And Status
+
+### `GET /health`
+
+Returns server readiness and the local-first requirements.
+
+```bash
+curl -sS http://127.0.0.1:8765/health
+```
+
+### `GET /status`
+
+Returns queue counts, schema version, database path, and the same safety
+requirements.
+
+```bash
+curl -sS http://127.0.0.1:8765/status
+```
+
+## Work Items
+
+### `GET /work-items`
+
+Lists work items. Optional filters:
+
+- `status`
+- `approval_state`
+
+```bash
+curl -sS 'http://127.0.0.1:8765/work-items?approval_state=pending'
+```
+
+### `POST /work-items`
+
+Creates a pending local work item.
+
+Required fields:
+
+- `kind`
+- `title`
+
+Optional fields:
+
+- `source`
+- `payload`
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/work-items \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "kind": "ci_failure",
+    "title": "Review failed dependency install",
+    "source": "local-demo",
+    "payload": {
+      "report": "patchrail-ci-result.json"
+    }
+  }'
+```
+
+Created items always include `write_actions_allowed=false` unless a future
+maintainer-reviewed execution layer explicitly changes that policy.
+
+### `GET /work-items/<id>`
+
+Fetches one work item.
+
+```bash
+curl -sS http://127.0.0.1:8765/work-items/prq_example
+```
+
+### `POST /work-items/<id>/approve`
+
+Records maintainer approval for a local work item.
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/work-items/prq_example/approve \
+  -H 'Content-Type: application/json' \
+  -d '{"note":"Reviewed local evidence."}'
+```
+
+Approval does not open a pull request, post a comment, push commits, contact a
+third party, or claim funding.
+
+### `POST /work-items/<id>/reject`
+
+Records maintainer rejection.
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/work-items/prq_example/reject \
+  -H 'Content-Type: application/json' \
+  -d '{"note":"Needs a smaller reproduction."}'
+```
+
+## Proposals
+
+Proposal records attach a reviewable patch plan to a work item. They are local
+handoff records, not execution requests.
+
+### `GET /proposals`
+
+Lists proposals. Optional filters:
+
+- `work_item_id`
+- `approval_state`
+
+```bash
+curl -sS 'http://127.0.0.1:8765/proposals?approval_state=pending'
+```
+
+### `POST /proposals`
+
+Creates a pending proposal.
+
+Required fields:
+
+- `work_item_id`
+- `title`
+- `summary`
+- `patch_plan`
+
+Optional field:
+
+- `risk_level`
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/proposals \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "work_item_id": "prq_example",
+    "title": "Pin compatible dependency range",
+    "summary": "Adjust dependency constraints and re-run CI.",
+    "patch_plan": "1. Reproduce the failure.\n2. Update dependency bounds.\n3. Re-run CI.",
+    "risk_level": "low"
+  }'
+```
+
+### `GET /proposals/<id>`
+
+Fetches one proposal.
+
+```bash
+curl -sS http://127.0.0.1:8765/proposals/prp_example
+```
+
+### `POST /proposals/<id>/approve`
+
+Records maintainer approval for a local patch plan.
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/proposals/prp_example/approve \
+  -H 'Content-Type: application/json' \
+  -d '{"note":"Plan accepted for manual handoff."}'
+```
+
+### `POST /proposals/<id>/reject`
+
+Records maintainer rejection for a local patch plan.
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/proposals/prp_example/reject \
+  -H 'Content-Type: application/json' \
+  -d '{"note":"Risk is too high for this release."}'
+```
+
+## Audit Events
+
+### `GET /audit-events`
+
+Exports local audit events for queue creation, proposals, decisions, and
+handoffs. Optional filter:
+
+- `work_item_id`
+
+```bash
+curl -sS http://127.0.0.1:8765/audit-events
+curl -sS 'http://127.0.0.1:8765/audit-events?work_item_id=prq_example'
+```
+
+## Compatibility
+
+The current API schema is `patchrail.queue_api.v1`, backed by
+`patchrail.queue.v1` SQLite records. v0.x releases may add fields, but should
+not remove the local-first requirements, pending-by-default work items, or
+human approval boundary.

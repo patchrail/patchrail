@@ -73,11 +73,13 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
 def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     codex_workflows = (ROOT / "docs" / "codex-workflows.md").read_text(encoding="utf-8")
     evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
+    api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
 
     assert "docs/codex-workflows.md" in readme
     assert "docs/openai-codex-for-oss-evidence.md" in readme
+    assert "docs/api-reference.md" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
     assert "patchrail ci explain --log failed-github-actions.log" in quickstart
@@ -85,6 +87,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "no automatic pull requests" in codex_workflows
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
+    assert "patchrail.queue_api.v1" in api_reference
+    assert "write_actions_allowed_by_default" in api_reference
+    assert "Approval does not open a pull request" in api_reference
 
 
 def test_funded_issues_docs_preserve_read_only_boundary() -> None:
