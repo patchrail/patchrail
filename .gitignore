@@ -1,5 +1,6 @@
 .venv/
 .pkg-smoke/
+.patchrail-release-smoke/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
