@@ -17,8 +17,18 @@
     "proposal-rejected.md",
     "approved.json",
     "queue.jsonl",
-    "audit-events.jsonl"
+    "audit-events.jsonl",
+    "audit-summary.json"
   ],
+  "audit_summary_gates": {
+    "proposal_approval_gate_exercised": true,
+    "proposal_rejection_gate_exercised": true,
+    "queue_export_recorded": true,
+    "work_item_approval_gate_exercised": true,
+    "work_item_rejection_gate_exercised": true
+  },
+  "audit_summary_missing_required_events": [],
+  "audit_summary_status": "human_gates_exercised",
   "audit_event_types": [
     "work_item_added",
     "work_item_added",

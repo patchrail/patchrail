@@ -19,6 +19,7 @@ candidate evidence covers:
 - Human approval and rejection states for work items.
 - Local proposal records linked to queue items.
 - Proposal approval and rejection audit events.
+- Local audit summary for release-checkable human-gate coverage.
 - JSON and JSONL exports for queue items, proposals, and audit events.
 - Versioned queue JSON Schemas bundled in the package and mirrored in
   `schemas/`.
@@ -26,6 +27,9 @@ candidate evidence covers:
   audit events.
 - Shared `patchrail.queue_status.v1` contract for `patchrail queue status`,
   `patchrail schema queue-status`, and `GET /status`.
+- Shared `patchrail.queue_audit_summary.v1` contract for
+  `patchrail queue audit-summary` and
+  `patchrail schema queue-audit-summary`.
 - Executable demo in `examples/local-agent-queue`.
 - No pull request creation, issue comments, repository writes, external model
   calls, billing, or GitHub write permissions.
@@ -43,7 +47,9 @@ uv run --extra dev python examples/local-agent-queue/run_demo.py --output .patch
 uv run --extra dev patchrail schema queue-work-item
 uv run --extra dev patchrail schema queue-proposal
 uv run --extra dev patchrail schema queue-audit-event
+uv run --extra dev patchrail schema queue-audit-summary
 uv run --extra dev patchrail schema queue-status
+uv run --extra dev patchrail queue --db .patchrail-queue-demo/queue.sqlite audit-summary --format markdown
 uv run --extra dev patchrail evidence control-plane --format markdown
 uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail queue --db .patchrail-pilot.sqlite add --from-pilot-pack .patchrail-pilot-pack-smoke
@@ -63,10 +69,13 @@ Current evidence snapshot from 2026-06-03:
 - The local-agent-queue demo runs end-to-end and produces a stable
   `summary.json` matching
   [demo-summary.expected.json](../examples/local-agent-queue/demo-summary.expected.json).
+- The same demo writes `audit-summary.json`; `patchrail queue audit-summary`
+  reports `human_gates_exercised` only after required approval, rejection,
+  proposal, and export events are present.
 - `patchrail evidence control-plane --format markdown` reports
   `local_demo_ready` from the checked-in summary when required audit events,
-  artifacts, source docs, human approval, proposal approval, and risky-proposal
-  rejection are all present.
+  artifacts, source docs, human approval, proposal approval, risky-proposal
+  rejection, and audit-summary gate coverage are all present.
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
 - `patchrail queue status --format json` and `GET /status` share
@@ -95,6 +104,7 @@ Recent owned-repo public PR evidence:
 - Queue work item schema: [schemas/queue_work_item.schema.json](../schemas/queue_work_item.schema.json)
 - Queue proposal schema: [schemas/queue_proposal.schema.json](../schemas/queue_proposal.schema.json)
 - Queue audit event schema: [schemas/queue_audit_event.schema.json](../schemas/queue_audit_event.schema.json)
+- Queue audit summary schema: [schemas/queue_audit_summary.schema.json](../schemas/queue_audit_summary.schema.json)
 - Public workflow ledger: [docs/public-workflow-ledger.md](public-workflow-ledger.md)
 - OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
 

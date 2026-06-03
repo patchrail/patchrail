@@ -149,6 +149,9 @@ Last verified: 2026-06-03.
 - Queue audit trail: `patchrail queue audit --format jsonl` exports local
   `work_item_added`, `work_item_approved`, `work_item_rejected`, and
   `work_items_exported` events without granting GitHub write permissions.
+- Queue audit summary: `patchrail queue audit-summary --format json` emits
+  `patchrail.queue_audit_summary.v1` and verifies the required local human-gate
+  events without appending events or executing queued proposals.
 - Proposal records: `patchrail queue proposal add/show/approve/reject` links a
   queued CI failure to a local patch plan and records `proposal_added`,
   `proposal_approved`, and `proposal_rejected` audit events without executing

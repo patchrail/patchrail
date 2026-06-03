@@ -112,6 +112,10 @@ patchrail queue --db .patchrail-demo/queue.sqlite export \
 patchrail queue --db .patchrail-demo/queue.sqlite audit \
   --format jsonl \
   --out .patchrail-demo/audit-events.jsonl
+
+patchrail queue --db .patchrail-demo/queue.sqlite audit-summary \
+  --format json \
+  --out .patchrail-demo/audit-summary.json
 ```
 
 Optional local API demo:
@@ -152,6 +156,8 @@ Expected local artifacts:
 - `.patchrail-demo/queue.jsonl`: the exported work items.
 - `.patchrail-demo/audit-events.jsonl`: the append-only local event trail for
   add, proposal, approve, and export decisions.
+- `.patchrail-demo/audit-summary.json`: the local gate summary proving the
+  required approval, rejection, proposal, and export events were exercised.
 - `.patchrail-demo/summary.json`: stable demo summary matching
   `demo-summary.expected.json`.
 - The work item is imported from `pilot-pack/pilot-manifest.json`, which
@@ -182,6 +188,10 @@ assert proposal["approval_state"] == "approved"
 assert proposal["risk_level"] == "low"
 assert rejected_proposal["approval_state"] == "rejected"
 assert rejected_proposal["risk_level"] == "high"
+audit_summary = json.loads(Path(".patchrail-demo/audit-summary.json").read_text())
+assert audit_summary["status"] == "human_gates_exercised"
+assert audit_summary["missing_required_events"] == []
+assert audit_summary["safety"]["approval_records_execute_actions"] is False
 
 events = [json.loads(line) for line in Path(".patchrail-demo/audit-events.jsonl").read_text().splitlines()]
 assert [event["event_type"] for event in events] == [
