@@ -11,6 +11,9 @@
 - Safety, ethics, and security documentation.
 - Release-prep evidence checklist for tests, lint, benchmark, doctor, package
   artifacts, safety review, and manual publish gates.
+- v0.1.0 release evidence page with artifact manifest, wheel smoke result, and
+  explicit manual gates for tag, PyPI, GitHub Release, announcements, and
+  external applications.
 
 ## v0.2
 
