@@ -153,6 +153,17 @@ approved queue export, see
 The demo includes `run_demo.py`, which produces a stable `summary.json`
 contract for release evidence and CI checks.
 
+Audit that demo as local Agent Control Plane evidence:
+
+```bash
+patchrail evidence control-plane --format markdown
+```
+
+The command reads the checked-in demo summary, verifies the required queue
+events and artifacts, and reports whether the human approval and rejection gates
+were exercised. It does not use network access, billing, external models,
+GitHub write permission, or repository write actions.
+
 ## Custom Database Path
 
 By default PatchRail stores the queue in `.patchrail/queue.sqlite` in the current

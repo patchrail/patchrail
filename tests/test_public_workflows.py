@@ -146,6 +146,10 @@ def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> No
     assert payload["versions"]["v0.2.0"]["signals"]["ci_benchmark_failed"] == 0
     assert payload["versions"]["v0.2.0"]["signals"]["read_only_github_action"] is True
     assert payload["versions"]["v0.3.0"]["signals"]["owned_repo_issue_pr_cycles"] == 20
+    assert (
+        payload["versions"]["v0.3.0"]["signals"]["evidence_command"]
+        == "patchrail evidence control-plane"
+    )
     assert payload["versions"]["v0.4.0"]["signals"]["money_goal_retired"] is True
     assert (
         "do not process bounties, payouts, claims, outbound, or money-ranked leads"
@@ -169,6 +173,68 @@ def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> No
     roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
     assert "patchrail evidence roadmap --format markdown" in roadmap
     assert "does not replace public PyPI download telemetry" in roadmap
+
+
+def test_control_plane_evidence_audits_local_demo_without_write_actions() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "control-plane", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.control_plane_evidence.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "local_checkout"
+    assert payload["summary_file"] == "examples/local-agent-queue/demo-summary.expected.json"
+    assert payload["status"] == "local_demo_ready"
+    assert payload["signals"]["artifact_count"] == 18
+    assert payload["signals"]["audit_event_count"] == 9
+    assert payload["signals"]["source_failure_class"] == "python_dependency_resolution"
+    assert payload["signals"]["item_approval_state"] == "approved"
+    assert payload["signals"]["proposal_approval_state"] == "approved"
+    assert payload["signals"]["proposal_risk_level"] == "low"
+    assert payload["signals"]["rejected_item_approval_state"] == "rejected"
+    assert payload["signals"]["rejected_proposal_approval_state"] == "rejected"
+    assert payload["safety"]["local_first"] is True
+    assert payload["safety"]["write_actions_allowed"] is False
+    assert payload["safety"]["rejected_item_write_actions_allowed"] is False
+    assert payload["safety"]["human_approval_gate_exercised"] is True
+    assert payload["safety"]["proposal_approval_gate_exercised"] is True
+    assert payload["safety"]["risky_proposal_rejection_exercised"] is True
+    assert payload["safety"]["github_write_permission_required"] is False
+    assert payload["safety"]["external_model_required"] is False
+    assert payload["safety"]["billing_required"] is False
+    assert payload["safety"]["network_required"] is False
+    assert payload["artifact_presence"]["required_events_present"] is True
+    assert payload["artifact_presence"]["required_artifacts_present"] is True
+    assert payload["artifact_presence"]["source_files_present"] is True
+    assert payload["artifact_presence"]["missing_events"] == []
+    assert payload["artifact_presence"]["missing_artifacts"] == []
+    assert payload["artifact_presence"]["missing_source_files"] == []
+    assert payload["artifact_presence"]["safety_gaps"] == []
+    assert (
+        "permissioned external maintainer control-plane demo"
+        in (payload["remaining_evidence_gaps"])
+    )
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
+
+    agent_control_plane = (ROOT / "docs" / "agent-control-plane.md").read_text(encoding="utf-8")
+    api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
+    oss_program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    release_v03 = (ROOT / "docs" / "release-v0.3.0-evidence.md").read_text(encoding="utf-8")
+    docs = "\n".join(
+        [agent_control_plane, api_reference, oss_program_evidence, roadmap, release_v03]
+    )
+    assert "patchrail evidence control-plane --format markdown" in docs
+    assert "local_demo_ready" in docs
+    assert "risky-proposal rejection" in docs
 
 
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:

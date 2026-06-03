@@ -21,6 +21,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
   summarizes CI fixtures, read-only workflow posture, release evidence pages,
   Agent Control Plane demo, Funded Issue Scout demo, pilot summaries, and
   remaining evidence gaps without network or write actions
+- Agent Control Plane evidence audit:
+  `patchrail evidence control-plane --format markdown` verifies the checked-in
+  local queue demo summary, required audit events, required artifacts, human
+  approval gates, and risky proposal rejection without network or write actions
 - Public CI artifact: the main CI workflow uploads `patchrail-oss-evidence`
   with `evidence-snapshot.json` and `evidence-snapshot.md` after tests,
   benchmark, and package smoke pass. This is project-health evidence only; it
@@ -112,6 +116,12 @@ Last verified: 2026-06-03.
   [`examples/local-agent-queue`](../examples/local-agent-queue/README.md)
   links `ci explain` to `queue add`, `queue approve`, and `queue export`
   using only local files and SQLite.
+- Agent Control Plane evidence command:
+  `patchrail evidence control-plane --format markdown` reports
+  `local_demo_ready` from
+  [`demo-summary.expected.json`](../examples/local-agent-queue/demo-summary.expected.json)
+  when the demo artifacts, audit events, approval gate, proposal gate, and
+  risky-proposal rejection are all present.
 - CI result importer: `patchrail queue add --from-ci-result ci-result.json`
   turns the read-only CI artifact JSON into a pending local queue item while
   keeping `write_actions_allowed=false`.
