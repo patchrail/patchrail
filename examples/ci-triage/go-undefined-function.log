@@ -1,0 +1,4 @@
+go test ./...
+# example.test/demo
+handlers.go:24:9: undefined: buildReport
+FAIL	example.test/demo [build failed]

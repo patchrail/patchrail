@@ -1,0 +1,4 @@
+go test ./...
+# example.test/store
+store.go:33:14: cannot use MemoryStore as type Store in argument to Run: missing method Close
+FAIL	example.test/store [build failed]

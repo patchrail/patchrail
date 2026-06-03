@@ -1,0 +1,4 @@
+go test ./... -race
+WARNING: DATA RACE
+--- FAIL: TestConcurrentQueue (0.03s)
+FAIL	example.test/queue	0.090s

@@ -1,0 +1,2 @@
+tsc -p tsconfig.json
+src/client.ts:27:3 - error TS2416: Property 'fetch' in type 'DemoClient' is not assignable to base type 'BaseClient'.

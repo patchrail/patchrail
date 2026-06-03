@@ -10,6 +10,15 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-bad-shell.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "github_actions_workflow",
       "expected_failure_class": "github_actions_workflow",
@@ -23,7 +32,43 @@
       "actual_failure_class": "github_actions_workflow",
       "expected_failure_class": "github_actions_workflow",
       "expected_minimum_confidence": 0.7,
+      "log": "github-actions-matrix-expression.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-missing-workflow-ref.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-permission-id-token.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
       "log": "github-actions-permission.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-token-permission.log",
       "mismatches": [],
       "passed": true
     },
@@ -37,11 +82,83 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-unresolved-checkout.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "github_actions_workflow",
+      "expected_failure_class": "github_actions_workflow",
+      "expected_minimum_confidence": 0.7,
+      "log": "github-actions-yaml-syntax.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-assertion-fail.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "go_test_failure",
       "expected_failure_class": "go_test_failure",
       "expected_minimum_confidence": 0.8,
       "log": "go-compile-failure.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-compile-interface.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-data-race-test.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-module-missing-symbol.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-panic-in-test.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-timeout-race.log",
       "mismatches": [],
       "passed": true
     },
@@ -58,8 +175,71 @@
       "actual_confidence": 0.89,
       "actual_failure_class": "go_test_failure",
       "expected_failure_class": "go_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "go-undefined-function.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "go_test_failure",
+      "expected_failure_class": "go_test_failure",
       "expected_minimum_confidence": 0.8,
       "log": "go-undefined-symbol.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-biome-format.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-eslint-a11y.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-eslint-import-order.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-eslint-no-undef.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-eslint-react-hooks.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-eslint-unused-vars.log",
       "mismatches": [],
       "passed": true
     },
@@ -69,6 +249,15 @@
       "expected_failure_class": "javascript_lint",
       "expected_minimum_confidence": 0.8,
       "log": "javascript-eslint.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "javascript_lint",
+      "expected_failure_class": "javascript_lint",
+      "expected_minimum_confidence": 0.7,
+      "log": "javascript-prettier-format.log",
       "mismatches": [],
       "passed": true
     },
@@ -94,8 +283,44 @@
       "actual_confidence": 0.71,
       "actual_failure_class": "node_dependency_install",
       "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-npm-ci-lock-outdated.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-npm-engine-mismatch.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-npm-eresolve-react.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
       "expected_minimum_confidence": 0.5,
       "log": "node-npm-missing-lockfile.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-npm-missing-package-lock.log",
       "mismatches": [],
       "passed": true
     },
@@ -105,6 +330,15 @@
       "expected_failure_class": "node_dependency_install",
       "expected_minimum_confidence": 0.7,
       "log": "node-peer-dependency.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-pnpm-frozen-lockfile.log",
       "mismatches": [],
       "passed": true
     },
@@ -131,7 +365,34 @@
       "actual_failure_class": "node_dependency_install",
       "expected_failure_class": "node_dependency_install",
       "expected_minimum_confidence": 0.7,
+      "log": "node-pnpm-peer-optional.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-pnpm-workspace-protocol.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
       "log": "node-yarn-immutable-cache-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-yarn-immutable-install.log",
       "mismatches": [],
       "passed": true
     },
@@ -141,6 +402,15 @@
       "expected_failure_class": "node_dependency_install",
       "expected_minimum_confidence": 0.8,
       "log": "node-yarn-peer-dependency.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "node_dependency_install",
+      "expected_failure_class": "node_dependency_install",
+      "expected_minimum_confidence": 0.7,
+      "log": "node-yarn-peer-version.log",
       "mismatches": [],
       "passed": true
     },
@@ -172,6 +442,15 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-constraint-pin-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.95,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
@@ -181,11 +460,38 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-index-timeout-backtrack.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-marker-py310.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.8,
       "log": "python-pip-no-matching-distribution.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-platform-arm64-wheel.log",
       "mismatches": [],
       "passed": true
     },
@@ -221,7 +527,25 @@
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.7,
+      "log": "python-pip-tools-backtracking.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
       "log": "python-pip-tools-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pip-yanked-only-candidate.log",
       "mismatches": [],
       "passed": true
     },
@@ -244,6 +568,33 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-poetry-transitive-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-pytest-env-token-redacted.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-assert-json.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "python_test_failure",
       "expected_failure_class": "python_test_failure",
@@ -253,11 +604,65 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-fixture-timeout.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-import-mode.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-module-not-found.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-parametrize-regression.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_test_failure",
+      "expected_failure_class": "python_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-test-snapshot-diff.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.95,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.8,
       "log": "python-tox-constraint-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "python_dependency_resolution",
+      "expected_failure_class": "python_dependency_resolution",
+      "expected_minimum_confidence": 0.7,
+      "log": "python-uv-extra-marker-conflict.log",
       "mismatches": [],
       "passed": true
     },
@@ -276,6 +681,69 @@
       "expected_failure_class": "rust_test_failure",
       "expected_minimum_confidence": 0.7,
       "log": "rust-compile-error.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-e0277-trait-bound.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-e0308-mismatched-types.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-e0382-moved-value.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-e0502-borrow-checker.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-e0599-method-not-found.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-panic-thread.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "rust_test_failure",
+      "expected_failure_class": "rust_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "rust-snapshot-failure.log",
       "mismatches": [],
       "passed": true
     },
@@ -325,6 +793,15 @@
       "passed": true
     },
     {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-path-alias-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.89,
       "actual_failure_class": "typescript_typecheck",
       "expected_failure_class": "typescript_typecheck",
@@ -339,6 +816,78 @@
       "expected_failure_class": "typescript_typecheck",
       "expected_minimum_confidence": 0.8,
       "log": "typescript-schema-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2304-missing-global.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2322-prop.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2345-route-param.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2416-class-override.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2551-import-name.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2741-required-prop.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts2769-overload.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "typescript_typecheck",
+      "expected_failure_class": "typescript_typecheck",
+      "expected_minimum_confidence": 0.7,
+      "log": "typescript-ts7006-implicit-any.log",
       "mismatches": [],
       "passed": true
     },
@@ -362,13 +911,13 @@
     }
   ],
   "failed": 0,
-  "passed": 40,
+  "passed": 101,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
     "network_required": false
   },
-  "root": "patchrail/examples/ci-triage",
+  "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 40
+  "total_cases": 101
 }

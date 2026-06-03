@@ -14,7 +14,7 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Monthly PyPI downloads: pending first PyPI release
 - External repositories using PatchRail: pending pilots
 - External contributors: pending external contributions
-- Public CI fixtures: 40 sanitized synthetic fixtures in the local benchmark
+- Public CI fixtures: 101 sanitized synthetic fixtures in the local benchmark
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, and the
   Agent Control Plane
@@ -50,10 +50,10 @@ Last verified: 2026-06-03.
   and public CI evidence before any publish step.
 - Manual gates: release tags, PyPI publish, GitHub releases, public
   announcements, and external applications remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 26 passed.
+- Tests: `uv run --extra dev pytest -q` -> 29 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 14 files already formatted.
-- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 40/40 fixtures passed.
+- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 101/101 fixtures passed.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:
   [`examples/local-agent-queue`](../examples/local-agent-queue/README.md)

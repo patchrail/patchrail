@@ -1,0 +1,3 @@
+pnpm typecheck
+src/app.ts:2:24 - error TS2307: Cannot find module '@demo/core' or its corresponding type declarations.
+tsc exited with code 2

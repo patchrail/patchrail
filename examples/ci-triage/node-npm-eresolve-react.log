@@ -1,0 +1,3 @@
+npm ERR! code ERESOLVE
+npm ERR! peer dep missing: react@^18, required by demo-widget@1.0.0
+npm ERR! Fix the upstream dependency conflict, or retry this command with --force.

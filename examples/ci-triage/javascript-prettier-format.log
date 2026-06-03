@@ -1,0 +1,4 @@
+pnpm lint
+[warn] src/Button.tsx
+[warn] Code style issues found in the above file. Forgot to run prettier?
+lint failed

@@ -1,0 +1,5 @@
+pnpm lint
+/home/runner/work/repo/src/app.js
+  14:3  error  'renderWidget' is not defined  no-undef
+eslint found 1 problem
+lint failed

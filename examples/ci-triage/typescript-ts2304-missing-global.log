@@ -1,0 +1,3 @@
+npm run typecheck
+src/env.ts:9:12 - error TS2304: Cannot find name 'ProcessEnv'.
+tsc exited with code 2

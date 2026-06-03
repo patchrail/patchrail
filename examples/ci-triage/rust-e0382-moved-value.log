@@ -1,0 +1,4 @@
+cargo test
+error[E0382]: use of moved value: 'config'
+thread 'config::tests::merge' panicked after compile failure
+test result: FAILED

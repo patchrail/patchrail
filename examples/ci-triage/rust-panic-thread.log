@@ -1,0 +1,3 @@
+cargo test
+thread 'parser::tests::keeps_tokens' panicked at 'assertion failed', src/parser.rs:41:9
+test result: FAILED. 14 passed; 1 failed

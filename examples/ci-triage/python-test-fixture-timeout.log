@@ -1,0 +1,3 @@
+python -m pytest tests/test_worker.py -q
+FAILED tests/test_worker.py::test_retries - AssertionError
+E   assert 2 == 3

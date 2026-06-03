@@ -7,16 +7,19 @@
 - Local redaction helper for shared logs.
 - Fixture-backed tests.
 - Local fixture benchmark command.
-- Initial 40-fixture CI failure zoo.
+- Initial 40-fixture CI failure zoo, now expanded to 101 public benchmark fixtures.
 - Safety, ethics, and security documentation.
 - Release-prep evidence checklist for tests, lint, benchmark, doctor, package
   artifacts, safety review, and manual publish gates.
 
 ## v0.2
 
-- Larger CI failure fixture set toward 40+ cases.
-- Expanded Node and TypeScript drift fixtures toward 28 total benchmark cases.
-- Expanded Python dependency-resolution fixtures to reach 40 total benchmark cases.
+- Larger CI failure fixture set past the 100-case v0.2 benchmark bar.
+- Expanded Node and TypeScript drift fixtures, including workspace, engine,
+  route, overload, schema and import/type variants.
+- Expanded Python dependency-resolution fixtures with pip, Poetry, pip-tools,
+  uv, tox, marker, yanked, prerelease, platform wheel and transitive-conflict
+  cases.
 - GitHub Actions report artifact example.
 - Reproducible `patchrail-ci-triage` artifact example with Markdown, JSON,
   benchmark and doctor outputs.

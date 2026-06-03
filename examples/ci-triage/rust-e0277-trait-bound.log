@@ -1,0 +1,3 @@
+cargo test
+error[E0277]: the trait bound Demo: serde::Serialize is not satisfied
+thread 'main' panicked after compile failure

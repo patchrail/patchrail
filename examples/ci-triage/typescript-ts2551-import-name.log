@@ -1,0 +1,3 @@
+npm run typecheck
+src/index.ts:4:10 - error TS2551: Property 'createReport' does not exist on type 'typeof import("./report")'.
+Cannot find name 'createReprot'.

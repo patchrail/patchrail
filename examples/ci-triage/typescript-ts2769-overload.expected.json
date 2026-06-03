@@ -1,0 +1,4 @@
+{
+  "failure_class": "typescript_typecheck",
+  "minimum_confidence": 0.7
+}

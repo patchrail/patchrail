@@ -1,0 +1,3 @@
+tsc --pretty false
+src/server.ts:88:5 - error TS2769: No overload matches this call.
+Type 'string' is not assignable to type 'URL'.

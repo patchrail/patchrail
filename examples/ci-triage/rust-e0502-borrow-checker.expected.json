@@ -1,0 +1,4 @@
+{
+  "failure_class": "rust_test_failure",
+  "minimum_confidence": 0.7
+}
