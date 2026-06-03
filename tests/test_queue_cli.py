@@ -7,6 +7,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from patchrail.queue.status import _redact_local_paths
+
 
 def run_patchrail(args: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
@@ -18,6 +20,29 @@ def run_patchrail(args: list[str]) -> subprocess.CompletedProcess[str]:
 
 
 class PatchRailQueueTests(unittest.TestCase):
+    def test_queue_status_redaction_masks_local_paths_in_public_payloads(self) -> None:
+        payload = {
+            "db_path": "/Volumes/CorsairSSD/OpenClaw/tmp/queue.sqlite",
+            "work_items": [
+                {
+                    "payload": {
+                        "report": "/Users/pablo/project/report.md",
+                        "notes": "runner path /home/runner/work/patchrail/report.json",
+                    }
+                }
+            ],
+        }
+
+        redacted = _redact_local_paths(payload)
+        serialized = json.dumps(redacted)
+
+        self.assertEqual(redacted["db_path"], "<local-path>/queue.sqlite")
+        self.assertEqual(redacted["work_items"][0]["payload"]["report"], "<local-path>/report.md")
+        self.assertIn("<local-path>/report.json", redacted["work_items"][0]["payload"]["notes"])
+        self.assertNotIn("/Volumes/", serialized)
+        self.assertNotIn("/Users/", serialized)
+        self.assertNotIn("/home/", serialized)
+
     def test_queue_schema_command_exposes_public_control_plane_contracts(self) -> None:
         expected_titles = {
             "queue-status": "PatchRail Queue Status",
@@ -326,6 +351,173 @@ class PatchRailQueueTests(unittest.TestCase):
             self.assertIn("# PatchRail Queue Status", markdown_proc.stdout)
             self.assertIn("Write actions allowed by default: `False`", markdown_proc.stdout)
             self.assertIn("Approval records execute actions: `False`", markdown_proc.stdout)
+
+    def test_queue_bundle_exports_read_only_handoff_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+
+            approved_item_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "ci_failure",
+                    "--title",
+                    "Review dependency failure",
+                ]
+            )
+            self.assertEqual(approved_item_proc.returncode, 0, approved_item_proc.stderr)
+            approved_item = json.loads(approved_item_proc.stdout)
+
+            rejected_item_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "ci_failure",
+                    "--title",
+                    "Reject duplicate report",
+                ]
+            )
+            self.assertEqual(rejected_item_proc.returncode, 0, rejected_item_proc.stderr)
+            rejected_item = json.loads(rejected_item_proc.stdout)
+
+            proposal_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "proposal",
+                    "add",
+                    "--item-id",
+                    approved_item["id"],
+                    "--title",
+                    "Patch dependency range",
+                    "--summary",
+                    "Prepare a local patch plan.",
+                    "--patch-plan",
+                    "1. Reproduce.\n2. Patch.\n3. Test.",
+                    "--risk-level",
+                    "low",
+                ]
+            )
+            self.assertEqual(proposal_proc.returncode, 0, proposal_proc.stderr)
+            proposal = json.loads(proposal_proc.stdout)
+
+            rejected_proposal_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "proposal",
+                    "add",
+                    "--item-id",
+                    rejected_item["id"],
+                    "--title",
+                    "Open an automatic pull request",
+                    "--summary",
+                    "This proposal skips the maintainer gate.",
+                    "--patch-plan",
+                    "1. Generate patch.\n2. Open PR automatically.",
+                    "--risk-level",
+                    "high",
+                ]
+            )
+            self.assertEqual(rejected_proposal_proc.returncode, 0, rejected_proposal_proc.stderr)
+            rejected_proposal = json.loads(rejected_proposal_proc.stdout)
+
+            self.assertEqual(
+                run_patchrail(
+                    [
+                        "queue",
+                        "--db",
+                        str(db),
+                        "proposal",
+                        "approve",
+                        proposal["id"],
+                    ]
+                ).returncode,
+                0,
+            )
+            self.assertEqual(
+                run_patchrail(
+                    [
+                        "queue",
+                        "--db",
+                        str(db),
+                        "proposal",
+                        "reject",
+                        rejected_proposal["id"],
+                    ]
+                ).returncode,
+                0,
+            )
+            self.assertEqual(
+                run_patchrail(
+                    ["queue", "--db", str(db), "approve", approved_item["id"]]
+                ).returncode,
+                0,
+            )
+            self.assertEqual(
+                run_patchrail(["queue", "--db", str(db), "reject", rejected_item["id"]]).returncode,
+                0,
+            )
+            self.assertEqual(
+                run_patchrail(["queue", "--db", str(db), "export", "--format", "jsonl"]).returncode,
+                0,
+            )
+
+            audit_before_proc = run_patchrail(
+                ["queue", "--db", str(db), "audit", "--format", "json"]
+            )
+            self.assertEqual(audit_before_proc.returncode, 0, audit_before_proc.stderr)
+            audit_before = json.loads(audit_before_proc.stdout)
+
+            bundle_proc = run_patchrail(["queue", "--db", str(db), "bundle", "--format", "json"])
+            self.assertEqual(bundle_proc.returncode, 0, bundle_proc.stderr)
+            bundle = json.loads(bundle_proc.stdout)
+
+            self.assertEqual(bundle["schema_version"], "patchrail.queue_bundle.v1")
+            self.assertEqual(bundle["status"], "ready_for_handoff")
+            self.assertEqual(bundle["counts"]["work_items_total"], 2)
+            self.assertEqual(bundle["counts"]["proposals_total"], 2)
+            self.assertEqual(bundle["audit_summary"]["status"], "human_gates_exercised")
+            self.assertEqual(bundle["remaining_gate_gaps"], [])
+            self.assertEqual(bundle["safety"]["bundle_is_read_only"], True)
+            self.assertEqual(bundle["safety"]["bundle_records_audit_event"], False)
+            self.assertEqual(bundle["safety"]["local_paths_redacted"], True)
+            self.assertEqual(bundle["safety"]["approval_records_execute_actions"], False)
+            self.assertEqual(bundle["work_items"][0]["write_actions_allowed"], False)
+            self.assertEqual(
+                {proposal["approval_state"] for proposal in bundle["proposals"]},
+                {"approved", "rejected"},
+            )
+            self.assertNotIn("/Volumes/", bundle_proc.stdout)
+            self.assertNotIn("/Users/", bundle_proc.stdout)
+            self.assertNotIn("/home/", bundle_proc.stdout)
+
+            audit_after_proc = run_patchrail(
+                ["queue", "--db", str(db), "audit", "--format", "json"]
+            )
+            self.assertEqual(audit_after_proc.returncode, 0, audit_after_proc.stderr)
+            audit_after = json.loads(audit_after_proc.stdout)
+            self.assertEqual(
+                len(audit_after["audit_events"]),
+                len(audit_before["audit_events"]),
+            )
+
+            markdown_proc = run_patchrail(
+                ["queue", "--db", str(db), "bundle", "--format", "markdown"]
+            )
+            self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
+            self.assertIn("# PatchRail Queue Bundle", markdown_proc.stdout)
+            self.assertIn("Bundle is read-only: `True`", markdown_proc.stdout)
+            self.assertIn("Bundle records audit event: `False`", markdown_proc.stdout)
+            self.assertIn("Local paths redacted: `True`", markdown_proc.stdout)
 
     def test_queue_reject_marks_item_closed_locally(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

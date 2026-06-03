@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
+import re
 from typing import Any
 
 from patchrail import __version__
@@ -15,6 +16,7 @@ from patchrail.queue.store import (
 
 QUEUE_STATUS_SCHEMA_VERSION = "patchrail.queue_status.v1"
 QUEUE_AUDIT_SUMMARY_SCHEMA_VERSION = "patchrail.queue_audit_summary.v1"
+QUEUE_BUNDLE_SCHEMA_VERSION = "patchrail.queue_bundle.v1"
 
 DEFAULT_REQUIRED_AUDIT_EVENTS = [
     "work_item_added",
@@ -39,6 +41,21 @@ SAFE_QUEUE_STATUS = {
     "approval_records_execute_actions": False,
 }
 
+LOCAL_PATH_PATTERN = re.compile(r"(/Volumes|/Users|/home)/[^\s\"'`]+")
+
+
+def _redact_local_paths(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _redact_local_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_redact_local_paths(item) for item in value]
+    if isinstance(value, str):
+        return LOCAL_PATH_PATTERN.sub(
+            lambda match: f"<local-path>/{Path(match.group(0)).name}",
+            value,
+        )
+    return value
+
 
 def queue_status_payload(
     db_path: Path = DEFAULT_QUEUE_PATH,
@@ -46,9 +63,11 @@ def queue_status_payload(
     include_api_compat: bool = False,
 ) -> dict[str, Any]:
     init_result = init_queue(db_path)
-    work_items = [item.to_dict() for item in list_work_items(db_path=db_path)]
-    proposals = [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
-    audit_events = export_audit_events(db_path=db_path)["audit_events"]
+    work_items = _redact_local_paths([item.to_dict() for item in list_work_items(db_path=db_path)])
+    proposals = _redact_local_paths(
+        [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
+    )
+    audit_events = _redact_local_paths(export_audit_events(db_path=db_path)["audit_events"])
     work_item_approval_counts = Counter(item["approval_state"] for item in work_items)
     work_item_status_counts = Counter(item["status"] for item in work_items)
     proposal_approval_counts = Counter(proposal["approval_state"] for proposal in proposals)
@@ -57,7 +76,7 @@ def queue_status_payload(
         "schema_version": QUEUE_STATUS_SCHEMA_VERSION,
         "queue_schema_version": init_result["schema_version"],
         "patchrail_version": __version__,
-        "db_path": str(db_path),
+        "db_path": _redact_local_paths(str(db_path)),
         "local_first": True,
         "host_boundary": "127.0.0.1 only by default",
         "counts": {
@@ -113,7 +132,7 @@ def queue_audit_summary_payload(
         "schema_version": QUEUE_AUDIT_SUMMARY_SCHEMA_VERSION,
         "queue_schema_version": init_result["schema_version"],
         "patchrail_version": __version__,
-        "db_path": str(db_path),
+        "db_path": _redact_local_paths(str(db_path)),
         "local_first": True,
         "status": "human_gates_exercised"
         if not missing_required_events
@@ -131,4 +150,46 @@ def queue_audit_summary_payload(
         "affected_work_item_ids": affected_work_items,
         "latest_audit_event": audit_events[-1] if audit_events else None,
         "safety": SAFE_QUEUE_STATUS,
+    }
+
+
+def queue_bundle_payload(
+    db_path: Path = DEFAULT_QUEUE_PATH,
+    *,
+    required_events: list[str] | None = None,
+) -> dict[str, Any]:
+    status = _redact_local_paths(queue_status_payload(db_path))
+    audit_summary = _redact_local_paths(
+        queue_audit_summary_payload(db_path, required_events=required_events)
+    )
+    work_items = _redact_local_paths([item.to_dict() for item in list_work_items(db_path=db_path)])
+    proposals = _redact_local_paths(
+        [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
+    )
+    audit_events = _redact_local_paths(export_audit_events(db_path=db_path)["audit_events"])
+    ready = audit_summary["status"] == "human_gates_exercised"
+    return {
+        "schema_version": QUEUE_BUNDLE_SCHEMA_VERSION,
+        "queue_schema_version": status["queue_schema_version"],
+        "patchrail_version": __version__,
+        "db_path": _redact_local_paths(str(db_path)),
+        "local_first": True,
+        "status": "ready_for_handoff" if ready else "needs_more_gate_evidence",
+        "counts": {
+            "work_items_total": len(work_items),
+            "proposals_total": len(proposals),
+            "audit_events_total": len(audit_events),
+        },
+        "status_summary": status,
+        "audit_summary": audit_summary,
+        "work_items": work_items,
+        "proposals": proposals,
+        "audit_events": audit_events,
+        "safety": {
+            **SAFE_QUEUE_STATUS,
+            "bundle_is_read_only": True,
+            "bundle_records_audit_event": False,
+            "local_paths_redacted": True,
+        },
+        "remaining_gate_gaps": audit_summary["missing_required_events"],
     }

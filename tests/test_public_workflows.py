@@ -242,6 +242,7 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
     )
     assert "patchrail evidence control-plane --format markdown" in docs
     assert "patchrail evidence http-api --format markdown" in docs
+    assert "patchrail queue bundle --format markdown" in docs
     assert "local_demo_ready" in docs
     assert "risky-proposal rejection" in docs
 
@@ -597,6 +598,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         api_reference
     )
     assert "patchrail.queue_audit_summary.v1" in api_reference
+    assert "## CLI Queue Bundle" in api_reference
+    assert "patchrail queue --db patchrail-pilot.sqlite bundle --format markdown" in api_reference
+    assert "patchrail.queue_bundle.v1" in api_reference
     assert "## CLI Queue Imports" in api_reference
     assert "patchrail queue --db patchrail-pilot.sqlite add" in api_reference
     assert "--from-pilot-pack patchrail-pilot-pack" in api_reference
@@ -839,6 +843,7 @@ def test_release_evidence_pages_cover_v01_to_v04_without_publish_actions() -> No
 
     assert "examples/local-agent-queue/run_demo.py" in v03
     assert "queue add --from-pilot-pack" in v03
+    assert "patchrail queue bundle" in v03
     assert "patchrail schema queue-work-item" in v03
     assert "patchrail serve --host 127.0.0.1 --port 8765" in v03
     assert "Proposal approval/rejection records human decisions only" in release_process

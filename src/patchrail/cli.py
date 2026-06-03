@@ -39,7 +39,11 @@ from patchrail.queue import (
     show_work_item,
 )
 from patchrail.queue.server import make_queue_api_handler, serve_queue_api
-from patchrail.queue.status import queue_audit_summary_payload, queue_status_payload
+from patchrail.queue.status import (
+    queue_audit_summary_payload,
+    queue_bundle_payload,
+    queue_status_payload,
+)
 
 
 def _read_log(path: Path | None) -> str:
@@ -1627,6 +1631,75 @@ def _render_queue_audit_summary_markdown(payload: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _render_queue_bundle_markdown(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    safety = payload["safety"]
+    audit_summary = payload["audit_summary"]
+    lines = [
+        "# PatchRail Queue Bundle",
+        "",
+        f"- DB: `{payload['db_path']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Local-first: `{payload['local_first']}`",
+        f"- Work items: `{counts['work_items_total']}`",
+        f"- Proposals: `{counts['proposals_total']}`",
+        f"- Audit events: `{counts['audit_events_total']}`",
+        f"- Audit summary status: `{audit_summary['status']}`",
+        "",
+        "## Human Gate Coverage",
+        "",
+    ]
+    for event_type in audit_summary["required_events"]:
+        present = event_type not in audit_summary["missing_required_events"]
+        lines.append(f"- `{event_type}`: `{present}`")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            f"- Local-first: `{payload['local_first']}`",
+            f"- Write actions allowed by default: `{safety['write_actions_allowed_by_default']}`",
+            f"- GitHub write permission required: `{safety['github_write_permission_required']}`",
+            f"- Network required: `{safety['network_required']}`",
+            f"- External model required: `{safety['external_model_required']}`",
+            f"- Billing required: `{safety['billing_required']}`",
+            f"- Approval records execute actions: `{safety['approval_records_execute_actions']}`",
+            f"- Bundle is read-only: `{safety['bundle_is_read_only']}`",
+            f"- Bundle records audit event: `{safety['bundle_records_audit_event']}`",
+            f"- Local paths redacted: `{safety['local_paths_redacted']}`",
+            "",
+            "## Remaining Gate Gaps",
+            "",
+        ]
+    )
+    if payload["remaining_gate_gaps"]:
+        lines.extend(f"- `{gap}`" for gap in payload["remaining_gate_gaps"])
+    else:
+        lines.append("- None.")
+    return "\n".join(lines) + "\n"
+
+
+def _render_queue_bundle_text(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    return (
+        "\n".join(
+            [
+                "PatchRail Queue Bundle",
+                f"DB: {payload['db_path']}",
+                f"Status: {payload['status']}",
+                f"Work items: {counts['work_items_total']}",
+                f"Proposals: {counts['proposals_total']}",
+                f"Audit events: {counts['audit_events_total']}",
+                f"Missing gate events: {payload['remaining_gate_gaps']}",
+                "Bundle is read-only: True",
+                "Bundle records audit event: False",
+                "Local paths redacted: True",
+            ]
+        )
+        + "\n"
+    )
+
+
 def _render_queue_status_text(payload: dict[str, Any]) -> str:
     counts = payload["counts"]
     latest = payload["latest_audit_event"]
@@ -1906,6 +1979,21 @@ def _queue_audit_summary(args: argparse.Namespace) -> int:
         text = _render_queue_audit_summary_text(payload)
     _write_or_print(text, args.out)
     return 0 if payload["status"] == "human_gates_exercised" else 1
+
+
+def _queue_bundle(args: argparse.Namespace) -> int:
+    payload = queue_bundle_payload(
+        _queue_db(args),
+        required_events=args.require_event,
+    )
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_queue_bundle_markdown(payload)
+    else:
+        text = _render_queue_bundle_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "ready_for_handoff" else 1
 
 
 def _queue_status(args: argparse.Namespace) -> int:
@@ -3375,6 +3463,27 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     queue_audit_summary.add_argument("--out", type=Path, help="Optional output path.")
     queue_audit_summary.set_defaults(func=_queue_audit_summary)
+
+    queue_bundle = queue_subparsers.add_parser(
+        "bundle",
+        help="Emit a read-only handoff bundle with status, gates, items, proposals, and audit events.",
+    )
+    queue_bundle.add_argument(
+        "--require-event",
+        action="append",
+        help=(
+            "Audit event type required for ready status. May be repeated. Defaults to the "
+            "full local demo gate sequence."
+        ),
+    )
+    queue_bundle.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="json",
+        help="Output format.",
+    )
+    queue_bundle.add_argument("--out", type=Path, help="Optional output path.")
+    queue_bundle.set_defaults(func=_queue_bundle)
 
     queue_proposal = queue_subparsers.add_parser(
         "proposal",
