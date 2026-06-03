@@ -31,9 +31,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
   does not count as external adoption or PyPI download evidence.
 - Adopter list: [ADOPTERS.md](../ADOPTERS.md) is permission-only and currently
   has no public external adopters listed
-- Public CI fixtures: 121 sanitized synthetic fixtures in the local benchmark
+- Public CI fixtures: 124 sanitized synthetic fixtures in the local benchmark
 - Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`
-  validates 121 / 121 fixtures before sharing
+  validates 124 / 124 fixtures before sharing
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
   contributions
@@ -107,7 +107,7 @@ Last verified: 2026-06-03.
   review, public CI run, and remaining manual gates.
 - v0.2.0 release-candidate artifact:
   [docs/release-v0.2.0-evidence.md](release-v0.2.0-evidence.md) records the
-  121-fixture benchmark, fixture hygiene gate, read-only GitHub Action artifact,
+  124-fixture benchmark, fixture hygiene gate, read-only GitHub Action artifact,
   pilot/adopter evidence surfaces, and remaining manual gates before any version
   bump, tag, PyPI publish, announcement, or external application.
 - Manual gates: PyPI publish, public announcements, and external applications
@@ -115,8 +115,8 @@ Last verified: 2026-06-03.
 - Tests: `uv run --extra dev pytest -q` -> 55 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 21 files already formatted.
-- Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 121 / 121 fixtures passed.
-- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 121 / 121 fixtures passed, top-1 fixture accuracy 1.0, and 10 root-cause families covered.
+- Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 124 / 124 fixtures passed.
+- CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 124 / 124 fixtures passed, top-1 fixture accuracy 1.0, and 11 root-cause families covered.
 - Consent-only pilot metrics: `uv run --extra dev patchrail ci pilot-metrics examples/pilot-outcome/*.summary.json --format json` separates owned-repo public mentions from external repository mentions so `patchrail/*` outcomes are not counted as external adopters.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:

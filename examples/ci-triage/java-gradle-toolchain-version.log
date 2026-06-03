@@ -1,0 +1,9 @@
+Run ./gradlew test
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not determine java version from '22.0.1'.
+Unsupported class file major version 66
+
+BUILD FAILED in 8s

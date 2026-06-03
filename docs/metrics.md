@@ -16,8 +16,8 @@ Last updated: 2026-06-03.
 | Public external adopters | 0 | [ADOPTERS.md](../ADOPTERS.md) |
 | External contributors | 0 | GitHub contributors |
 | Public releases | 1 | <https://github.com/patchrail/patchrail/releases/tag/v0.1.0> |
-| Public CI fixtures | 121 | `examples/ci-triage` benchmark |
-| Fixture hygiene gate | 121 / 121 passing | `patchrail ci fixture-check examples/ci-triage --format json` |
+| Public CI fixtures | 124 | `examples/ci-triage` benchmark |
+| Fixture hygiene gate | 124 / 124 passing | `patchrail ci fixture-check examples/ci-triage --format json` |
 | Supported benchmark categories | Python, Node, TypeScript, Go, Rust, GitHub Actions, Docker/Compose, browser E2E | `docs/ci-failure-zoo.md` |
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
 | Funded issue read-only demos | 1 | `examples/funded-issues-readonly` |
