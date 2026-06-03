@@ -39,7 +39,8 @@ Current public evidence is local and preparatory:
   added for human-gated maintainer work items, reviewable proposal records,
   approval decisions, status, and audit events
 - Funded issue scout: experimental read-only `funded-issues` CLI now inspects
-  local metadata with safe-only filtering and explicit anti-abuse blocked actions
+  local metadata with safe-only filtering, offline provider export import, and
+  explicit anti-abuse blocked actions
 
 PatchRail's intended Codex usage is bounded to maintainer-approved work:
 
@@ -103,9 +104,11 @@ Last verified: 2026-06-03.
   `ci-result.json`, `fixture-benchmark.json`, and `doctor.json`.
 - Funded issue read-only demo:
   [`examples/funded-issues-readonly`](../examples/funded-issues-readonly/README.md)
-  shows `patchrail funded-issues list/explain` over local JSON. The command
-  reports blocked actions including automatic claims, comments, pull requests,
-  mass outreach, and money-only ranking.
+  shows `patchrail funded-issues list/explain` over local JSON and
+  `patchrail funded-issues import` over a synthetic GitHub export. The commands
+  report blocked actions including automatic claims, comments, pull requests,
+  mass outreach, and money-only ranking, while reporting no network, billing,
+  model, or GitHub write-permission requirement.
 - Maintainer pilot guide: [docs/pilot-guide.md](pilot-guide.md) gives external
   maintainers a no-write-access path to run `doctor`, `redact`, `ci explain`,
   `ci classify`, optional local queue import, and fixture contribution.
@@ -130,7 +133,8 @@ Last verified: 2026-06-03.
 - No automatic bounty claiming
 - No mass comments
 - No automatic pull requests to third-party repositories
-- Funded issue discovery is read-only, safe-only by default, and local-source only
+- Funded issue discovery is read-only, safe-only by default, and local-source only,
+  including provider export import
 - Local CI log processing by default
 - Redaction guidance in README, quickstart, and threat model
 
