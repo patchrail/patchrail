@@ -99,6 +99,7 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [API reference](docs/api-reference.md)
 - [Codex workflows](docs/codex-workflows.md)
 - [Reviewable automation workflows](docs/agent-workflows.md)
+- [Agent skills](.agents/skills)
 - [Threat model](docs/threat-model.md)
 - [Funded issue ethics](docs/funded-issues-ethics.md)
 - [Roadmap](docs/roadmap.md)

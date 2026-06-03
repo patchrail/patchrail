@@ -30,6 +30,10 @@ Current public evidence is local and preparatory:
 - Issue triage: launch issue queue created for fixture and docs work
 - Release automation: first release-prep checklist is documented in
   [release-process.md](release-process.md); public PR history is pending
+- Agent skills: `.agents/skills/patchrail-ci-triage`,
+  `.agents/skills/patchrail-release-captain`, and
+  `.agents/skills/patchrail-review-guardrails` document bounded maintainer
+  workflows for CI triage, release prep, and safety-sensitive review
 - CI triage: public CI is green, and the read-only triage workflow is installed for failed CI runs
 - Agent control plane: experimental local SQLite queue and `127.0.0.1` HTTP API
   added for human-gated maintainer work items, reviewable proposal records,
@@ -90,6 +94,8 @@ Last verified: 2026-06-03.
 - Public CI: <https://github.com/patchrail/patchrail/actions/workflows/ci.yml> runs tests, lint, benchmark and package smoke on every push to `main`; the test matrix covers Python 3.11, 3.12, and 3.13.
 - v0.1.0 release evidence PR: <https://github.com/patchrail/patchrail/pull/17>
   passed remote CI at <https://github.com/patchrail/patchrail/actions/runs/26869827161>.
+- Agent skills are included in the source distribution so maintainers can review
+  the same workflow prompts from a local checkout or packaged source artifact.
 - Public triage workflow: <https://github.com/patchrail/patchrail/actions/runs/26862165709> -> skipped because the triggering CI run succeeded.
 - GitHub Actions artifact example:
   [`examples/github-action`](../examples/github-action/README.md) documents the

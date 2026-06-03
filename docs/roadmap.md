@@ -35,6 +35,8 @@
 - Experimental local SQLite queue for maintainer work items.
 - Human approval states for local decisions.
 - Exportable audit log.
+- Public `.agents/skills` prompts for CI triage, release prep, and review
+  guardrails.
 - CI report to queue-item demo.
 - Direct `ci-result.json` import into pending local queue items.
 - Local audit event export for add, approve, reject, and handoff decisions.
