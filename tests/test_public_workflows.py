@@ -85,6 +85,19 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert "does not comment on issues or pull requests" in readme
     assert "does not open pull requests" in readme
     assert "does not call external models" in readme
+    assert "Copy The Workflow" in readme
+    assert "permissions:" in readme
+    assert "contents: read" in readme
+    assert "actions: read" in readme
+    assert 'gh workflow run "PatchRail CI Triage"' in readme
+    assert "gh run download" in readme
+    assert "--name patchrail-ci-triage" in readme
+    assert "Artifact Contents" in readme
+    assert "`ci-report.md`: Markdown summary for maintainers" in readme
+    assert "`ci-result.json`: structured classifier output" in readme
+    assert "`fixture-benchmark.json`: benchmark result" in readme
+    assert "`doctor.json`: local safety check" in readme
+    assert "Do not paste raw CI logs, secrets, private paths" in readme
 
     assert "PatchRail classified this log locally" in report
     assert "did not create a pull request" in report
