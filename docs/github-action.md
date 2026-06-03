@@ -48,6 +48,30 @@ permissions:
 If a future integration needs write access, keep it in a separate workflow and
 make the approval boundary explicit in the pull request that adds it.
 
+## JavaScript Action Runtime Review
+
+Reviewed on 2026-06-03 for GitHub's Node 24 action runtime transition.
+
+| Workflow | Action | Ref | Declared runtime | Update needed |
+| --- | --- | --- | --- | --- |
+| `ci.yml` and `ci-triage.yml` | `actions/checkout` | `v6` | `node24` | No |
+| `ci.yml` and `ci-triage.yml` | `actions/setup-python` | `v6` | `node24` | No |
+| `ci.yml` and `ci-triage.yml` | `astral-sh/setup-uv` | `v8.1.0` | `node24` | No |
+| `ci-triage.yml` | `actions/download-artifact` | `v4` | `node20` | No change for v0.2.0; keep monitored |
+| `ci-triage.yml` | `actions/upload-artifact` | `v4` | `node20` | No change for v0.2.0; keep monitored |
+
+The two PatchRail workflows also set:
+
+```yaml
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+```
+
+That smoke-tests GitHub's Node 24 runner path while the CI triage workflow stays
+read-only. The artifact actions remain on `v4` because that is the current
+stable major in use by GitHub's artifact workflows; they do not change the
+approval boundary and should be reviewed again before v0.2.0 is tagged.
+
 ## Supplying Real Logs
 
 For best results, upload raw or redacted CI logs from the failing job as an
