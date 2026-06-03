@@ -103,7 +103,7 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert payload["workstreams"]["release_packaging"]["package_smoke_in_ci"] is True
     assert payload["workstreams"]["public_review_triage"]["status"] == "owned_repo_visible"
     assert payload["workstreams"]["public_review_triage"]["owned_issue_pr_cycles"] == 20
-    assert payload["workstreams"]["public_review_triage"]["focused_maintainer_prs"] == 5
+    assert payload["workstreams"]["public_review_triage"]["focused_maintainer_prs"] == 12
     assert (
         payload["workstreams"]["public_review_triage"]["review_packet_command"]
         == "patchrail evidence review-packet"
@@ -318,8 +318,8 @@ def test_review_packet_summarizes_owned_repo_workflows_without_external_claims()
     assert payload["source_file"] == "docs/public-workflow-ledger.md"
     assert payload["status"] == "owned_repo_review_packet_ready"
     assert payload["signals"]["issue_to_pr_cycles"] == 20
-    assert payload["signals"]["focused_maintainer_prs"] == 5
-    assert payload["signals"]["total_owned_review_items"] == 25
+    assert payload["signals"]["focused_maintainer_prs"] == 12
+    assert payload["signals"]["total_owned_review_items"] == 32
     assert payload["boundaries"]["owned_repository_only"] is True
     assert payload["boundaries"]["external_adoption_claimed"] is False
     assert payload["boundaries"]["formal_codex_review_claimed"] is False
@@ -331,9 +331,9 @@ def test_review_packet_summarizes_owned_repo_workflows_without_external_claims()
     assert payload["requirements"]["github_write_permission_required"] is False
     assert payload["issue_to_pr_cycles"][0]["issue"]["url"].endswith("/issues/69")
     assert payload["issue_to_pr_cycles"][0]["pull_request"]["url"].endswith("/pull/79")
-    assert payload["focused_maintainer_prs"][-1]["pull_request"]["url"].endswith("/pull/87")
+    assert payload["focused_maintainer_prs"][-1]["pull_request"]["url"].endswith("/pull/94")
     assert payload["focused_maintainer_prs"][-1]["public_ci_evidence"]["url"].endswith(
-        "/actions/runs/26896840989"
+        "/actions/runs/26901794678"
     )
     assert "formal visible Codex review links" in payload["remaining_evidence_gaps"]
     assert "/Volumes/" not in proc.stdout
@@ -358,7 +358,7 @@ def test_review_packet_summarizes_owned_repo_workflows_without_external_claims()
     assert markdown_proc.returncode == 0, markdown_proc.stderr
     assert "# PatchRail Public Review Packet" in markdown_proc.stdout
     assert "- External adoption claimed: `False`" in markdown_proc.stdout
-    assert "https://github.com/patchrail/patchrail/pull/87" in markdown_proc.stdout
+    assert "https://github.com/patchrail/patchrail/pull/94" in markdown_proc.stdout
 
 
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
@@ -527,6 +527,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "[#75](https://github.com/patchrail/patchrail/pull/75)" in workflow_ledger
     assert "[#86](https://github.com/patchrail/patchrail/pull/86)" in workflow_ledger
     assert "[#87](https://github.com/patchrail/patchrail/pull/87)" in workflow_ledger
+    assert "[#94](https://github.com/patchrail/patchrail/pull/94)" in workflow_ledger
     assert "patchrail evidence review-packet --format markdown" in workflow_ledger
     assert (
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
