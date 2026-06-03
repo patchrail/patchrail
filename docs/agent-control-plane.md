@@ -27,6 +27,18 @@ Create a local queue:
 patchrail queue init
 ```
 
+Check the local control-plane status:
+
+```bash
+patchrail queue status --format markdown
+```
+
+The status command summarizes work item counts, proposal counts, audit-event
+counts, the latest local audit event, and the safety boundary. It is intended
+for maintainer handoffs and release evidence: approval records are visible, but
+write actions, network access, billing, and external models remain off by
+default.
+
 Add a work item from a local pilot pack:
 
 ```bash
