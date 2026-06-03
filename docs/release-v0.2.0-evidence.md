@@ -17,6 +17,7 @@ plan. The current candidate evidence covers:
 - `patchrail ci benchmark --summary-only` for short Markdown aggregate evidence.
 - `patchrail ci fixture-check` as the pre-PR hygiene gate for fixture metadata,
   classifier agreement, confidence floors, and redaction checks.
+- `patchrail ci pilot-pack` for a local redacted maintainer pilot bundle.
 - Read-only GitHub Actions triage workflow and artifact example.
 - Maintainer pilot guide for consent-only, local-first trials.
 - Permission-only `ADOPTERS.md` and public metrics tracker.
@@ -34,6 +35,7 @@ uv run --extra dev ruff format --check .
 uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format json
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format markdown --summary-only
+uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail doctor --format json
 uv run --extra dev python -m build
 uv run --extra dev twine check dist/*
@@ -41,13 +43,14 @@ uv run --extra dev twine check dist/*
 
 Current evidence snapshot from 2026-06-03:
 
-- Tests: 40 passed.
+- Tests: 42 passed.
 - Lint: all checks passed.
 - Format: 19 files already formatted.
 - Fixture hygiene: 115 / 115 fixtures passed.
 - Benchmark: 115 total, 115 passed, 0 failed.
 - Top-1 fixture accuracy: 1.0.
 - Class coverage: 8 root-cause families.
+- Pilot pack smoke: local redacted bundle generated without copying the raw log.
 - Safety doctor: `status=ok`, `local_first=true`, and no billing, network,
   external model, or GitHub write permission required.
 - v0.1.0 package artifacts already passed build, `twine check`, and wheel smoke;

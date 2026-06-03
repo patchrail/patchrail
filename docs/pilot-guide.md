@@ -51,6 +51,23 @@ patchrail ci explain --log failed-ci.redacted.log --format markdown > patchrail-
 patchrail ci classify --log failed-ci.redacted.log --format json > patchrail-result.json
 ```
 
+Or generate the same review bundle in one local command:
+
+```bash
+patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack
+```
+
+The pack contains:
+
+- `failed-ci.redacted.log`;
+- `patchrail-report.md`;
+- `patchrail-result.json`;
+- `pilot-manifest.json`;
+- `README.md`.
+
+It does not copy the raw log into the output directory. Review the redacted log
+manually before sharing the pack or citing the result publicly.
+
 Review the report manually. Useful pilot notes are:
 
 - whether the root cause was correct;
@@ -108,6 +125,7 @@ Useful pilot evidence is small and reviewable:
 
 - the PatchRail version;
 - the CI provider and toolchain;
+- the `pilot-manifest.json` from `patchrail ci pilot-pack`, if used;
 - the `patchrail ci fixture-check` result if a fixture is proposed;
 - the redacted report, if safe to share;
 - whether the classification was correct;

@@ -575,6 +575,115 @@ def _ci_explain(args: argparse.Namespace) -> int:
     return 0
 
 
+def _pilot_pack_readme(manifest: dict[str, Any]) -> str:
+    return (
+        "\n".join(
+            [
+                "# PatchRail Pilot Pack",
+                "",
+                "This directory was generated locally from one CI log.",
+                "",
+                "## Files",
+                "",
+                "- `failed-ci.redacted.log`: locally redacted CI log excerpt.",
+                "- `patchrail-report.md`: maintainer-readable diagnosis.",
+                "- `patchrail-result.json`: structured classifier output.",
+                "- `pilot-manifest.json`: local safety and consent manifest.",
+                "",
+                "## Result",
+                "",
+                f"- Root cause: `{manifest['classification']['failure_class']}`",
+                f"- Confidence: `{manifest['classification']['confidence']}`",
+                f"- Redaction categories: `{len(manifest['redaction']['categories'])}`",
+                "",
+                "## Boundary",
+                "",
+                "PatchRail did not copy the raw log into this pack.",
+                "PatchRail did not contact GitHub, call external models, open pull requests, "
+                "post comments, or ask for repository write access.",
+                "",
+                "Share only after a maintainer reviews the redacted log and report.",
+            ]
+        )
+        + "\n"
+    )
+
+
+def _ci_pilot_pack(args: argparse.Namespace) -> int:
+    raw_log = _read_log(args.log)
+    out_dir = args.out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    redaction = redact_ci_log(raw_log)
+    redacted_log = str(redaction["text"])
+    result = classify_ci_log(redacted_log)
+    report = _render_markdown(result)
+    source_name = args.log.name if args.log is not None else "stdin"
+
+    manifest = {
+        "schema_version": "patchrail.ci_pilot_pack.v1",
+        "source": {
+            "source_log_name": source_name,
+            "raw_log_copied": False,
+        },
+        "files": {
+            "redacted_log": "failed-ci.redacted.log",
+            "markdown_report": "patchrail-report.md",
+            "json_result": "patchrail-result.json",
+            "manifest": "pilot-manifest.json",
+            "readme": "README.md",
+        },
+        "classification": {
+            "failure_class": result["failure_class"],
+            "confidence": result["confidence"],
+            "likely_subsystem": result["likely_subsystem"],
+        },
+        "redaction": {
+            "local_only": True,
+            "categories": redaction["redactions"],
+        },
+        "consent_boundary": {
+            "maintainer_review_required_before_sharing": True,
+            "repository_write_access_required": False,
+            "raw_logs_should_not_be_shared": True,
+        },
+        "requirements": {
+            "billing_required": False,
+            "external_model_required": False,
+            "network_required": False,
+            "github_write_permission_required": False,
+        },
+        "blocked_actions": [
+            "copy_raw_log",
+            "open_pull_request",
+            "post_comment",
+            "contact_maintainer",
+            "call_external_model",
+            "request_repository_write_access",
+        ],
+    }
+
+    (out_dir / "failed-ci.redacted.log").write_text(redacted_log, encoding="utf-8")
+    if not redacted_log.endswith("\n"):
+        (out_dir / "failed-ci.redacted.log").write_text(redacted_log + "\n", encoding="utf-8")
+    (out_dir / "patchrail-report.md").write_text(report, encoding="utf-8")
+    (out_dir / "patchrail-result.json").write_text(_json_dump(result), encoding="utf-8")
+    (out_dir / "pilot-manifest.json").write_text(_json_dump(manifest), encoding="utf-8")
+    (out_dir / "README.md").write_text(_pilot_pack_readme(manifest), encoding="utf-8")
+
+    text = _json_dump(
+        {
+            "schema_version": "patchrail.ci_pilot_pack_result.v1",
+            "out_dir": str(out_dir),
+            "files": manifest["files"],
+            "requirements": manifest["requirements"],
+            "blocked_actions": manifest["blocked_actions"],
+        }
+    )
+    _write_or_print(text, args.out)
+    return 0
+
+
 def _redact(args: argparse.Namespace) -> int:
     redaction = redact_ci_log(_read_log(args.log))
     if args.format == "json":
@@ -1188,6 +1297,20 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     fixture_check.add_argument("--out", type=Path, help="Optional output path.")
     fixture_check.set_defaults(func=_ci_fixture_check)
+
+    pilot_pack = ci_subparsers.add_parser(
+        "pilot-pack",
+        help="Create a local consent-only pilot pack from one CI log.",
+    )
+    pilot_pack.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")
+    pilot_pack.add_argument(
+        "--out-dir",
+        type=Path,
+        required=True,
+        help="Directory for the generated redacted pilot pack.",
+    )
+    pilot_pack.add_argument("--out", type=Path, help="Optional JSON summary output path.")
+    pilot_pack.set_defaults(func=_ci_pilot_pack)
 
     redact = subparsers.add_parser("redact", help="Redact secrets, emails and home paths locally.")
     redact.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")

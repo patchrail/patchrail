@@ -31,6 +31,12 @@ Redact a log before sharing it:
 patchrail redact --log failed-github-actions.log > failed-github-actions.redacted.log
 ```
 
+Create a local pilot pack for maintainer review:
+
+```bash
+patchrail ci pilot-pack --log failed-github-actions.log --out-dir patchrail-pilot-pack
+```
+
 From a source checkout, run the bundled fixture and benchmark:
 
 ```bash

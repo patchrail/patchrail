@@ -31,6 +31,8 @@
   GitHub Action artifact, pilot guide, metrics and remaining manual gates.
 - Maintainer pilot guide for consent-only, read-only CI log trials and optional
   sanitized fixture contributions.
+- Local `patchrail ci pilot-pack` command for redacted maintainer review bundles
+  with no raw log copy, no network, and no repository write permission.
 - Permissioned `ADOPTERS.md`, adopter-report issue template, and `docs/metrics.md`
   for tracking public adoption without inventing evidence.
 

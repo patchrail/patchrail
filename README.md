@@ -73,6 +73,7 @@ Redact logs before sharing fixtures or reports:
 uv run --extra dev patchrail doctor --format markdown
 uv run --extra dev patchrail redact --log failed.log > failed.redacted.log
 uv run --extra dev patchrail ci explain --redact --log failed.log
+uv run --extra dev patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack
 uv run --extra dev patchrail schema ci-result > ci-result.schema.json
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format markdown
 ```
@@ -123,7 +124,8 @@ If you are not opening a pull request yet, use the
 with a redacted log excerpt and the `fixture-check` result.
 
 If you are testing PatchRail on a repository you maintain, use the adopter
-report issue template. Public adopter listings require explicit permission.
+report issue template. `patchrail ci pilot-pack` creates a local redacted pack
+for that review path. Public adopter listings require explicit permission.
 
 ## License
 

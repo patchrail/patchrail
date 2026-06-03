@@ -147,6 +147,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     )
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    release_v02 = (ROOT / "docs" / "release-v0.2.0-evidence.md").read_text(encoding="utf-8")
     contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
     skill_dir = ROOT / ".agents" / "skills"
     ci_skill = (skill_dir / "patchrail-ci-triage" / "SKILL.md").read_text(encoding="utf-8")
@@ -162,12 +164,14 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
     assert "docs/metrics.md" in readme
+    assert "patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack" in readme
     assert "ADOPTERS.md" in readme
     assert ".github/ISSUE_TEMPLATE/ci_failure_fixture.md" in readme
     assert ".agents/skills" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
     assert "patchrail ci explain --log failed-github-actions.log" in quickstart
+    assert "patchrail ci pilot-pack --log failed-github-actions.log" in quickstart
     assert "The v0.1 release does not require Codex or any external model" in codex_workflows
     assert "no automatic pull requests" in codex_workflows
     assert "patchrail-ci-triage" in codex_workflows
@@ -187,7 +191,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
     )
-    assert "Tests: `uv run --extra dev pytest -q` -> 40 passed." in oss_program_evidence
+    assert "Tests: `uv run --extra dev pytest -q` -> 42 passed." in oss_program_evidence
     assert (
         "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
         "examples/ci-triage --format json` -> 115 / 115 fixtures passed."
@@ -212,6 +216,16 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail redact --log failed-ci.log" in pilot_guide
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
+    assert "patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack" in (
+        pilot_guide
+    )
+    assert "It does not copy the raw log into the output directory" in pilot_guide
+    assert "pilot-manifest.json" in pilot_guide
+    assert "patchrail ci pilot-pack" in roadmap
+    assert "patchrail ci pilot-pack" in release_v02
+    assert "local redacted bundle generated without copying the raw log" in release_v02
+    assert "Pilot pack command: `patchrail ci pilot-pack`" in evidence
+    assert "no raw log copy" in evidence
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
     assert "Sanitized fixture contribution path" in contributing
     assert "patchrail redact --log failed-ci.log > failed-ci.redacted.log" in contributing
