@@ -660,6 +660,85 @@ def _run_ci_benchmark(path: Path) -> dict[str, Any]:
     }
 
 
+def _fixture_check_case(root: Path, log_path: Path) -> dict[str, Any]:
+    raw_log = log_path.read_text(encoding="utf-8", errors="replace")
+    expected_path = _expected_path_for(log_path)
+    result = classify_ci_log(raw_log)
+    redaction = redact_ci_log(raw_log)
+    issues: list[str] = []
+
+    expected: dict[str, Any] = {}
+    if not expected_path.exists():
+        issues.append("missing neighboring .expected.json file")
+    else:
+        try:
+            expected = json.loads(expected_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            issues.append(f"invalid expected JSON: {exc.msg}")
+
+    expected_class = expected.get("failure_class")
+    if expected_path.exists() and expected_class is None:
+        issues.append("expected JSON must include failure_class")
+    elif expected_class is not None and result["failure_class"] != expected_class:
+        issues.append(f"failure_class expected {expected_class!r}, got {result['failure_class']!r}")
+
+    minimum_confidence = expected.get("minimum_confidence")
+    if minimum_confidence is not None:
+        try:
+            confidence_floor = float(minimum_confidence)
+        except (TypeError, ValueError):
+            issues.append("minimum_confidence must be a number")
+        else:
+            if result["confidence"] < confidence_floor:
+                issues.append(
+                    f"confidence expected >= {confidence_floor}, got {result['confidence']}"
+                )
+
+    redactions = redaction["redactions"]
+    if redactions:
+        categories = ", ".join(sorted(redactions))
+        issues.append(f"possible unredacted sensitive data: {categories}")
+
+    return {
+        "log": str(log_path.relative_to(root)),
+        "expected_file": str(expected_path.relative_to(root)) if expected_path.exists() else None,
+        "expected_failure_class": expected_class,
+        "actual_failure_class": result["failure_class"],
+        "expected_minimum_confidence": minimum_confidence,
+        "actual_confidence": result["confidence"],
+        "redactions": redactions,
+        "passed": not issues,
+        "issues": issues,
+    }
+
+
+def _run_ci_fixture_check(path: Path) -> dict[str, Any]:
+    root = path.resolve()
+    if root.is_file():
+        log_paths = [root]
+        root = root.parent
+    else:
+        log_paths = sorted(root.rglob("*.log"))
+
+    cases = [_fixture_check_case(root, log_path) for log_path in log_paths]
+    passed = sum(1 for case in cases if case["passed"])
+    failed = len(cases) - passed
+    return {
+        "schema_version": "patchrail.ci_fixture_check.v1",
+        "root": str(root),
+        "total_cases": len(cases),
+        "passed": passed,
+        "failed": failed,
+        "cases": cases,
+        "requirements": {
+            "billing_required": False,
+            "external_model_required": False,
+            "network_required": False,
+            "github_write_permission_required": False,
+        },
+    }
+
+
 def _render_benchmark_markdown(result: dict[str, Any]) -> str:
     lines = [
         "# PatchRail CI Benchmark",
@@ -691,6 +770,53 @@ def _render_benchmark_text(result: dict[str, Any]) -> str:
     for case in result["cases"]:
         status = "PASS" if case["passed"] else "FAIL"
         lines.append(f"{status} {case['log']}: {case['actual_failure_class']}")
+    return "\n".join(lines) + "\n"
+
+
+def _render_fixture_check_markdown(result: dict[str, Any]) -> str:
+    lines = [
+        "# PatchRail CI Fixture Check",
+        "",
+        f"- Total cases: `{result['total_cases']}`",
+        f"- Passed: `{result['passed']}`",
+        f"- Failed: `{result['failed']}`",
+        "",
+        "## Cases",
+        "",
+    ]
+    for case in result["cases"]:
+        status = "pass" if case["passed"] else "fail"
+        lines.append(
+            f"- `{status}` `{case['log']}`: `{case['actual_failure_class']}` "
+            f"confidence `{case['actual_confidence']}`"
+        )
+        for issue in case["issues"]:
+            lines.append(f"  - {issue}")
+    lines.extend(
+        [
+            "",
+            "## Boundary",
+            "",
+            (
+                "This check is local-only. It does not upload logs, contact GitHub, "
+                "open pull requests, or call external models."
+            ),
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _render_fixture_check_text(result: dict[str, Any]) -> str:
+    lines = [
+        f"Total cases: {result['total_cases']}",
+        f"Passed: {result['passed']}",
+        f"Failed: {result['failed']}",
+    ]
+    for case in result["cases"]:
+        status = "PASS" if case["passed"] else "FAIL"
+        lines.append(f"{status} {case['log']}: {case['actual_failure_class']}")
+        for issue in case["issues"]:
+            lines.append(f"  - {issue}")
     return "\n".join(lines) + "\n"
 
 
@@ -919,6 +1045,18 @@ def _ci_benchmark(args: argparse.Namespace) -> int:
     return 0 if result["failed"] == 0 else 1
 
 
+def _ci_fixture_check(args: argparse.Namespace) -> int:
+    result = _run_ci_fixture_check(args.path)
+    if args.format == "json":
+        text = json.dumps(result, indent=2, sort_keys=True) + "\n"
+    elif args.format == "markdown":
+        text = _render_fixture_check_markdown(result)
+    else:
+        text = _render_fixture_check_text(result)
+    _write_or_print(text, args.out)
+    return 0 if result["failed"] == 0 else 1
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="patchrail",
@@ -974,6 +1112,24 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     benchmark.add_argument("--out", type=Path, help="Optional output path.")
     benchmark.set_defaults(func=_ci_benchmark)
+
+    fixture_check = ci_subparsers.add_parser(
+        "fixture-check",
+        help="Validate CI fixture metadata and redaction hygiene before sharing.",
+    )
+    fixture_check.add_argument(
+        "path",
+        type=Path,
+        help="Directory or single .log fixture to check.",
+    )
+    fixture_check.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="json",
+        help="Output format.",
+    )
+    fixture_check.add_argument("--out", type=Path, help="Optional output path.")
+    fixture_check.set_defaults(func=_ci_fixture_check)
 
     redact = subparsers.add_parser("redact", help="Redact secrets, emails and home paths locally.")
     redact.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")

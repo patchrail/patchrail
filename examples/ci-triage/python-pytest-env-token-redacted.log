@@ -1,4 +1,4 @@
 python -m pytest -q
 FAILED tests/test_secret.py::test_token_is_hidden - AssertionError
-TOKEN=<redacted>
+redacted token placeholder present
 Contact <email>

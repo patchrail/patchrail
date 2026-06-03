@@ -42,10 +42,16 @@ Run the benchmark:
 ```bash
 patchrail ci benchmark examples/ci-triage --format markdown
 patchrail ci benchmark examples/ci-triage --format json
+patchrail ci fixture-check examples/ci-triage --format json
 ```
 
 The command exits with status `0` only when every fixture matches its expected
 classification and confidence floor.
+
+`fixture-check` is the pre-PR hygiene gate for new fixtures. It checks that each
+`.log` file has a neighboring `.expected.json`, that the expected class and
+confidence floor still match the local classifier, and that the redactor does
+not see obvious secrets, emails, or home paths in the fixture text.
 
 ## Adding A Fixture
 
@@ -55,8 +61,10 @@ classification and confidence floor.
 3. Reduce the log to the shortest evidence that still represents the failure.
 4. Add the log under `examples/ci-triage/<name>.log`.
 5. Add `examples/ci-triage/<name>.expected.json`.
-6. Run `patchrail ci benchmark examples/ci-triage --format json`.
-7. Include the evidence lines and benchmark result in the pull request.
+6. Run `patchrail ci fixture-check examples/ci-triage --format json`.
+7. Run `patchrail ci benchmark examples/ci-triage --format json`.
+8. Include the evidence lines, fixture-check result, and benchmark result in the
+   pull request.
 
 Expected files use this shape:
 
