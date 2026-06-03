@@ -78,6 +78,11 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
+    metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
+    adopters = (ROOT / "ADOPTERS.md").read_text(encoding="utf-8")
+    adopter_report = (ROOT / ".github" / "ISSUE_TEMPLATE" / "adopter_report.md").read_text(
+        encoding="utf-8"
+    )
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
     skill_dir = ROOT / ".agents" / "skills"
@@ -93,6 +98,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "docs/openai-codex-for-oss-evidence.md" in readme
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
+    assert "docs/metrics.md" in readme
+    assert "ADOPTERS.md" in readme
     assert ".agents/skills" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
@@ -116,6 +123,18 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
+    assert "PatchRail tracks adoption and quality metrics" in metrics
+    assert "Monthly PyPI downloads" in metrics
+    assert "Public external adopters | 0" in metrics
+    assert "Do not use placeholders as evidence" in metrics
+    assert "public PRs reviewed with Codex" in metrics
+    assert "only with explicit maintainer permission" in adopters
+    assert "There are no public external adopters listed yet" in adopters
+    assert "Use `patchrail redact`" in adopters
+    assert "Adopter or pilot report" in adopter_report
+    assert "I maintain this repository or have permission" in adopter_report
+    assert "PatchRail may list the repository in `ADOPTERS.md`" in adopter_report
+    assert "Use `patchrail redact`" in adopter_report
     assert "Do not quote raw logs that may contain secrets" in ci_skill
     assert "uv run --extra dev patchrail ci benchmark examples/ci-triage --format json" in ci_skill
     assert "Do not publish to PyPI without an explicit maintainer release request" in release_skill
@@ -201,6 +220,7 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "python -m venv .pkg-smoke" in workflow
     assert "python -m pip install dist/*.whl" in workflow
     assert "patchrail doctor --format json" in workflow
+    assert '"/ADOPTERS.md"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 
     assert "python -m pip install dist/*.whl" in release_process
     assert "patchrail ci explain --log examples/ci-triage/dependency-failure.log" in release_process
