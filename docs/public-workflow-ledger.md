@@ -23,10 +23,26 @@ As of 2026-06-03:
 - PyPI publication: pending maintainer credential gate;
 - formal Codex review examples: pending visible review links.
 
+## Review And Triage Boundary
+
+The rows below are public, owned-repository maintenance evidence. They show
+scoped triage, reviewable pull requests, CI checks, and documented outcomes in
+PatchRail-owned infrastructure. They do not claim:
+
+- third-party adoption;
+- maintainer permission outside the PatchRail-owned repo;
+- formal Codex review unless a public review link is listed;
+- PyPI download telemetry.
+
 ## Issue-To-PR Cycles
 
 | Area | Issue | Pull request | Evidence type |
 | --- | --- | --- | --- |
+| OSS evidence artifact maintenance | [#69](https://github.com/patchrail/patchrail/issues/69) | [#79](https://github.com/patchrail/patchrail/pull/79) | workflow runtime review |
+| OSS evidence artifact publication | [#69](https://github.com/patchrail/patchrail/issues/69) | [#78](https://github.com/patchrail/patchrail/pull/78) | CI artifact evidence |
+| Evidence snapshot command | [#69](https://github.com/patchrail/patchrail/issues/69) | [#77](https://github.com/patchrail/patchrail/pull/77) | program evidence automation |
+| Consent-only pilot request package | [#69](https://github.com/patchrail/patchrail/issues/69) | [#76](https://github.com/patchrail/patchrail/pull/76) | adopter readiness docs |
+| Own-repo CI pilot outcome | [#68](https://github.com/patchrail/patchrail/issues/68) | [#75](https://github.com/patchrail/patchrail/pull/75) | own-repo triage evidence |
 | Public workflow evidence ledger | [#61](https://github.com/patchrail/patchrail/issues/61) | [#62](https://github.com/patchrail/patchrail/pull/62) | evidence tracking |
 | Consent-only pilot outcome example | [#59](https://github.com/patchrail/patchrail/issues/59) | [#60](https://github.com/patchrail/patchrail/pull/60) | adopter evidence surface |
 | Pilot-pack importer API reference | [#57](https://github.com/patchrail/patchrail/issues/57) | [#58](https://github.com/patchrail/patchrail/pull/58) | Agent Control Plane docs |
