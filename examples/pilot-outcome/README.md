@@ -6,6 +6,12 @@ or unapproved adopter claims.
 
 The repository name, log path, and outcome below are synthetic. Do not count this example as adoption evidence.
 
+For the first real owned-repo pilot outcome, see
+[patchrail-own-repo-20260603.md](patchrail-own-repo-20260603.md) and
+[patchrail-own-repo-20260603.summary.json](patchrail-own-repo-20260603.summary.json).
+That outcome is public project evidence for `patchrail/patchrail`, not an
+external adopter listing.
+
 ## Pilot Boundary
 
 - Maintainer permission: confirmed for the real pilot before any public mention.

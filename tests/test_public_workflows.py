@@ -146,6 +146,14 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
     adopters = (ROOT / "ADOPTERS.md").read_text(encoding="utf-8")
     pilot_outcome = (ROOT / "examples" / "pilot-outcome" / "README.md").read_text(encoding="utf-8")
+    own_repo_pilot = (
+        ROOT / "examples" / "pilot-outcome" / "patchrail-own-repo-20260603.md"
+    ).read_text(encoding="utf-8")
+    own_repo_pilot_json = json.loads(
+        (
+            ROOT / "examples" / "pilot-outcome" / "patchrail-own-repo-20260603.summary.json"
+        ).read_text(encoding="utf-8")
+    )
     adopter_report = (ROOT / ".github" / "ISSUE_TEMPLATE" / "adopter_report.md").read_text(
         encoding="utf-8"
     )
@@ -332,7 +340,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Monthly PyPI downloads" in metrics
     assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
-    assert "Consent-only pilot outcome examples | 1" in metrics
+    assert "Synthetic consent-only pilot examples | 1" in metrics
+    assert "Owned-repo consent-only pilot outcomes | 1" in metrics
+    assert "not an external adopter" in metrics
     assert "Public releases | 1" in metrics
     assert "Fixture hygiene gate | 115 / 115 passing" in metrics
     assert "Do not use placeholders as evidence" in metrics
@@ -344,6 +354,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Consent-Only Pilot Outcome Example" in pilot_outcome
     assert "The repository name, log path, and outcome below are synthetic" in pilot_outcome
     assert "Do not count this example as adoption evidence" in pilot_outcome
+    assert "patchrail-own-repo-20260603.md" in pilot_outcome
+    assert "not an\nexternal adopter listing" in pilot_outcome
     assert "Raw CI log: kept outside the report and never copied into the pilot pack" in (
         pilot_outcome
     )
@@ -358,6 +370,22 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "claims that PatchRail fixed code, opened a pull request" in pilot_outcome
     assert "/Volumes/" not in pilot_outcome
     assert "/Users/" not in pilot_outcome
+    assert "Repository: `patchrail/patchrail`" in own_repo_pilot
+    assert "Root cause: `python_dependency_resolution`" in own_repo_pilot
+    assert "PatchRail ran locally" in own_repo_pilot
+    assert "did not copy the raw log" in own_repo_pilot
+    assert own_repo_pilot_json["public_listing"]["repository"] == "patchrail/patchrail"
+    assert own_repo_pilot_json["public_listing"]["repository_mention_approved"] is True
+    assert own_repo_pilot_json["pilot_pack"]["manifest_path"] == "pilot-manifest.json"
+    assert own_repo_pilot_json["pilot_pack"]["raw_log_copied"] is False
+    assert own_repo_pilot_json["requirements"]["external_model_required"] is False
+    assert own_repo_pilot_json["requirements"]["github_write_permission_required"] is False
+    assert "/Volumes/" not in own_repo_pilot
+    assert "/Users/" not in own_repo_pilot
+    assert "/home/" not in own_repo_pilot
+    assert "/Volumes/" not in json.dumps(own_repo_pilot_json)
+    assert "/Users/" not in json.dumps(own_repo_pilot_json)
+    assert "/home/" not in json.dumps(own_repo_pilot_json)
     assert "Adopter or pilot report" in adopter_report
     assert "I maintain this repository or have permission" in adopter_report
     assert "PatchRail may list the repository in `ADOPTERS.md`" in adopter_report

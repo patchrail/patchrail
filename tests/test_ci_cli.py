@@ -536,6 +536,7 @@ class PatchRailCITests(unittest.TestCase):
             self.assertEqual(summary_proc.returncode, 0, summary_proc.stderr)
             payload = json.loads(summary_proc.stdout)
             self.assertEqual(payload["schema_version"], "patchrail.ci_pilot_summary.v1")
+            self.assertEqual(payload["pilot_pack"]["manifest_path"], "pilot-manifest.json")
             self.assertEqual(payload["public_listing"]["repository_mention_approved"], True)
             self.assertEqual(payload["public_listing"]["repository"], "patchrail/example")
             self.assertEqual(payload["pilot_context"]["ci_provider"], "GitHub Actions")
@@ -544,6 +545,9 @@ class PatchRailCITests(unittest.TestCase):
             self.assertEqual(payload["pilot_pack"]["raw_log_copied"], False)
             self.assertEqual(payload["requirements"]["network_required"], False)
             self.assertIn("open_pull_request", payload["blocked_actions"])
+            self.assertNotIn("/Volumes/", summary_proc.stdout)
+            self.assertNotIn("/Users/", summary_proc.stdout)
+            self.assertNotIn("/home/", summary_proc.stdout)
 
     def test_ci_pilot_metrics_aggregates_public_and_private_summaries(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

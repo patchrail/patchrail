@@ -21,8 +21,9 @@ Last updated: 2026-06-03.
 | Supported benchmark categories | Python, Node, TypeScript, Go, Rust, GitHub Actions | `docs/ci-failure-zoo.md` |
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
 | Funded issue read-only demos | 1 | `examples/funded-issues-readonly` |
-| Consent-only pilot outcome examples | 1 | `examples/pilot-outcome` |
-| Active evidence follow-up issues | 3 | [#67](https://github.com/patchrail/patchrail/issues/67), [#68](https://github.com/patchrail/patchrail/issues/68), [#69](https://github.com/patchrail/patchrail/issues/69) |
+| Synthetic consent-only pilot examples | 1 | `examples/pilot-outcome` |
+| Owned-repo consent-only pilot outcomes | 1 | [patchrail-own-repo-20260603.md](../examples/pilot-outcome/patchrail-own-repo-20260603.md) |
+| Active evidence follow-up issues | 2 | [#67](https://github.com/patchrail/patchrail/issues/67), [#69](https://github.com/patchrail/patchrail/issues/69) |
 
 ## Quality Gates
 
@@ -72,7 +73,7 @@ current evidence gaps are:
 
 - first PyPI release and download telemetry;
 - external maintainer pilots with permission to cite outcomes;
-- safe pilot summaries based on [examples/pilot-outcome](../examples/pilot-outcome/README.md);
+- safe external pilot summaries based on [examples/pilot-outcome](../examples/pilot-outcome/README.md);
 - permissioned pilot fixture submissions that pass `fixture-check`;
 - public PRs reviewed with Codex;
 - public issues triaged with Codex;
@@ -81,5 +82,10 @@ current evidence gaps are:
 Active follow-up issues:
 
 - [#67](https://github.com/patchrail/patchrail/issues/67) for PyPI publication and clean install verification.
-- [#68](https://github.com/patchrail/patchrail/issues/68) for the first consent-only maintainer pilot.
 - [#69](https://github.com/patchrail/patchrail/issues/69) for verified adoption and ecosystem signal tracking.
+
+Completed pilot evidence:
+
+- [#68](https://github.com/patchrail/patchrail/issues/68) records the first
+  owned-repo consent-only pilot outcome for `patchrail/patchrail`. This is a
+  real public pilot signal for the project itself, not an external adopter.
