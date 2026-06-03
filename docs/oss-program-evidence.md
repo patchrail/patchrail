@@ -50,7 +50,8 @@ Pablo Guillén is the primary maintainer of PatchRail.
   public project evidence, not an external adopter signal
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
-  issues to focused pull requests without claiming external adoption
+  issues to focused pull requests and tracks focused maintainer PR evidence
+  without claiming external adoption
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, the Agent
   Control Plane, and the read-only Funded Issue Scout
@@ -106,9 +107,9 @@ Last verified: 2026-06-03.
   bump, tag, PyPI publish, announcement, or external application.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 54 passed.
+- Tests: `uv run --extra dev pytest -q` -> 55 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
-- Format: `uv run --extra dev ruff format --check .` -> 20 files already formatted.
+- Format: `uv run --extra dev ruff format --check .` -> 21 files already formatted.
 - Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 121 / 121 fixtures passed.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 121 / 121 fixtures passed, top-1 fixture accuracy 1.0, and 10 root-cause families covered.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
@@ -150,6 +151,10 @@ Last verified: 2026-06-03.
   `/health`, `/status`, `/work-items`, `/proposals`, and `/audit-events` for
   local dashboards/demos. The API rejects non-local bind hosts and reports no
   billing, external model, network, or GitHub write permission requirement.
+- Shared queue status contract: `patchrail queue status --format json` and
+  `GET /status` both expose `patchrail.queue_status.v1`; the public schema is
+  available through `patchrail schema queue-status` and
+  [schemas/queue_status.schema.json](../schemas/queue_status.schema.json).
 - Safety doctor: `uv run --extra dev patchrail doctor --format json` -> `status: ok`, `local_first: true`, and no billing, network, external model, or GitHub write permission required.
 - Distribution check: `uv run --extra dev python -m build` produced wheel and sdist; `uv run --extra dev twine check dist/*` passed both artifacts.
 - Wheel smoke: installed `dist/patchrail-0.1.0-py3-none-any.whl` in a fresh
@@ -181,8 +186,12 @@ Last verified: 2026-06-03.
   does not count as adoption evidence.
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) records owned-repo
-  maintenance cycles including #59 -> #60, #57 -> #58, #55 -> #56, #53 -> #54,
-  #51 -> #52, and #61 -> #62.
+  maintenance cycles such as #59 -> #60, #57 -> #58, #55 -> #56, #53 -> #54,
+  #51 -> #52, and #61 -> #62, plus recent focused PR evidence including
+  [#83](https://github.com/patchrail/patchrail/pull/83),
+  [#84](https://github.com/patchrail/patchrail/pull/84), and
+  [#85](https://github.com/patchrail/patchrail/pull/85), each with public CI
+  success. These PRs are owned-repo workflow evidence, not external adoption.
 
 ## Public Launch Issues
 

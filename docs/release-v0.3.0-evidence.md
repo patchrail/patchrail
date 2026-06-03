@@ -24,6 +24,8 @@ candidate evidence covers:
   `schemas/`.
 - Local-only HTTP API for status, health, work items, proposals, approvals, and
   audit events.
+- Shared `patchrail.queue_status.v1` contract for `patchrail queue status`,
+  `patchrail schema queue-status`, and `GET /status`.
 - Executable demo in `examples/local-agent-queue`.
 - No pull request creation, issue comments, repository writes, external model
   calls, billing, or GitHub write permissions.
@@ -41,6 +43,7 @@ uv run --extra dev python examples/local-agent-queue/run_demo.py --output .patch
 uv run --extra dev patchrail schema queue-work-item
 uv run --extra dev patchrail schema queue-proposal
 uv run --extra dev patchrail schema queue-audit-event
+uv run --extra dev patchrail schema queue-status
 uv run --extra dev patchrail evidence control-plane --format markdown
 uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
 uv run --extra dev patchrail queue --db .patchrail-pilot.sqlite add --from-pilot-pack .patchrail-pilot-pack-smoke
@@ -66,16 +69,29 @@ Current evidence snapshot from 2026-06-03:
   rejection are all present.
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
+- `patchrail queue status --format json` and `GET /status` share
+  `patchrail.queue_status.v1`; the mirrored schema is available at
+  [schemas/queue_status.schema.json](../schemas/queue_status.schema.json).
 - `queue add --from-pilot-pack` links the v0.2 consent-only pilot pack to the
   v0.3 local queue while keeping `write_actions_allowed=false`.
 - Safety boundary remains explicit: approving a work item or proposal records a
   local human decision only.
+
+Recent owned-repo public PR evidence:
+
+- [#84](https://github.com/patchrail/patchrail/pull/84) added local queue status
+  summaries and passed public CI run
+  [26894698571](https://github.com/patchrail/patchrail/actions/runs/26894698571).
+- [#85](https://github.com/patchrail/patchrail/pull/85) shared the queue status
+  contract between CLI and API and passed public CI run
+  [26895362360](https://github.com/patchrail/patchrail/actions/runs/26895362360).
 
 ## Public Artifacts
 
 - Agent Control Plane guide: [docs/agent-control-plane.md](agent-control-plane.md)
 - API reference: [docs/api-reference.md](api-reference.md)
 - Local queue demo: [examples/local-agent-queue](../examples/local-agent-queue/README.md)
+- Queue status schema: [schemas/queue_status.schema.json](../schemas/queue_status.schema.json)
 - Queue work item schema: [schemas/queue_work_item.schema.json](../schemas/queue_work_item.schema.json)
 - Queue proposal schema: [schemas/queue_proposal.schema.json](../schemas/queue_proposal.schema.json)
 - Queue audit event schema: [schemas/queue_audit_event.schema.json](../schemas/queue_audit_event.schema.json)

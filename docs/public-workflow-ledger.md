@@ -18,7 +18,7 @@ As of 2026-06-03:
 
 - repository: <https://github.com/patchrail/patchrail>;
 - public GitHub release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>;
-- public issue-to-PR cycles: active and linkable in this ledger;
+- public issue-to-PR cycles and focused maintainer PRs: active and linkable in this ledger;
 - external adopters: pending consent-only pilots;
 - PyPI publication: pending maintainer credential gate;
 - formal Codex review examples: pending visible review links.
@@ -58,6 +58,18 @@ PatchRail-owned infrastructure. They do not claim:
 | Node 24 action runtime review | [#31](https://github.com/patchrail/patchrail/issues/31) | [#40](https://github.com/patchrail/patchrail/pull/40) | workflow maintenance |
 | Sanitized fixture contributor path | [#29](https://github.com/patchrail/patchrail/issues/29) | [#39](https://github.com/patchrail/patchrail/pull/39) | contributor docs |
 | Public launch issue evidence | [#30](https://github.com/patchrail/patchrail/issues/30) | [#38](https://github.com/patchrail/patchrail/pull/38) | program evidence docs |
+
+## Focused Maintainer PR Evidence
+
+The rows below are recent owned-repository maintenance PRs that were merged
+with public CI evidence. They are useful maintainer-workflow evidence but do not
+count as issue-to-PR cycles because no public issue was linked by the PR.
+
+| Area | Pull request | Public CI evidence | Evidence type |
+| --- | --- | --- | --- |
+| CI Janitor Docker/browser coverage | [#83](https://github.com/patchrail/patchrail/pull/83) | [CI run 26893931040](https://github.com/patchrail/patchrail/actions/runs/26893931040) | classifier and benchmark expansion |
+| Agent Control Plane queue status CLI | [#84](https://github.com/patchrail/patchrail/pull/84) | [CI run 26894698571](https://github.com/patchrail/patchrail/actions/runs/26894698571) | local control-plane observability |
+| Shared queue status CLI/API contract | [#85](https://github.com/patchrail/patchrail/pull/85) | [CI run 26895362360](https://github.com/patchrail/patchrail/actions/runs/26895362360) | versioned status schema and API parity |
 
 ## How To Read This Ledger
 
