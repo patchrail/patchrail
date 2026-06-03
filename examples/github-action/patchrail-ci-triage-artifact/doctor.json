@@ -1,12 +1,12 @@
 {
   "checks": {
-    "ci_fixture_count": 40,
-    "ci_fixture_directory": "patchrail/examples/ci-triage",
+    "ci_fixture_count": 101,
+    "ci_fixture_directory": "examples/ci-triage",
     "ci_result_schema_available": true
   },
   "local_first": true,
   "patchrail_version": "0.1.0",
-  "project_root": "patchrail",
+  "project_root": ".",
   "python_version": "3.11.15",
   "requirements": {
     "billing_required": false,

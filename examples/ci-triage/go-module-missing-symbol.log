@@ -1,0 +1,4 @@
+go test ./...
+# example.test/api
+api.go:11:2: undefined: NewClient
+FAIL	example.test/api [build failed]

@@ -1,0 +1,2 @@
+Resource not accessible by integration
+.github/workflows/release.yml attempted to create a release with read-only contents permission

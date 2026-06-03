@@ -51,7 +51,7 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert result["failure_class"] == "python_dependency_resolution"
     assert result["requirements"]["billing_required"] is False
     assert result["requirements"]["external_model_required"] is False
-    assert benchmark["total_cases"] == 40
+    assert benchmark["total_cases"] == 101
     assert benchmark["failed"] == 0
     assert doctor["status"] == "ok"
     assert doctor["requirements"]["github_write_permission_required"] is False

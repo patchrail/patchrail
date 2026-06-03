@@ -1,0 +1,4 @@
+go test ./...
+--- FAIL: TestRenderer (0.00s)
+    renderer_test.go:22: expected ok got warn
+FAIL	example.test/render	0.012s

@@ -1,0 +1,2 @@
+npm ERR! npm ci can only install packages when package.json and package-lock.json are in sync
+npm ERR! Missing: demo-lib@2.1.0 from lockfile

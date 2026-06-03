@@ -1,0 +1,3 @@
+biome check .
+src/demo.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  lint failed: file would be reformatted

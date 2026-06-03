@@ -7,7 +7,7 @@
 - Added local Markdown, JSON, and text reports.
 - Added Apache-2.0 license and safety/ethics documentation.
 - Added fixture-backed tests, local benchmark command, and GitHub Actions CI.
-- Expanded the initial CI fixture zoo to 40 sanitized synthetic examples across
+- Expanded the initial CI fixture zoo to 101 sanitized synthetic examples across
   Python, Node, TypeScript, Go, Rust, and GitHub Actions failure modes.
 - Added a read-only GitHub Actions triage artifact workflow.
 - Added the experimental local Agent Control Plane queue with SQLite-backed

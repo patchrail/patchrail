@@ -1,0 +1,2 @@
+Resource not accessible by integration
+.github/workflows/deploy.yml requested id-token write but workflow permissions only grant contents read

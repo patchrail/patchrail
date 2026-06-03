@@ -66,7 +66,7 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "patchrail.doctor.v1")
         self.assertEqual(payload["status"], "ok")
         self.assertEqual(payload["local_first"], True)
-        self.assertEqual(payload["checks"]["ci_fixture_count"], 40)
+        self.assertEqual(payload["checks"]["ci_fixture_count"], 101)
         self.assertEqual(payload["checks"]["ci_result_schema_available"], True)
         self.assertEqual(payload["requirements"]["billing_required"], False)
         self.assertEqual(payload["requirements"]["external_model_required"], False)
@@ -93,8 +93,8 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         payload = json.loads(proc.stdout)
         self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
-        self.assertEqual(payload["total_cases"], 40)
-        self.assertEqual(payload["passed"], 40)
+        self.assertEqual(payload["total_cases"], 101)
+        self.assertEqual(payload["passed"], 101)
         self.assertEqual(payload["failed"], 0)
         actual_classes = {case["actual_failure_class"] for case in payload["cases"]}
         self.assertEqual(

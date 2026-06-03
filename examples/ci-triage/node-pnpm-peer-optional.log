@@ -1,0 +1,3 @@
+ERR_PNPM_PEER_DEP_ISSUES Unmet peer dependencies
+peer dep react@>=18 is required by demo-chart
+lockfile install aborted

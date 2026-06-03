@@ -1,0 +1,5 @@
+go test ./...
+panic: test timed out after 30s
+running tests:
+	TestRetries
+FAIL	example.test/retry	30.041s

@@ -1,0 +1,3 @@
+cargo test snapshots
+thread 'snapshot::report' panicked at 'snapshot assertion failed'
+test result: FAILED. 3 passed; 1 failed

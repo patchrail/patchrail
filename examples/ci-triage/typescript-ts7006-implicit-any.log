@@ -1,0 +1,3 @@
+pnpm typecheck
+src/map.ts:12:18 - error TS7006: Parameter 'item' implicitly has an 'any' type.
+tsc failed

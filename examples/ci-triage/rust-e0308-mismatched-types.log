@@ -1,0 +1,4 @@
+cargo test
+error[E0308]: mismatched types
+  --> src/lib.rs:22:5
+test result: FAILED. 0 passed; 1 failed

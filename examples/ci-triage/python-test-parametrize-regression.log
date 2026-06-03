@@ -1,0 +1,3 @@
+pytest -q
+FAILED tests/test_parser.py::test_parse_case[windows-path] - AssertionError
+E   assert 'unknown' == 'python_dependency_resolution'

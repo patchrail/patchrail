@@ -1,0 +1,3 @@
+cargo test -p demo-core
+error[E0599]: no method named 'render' found for struct 'Report' in the current scope
+test result: FAILED

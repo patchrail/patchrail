@@ -1,0 +1,4 @@
+go test ./...
+--- FAIL: TestWorker (0.01s)
+panic: runtime error: invalid memory address or nil pointer dereference
+FAIL	example.test/worker	0.017s

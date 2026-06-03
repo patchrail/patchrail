@@ -1,0 +1,5 @@
+python -m pip install -r requirements.txt -c constraints.txt
+The conflict is caused by:
+    package-a 1.9 depends on urllib3<2
+    constraints.txt pins urllib3==2.2.1
+Cannot install -r requirements.txt because these package versions have conflicting dependencies.

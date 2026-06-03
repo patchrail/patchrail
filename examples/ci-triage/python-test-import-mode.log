@@ -1,0 +1,2 @@
+pytest --import-mode=importlib -q
+FAILED tests/test_package.py::test_public_import - ModuleNotFoundError: No module named 'demo_pkg'

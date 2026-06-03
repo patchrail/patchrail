@@ -1,0 +1,3 @@
+cargo test
+error[E0502]: cannot borrow 'items' as mutable because it is also borrowed as immutable
+test result: FAILED

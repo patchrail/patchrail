@@ -1,0 +1,4 @@
+python -m pip install -r requirements.txt
+ERROR: Ignored the following yanked versions: 2.0.0, 2.0.1
+Could not find a version that satisfies the requirement demo-yanked==2.0.0
+No matching distribution found

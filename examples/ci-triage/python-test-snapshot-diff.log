@@ -1,0 +1,3 @@
+python -m pytest tests/test_snapshot.py -q
+FAILED tests/test_snapshot.py::test_report_snapshot - AssertionError
+E   Snapshot does not match current output

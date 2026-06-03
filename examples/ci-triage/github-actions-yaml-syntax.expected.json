@@ -1,0 +1,4 @@
+{
+  "failure_class": "github_actions_workflow",
+  "minimum_confidence": 0.7
+}

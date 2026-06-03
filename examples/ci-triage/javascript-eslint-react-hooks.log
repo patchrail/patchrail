@@ -1,0 +1,5 @@
+npm run lint
+src/Widget.tsx
+  22:5  error  React Hook useEffect has a missing dependency  react-hooks/exhaustive-deps
+eslint
+lint failed
