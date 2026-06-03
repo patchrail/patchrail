@@ -59,6 +59,7 @@ the CLI so local dashboards, tests, demos, and handoff tools can validate
 PatchRail output without importing private runtime code:
 
 ```bash
+patchrail schema queue-status
 patchrail schema queue-work-item
 patchrail schema queue-proposal
 patchrail schema queue-audit-event
@@ -69,6 +70,7 @@ The same schema files are mirrored in `schemas/` for repository consumers:
 - `schemas/queue_work_item.schema.json`
 - `schemas/queue_proposal.schema.json`
 - `schemas/queue_audit_event.schema.json`
+- `schemas/queue_status.schema.json`
 
 The schemas preserve the human-approval boundary: work items require
 `write_actions_allowed=false`, proposals are local patch-plan records, and audit
@@ -102,8 +104,11 @@ curl -sS http://127.0.0.1:8765/health
 
 ### `GET /status`
 
-Returns queue counts, schema version, database path, and the same safety
-requirements.
+Returns the same `patchrail.queue_status.v1` contract emitted by
+`patchrail queue status --format json`: queue counts, approval-state counts,
+audit-event counts, the latest local audit event, database path, and the safety
+boundary. The endpoint also keeps the small legacy `queue` and `requirements`
+objects for local dashboards that already consumed `/status`.
 
 ```bash
 curl -sS http://127.0.0.1:8765/status
