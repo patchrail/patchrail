@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 import tempfile
 import threading
@@ -923,6 +924,118 @@ def _evidence_roadmap(args: argparse.Namespace) -> int:
         text = _render_roadmap_audit_markdown(payload)
     else:
         text = _render_roadmap_audit_text(payload)
+    _write_or_print(text, args.out)
+    return 0
+
+
+def _release_readiness_payload(args: argparse.Namespace) -> dict[str, Any]:
+    root = Path(".")
+    script = root / "scripts" / "release_readiness.py"
+    if not script.exists():
+        raise RuntimeError(
+            "scripts/release_readiness.py is required; run this command from a PatchRail checkout."
+        )
+
+    command = [
+        sys.executable,
+        str(script),
+        "--dist-dir",
+        str(args.dist_dir),
+        "--fixture",
+        str(args.fixture),
+    ]
+    if args.clean_dist:
+        command.append("--clean-dist")
+
+    proc = subprocess.run(
+        command,
+        cwd=root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stdout.strip() or "release readiness command failed")
+    payload = json.loads(proc.stdout)
+    if not isinstance(payload, dict):
+        raise ValueError("release readiness output must be a JSON object")
+    return payload
+
+
+def _render_release_readiness_markdown(payload: dict[str, Any]) -> str:
+    checks = payload["checks"]
+    safety = payload["safety"]
+    lines = [
+        "# PatchRail Release Readiness",
+        "",
+        f"- Schema: `{payload['schema_version']}`",
+        f"- Version: `{payload['version']}`",
+        f"- Published to PyPI: `{payload['published']}`",
+        f"- Build: `{checks['build']}`",
+        f"- Twine check: `{checks['twine_check']}`",
+        f"- Wheel smoke: `{checks['wheel_smoke']}`",
+        f"- Doctor status: `{checks['doctor_status']}`",
+        f"- Fixture smoke class: `{checks['fixture_failure_class']}`",
+        "",
+        "## Artifacts",
+        "",
+    ]
+    lines.extend(
+        f"- `{artifact['file']}`: sha256 `{artifact['sha256']}`, {artifact['size_bytes']} bytes"
+        for artifact in payload["artifacts"]
+    )
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            f"- Local-first: `{safety['local_first']}`",
+            f"- Created release tag: `{safety['created_release_tag']}`",
+            f"- Announced publicly: `{safety['announced_publicly']}`",
+            f"- Contacted third parties: `{safety['contacted_third_parties']}`",
+            (f"- GitHub write permission required: `{safety['github_write_permission_required']}`"),
+            f"- External model required: `{safety['external_model_required']}`",
+            "",
+            "## Manual Gates Remaining",
+            "",
+        ]
+    )
+    lines.extend(f"- {gate}" for gate in payload["manual_gates_remaining"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_release_readiness_text(payload: dict[str, Any]) -> str:
+    checks = payload["checks"]
+    artifacts = ", ".join(artifact["file"] for artifact in payload["artifacts"])
+    return (
+        "\n".join(
+            [
+                f"Version: {payload['version']}",
+                f"Published: {payload['published']}",
+                f"Build: {checks['build']}",
+                f"Twine check: {checks['twine_check']}",
+                f"Wheel smoke: {checks['wheel_smoke']}",
+                f"Doctor: {checks['doctor_status']}",
+                f"Artifacts: {artifacts}",
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_release_readiness(args: argparse.Namespace) -> int:
+    try:
+        payload = _release_readiness_payload(args)
+    except (RuntimeError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Invalid release readiness evidence: {exc}", file=sys.stderr)
+        return 1
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_release_readiness_markdown(payload)
+    else:
+        text = _render_release_readiness_text(payload)
     _write_or_print(text, args.out)
     return 0
 
@@ -3275,6 +3388,37 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_roadmap.add_argument("--out", type=Path, help="Optional output path.")
     evidence_roadmap.set_defaults(func=_evidence_roadmap)
+
+    evidence_release_readiness = evidence_subparsers.add_parser(
+        "release-readiness",
+        description="Build and smoke-test local release artifacts without publishing.",
+        help="Build and smoke-test local release artifacts without publishing.",
+    )
+    evidence_release_readiness.add_argument(
+        "--dist-dir",
+        default=Path("dist"),
+        type=Path,
+        help="Directory for local sdist and wheel artifacts.",
+    )
+    evidence_release_readiness.add_argument(
+        "--fixture",
+        default=Path("examples/ci-triage/dependency-failure.log"),
+        type=Path,
+        help="Fixture used for the installed-wheel smoke test.",
+    )
+    evidence_release_readiness.add_argument(
+        "--clean-dist",
+        action="store_true",
+        help="Remove the dist directory before building local artifacts.",
+    )
+    evidence_release_readiness.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_release_readiness.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_release_readiness.set_defaults(func=_evidence_release_readiness)
 
     evidence_control_plane = evidence_subparsers.add_parser(
         "control-plane",

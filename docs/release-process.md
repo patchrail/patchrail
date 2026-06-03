@@ -71,13 +71,13 @@ fresh-wheel install, `patchrail doctor`, and a fixture smoke test without
 publishing, tagging, announcing, or contacting third parties:
 
 ```bash
-uv run --extra dev python scripts/release_readiness.py --clean-dist
+uv run --extra dev patchrail evidence release-readiness --clean-dist
 ```
 
 To save a machine-readable evidence artifact for maintainer review:
 
 ```bash
-uv run --extra dev python scripts/release_readiness.py --clean-dist --output release-readiness.json
+uv run --extra dev patchrail evidence release-readiness --clean-dist --format json --out release-readiness.json
 ```
 
 - [ ] Build the source distribution and wheel:
@@ -104,8 +104,8 @@ patchrail ci explain --log examples/ci-triage/dependency-failure.log --format te
 deactivate
 ```
 
-- [ ] Or run `scripts/release_readiness.py --clean-dist` and attach its JSON
-  output to the release-prep evidence.
+- [ ] Or run `patchrail evidence release-readiness --clean-dist --format json`
+  and attach its JSON output to the release-prep evidence.
 - [ ] Remove local transient build artifacts after capturing evidence, using the
   maintainer's normal cleanup tool.
 
@@ -217,7 +217,7 @@ uv run --extra dev pytest -q
 uv run --extra dev ruff check .
 uv run --extra dev ruff format --check .
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format json
-uv run --extra dev python scripts/release_readiness.py --clean-dist
+uv run --extra dev patchrail evidence release-readiness --clean-dist --format json
 uv run --extra dev python -m build
 uv run --extra dev twine check dist/*
 python3 -m venv .pkg-smoke
