@@ -79,6 +79,14 @@ count as issue-to-PR cycles because no public issue was linked by the PR.
 | Queue audit summary gate | [#92](https://github.com/patchrail/patchrail/pull/92) | [CI run 26900396583](https://github.com/patchrail/patchrail/actions/runs/26900396583) | Agent Control Plane audit evidence |
 | CI Janitor .NET coverage | [#93](https://github.com/patchrail/patchrail/pull/93) | [CI run 26901089624](https://github.com/patchrail/patchrail/actions/runs/26901089624) | classifier and benchmark expansion |
 | HTTP API evidence smoke test | [#94](https://github.com/patchrail/patchrail/pull/94) | [CI run 26901794678](https://github.com/patchrail/patchrail/actions/runs/26901794678) | local control-plane API evidence |
+| Public workflow ledger refresh | [#95](https://github.com/patchrail/patchrail/pull/95) | [CI run 26902859853](https://github.com/patchrail/patchrail/actions/runs/26902859853) | public evidence ledger maintenance |
+| Queue handoff bundle | [#96](https://github.com/patchrail/patchrail/pull/96) | [CI run 26904444855](https://github.com/patchrail/patchrail/actions/runs/26904444855) | Agent Control Plane handoff evidence |
+| Queue skip and artifact schemas | [#97](https://github.com/patchrail/patchrail/pull/97) | [CI run 26905840189](https://github.com/patchrail/patchrail/actions/runs/26905840189) | skip-state schema evidence |
+| Release readiness evidence CLI | [#98](https://github.com/patchrail/patchrail/pull/98) | [CI run 26907134911](https://github.com/patchrail/patchrail/actions/runs/26907134911) | release-readiness gate evidence |
+| CI benchmark coverage gate | [#99](https://github.com/patchrail/patchrail/pull/99) | [CI run 26908510850](https://github.com/patchrail/patchrail/actions/runs/26908510850) | benchmark coverage guardrail |
+| Queue human gate status summary | [#100](https://github.com/patchrail/patchrail/pull/100) | [CI run 26909277529](https://github.com/patchrail/patchrail/actions/runs/26909277529) | human approval gate observability |
+| HTTP API human gate evidence | [#101](https://github.com/patchrail/patchrail/pull/101) | [CI run 26910720452](https://github.com/patchrail/patchrail/actions/runs/26910720452) | local API human-gate evidence |
+| Application evidence gate | [#102](https://github.com/patchrail/patchrail/pull/102) | [CI run 26911478559](https://github.com/patchrail/patchrail/actions/runs/26911478559) | fail-closed application readiness evidence |
 
 ## How To Read This Ledger
 
