@@ -73,6 +73,45 @@ def test_github_actions_runtime_review_keeps_workflows_node24_ready() -> None:
     assert "`actions/upload-artifact` | `v4` | `node20` | No change" in docs
 
 
+def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "snapshot", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.evidence_snapshot.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "local_checkout"
+    assert payload["status"] == "needs_more_evidence"
+    assert payload["signals"]["ci_fixtures"] == 115
+    assert payload["signals"]["ci_expected_files"] == 115
+    assert payload["signals"]["ci_benchmark_passed"] == 115
+    assert payload["signals"]["ci_benchmark_failed"] == 0
+    assert payload["signals"]["public_external_adopters"] == 0
+    assert payload["signals"]["pilot_summary_count"] == 1
+    assert "release-v0.4.0-evidence.md" in payload["signals"]["release_evidence_pages"]
+    assert payload["workstreams"]["ci_janitor"]["benchmark_green"] is True
+    assert payload["workstreams"]["github_action"]["read_only_permissions"] is True
+    assert payload["workstreams"]["agent_control_plane"]["demo_present"] is True
+    assert payload["workstreams"]["funded_issue_scout"]["demo_present"] is True
+    assert payload["workstreams"]["release_packaging"]["package_smoke_in_ci"] is True
+    assert payload["safety"]["read_only_ci_triage_workflow"] is True
+    assert payload["safety"]["github_write_permission_required"] is False
+    assert payload["safety"]["external_model_required"] is False
+    assert payload["safety"]["billing_required"] is False
+    assert payload["safety"]["network_required"] is False
+    assert payload["safety"]["missing_required_docs"] == []
+    assert "first PyPI publish and download telemetry" in payload["remaining_evidence_gaps"]
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
+
+
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     artifact_dir = ROOT / "examples" / "github-action" / "patchrail-ci-triage-artifact"
     readme = (ROOT / "examples" / "github-action" / "README.md").read_text(encoding="utf-8")
@@ -181,6 +220,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "examples/pilot-outcome/README.md" in readme
     assert "docs/metrics.md" in readme
     assert "patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack" in readme
+    assert "patchrail evidence snapshot --format markdown" in readme
     assert "ADOPTERS.md" in readme
     assert ".github/ISSUE_TEMPLATE/ci_failure_fixture.md" in readme
     assert ".agents/skills" in readme
@@ -206,6 +246,9 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Consent-only pilot outcome example" in evidence
     assert "examples/pilot-outcome" in evidence
     assert "Public CI fixtures: 115 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Local evidence snapshot: `patchrail evidence snapshot --format markdown`" in (
+        oss_program_evidence
+    )
     assert "Public maintenance workflow ledger" in oss_program_evidence
     assert "owned-repo issue-to-PR cycles" in oss_program_evidence
     assert "#61 -> #62" in oss_program_evidence
@@ -374,6 +417,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Monthly PyPI downloads" in metrics
     assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
+    assert "patchrail evidence snapshot --format markdown" in metrics
+    assert "does not replace\npublic GitHub, PyPI, or adopter metrics" in metrics
     assert "Synthetic consent-only pilot examples | 1" in metrics
     assert "Owned-repo consent-only pilot outcomes | 1" in metrics
     assert "not an external adopter" in metrics

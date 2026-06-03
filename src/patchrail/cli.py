@@ -217,6 +217,207 @@ def _doctor(args: argparse.Namespace) -> int:
     return 0 if result["status"] == "ok" else 1
 
 
+def _read_optional_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
+def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
+    fixture_root = root / "examples" / "ci-triage"
+    log_paths = sorted(fixture_root.glob("*.log")) if fixture_root.exists() else []
+    expected_paths = sorted(fixture_root.glob("*.expected.json")) if fixture_root.exists() else []
+    benchmark = _run_ci_benchmark(fixture_root) if fixture_root.exists() else {}
+    triage_workflow = _read_optional_text(root / ".github" / "workflows" / "ci-triage.yml")
+    ci_workflow = _read_optional_text(root / ".github" / "workflows" / "ci.yml")
+    adopters = _read_optional_text(root / "ADOPTERS.md")
+    pilot_summaries = sorted((root / "examples" / "pilot-outcome").glob("*.summary.json"))
+    approved_pilot_repositories: list[str] = []
+    for path in pilot_summaries:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        repository = payload.get("repository")
+        if payload.get("repository_mention_approved") is True and repository:
+            approved_pilot_repositories.append(str(repository))
+
+    release_evidence_pages = sorted((root / "docs").glob("release-v*.0-evidence.md"))
+    required_docs = [
+        "ETHICS.md",
+        "SECURITY.md",
+        "AGENTS.md",
+        "docs/threat-model.md",
+        "docs/codex-workflows.md",
+        "docs/agent-control-plane.md",
+        "docs/funded-issues-ethics.md",
+        "docs/public-workflow-ledger.md",
+        "docs/pilot-request-package.md",
+        "docs/metrics.md",
+        "docs/oss-program-evidence.md",
+    ]
+    missing_docs = [path for path in required_docs if not (root / path).exists()]
+    read_only_workflow = (
+        "contents: read" in triage_workflow
+        and "actions: read" in triage_workflow
+        and "issues: write" not in triage_workflow
+        and "pull-requests: write" not in triage_workflow
+        and "gh pr create" not in triage_workflow
+        and "gh issue comment" not in triage_workflow
+    )
+    package_smoke = (
+        "package-smoke:" in ci_workflow
+        and "python -m pip install dist/*.whl" in ci_workflow
+        and "twine check dist/*" in ci_workflow
+    )
+    no_public_external_adopters = "no public external adopters listed yet" in adopters
+    public_adopters = 0 if no_public_external_adopters else None
+    benchmark_passed = int(benchmark.get("passed", 0))
+    benchmark_failed = int(benchmark.get("failed", 0))
+    total_fixtures = len(log_paths)
+    return {
+        "schema_version": "patchrail.evidence_snapshot.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "local_checkout",
+        "status": "needs_more_evidence"
+        if public_adopters == 0 or not pilot_summaries
+        else "ready_for_review",
+        "signals": {
+            "ci_fixtures": total_fixtures,
+            "ci_expected_files": len(expected_paths),
+            "ci_benchmark_passed": benchmark_passed,
+            "ci_benchmark_failed": benchmark_failed,
+            "ci_benchmark_top_1": benchmark.get("accuracy", {}).get("top_1"),
+            "release_evidence_pages": [path.name for path in release_evidence_pages],
+            "public_release_count": 1
+            if (root / "docs" / "release-v0.1.0-evidence.md").exists()
+            else 0,
+            "public_external_adopters": public_adopters,
+            "pilot_summary_count": len(pilot_summaries),
+            "approved_pilot_repositories": sorted(set(approved_pilot_repositories)),
+        },
+        "workstreams": {
+            "ci_janitor": {
+                "status": "public_beta",
+                "fixture_count": total_fixtures,
+                "benchmark_green": total_fixtures > 0 and benchmark_failed == 0,
+            },
+            "github_action": {
+                "status": "read_only_artifact",
+                "read_only_permissions": read_only_workflow,
+            },
+            "agent_control_plane": {
+                "status": "local_demo",
+                "demo_present": (root / "examples" / "local-agent-queue" / "run_demo.py").exists(),
+            },
+            "funded_issue_scout": {
+                "status": "read_only_demo",
+                "demo_present": (
+                    root / "examples" / "funded-issues-readonly" / "run_demo.py"
+                ).exists(),
+            },
+            "release_packaging": {
+                "status": "local_ready_pypi_blocked",
+                "package_smoke_in_ci": package_smoke,
+                "readiness_script_present": (root / "scripts" / "release_readiness.py").exists(),
+            },
+        },
+        "safety": {
+            "local_first": True,
+            "read_only_ci_triage_workflow": read_only_workflow,
+            "missing_required_docs": missing_docs,
+            "no_public_external_adopters_without_permission": no_public_external_adopters,
+            "github_write_permission_required": False,
+            "external_model_required": False,
+            "billing_required": False,
+            "network_required": False,
+        },
+        "remaining_evidence_gaps": [
+            "first PyPI publish and download telemetry",
+            "permissioned external maintainer pilots",
+            "visible formal review and issue triage examples",
+        ],
+    }
+
+
+def _render_evidence_snapshot_markdown(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    safety = payload["safety"]
+    workstreams = payload["workstreams"]
+    lines = [
+        "# PatchRail OSS Evidence Snapshot",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- PatchRail version: `{payload['patchrail_version']}`",
+        f"- CI fixtures: `{signals['ci_fixtures']}`",
+        (
+            f"- Benchmark: `{signals['ci_benchmark_passed']} passed`, "
+            f"`{signals['ci_benchmark_failed']} failed`"
+        ),
+        f"- Public external adopters: `{signals['public_external_adopters']}`",
+        f"- Pilot summaries: `{signals['pilot_summary_count']}`",
+        "",
+        "## Workstreams",
+        "",
+    ]
+    for name, item in workstreams.items():
+        details = ", ".join(f"{key}={value}" for key, value in item.items())
+        lines.append(f"- `{name}`: {details}")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            f"- Local-first: `{safety['local_first']}`",
+            f"- Read-only CI triage workflow: `{safety['read_only_ci_triage_workflow']}`",
+            f"- GitHub write permission required: `{safety['github_write_permission_required']}`",
+            f"- External model required: `{safety['external_model_required']}`",
+            f"- Billing required: `{safety['billing_required']}`",
+            f"- Network required: `{safety['network_required']}`",
+            "",
+            "## Remaining Evidence Gaps",
+            "",
+        ]
+    )
+    lines.extend(f"- {gap}" for gap in payload["remaining_evidence_gaps"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_evidence_snapshot_text(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                f"CI fixtures: {signals['ci_fixtures']}",
+                (
+                    "Benchmark: "
+                    f"{signals['ci_benchmark_passed']} passed, "
+                    f"{signals['ci_benchmark_failed']} failed"
+                ),
+                f"Public external adopters: {signals['public_external_adopters']}",
+                f"Pilot summaries: {signals['pilot_summary_count']}",
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_snapshot(args: argparse.Namespace) -> int:
+    payload = _evidence_snapshot_payload(Path("."))
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_evidence_snapshot_markdown(payload)
+    else:
+        text = _render_evidence_snapshot_text(payload)
+    _write_or_print(text, args.out)
+    return 0
+
+
 def _queue_db(args: argparse.Namespace) -> Path:
     return Path(args.db) if args.db else DEFAULT_QUEUE_PATH
 
@@ -1696,6 +1897,24 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     doctor.add_argument("--out", type=Path, help="Optional output path.")
     doctor.set_defaults(func=_doctor)
+
+    evidence = subparsers.add_parser(
+        "evidence",
+        help="Summarize local OSS program evidence without network or write actions.",
+    )
+    evidence_subparsers = evidence.add_subparsers(dest="evidence_command", required=True)
+    evidence_snapshot = evidence_subparsers.add_parser(
+        "snapshot",
+        help="Build a reproducible local snapshot of public PatchRail evidence signals.",
+    )
+    evidence_snapshot.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_snapshot.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_snapshot.set_defaults(func=_evidence_snapshot)
 
     serve = subparsers.add_parser(
         "serve",
