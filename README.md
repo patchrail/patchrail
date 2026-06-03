@@ -94,6 +94,8 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [CI Janitor](docs/ci-janitor.md)
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
 - [Maintainer pilot guide](docs/pilot-guide.md)
+- [Adopters](ADOPTERS.md)
+- [Metrics](docs/metrics.md)
 - [GitHub Actions CI triage](docs/github-action.md)
 - [Agent Control Plane](docs/agent-control-plane.md)
 - [API reference](docs/api-reference.md)
@@ -113,6 +115,9 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 The easiest contribution is a sanitized CI failure fixture. See
 [CONTRIBUTING.md](CONTRIBUTING.md) and the
 [maintainer pilot guide](docs/pilot-guide.md).
+
+If you are testing PatchRail on a repository you maintain, use the adopter
+report issue template. Public adopter listings require explicit permission.
 
 ## License
 

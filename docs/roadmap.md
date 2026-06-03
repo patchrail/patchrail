@@ -29,6 +29,8 @@
 - Classifier fixture contribution flow.
 - Maintainer pilot guide for consent-only, read-only CI log trials and optional
   sanitized fixture contributions.
+- Permissioned `ADOPTERS.md`, adopter-report issue template, and `docs/metrics.md`
+  for tracking public adoption without inventing evidence.
 
 ## v0.3
 

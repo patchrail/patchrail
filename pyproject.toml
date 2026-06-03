@@ -48,6 +48,7 @@ include = [
   "/schemas",
   "/.agents",
   "/README.md",
+  "/ADOPTERS.md",
   "/LICENSE",
   "/CHANGELOG.md",
   "/AGENTS.md",

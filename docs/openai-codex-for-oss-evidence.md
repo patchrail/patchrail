@@ -14,6 +14,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Monthly PyPI downloads: pending first PyPI release
 - External repositories using PatchRail: pending pilots
 - External contributors: pending external contributions
+- Public metrics tracker: [docs/metrics.md](metrics.md) records current public
+  signals without placeholder promotion
+- Adopter list: [ADOPTERS.md](../ADOPTERS.md) is permission-only and currently
+  has no public external adopters listed
 - Public CI fixtures: 101 sanitized synthetic fixtures in the local benchmark
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
@@ -147,3 +151,4 @@ Last verified: 2026-06-03.
 - PyPI download stats
 - External adopter feedback
 - Pilot outcomes from maintainers who opted into read-only local trials
+- Permissioned adopter entries linked from `ADOPTERS.md`
