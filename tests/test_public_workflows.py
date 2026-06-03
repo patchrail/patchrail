@@ -94,12 +94,16 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert payload["signals"]["ci_benchmark_failed"] == 0
     assert payload["signals"]["public_external_adopters"] == 0
     assert payload["signals"]["pilot_summary_count"] == 1
+    assert payload["signals"]["owned_repo_issue_pr_cycles"] == 20
     assert "release-v0.4.0-evidence.md" in payload["signals"]["release_evidence_pages"]
     assert payload["workstreams"]["ci_janitor"]["benchmark_green"] is True
     assert payload["workstreams"]["github_action"]["read_only_permissions"] is True
     assert payload["workstreams"]["agent_control_plane"]["demo_present"] is True
     assert payload["workstreams"]["funded_issue_scout"]["demo_present"] is True
     assert payload["workstreams"]["release_packaging"]["package_smoke_in_ci"] is True
+    assert payload["workstreams"]["public_review_triage"]["status"] == "owned_repo_visible"
+    assert payload["workstreams"]["public_review_triage"]["owned_issue_pr_cycles"] == 20
+    assert payload["workstreams"]["public_review_triage"]["formal_codex_review_links"] is False
     assert payload["safety"]["read_only_ci_triage_workflow"] is True
     assert payload["safety"]["github_write_permission_required"] is False
     assert payload["safety"]["external_model_required"] is False
@@ -107,6 +111,10 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert payload["safety"]["network_required"] is False
     assert payload["safety"]["missing_required_docs"] == []
     assert "first PyPI publish and download telemetry" in payload["remaining_evidence_gaps"]
+    assert (
+        "formal visible Codex review links and external maintainer triage examples"
+        in (payload["remaining_evidence_gaps"])
+    )
     assert "/Volumes/" not in proc.stdout
     assert "/Users/" not in proc.stdout
     assert "/home/" not in proc.stdout
@@ -260,6 +268,16 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "https://github.com/patchrail/patchrail/issues/27" in evidence
     assert "https://github.com/patchrail/patchrail/issues/37" in evidence
     assert "https://github.com/patchrail/patchrail/issues/1>" not in evidence
+    assert "Review And Triage Boundary" in workflow_ledger
+    assert "formal Codex review unless a public review link is listed" in workflow_ledger
+    assert "third-party adoption" in workflow_ledger
+    assert "[#69](https://github.com/patchrail/patchrail/issues/69)" in workflow_ledger
+    assert "[#79](https://github.com/patchrail/patchrail/pull/79)" in workflow_ledger
+    assert "[#78](https://github.com/patchrail/patchrail/pull/78)" in workflow_ledger
+    assert "[#77](https://github.com/patchrail/patchrail/pull/77)" in workflow_ledger
+    assert "[#76](https://github.com/patchrail/patchrail/pull/76)" in workflow_ledger
+    assert "[#68](https://github.com/patchrail/patchrail/issues/68)" in workflow_ledger
+    assert "[#75](https://github.com/patchrail/patchrail/pull/75)" in workflow_ledger
     assert (
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence

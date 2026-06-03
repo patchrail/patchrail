@@ -231,6 +231,7 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
     triage_workflow = _read_optional_text(root / ".github" / "workflows" / "ci-triage.yml")
     ci_workflow = _read_optional_text(root / ".github" / "workflows" / "ci.yml")
     adopters = _read_optional_text(root / "ADOPTERS.md")
+    workflow_ledger = _read_optional_text(root / "docs" / "public-workflow-ledger.md")
     pilot_summaries = sorted((root / "examples" / "pilot-outcome").glob("*.summary.json"))
     approved_pilot_repositories: list[str] = []
     for path in pilot_summaries:
@@ -275,6 +276,7 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
     benchmark_passed = int(benchmark.get("passed", 0))
     benchmark_failed = int(benchmark.get("failed", 0))
     total_fixtures = len(log_paths)
+    owned_issue_pr_cycles = _count_owned_issue_pr_cycles(workflow_ledger)
     return {
         "schema_version": "patchrail.evidence_snapshot.v1",
         "patchrail_version": __version__,
@@ -296,6 +298,7 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
             "public_external_adopters": public_adopters,
             "pilot_summary_count": len(pilot_summaries),
             "approved_pilot_repositories": sorted(set(approved_pilot_repositories)),
+            "owned_repo_issue_pr_cycles": owned_issue_pr_cycles,
         },
         "workstreams": {
             "ci_janitor": {
@@ -322,6 +325,12 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
                 "package_smoke_in_ci": package_smoke,
                 "readiness_script_present": (root / "scripts" / "release_readiness.py").exists(),
             },
+            "public_review_triage": {
+                "status": "owned_repo_visible",
+                "ledger_present": bool(workflow_ledger.strip()),
+                "owned_issue_pr_cycles": owned_issue_pr_cycles,
+                "formal_codex_review_links": False,
+            },
         },
         "safety": {
             "local_first": True,
@@ -336,9 +345,21 @@ def _evidence_snapshot_payload(root: Path) -> dict[str, Any]:
         "remaining_evidence_gaps": [
             "first PyPI publish and download telemetry",
             "permissioned external maintainer pilots",
-            "visible formal review and issue triage examples",
+            "formal visible Codex review links and external maintainer triage examples",
         ],
     }
+
+
+def _count_owned_issue_pr_cycles(workflow_ledger: str) -> int:
+    count = 0
+    for line in workflow_ledger.splitlines():
+        if (
+            line.startswith("|")
+            and "github.com/patchrail/patchrail/issues/" in line
+            and "github.com/patchrail/patchrail/pull/" in line
+        ):
+            count += 1
+    return count
 
 
 def _render_evidence_snapshot_markdown(payload: dict[str, Any]) -> str:
@@ -358,6 +379,7 @@ def _render_evidence_snapshot_markdown(payload: dict[str, Any]) -> str:
         ),
         f"- Public external adopters: `{signals['public_external_adopters']}`",
         f"- Pilot summaries: `{signals['pilot_summary_count']}`",
+        f"- Owned repo issue-to-PR cycles: `{signals['owned_repo_issue_pr_cycles']}`",
         "",
         "## Workstreams",
         "",
@@ -400,6 +422,7 @@ def _render_evidence_snapshot_text(payload: dict[str, Any]) -> str:
                 ),
                 f"Public external adopters: {signals['public_external_adopters']}",
                 f"Pilot summaries: {signals['pilot_summary_count']}",
+                f"Owned repo issue-to-PR cycles: {signals['owned_repo_issue_pr_cycles']}",
             ]
         )
         + "\n"
