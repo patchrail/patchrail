@@ -37,6 +37,17 @@ Suggested triage output:
 PatchRail should classify the failed log first. A maintainer can then ask Codex
 for a minimal patch using the report as context.
 
+The local Agent Control Plane demo makes that handoff concrete without granting
+write permissions:
+
+```bash
+python examples/local-agent-queue/run_demo.py --output .patchrail-demo --force
+```
+
+It creates a CI report, imports the machine-readable result into the local
+SQLite queue, records a reviewable patch proposal, captures maintainer approval,
+and exports the audit trail.
+
 Safety boundary:
 
 - no automatic pull requests;

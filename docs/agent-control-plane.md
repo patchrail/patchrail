@@ -129,6 +129,8 @@ curl -sS -X POST http://127.0.0.1:8765/work-items/prq_example/approve \
 For a complete local demo that starts from a CI report and ends with an
 approved queue export, see
 [`examples/local-agent-queue`](../examples/local-agent-queue/README.md).
+The demo includes `run_demo.py`, which produces a stable `summary.json`
+contract for release evidence and CI checks.
 
 ## Custom Database Path
 
