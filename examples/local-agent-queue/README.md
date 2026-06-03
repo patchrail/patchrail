@@ -45,6 +45,24 @@ patchrail queue --db .patchrail-demo/queue.sqlite show "$ITEM_ID" \
   --format markdown \
   --out .patchrail-demo/item.md
 
+patchrail queue --db .patchrail-demo/queue.sqlite add \
+  --kind ci_failure \
+  --title "Review duplicate CI report" \
+  --source local-demo \
+  --payload-json '{"reason": "duplicate of approved local evidence"}' \
+  --out .patchrail-demo/rejected-item.json
+
+REJECTED_ITEM_ID=$(python3 -c 'import json; print(json.load(open(".patchrail-demo/rejected-item.json"))["id"])')
+
+patchrail queue --db .patchrail-demo/queue.sqlite list \
+  --approval-state pending \
+  --format json \
+  --out .patchrail-demo/queue-before-decisions.json
+
+patchrail queue --db .patchrail-demo/queue.sqlite show "$REJECTED_ITEM_ID" \
+  --format markdown \
+  --out .patchrail-demo/rejected-item.md
+
 patchrail queue --db .patchrail-demo/queue.sqlite proposal add \
   --item-id "$ITEM_ID" \
   --title "Pin compatible dependency range" \
@@ -68,6 +86,10 @@ patchrail queue --db .patchrail-demo/queue.sqlite proposal approve "$PROPOSAL_ID
 patchrail queue --db .patchrail-demo/queue.sqlite approve "$ITEM_ID" \
   --note "Maintainer reviewed the local CI evidence and approved handoff." \
   --out .patchrail-demo/approved.json
+
+patchrail queue --db .patchrail-demo/queue.sqlite reject "$REJECTED_ITEM_ID" \
+  --note "Maintainer rejected the duplicate local queue item." \
+  --out .patchrail-demo/rejected-item.json
 
 patchrail queue --db .patchrail-demo/queue.sqlite export \
   --format jsonl \
@@ -95,6 +117,10 @@ Expected local artifacts:
 - `.patchrail-demo/ci-result.json`: the machine-readable CI result.
 - `.patchrail-demo/item.json`: the pending work item.
 - `.patchrail-demo/item.md`: a human-readable queue item.
+- `.patchrail-demo/rejected-item.json`: the rejected duplicate item decision.
+- `.patchrail-demo/rejected-item.md`: a human-readable item before rejection.
+- `.patchrail-demo/queue-before-decisions.json`: pending queue list before
+  approval and rejection decisions.
 - `.patchrail-demo/proposal.json`: the pending patch proposal.
 - `.patchrail-demo/proposal.md`: a human-readable proposal record.
 - `.patchrail-demo/proposal-approved.json`: the local proposal approval decision.
@@ -115,20 +141,27 @@ import json
 from pathlib import Path
 
 item = json.loads(Path(".patchrail-demo/approved.json").read_text())
+rejected_item = json.loads(Path(".patchrail-demo/rejected-item.json").read_text())
 proposal = json.loads(Path(".patchrail-demo/proposal-approved.json").read_text())
+pending_list = json.loads(Path(".patchrail-demo/queue-before-decisions.json").read_text())
 assert item["approval_state"] == "approved"
 assert item["write_actions_allowed"] is False
 assert item["payload"]["failure_class"] == "python_dependency_resolution"
 assert item["payload"]["ci_result"]["schema_version"] == "patchrail.ci_result.v1"
+assert rejected_item["approval_state"] == "rejected"
+assert rejected_item["write_actions_allowed"] is False
+assert len(pending_list["work_items"]) == 2
 assert proposal["approval_state"] == "approved"
 assert proposal["risk_level"] == "low"
 
 events = [json.loads(line) for line in Path(".patchrail-demo/audit-events.jsonl").read_text().splitlines()]
 assert [event["event_type"] for event in events] == [
     "work_item_added",
+    "work_item_added",
     "proposal_added",
     "proposal_approved",
     "work_item_approved",
+    "work_item_rejected",
     "work_items_exported",
 ]
 PY
