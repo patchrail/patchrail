@@ -115,6 +115,9 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 The easiest contribution is a sanitized CI failure fixture. See
 [CONTRIBUTING.md](CONTRIBUTING.md) and the
 [maintainer pilot guide](docs/pilot-guide.md).
+If you are not opening a pull request yet, use the
+[CI failure fixture issue template](.github/ISSUE_TEMPLATE/ci_failure_fixture.md)
+with a redacted log excerpt and the `fixture-check` result.
 
 If you are testing PatchRail on a repository you maintain, use the adopter
 report issue template. Public adopter listings require explicit permission.

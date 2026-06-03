@@ -86,6 +86,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     )
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
+    contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
     skill_dir = ROOT / ".agents" / "skills"
     ci_skill = (skill_dir / "patchrail-ci-triage" / "SKILL.md").read_text(encoding="utf-8")
     release_skill = (skill_dir / "patchrail-release-captain" / "SKILL.md").read_text(
@@ -101,6 +102,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "docs/pilot-guide.md" in readme
     assert "docs/metrics.md" in readme
     assert "ADOPTERS.md" in readme
+    assert ".github/ISSUE_TEMPLATE/ci_failure_fixture.md" in readme
     assert ".agents/skills" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
@@ -150,6 +152,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
+    assert "Sanitized fixture contribution path" in contributing
+    assert "patchrail redact --log failed-ci.log > failed-ci.redacted.log" in contributing
+    assert "patchrail ci fixture-check examples/ci-triage --format json" in contributing
+    assert "patchrail ci benchmark examples/ci-triage --format json" in contributing
+    assert "Do not commit it" in contributing
+    assert "the fixture is synthetic" in contributing
     assert "PatchRail tracks adoption and quality metrics" in metrics
     assert "Monthly PyPI downloads" in metrics
     assert "Pending first PyPI release" in metrics
