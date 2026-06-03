@@ -72,7 +72,7 @@ Current public evidence is local, owned-repository, and preparatory:
   [#83](https://github.com/patchrail/patchrail/pull/83),
   [#84](https://github.com/patchrail/patchrail/pull/84), and
   [#85](https://github.com/patchrail/patchrail/pull/85), with the current
-  ledger extended through [#94](https://github.com/patchrail/patchrail/pull/94);
+  ledger extended through [#102](https://github.com/patchrail/patchrail/pull/102);
   all listed focused maintainer PRs were merged with public CI success.
 - Issue triage: public own-repo issues are tracked in
   [public-workflow-ledger.md](public-workflow-ledger.md), including CI fixture,
@@ -220,7 +220,7 @@ Last verified: 2026-06-03.
   [#85](https://github.com/patchrail/patchrail/pull/85),
   [#86](https://github.com/patchrail/patchrail/pull/86), and
   [#87](https://github.com/patchrail/patchrail/pull/87), now extended through
-  [#94](https://github.com/patchrail/patchrail/pull/94). These remain
+  [#102](https://github.com/patchrail/patchrail/pull/102). These remain
   owned-repo workflow evidence, not external adoption.
 - Public review packet smoke:
   `uv run --extra dev patchrail evidence review-packet --format json` reads the
