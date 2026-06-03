@@ -241,8 +241,64 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
         [agent_control_plane, api_reference, oss_program_evidence, roadmap, release_v03]
     )
     assert "patchrail evidence control-plane --format markdown" in docs
+    assert "patchrail evidence http-api --format markdown" in docs
     assert "local_demo_ready" in docs
     assert "risky-proposal rejection" in docs
+
+
+def test_http_api_evidence_smokes_ephemeral_local_server_without_write_actions() -> None:
+    proc = subprocess.run(
+        [sys.executable, "-m", "patchrail", "evidence", "http-api", "--format", "json"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["schema_version"] == "patchrail.http_api_evidence.v1"
+    assert payload["repository"] == "patchrail/patchrail"
+    assert payload["generated_from"] == "ephemeral_local_http_server"
+    assert payload["status"] == "local_http_api_ready"
+    assert payload["server"]["bind_host"] == "127.0.0.1"
+    assert payload["server"]["base_url"].startswith("http://127.0.0.1:")
+    assert payload["server"]["database"] == "temporary SQLite database"
+    assert "GET /health" in payload["endpoints_checked"]
+    assert "GET /status" in payload["endpoints_checked"]
+    assert "POST /work-items" in payload["endpoints_checked"]
+    assert "POST /proposals" in payload["endpoints_checked"]
+    assert "POST /proposals/{id}/approve" in payload["endpoints_checked"]
+    assert "POST /proposals/{id}/reject" in payload["endpoints_checked"]
+    assert "POST /work-items/{id}/approve" in payload["endpoints_checked"]
+    assert "POST /work-items/{id}/reject" in payload["endpoints_checked"]
+    assert "GET /audit-events" in payload["endpoints_checked"]
+    assert payload["signals"]["work_items_total"] == 2
+    assert payload["signals"]["proposals_total"] == 2
+    assert payload["signals"]["audit_events_total"] == 8
+    assert payload["signals"]["approved_work_items"] == 1
+    assert payload["signals"]["rejected_work_items"] == 1
+    assert payload["signals"]["approved_proposals"] == 1
+    assert payload["signals"]["rejected_proposals"] == 1
+    assert payload["safety"]["local_first"] is True
+    assert payload["safety"]["bind_host_local_only"] is True
+    assert payload["safety"]["network_required"] is False
+    assert payload["safety"]["github_write_permission_required"] is False
+    assert payload["safety"]["external_model_required"] is False
+    assert payload["safety"]["billing_required"] is False
+    assert payload["safety"]["approval_records_execute_actions"] is False
+    assert payload["safety"]["approved_item_write_actions_allowed"] is False
+    assert payload["safety"]["rejected_item_write_actions_allowed"] is False
+    assert payload["safety"]["proposal_approval_gate_exercised"] is True
+    assert payload["safety"]["proposal_rejection_gate_exercised"] is True
+    assert payload["artifact_presence"]["required_events_present"] is True
+    assert payload["artifact_presence"]["required_endpoints_present"] is True
+    assert payload["artifact_presence"]["missing_events"] == []
+    assert payload["artifact_presence"]["missing_endpoints"] == []
+    assert payload["artifact_presence"]["safety_gaps"] == []
+    assert "/Volumes/" not in proc.stdout
+    assert "/Users/" not in proc.stdout
+    assert "/home/" not in proc.stdout
 
 
 def test_review_packet_summarizes_owned_repo_workflows_without_external_claims() -> None:

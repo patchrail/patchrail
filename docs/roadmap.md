@@ -66,6 +66,8 @@ external adopter evidence, or visible review links.
   approvals, and audit events.
 - Local evidence audit command for the checked-in Agent Control Plane demo
   summary, required artifacts, audit events, and human approval gates.
+- HTTP API evidence command that starts an ephemeral `127.0.0.1` server,
+  exercises endpoint smoke coverage, and reports `local_http_api_ready`.
 - v0.3.0 release-candidate evidence page tying queue CLI/API, schemas, demo,
   audit exports, proposal gates, and remaining manual gates.
 

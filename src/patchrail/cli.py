@@ -4,10 +4,14 @@ import argparse
 import json
 import re
 import sys
+import tempfile
+import threading
 from collections import Counter
+from http.server import ThreadingHTTPServer
 from importlib.resources import files
 from pathlib import Path
 from typing import Any
+from urllib.request import Request, urlopen
 
 from patchrail import __version__
 from patchrail.ci import classify_ci_log, redact_ci_log
@@ -34,7 +38,7 @@ from patchrail.queue import (
     show_proposal,
     show_work_item,
 )
-from patchrail.queue.server import serve_queue_api
+from patchrail.queue.server import make_queue_api_handler, serve_queue_api
 from patchrail.queue.status import queue_audit_summary_payload, queue_status_payload
 
 
@@ -1119,6 +1123,328 @@ def _evidence_control_plane(args: argparse.Namespace) -> int:
         text = _render_control_plane_evidence_text(payload)
     _write_or_print(text, args.out)
     return 0 if payload["status"] == "local_demo_ready" else 1
+
+
+def _http_json_request(url: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    data = None if payload is None else json.dumps(payload).encode("utf-8")
+    request = Request(url, data=data, headers={"Content-Type": "application/json"})
+    with urlopen(request, timeout=5) as response:
+        decoded = json.loads(response.read().decode("utf-8"))
+    if not isinstance(decoded, dict):
+        raise ValueError("HTTP evidence endpoint returned a non-object JSON payload")
+    return decoded
+
+
+def _http_api_evidence_payload() -> dict[str, Any]:
+    endpoints_checked: list[str] = []
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = Path(tmpdir) / "queue.sqlite"
+        server = ThreadingHTTPServer(("127.0.0.1", 0), make_queue_api_handler(db_path))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base_url = f"http://127.0.0.1:{server.server_port}"
+        try:
+            health = _http_json_request(f"{base_url}/health")
+            endpoints_checked.append("GET /health")
+
+            item = _http_json_request(
+                f"{base_url}/work-items",
+                {
+                    "kind": "ci_failure",
+                    "title": "Review local CI failure evidence",
+                    "source": "http-api-evidence",
+                    "payload": {"report": "ci-result.json"},
+                },
+            )
+            duplicate_item = _http_json_request(
+                f"{base_url}/work-items",
+                {
+                    "kind": "ci_failure",
+                    "title": "Reject duplicate local CI failure evidence",
+                    "source": "http-api-evidence",
+                    "payload": {"reason": "duplicate local evidence"},
+                },
+            )
+            endpoints_checked.append("POST /work-items")
+
+            proposal = _http_json_request(
+                f"{base_url}/proposals",
+                {
+                    "work_item_id": item["id"],
+                    "title": "Patch local dependency range",
+                    "summary": "Maintainer-reviewed local proposal only.",
+                    "patch_plan": "Reproduce locally, patch constraints, rerun tests.",
+                    "risk_level": "low",
+                },
+            )
+            risky_proposal = _http_json_request(
+                f"{base_url}/proposals",
+                {
+                    "work_item_id": duplicate_item["id"],
+                    "title": "Open an automatic pull request",
+                    "summary": "Rejected because it would skip maintainer review.",
+                    "patch_plan": "Generate a patch and open a PR automatically.",
+                    "risk_level": "high",
+                },
+            )
+            endpoints_checked.append("POST /proposals")
+
+            approved_proposal = _http_json_request(
+                f"{base_url}/proposals/{proposal['id']}/approve",
+                {"note": "Maintainer approved the local proposal record."},
+            )
+            endpoints_checked.append("POST /proposals/{id}/approve")
+
+            rejected_proposal = _http_json_request(
+                f"{base_url}/proposals/{risky_proposal['id']}/reject",
+                {"note": "Maintainer rejected the automatic PR proposal."},
+            )
+            endpoints_checked.append("POST /proposals/{id}/reject")
+
+            approved_item = _http_json_request(
+                f"{base_url}/work-items/{item['id']}/approve",
+                {"note": "Maintainer approved local queue handoff."},
+            )
+            endpoints_checked.append("POST /work-items/{id}/approve")
+
+            rejected_item = _http_json_request(
+                f"{base_url}/work-items/{duplicate_item['id']}/reject",
+                {"note": "Maintainer rejected duplicate local queue item."},
+            )
+            endpoints_checked.append("POST /work-items/{id}/reject")
+
+            status = _http_json_request(f"{base_url}/status")
+            endpoints_checked.append("GET /status")
+            work_items = _http_json_request(f"{base_url}/work-items")
+            endpoints_checked.append("GET /work-items")
+            proposals = _http_json_request(f"{base_url}/proposals")
+            endpoints_checked.append("GET /proposals")
+            audit_events = _http_json_request(f"{base_url}/audit-events")
+            endpoints_checked.append("GET /audit-events")
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
+
+    requirements = dict(health.get("requirements") or {})
+    safety = dict(status.get("safety") or {})
+    audit_event_types = [
+        str(event.get("event_type")) for event in audit_events.get("audit_events", [])
+    ]
+    required_events = [
+        "work_item_added",
+        "proposal_added",
+        "proposal_approved",
+        "proposal_rejected",
+        "work_item_approved",
+        "work_item_rejected",
+    ]
+    missing_events = [event for event in required_events if event not in audit_event_types]
+    expected_endpoints = [
+        "GET /health",
+        "GET /status",
+        "GET /work-items",
+        "POST /work-items",
+        "POST /work-items/{id}/approve",
+        "POST /work-items/{id}/reject",
+        "GET /proposals",
+        "POST /proposals",
+        "POST /proposals/{id}/approve",
+        "POST /proposals/{id}/reject",
+        "GET /audit-events",
+    ]
+    missing_endpoints = [
+        endpoint for endpoint in expected_endpoints if endpoint not in endpoints_checked
+    ]
+    safety_gaps = []
+    if health.get("local_first") is not True:
+        safety_gaps.append("health_local_first")
+    if requirements.get("network_required") is not False:
+        safety_gaps.append("network_required_false")
+    if requirements.get("github_write_permission_required") is not False:
+        safety_gaps.append("github_write_permission_required_false")
+    if requirements.get("external_model_required") is not False:
+        safety_gaps.append("external_model_required_false")
+    if requirements.get("billing_required") is not False:
+        safety_gaps.append("billing_required_false")
+    if safety.get("approval_records_execute_actions") is not False:
+        safety_gaps.append("approval_records_execute_actions_false")
+    if approved_item.get("write_actions_allowed") is not False:
+        safety_gaps.append("approved_item_write_actions_allowed_false")
+    if rejected_item.get("write_actions_allowed") is not False:
+        safety_gaps.append("rejected_item_write_actions_allowed_false")
+    if approved_proposal.get("approval_state") != "approved":
+        safety_gaps.append("proposal_approval_gate_exercised")
+    if rejected_proposal.get("approval_state") != "rejected":
+        safety_gaps.append("proposal_rejection_gate_exercised")
+    gaps = [*missing_events, *missing_endpoints, *safety_gaps]
+    return {
+        "schema_version": "patchrail.http_api_evidence.v1",
+        "patchrail_version": __version__,
+        "repository": "patchrail/patchrail",
+        "generated_from": "ephemeral_local_http_server",
+        "status": "local_http_api_ready" if not gaps else "needs_attention",
+        "server": {
+            "bind_host": "127.0.0.1",
+            "base_url": base_url,
+            "database": "temporary SQLite database",
+        },
+        "endpoints_checked": endpoints_checked,
+        "signals": {
+            "work_items_total": status["counts"]["work_items_total"],
+            "proposals_total": status["counts"]["proposals_total"],
+            "audit_events_total": status["counts"]["audit_events_total"],
+            "latest_audit_event": status["latest_audit_event"]["event_type"],
+            "approved_work_items": status["counts"]["work_items_by_approval_state"].get(
+                "approved", 0
+            ),
+            "rejected_work_items": status["counts"]["work_items_by_approval_state"].get(
+                "rejected", 0
+            ),
+            "approved_proposals": status["counts"]["proposals_by_approval_state"].get(
+                "approved", 0
+            ),
+            "rejected_proposals": status["counts"]["proposals_by_approval_state"].get(
+                "rejected", 0
+            ),
+            "listed_work_items": len(work_items.get("work_items", [])),
+            "listed_proposals": len(proposals.get("proposals", [])),
+        },
+        "safety": {
+            "local_first": health.get("local_first") is True,
+            "bind_host_local_only": True,
+            "network_required": requirements.get("network_required"),
+            "github_write_permission_required": requirements.get(
+                "github_write_permission_required"
+            ),
+            "external_model_required": requirements.get("external_model_required"),
+            "billing_required": requirements.get("billing_required"),
+            "approval_records_execute_actions": safety.get("approval_records_execute_actions"),
+            "approved_item_write_actions_allowed": approved_item.get("write_actions_allowed"),
+            "rejected_item_write_actions_allowed": rejected_item.get("write_actions_allowed"),
+            "proposal_approval_gate_exercised": approved_proposal.get("approval_state")
+            == "approved",
+            "proposal_rejection_gate_exercised": rejected_proposal.get("approval_state")
+            == "rejected",
+        },
+        "artifact_presence": {
+            "required_events_present": missing_events == [],
+            "required_endpoints_present": missing_endpoints == [],
+            "missing_events": missing_events,
+            "missing_endpoints": missing_endpoints,
+            "safety_gaps": safety_gaps,
+        },
+        "remaining_evidence_gaps": [
+            "permissioned external maintainer control-plane demo",
+            "formal visible review links for agent handoff examples",
+            "public adopter report that explicitly approves repository listing",
+        ],
+    }
+
+
+def _render_http_api_evidence_markdown(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    safety = payload["safety"]
+    artifacts = payload["artifact_presence"]
+    lines = [
+        "# PatchRail HTTP API Evidence",
+        "",
+        f"- Repository: `{payload['repository']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Generated from: `{payload['generated_from']}`",
+        f"- Bind host: `{payload['server']['bind_host']}`",
+        f"- Base URL: `{payload['server']['base_url']}`",
+        "",
+        "## Endpoint Smoke",
+        "",
+    ]
+    lines.extend(f"- `{endpoint}`" for endpoint in payload["endpoints_checked"])
+    lines.extend(
+        [
+            "",
+            "## Signals",
+            "",
+            f"- Work items total: `{signals['work_items_total']}`",
+            f"- Proposals total: `{signals['proposals_total']}`",
+            f"- Audit events total: `{signals['audit_events_total']}`",
+            f"- Latest audit event: `{signals['latest_audit_event']}`",
+            f"- Approved work items: `{signals['approved_work_items']}`",
+            f"- Rejected work items: `{signals['rejected_work_items']}`",
+            f"- Approved proposals: `{signals['approved_proposals']}`",
+            f"- Rejected proposals: `{signals['rejected_proposals']}`",
+            "",
+            "## Safety",
+            "",
+            f"- Local-first: `{safety['local_first']}`",
+            f"- Bind host local-only: `{safety['bind_host_local_only']}`",
+            f"- Network required: `{safety['network_required']}`",
+            (f"- GitHub write permission required: `{safety['github_write_permission_required']}`"),
+            f"- External model required: `{safety['external_model_required']}`",
+            f"- Billing required: `{safety['billing_required']}`",
+            (f"- Approval records execute actions: `{safety['approval_records_execute_actions']}`"),
+            (
+                "- Approved item write actions allowed: "
+                f"`{safety['approved_item_write_actions_allowed']}`"
+            ),
+            (
+                "- Rejected item write actions allowed: "
+                f"`{safety['rejected_item_write_actions_allowed']}`"
+            ),
+            (f"- Proposal approval gate exercised: `{safety['proposal_approval_gate_exercised']}`"),
+            (
+                "- Proposal rejection gate exercised: "
+                f"`{safety['proposal_rejection_gate_exercised']}`"
+            ),
+            "",
+            "## Artifact Presence",
+            "",
+            f"- Required events present: `{artifacts['required_events_present']}`",
+            f"- Required endpoints present: `{artifacts['required_endpoints_present']}`",
+            "",
+            "## Remaining Evidence Gaps",
+            "",
+        ]
+    )
+    lines.extend(f"- {gap}" for gap in payload["remaining_evidence_gaps"])
+    return "\n".join(lines) + "\n"
+
+
+def _render_http_api_evidence_text(payload: dict[str, Any]) -> str:
+    signals = payload["signals"]
+    safety = payload["safety"]
+    return (
+        "\n".join(
+            [
+                f"Repository: {payload['repository']}",
+                f"Status: {payload['status']}",
+                f"Bind host: {payload['server']['bind_host']}",
+                f"Endpoints checked: {len(payload['endpoints_checked'])}",
+                f"Work items: {signals['work_items_total']}",
+                f"Proposals: {signals['proposals_total']}",
+                f"Audit events: {signals['audit_events_total']}",
+                f"Network required: {safety['network_required']}",
+                (f"GitHub write permission required: {safety['github_write_permission_required']}"),
+                (f"Approval records execute actions: {safety['approval_records_execute_actions']}"),
+            ]
+        )
+        + "\n"
+    )
+
+
+def _evidence_http_api(args: argparse.Namespace) -> int:
+    try:
+        payload = _http_api_evidence_payload()
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"Invalid HTTP API evidence run: {exc}", file=sys.stderr)
+        return 1
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_http_api_evidence_markdown(payload)
+    else:
+        text = _render_http_api_evidence_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "local_http_api_ready" else 1
 
 
 def _queue_db(args: argparse.Namespace) -> Path:
@@ -2859,6 +3185,19 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     evidence_control_plane.add_argument("--out", type=Path, help="Optional output path.")
     evidence_control_plane.set_defaults(func=_evidence_control_plane)
+
+    evidence_http_api = evidence_subparsers.add_parser(
+        "http-api",
+        help="Smoke-test the local Agent Control Plane HTTP API on 127.0.0.1.",
+    )
+    evidence_http_api.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="markdown",
+        help="Output format.",
+    )
+    evidence_http_api.add_argument("--out", type=Path, help="Optional output path.")
+    evidence_http_api.set_defaults(func=_evidence_http_api)
 
     evidence_review_packet = evidence_subparsers.add_parser(
         "review-packet",
