@@ -93,6 +93,7 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [Quickstart](docs/quickstart.md)
 - [CI Janitor](docs/ci-janitor.md)
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
+- [Maintainer pilot guide](docs/pilot-guide.md)
 - [GitHub Actions CI triage](docs/github-action.md)
 - [Agent Control Plane](docs/agent-control-plane.md)
 - [API reference](docs/api-reference.md)
@@ -108,7 +109,8 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 ## Contributing
 
 The easiest contribution is a sanitized CI failure fixture. See
-[CONTRIBUTING.md](CONTRIBUTING.md).
+[CONTRIBUTING.md](CONTRIBUTING.md) and the
+[maintainer pilot guide](docs/pilot-guide.md).
 
 ## License
 

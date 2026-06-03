@@ -77,12 +77,14 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     codex_workflows = (ROOT / "docs" / "codex-workflows.md").read_text(encoding="utf-8")
     evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
+    pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
 
     assert "docs/codex-workflows.md" in readme
     assert "docs/openai-codex-for-oss-evidence.md" in readme
     assert "docs/api-reference.md" in readme
+    assert "docs/pilot-guide.md" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
     assert "patchrail ci explain --log failed-github-actions.log" in quickstart
@@ -95,6 +97,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Approval does not open a pull request" in api_reference
     assert "patchrail schema queue-work-item" in api_reference
     assert "schemas/queue_work_item.schema.json" in api_reference
+    assert "consent-only" in pilot_guide
+    assert "does not give PatchRail write access" in pilot_guide
+    assert "patchrail redact --log failed-ci.log" in pilot_guide
+    assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
+    assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
+    assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
 
 
 def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
