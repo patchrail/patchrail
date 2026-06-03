@@ -768,7 +768,11 @@ def _run_ci_fixture_check(path: Path) -> dict[str, Any]:
     }
 
 
-def _render_benchmark_markdown(result: dict[str, Any]) -> str:
+def _benchmark_summary(result: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in result.items() if key != "cases"}
+
+
+def _render_benchmark_markdown(result: dict[str, Any], *, include_cases: bool = True) -> str:
     lines = [
         "# PatchRail CI Benchmark",
         "",
@@ -784,6 +788,8 @@ def _render_benchmark_markdown(result: dict[str, Any]) -> str:
         lines.append(
             f"- `{failure_class}`: `{summary['passed']}` / `{summary['total_cases']}` passed"
         )
+    if not include_cases:
+        return "\n".join(lines) + "\n"
     lines.extend(
         [
             "",
@@ -802,7 +808,7 @@ def _render_benchmark_markdown(result: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _render_benchmark_text(result: dict[str, Any]) -> str:
+def _render_benchmark_text(result: dict[str, Any], *, include_cases: bool = True) -> str:
     lines = [
         f"Total cases: {result['total_cases']}",
         f"Passed: {result['passed']}",
@@ -811,6 +817,8 @@ def _render_benchmark_text(result: dict[str, Any]) -> str:
     ]
     for failure_class, summary in result["class_summary"].items():
         lines.append(f"{failure_class}: {summary['passed']} / {summary['total_cases']} passed")
+    if not include_cases:
+        return "\n".join(lines) + "\n"
     for case in result["cases"]:
         status = "PASS" if case["passed"] else "FAIL"
         lines.append(f"{status} {case['log']}: {case['actual_failure_class']}")
@@ -1080,11 +1088,12 @@ def _funded_issues_import(args: argparse.Namespace) -> int:
 def _ci_benchmark(args: argparse.Namespace) -> int:
     result = _run_ci_benchmark(args.path)
     if args.format == "json":
-        text = json.dumps(result, indent=2, sort_keys=True) + "\n"
+        payload = _benchmark_summary(result) if args.summary_only else result
+        text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     elif args.format == "markdown":
-        text = _render_benchmark_markdown(result)
+        text = _render_benchmark_markdown(result, include_cases=not args.summary_only)
     else:
-        text = _render_benchmark_text(result)
+        text = _render_benchmark_text(result, include_cases=not args.summary_only)
     _write_or_print(text, args.out)
     return 0 if result["failed"] == 0 else 1
 
@@ -1153,6 +1162,11 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=["json", "markdown", "text"],
         default="json",
         help="Output format.",
+    )
+    benchmark.add_argument(
+        "--summary-only",
+        action="store_true",
+        help="Omit per-case benchmark details and emit only aggregate evidence.",
     )
     benchmark.add_argument("--out", type=Path, help="Optional output path.")
     benchmark.set_defaults(func=_ci_benchmark)

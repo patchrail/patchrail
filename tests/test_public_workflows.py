@@ -77,6 +77,7 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     artifact_dir = ROOT / "examples" / "github-action" / "patchrail-ci-triage-artifact"
     readme = (ROOT / "examples" / "github-action" / "README.md").read_text(encoding="utf-8")
     report = (artifact_dir / "ci-report.md").read_text(encoding="utf-8")
+    benchmark_summary = (artifact_dir / "fixture-benchmark-summary.md").read_text(encoding="utf-8")
     result = json.loads((artifact_dir / "ci-result.json").read_text(encoding="utf-8"))
     benchmark = json.loads((artifact_dir / "fixture-benchmark.json").read_text(encoding="utf-8"))
     doctor = json.loads((artifact_dir / "doctor.json").read_text(encoding="utf-8"))
@@ -96,11 +97,16 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert "`ci-report.md`: Markdown summary for maintainers" in readme
     assert "`ci-result.json`: structured classifier output" in readme
     assert "`fixture-benchmark.json`: benchmark result" in readme
+    assert "`fixture-benchmark-summary.md`: short Markdown benchmark summary" in readme
     assert "`doctor.json`: local safety check" in readme
     assert "Do not paste raw CI logs, secrets, private paths" in readme
 
     assert "PatchRail classified this log locally" in report
     assert "did not create a pull request" in report
+    assert "# PatchRail CI Benchmark" in benchmark_summary
+    assert "- Total cases: `115`" in benchmark_summary
+    assert "## Class summary" in benchmark_summary
+    assert "## Cases" not in benchmark_summary
     assert result["failure_class"] == "python_dependency_resolution"
     assert result["requirements"]["billing_required"] is False
     assert result["requirements"]["external_model_required"] is False
@@ -117,6 +123,7 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
         [
             readme,
             report,
+            benchmark_summary,
             json.dumps(result),
             json.dumps(benchmark),
             json.dumps(doctor),

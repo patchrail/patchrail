@@ -11,6 +11,7 @@ patchrail-ci-triage/
 |-- ci-report.md
 |-- ci-result.json
 |-- doctor.json
+|-- fixture-benchmark-summary.md
 `-- fixture-benchmark.json
 ```
 
@@ -23,6 +24,7 @@ mkdir -p patchrail-report
 uv run patchrail ci explain --redact --log examples/ci-triage/dependency-failure.log --format markdown --out patchrail-report/ci-report.md
 uv run patchrail ci classify --redact --log examples/ci-triage/dependency-failure.log --format json --out patchrail-report/ci-result.json
 uv run patchrail ci benchmark examples/ci-triage --format json --out patchrail-report/fixture-benchmark.json
+uv run patchrail ci benchmark examples/ci-triage --format markdown --summary-only --out patchrail-report/fixture-benchmark-summary.md
 uv run patchrail doctor --format json --out patchrail-report/doctor.json
 ```
 
@@ -56,6 +58,7 @@ Inspect the files locally:
 sed -n '1,120p' patchrail-ci-triage/ci-report.md
 python -m json.tool patchrail-ci-triage/ci-result.json
 python -m json.tool patchrail-ci-triage/fixture-benchmark.json | sed -n '1,80p'
+sed -n '1,80p' patchrail-ci-triage/fixture-benchmark-summary.md
 python -m json.tool patchrail-ci-triage/doctor.json
 ```
 
@@ -70,6 +73,8 @@ python -m json.tool patchrail-ci-triage/doctor.json
 - `fixture-benchmark.json`: benchmark result over the public CI Failure Zoo. The
   example records `115` total cases, `115` passed, `0` failed, top-1 fixture
   accuracy `1.0`, and per-class coverage for the supported root-cause families.
+- `fixture-benchmark-summary.md`: short Markdown benchmark summary for
+  maintainers who want aggregate evidence without the full per-fixture JSON.
 - `doctor.json`: local safety check. It records `status=ok`, `local_first=true`,
   and no billing, network, external model, or GitHub write permission required.
 
@@ -86,5 +91,6 @@ Do not paste raw CI logs, secrets, private paths, personal data, or access token
 - It does not require billing, network access for classification, or GitHub
   write permissions.
 
-`doctor.json` and `fixture-benchmark.json` use sanitized relative paths in this
-example so the public fixture does not expose maintainer machine paths.
+`doctor.json`, `fixture-benchmark.json` and `fixture-benchmark-summary.md` use
+sanitized relative paths in this example so the public fixture does not expose
+maintainer machine paths.

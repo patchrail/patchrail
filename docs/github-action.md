@@ -23,6 +23,7 @@ patchrail-ci-triage/
 |-- ci-report.md
 |-- ci-result.json
 |-- doctor.json
+|-- fixture-benchmark-summary.md
 `-- fixture-benchmark.json
 ```
 
@@ -90,6 +91,7 @@ Local equivalent:
 uv run patchrail ci explain --redact --log examples/ci-triage/dependency-failure.log --format markdown
 uv run patchrail ci classify --redact --log examples/ci-triage/dependency-failure.log --format json
 uv run patchrail ci benchmark examples/ci-triage --format json
+uv run patchrail ci benchmark examples/ci-triage --format markdown --summary-only
 ```
 
 To reproduce the artifact locally:
@@ -99,5 +101,6 @@ mkdir -p patchrail-report
 uv run patchrail ci explain --redact --log examples/ci-triage/dependency-failure.log --format markdown --out patchrail-report/ci-report.md
 uv run patchrail ci classify --redact --log examples/ci-triage/dependency-failure.log --format json --out patchrail-report/ci-result.json
 uv run patchrail ci benchmark examples/ci-triage --format json --out patchrail-report/fixture-benchmark.json
+uv run patchrail ci benchmark examples/ci-triage --format markdown --summary-only --out patchrail-report/fixture-benchmark-summary.md
 uv run patchrail doctor --format json --out patchrail-report/doctor.json
 ```

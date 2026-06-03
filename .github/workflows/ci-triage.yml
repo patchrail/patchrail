@@ -64,6 +64,7 @@ jobs:
           uv run patchrail ci explain --redact --log "${{ steps.select-log.outputs.log_path }}" --format markdown --out patchrail-report/ci-report.md
           uv run patchrail ci classify --redact --log "${{ steps.select-log.outputs.log_path }}" --format json --out patchrail-report/ci-result.json
           uv run patchrail ci benchmark examples/ci-triage --format json --out patchrail-report/fixture-benchmark.json
+          uv run patchrail ci benchmark examples/ci-triage --format markdown --summary-only --out patchrail-report/fixture-benchmark-summary.md
           uv run patchrail doctor --format json --out patchrail-report/doctor.json
 
       - name: Upload PatchRail report
