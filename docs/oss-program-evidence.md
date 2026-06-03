@@ -28,6 +28,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows how to
   summarize a pilot without raw logs or unapproved repository mentions
+- Owned-repo consent-only pilot outcome:
+  [patchrail-own-repo-20260603.md](../examples/pilot-outcome/patchrail-own-repo-20260603.md)
+  records a maintainer-reviewed local pilot on `patchrail/patchrail`; this is
+  public project evidence, not an external adopter signal
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
   issues to focused pull requests without claiming external adoption
@@ -36,10 +40,11 @@ Pablo Guillén is the primary maintainer of PatchRail.
   Control Plane, and the read-only Funded Issue Scout
 - Current evidence follow-up issues:
   [#67](https://github.com/patchrail/patchrail/issues/67) for PyPI publish,
-  [#68](https://github.com/patchrail/patchrail/issues/68) for the first
-  consent-only maintainer pilot, and
   [#69](https://github.com/patchrail/patchrail/issues/69) for real adoption
   and ecosystem signal tracking
+- Completed owned-repo pilot issue:
+  [#68](https://github.com/patchrail/patchrail/issues/68) records the first
+  consent-only pilot outcome on PatchRail's own public repository
 
 ## Maintenance Workflows
 
@@ -105,6 +110,13 @@ Last verified: 2026-06-03.
 - Pilot summary command: `patchrail ci pilot-summary --pack patchrail-pilot-pack`
   creates a safe Markdown/JSON outcome record and suppresses repository names
   unless public mention was explicitly approved.
+- Owned-repo pilot outcome:
+  [`examples/pilot-outcome/patchrail-own-repo-20260603.md`](../examples/pilot-outcome/patchrail-own-repo-20260603.md)
+  and
+  [`patchrail-own-repo-20260603.summary.json`](../examples/pilot-outcome/patchrail-own-repo-20260603.summary.json)
+  record a `patchrail/patchrail` local pilot summary with
+  `repository_mention_approved=true`, `raw_log_copied=false`,
+  `external_model_required=false`, and `github_write_permission_required=false`.
 - Queue audit trail: `patchrail queue audit --format jsonl` exports local
   `work_item_added`, `work_item_approved`, `work_item_rejected`, and
   `work_items_exported` events without granting GitHub write permissions.
@@ -163,7 +175,6 @@ Last verified: 2026-06-03.
 ## Active Evidence Follow-Up Issues
 
 - <https://github.com/patchrail/patchrail/issues/67> - publish v0.1.0 to PyPI and verify the public install path.
-- <https://github.com/patchrail/patchrail/issues/68> - run the first consent-only CI pilot and record an approved outcome.
 - <https://github.com/patchrail/patchrail/issues/69> - track real adoption and ecosystem signals before any external application.
 
 ## Evidence To Add Before Applying
@@ -174,7 +185,7 @@ Last verified: 2026-06-03.
 - PyPI release link after package index publish.
 - PyPI download stats.
 - External adopter feedback and permissioned adopter entries.
-- Pilot outcomes from maintainers who opted into read-only local trials.
+- External pilot outcomes from maintainers who opted into read-only local trials.
 - Pilot outcome summaries following
   [examples/pilot-outcome](../examples/pilot-outcome/README.md).
 

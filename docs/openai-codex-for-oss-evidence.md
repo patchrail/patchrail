@@ -26,6 +26,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows the safe
   shape for a public pilot summary without raw logs or unapproved repo mentions
+- Owned-repo consent-only pilot outcome:
+  [patchrail-own-repo-20260603.md](../examples/pilot-outcome/patchrail-own-repo-20260603.md)
+  records a maintainer-reviewed local pilot on `patchrail/patchrail`; this is
+  public project evidence, not an external adopter signal
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
   issues to focused pull requests without claiming external adoption
@@ -42,10 +46,11 @@ Pablo Guillén is the primary maintainer of PatchRail.
   Agent Control Plane
 - Current evidence follow-up issues:
   [#67](https://github.com/patchrail/patchrail/issues/67) for PyPI publish,
-  [#68](https://github.com/patchrail/patchrail/issues/68) for the first
-  consent-only maintainer pilot, and
   [#69](https://github.com/patchrail/patchrail/issues/69) for real adoption
   and ecosystem signal tracking
+- Completed owned-repo pilot issue:
+  [#68](https://github.com/patchrail/patchrail/issues/68) records the first
+  consent-only pilot outcome on PatchRail's own public repository
 
 ## Codex Workflows In Use
 
@@ -158,6 +163,13 @@ Last verified: 2026-06-03.
   `patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke`
   creates a local redacted bundle with `pilot-manifest.json`, `patchrail-report.md`,
   `patchrail-result.json`, `failed-ci.redacted.log`, and no raw log copy.
+- Owned-repo pilot outcome:
+  [`examples/pilot-outcome/patchrail-own-repo-20260603.md`](../examples/pilot-outcome/patchrail-own-repo-20260603.md)
+  and
+  [`patchrail-own-repo-20260603.summary.json`](../examples/pilot-outcome/patchrail-own-repo-20260603.summary.json)
+  record a `patchrail/patchrail` local pilot summary with
+  `repository_mention_approved=true`, `raw_log_copied=false`,
+  `external_model_required=false`, and `github_write_permission_required=false`.
 - Funded issue read-only demo:
   [`examples/funded-issues-readonly`](../examples/funded-issues-readonly/README.md)
   shows `patchrail funded-issues list/explain` over local JSON and
@@ -216,6 +228,6 @@ Last verified: 2026-06-03.
 - PyPI download stats
 - External adopter feedback
 - Pilot outcomes from maintainers who opted into read-only local trials
-- Pilot outcome summaries that follow
+- External pilot outcome summaries that follow
   [examples/pilot-outcome](../examples/pilot-outcome/README.md)
 - Permissioned adopter entries linked from `ADOPTERS.md`

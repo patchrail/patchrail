@@ -695,7 +695,7 @@ def _pilot_summary_payload(args: argparse.Namespace) -> dict[str, Any]:
     return {
         "schema_version": "patchrail.ci_pilot_summary.v1",
         "pilot_pack": {
-            "manifest_path": str(manifest_path),
+            "manifest_path": manifest_path.name,
             "raw_log_copied": False,
             "redaction_local_only": True,
             "maintainer_review_required_before_sharing": True,

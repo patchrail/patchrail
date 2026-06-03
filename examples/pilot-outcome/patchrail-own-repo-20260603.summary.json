@@ -1,0 +1,39 @@
+{
+  "blocked_actions": [
+    "copy_raw_log",
+    "open_pull_request",
+    "post_comment",
+    "contact_maintainer",
+    "call_external_model",
+    "request_repository_write_access"
+  ],
+  "classification": {
+    "confidence": 0.95,
+    "failure_class": "python_dependency_resolution",
+    "likely_subsystem": "Python dependency installation",
+    "minimal_repair_strategy": "Pin or relax the conflicting dependency range, then rerun the same install command and the affected tests."
+  },
+  "pilot_context": {
+    "ci_provider": "GitHub Actions fixture",
+    "classification_correct": "yes",
+    "maintainer_action_useful": "yes",
+    "toolchain": "Python"
+  },
+  "pilot_pack": {
+    "maintainer_review_required_before_sharing": true,
+    "manifest_path": "pilot-manifest.json",
+    "raw_log_copied": false,
+    "redaction_local_only": true
+  },
+  "public_listing": {
+    "repository": "patchrail/patchrail",
+    "repository_mention_approved": true
+  },
+  "requirements": {
+    "billing_required": false,
+    "external_model_required": false,
+    "github_write_permission_required": false,
+    "network_required": false
+  },
+  "schema_version": "patchrail.ci_pilot_summary.v1"
+}
