@@ -1,0 +1,28 @@
+{
+  "artifact_files": [
+    "ci-report.md",
+    "ci-result.json",
+    "item.json",
+    "item.md",
+    "proposal.json",
+    "proposal.md",
+    "proposal-approved.json",
+    "approved.json",
+    "queue.jsonl",
+    "audit-events.jsonl"
+  ],
+  "audit_event_types": [
+    "work_item_added",
+    "proposal_added",
+    "proposal_approved",
+    "work_item_approved",
+    "work_items_exported"
+  ],
+  "item_approval_state": "approved",
+  "local_first": true,
+  "proposal_approval_state": "approved",
+  "proposal_risk_level": "low",
+  "schema_version": "patchrail.local_agent_queue_demo.v1",
+  "source_failure_class": "python_dependency_resolution",
+  "write_actions_allowed": false
+}

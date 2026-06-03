@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 
@@ -92,6 +95,52 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Approval does not open a pull request" in api_reference
     assert "patchrail schema queue-work-item" in api_reference
     assert "schemas/queue_work_item.schema.json" in api_reference
+
+
+def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
+    expected = json.loads(
+        (ROOT / "examples" / "local-agent-queue" / "demo-summary.expected.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    with tempfile.TemporaryDirectory() as tmpdir:
+        proc = subprocess.run(
+            [
+                sys.executable,
+                "examples/local-agent-queue/run_demo.py",
+                "--output",
+                tmpdir,
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        assert proc.returncode == 0, proc.stderr
+        summary = json.loads((Path(tmpdir) / "summary.json").read_text(encoding="utf-8"))
+        assert summary == expected
+
+        for artifact in expected["artifact_files"]:
+            assert (Path(tmpdir) / artifact).exists()
+
+        report = (Path(tmpdir) / "ci-report.md").read_text(encoding="utf-8")
+        item = json.loads((Path(tmpdir) / "approved.json").read_text(encoding="utf-8"))
+        proposal = json.loads((Path(tmpdir) / "proposal-approved.json").read_text(encoding="utf-8"))
+        events = [
+            json.loads(line)
+            for line in (Path(tmpdir) / "audit-events.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+
+        assert "PatchRail classified this log locally" in report
+        assert "did not create a pull request" in report
+        assert item["write_actions_allowed"] is False
+        assert item["payload"]["markdown_report"] == "ci-report.md"
+        assert item["payload"]["ci_result"]["requirements"]["external_model_required"] is False
+        assert proposal["approval_state"] == "approved"
+        assert [event["event_type"] for event in events] == expected["audit_event_types"]
 
 
 def test_funded_issues_docs_preserve_read_only_boundary() -> None:

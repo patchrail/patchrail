@@ -8,6 +8,17 @@ call external models, require billing, or use network access.
 Run it from the repository root:
 
 ```bash
+python examples/local-agent-queue/run_demo.py --output .patchrail-demo --force
+```
+
+The script writes the same artifacts listed below plus
+`.patchrail-demo/summary.json`. Its stable summary contract is documented in
+[`demo-summary.expected.json`](demo-summary.expected.json), so maintainers can
+use the demo as release evidence instead of relying on screenshots.
+
+Manual equivalent:
+
+```bash
 mkdir -p .patchrail-demo
 
 patchrail ci explain \
@@ -91,6 +102,8 @@ Expected local artifacts:
 - `.patchrail-demo/queue.jsonl`: the exported work items.
 - `.patchrail-demo/audit-events.jsonl`: the append-only local event trail for
   add, proposal, approve, and export decisions.
+- `.patchrail-demo/summary.json`: stable demo summary matching
+  `demo-summary.expected.json`.
 - Local API responses expose the same local SQLite state for dashboard or demo
   use without GitHub write permissions or external model calls.
 

@@ -59,6 +59,10 @@ Last verified: 2026-06-03.
   [`examples/local-agent-queue`](../examples/local-agent-queue/README.md)
   links `ci explain` to `queue add`, `queue approve`, and `queue export`
   using only local files and SQLite.
+- Executable Agent Control Plane evidence:
+  `python examples/local-agent-queue/run_demo.py --output .patchrail-demo --force`
+  produces `summary.json` matching
+  [`demo-summary.expected.json`](../examples/local-agent-queue/demo-summary.expected.json).
 - CI result importer: `patchrail queue add --from-ci-result ci-result.json`
   turns the read-only CI artifact JSON into a pending local queue item while
   keeping `write_actions_allowed=false`.
