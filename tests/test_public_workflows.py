@@ -106,6 +106,10 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert result["requirements"]["external_model_required"] is False
     assert benchmark["total_cases"] == 115
     assert benchmark["failed"] == 0
+    assert benchmark["accuracy"]["top_1"] == 1.0
+    assert benchmark["class_summary"]["python_dependency_resolution"]["total_cases"] == 27
+    assert benchmark["class_summary"]["node_dependency_install"]["total_cases"] == 19
+    assert benchmark["class_summary"]["typescript_typecheck"]["total_cases"] == 19
     assert doctor["status"] == "ok"
     assert doctor["requirements"]["github_write_permission_required"] is False
 
@@ -415,6 +419,8 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     )
     assert "Fixture hygiene: 115 / 115 fixtures passed." in release_v02_evidence
     assert "Benchmark: 115 total, 115 passed, 0 failed." in release_v02_evidence
+    assert "Top-1 fixture accuracy: 1.0." in release_v02_evidence
+    assert "Class coverage: 8 root-cause families." in release_v02_evidence
     assert "Bump `pyproject.toml` from `0.1.0` to `0.2.0`." in release_v02_evidence
     assert "Publish to PyPI only when the maintainer has configured the credential." in (
         release_v02_evidence

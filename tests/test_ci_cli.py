@@ -96,7 +96,21 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["total_cases"], 115)
         self.assertEqual(payload["passed"], 115)
         self.assertEqual(payload["failed"], 0)
+        self.assertEqual(payload["accuracy"]["top_1"], 1.0)
         self.assertEqual(payload["root"], "examples/ci-triage")
+        self.assertEqual(
+            payload["class_summary"],
+            {
+                "github_actions_workflow": {"failed": 0, "passed": 10, "total_cases": 10},
+                "go_test_failure": {"failed": 0, "passed": 10, "total_cases": 10},
+                "javascript_lint": {"failed": 0, "passed": 11, "total_cases": 11},
+                "node_dependency_install": {"failed": 0, "passed": 19, "total_cases": 19},
+                "python_dependency_resolution": {"failed": 0, "passed": 27, "total_cases": 27},
+                "python_test_failure": {"failed": 0, "passed": 9, "total_cases": 9},
+                "rust_test_failure": {"failed": 0, "passed": 10, "total_cases": 10},
+                "typescript_typecheck": {"failed": 0, "passed": 19, "total_cases": 19},
+            },
+        )
         actual_classes = {case["actual_failure_class"] for case in payload["cases"]}
         self.assertEqual(
             actual_classes,

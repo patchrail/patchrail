@@ -48,6 +48,19 @@ patchrail ci fixture-check examples/ci-triage --format json
 The command exits with status `0` only when every fixture matches its expected
 classification and confidence floor.
 
+`benchmark` also emits maintainer-readable aggregate evidence:
+
+- `accuracy.top_1`: passed fixtures divided by total fixtures.
+- `class_summary`: total, passed and failed cases per root-cause family.
+
+Current aggregate snapshot:
+
+- Top-1 fixture accuracy: `1.0`.
+- Root-cause families covered: `8`.
+- Largest families: `python_dependency_resolution` (`27` cases),
+  `node_dependency_install` (`19` cases), and `typescript_typecheck`
+  (`19` cases).
+
 `fixture-check` is the pre-PR hygiene gate for new fixtures. It checks that each
 `.log` file has a neighboring `.expected.json`, that the expected class and
 confidence floor still match the local classifier, and that the redactor does
