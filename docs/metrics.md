@@ -36,6 +36,13 @@ Before increasing a metric in public docs:
 - never report payouts, bounty value, or money-ranked opportunity counts as the
   primary project metric.
 
+To aggregate reviewed consent-only pilot outcomes without exposing unapproved
+repository names:
+
+```bash
+patchrail ci pilot-metrics pilot-summary-*.json --format markdown
+```
+
 ## Weekly Snapshot Template
 
 ```markdown
@@ -52,6 +59,8 @@ Before increasing a metric in public docs:
 - PRs opened / merged:
 - Codex-reviewed PRs:
 - Codex-triaged issues:
+- Consent-only pilot summaries:
+- Public repository mentions approved:
 - Release or package status:
 - Notable maintainer feedback:
 ```

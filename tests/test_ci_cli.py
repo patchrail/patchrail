@@ -545,6 +545,160 @@ class PatchRailCITests(unittest.TestCase):
             self.assertEqual(payload["requirements"]["network_required"], False)
             self.assertIn("open_pull_request", payload["blocked_actions"])
 
+    def test_ci_pilot_metrics_aggregates_public_and_private_summaries(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+
+            first_log = root / "first.log"
+            first_pack = root / "first-pack"
+            first_summary = root / "first-summary.json"
+            first_log.write_text(
+                "python -m pytest -q\nFAILED tests/test_app.py::test_ok - AssertionError\n",
+                encoding="utf-8",
+            )
+            first_pack_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    str(first_log),
+                    "--out-dir",
+                    str(first_pack),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(first_pack_proc.returncode, 0, first_pack_proc.stderr)
+            first_summary_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-summary",
+                    "--pack",
+                    str(first_pack),
+                    "--classification-correct",
+                    "yes",
+                    "--maintainer-action-useful",
+                    "yes",
+                    "--format",
+                    "json",
+                    "--out",
+                    str(first_summary),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(first_summary_proc.returncode, 0, first_summary_proc.stderr)
+
+            second_log = root / "second.log"
+            second_pack = root / "second-pack"
+            second_summary = root / "second-summary.json"
+            second_log.write_text(
+                "cargo test\nthread 'tests::demo' panicked at src/lib.rs:7\n",
+                encoding="utf-8",
+            )
+            second_pack_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    str(second_log),
+                    "--out-dir",
+                    str(second_pack),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(second_pack_proc.returncode, 0, second_pack_proc.stderr)
+            second_summary_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-summary",
+                    "--pack",
+                    str(second_pack),
+                    "--repository",
+                    "patchrail/example",
+                    "--repository-mention-approved",
+                    "yes",
+                    "--classification-correct",
+                    "no",
+                    "--maintainer-action-useful",
+                    "unknown",
+                    "--format",
+                    "json",
+                    "--out",
+                    str(second_summary),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(second_summary_proc.returncode, 0, second_summary_proc.stderr)
+
+            metrics_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-metrics",
+                    str(first_summary),
+                    str(second_summary),
+                    "--format",
+                    "json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(metrics_proc.returncode, 0, metrics_proc.stderr)
+            payload = json.loads(metrics_proc.stdout)
+            self.assertEqual(payload["schema_version"], "patchrail.ci_pilot_metrics.v1")
+            self.assertEqual(payload["total_pilot_summaries"], 2)
+            self.assertEqual(payload["public_repository_mentions"], 1)
+            self.assertEqual(payload["private_or_unapproved_repository_mentions"], 1)
+            self.assertEqual(payload["public_repositories"], ["patchrail/example"])
+            self.assertEqual(payload["classification_correct"]["yes"], 1)
+            self.assertEqual(payload["classification_correct"]["no"], 1)
+            self.assertEqual(payload["maintainer_action_useful"]["yes"], 1)
+            self.assertEqual(payload["maintainer_action_useful"]["unknown"], 1)
+            self.assertEqual(payload["local_only_and_no_raw_log"], 2)
+            self.assertEqual(payload["requirements"]["network_required"], False)
+
+            markdown_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-metrics",
+                    str(first_summary),
+                    str(second_summary),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
+            self.assertIn("# PatchRail Consent-Only Pilot Metrics", markdown_proc.stdout)
+            self.assertIn("- Public repository mentions: `1`", markdown_proc.stdout)
+            self.assertIn("- `patchrail/example`", markdown_proc.stdout)
+
     def test_redact_command_emits_redacted_text(self) -> None:
         proc = subprocess.run(
             [sys.executable, "-m", "patchrail", "redact"],

@@ -183,6 +183,28 @@ The importer does not read or store the original raw CI log, does not call
 external models, does not contact GitHub, and does not create pull requests,
 comments, branches, funded issue actions, or billing events.
 
+## CLI Pilot Metrics
+
+### `patchrail ci pilot-metrics`
+
+Aggregates one or more `patchrail ci pilot-summary --format json` outputs into
+safe adoption metrics for local records or public evidence docs.
+
+```bash
+patchrail ci pilot-metrics pilot-summary-*.json --format markdown
+```
+
+Metric contract:
+
+- counts total pilot summaries;
+- counts public repository mentions only when each summary has
+  `repository_mention_approved=true`;
+- keeps private or unapproved repository names out of the public list;
+- counts maintainer-reviewed `classification_correct` and
+  `maintainer_action_useful` outcomes;
+- verifies each input used `schema_version=patchrail.ci_pilot_summary.v1`;
+- requires no network, external model, billing, or GitHub write permission.
+
 ### `GET /work-items/<id>`
 
 Fetches one work item.

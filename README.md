@@ -134,6 +134,13 @@ snippet and keeps repository names private unless
 `--repository-mention-approved yes` is set. Public adopter listings require
 explicit permission.
 
+When you have multiple reviewed summaries, aggregate them without exposing
+private repository names:
+
+```bash
+uv run --extra dev patchrail ci pilot-metrics pilot-summary-*.json --format markdown
+```
+
 ## License
 
 Apache-2.0.

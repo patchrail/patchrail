@@ -89,6 +89,16 @@ Use `--format json` if you want structured evidence for local records. The
 summary still does not copy raw logs, open pull requests, post comments, call
 external models, claim funding, or request write access.
 
+Aggregate multiple reviewed summaries into safe adoption metrics with:
+
+```bash
+patchrail ci pilot-metrics pilot-summary-*.json --format markdown
+```
+
+The aggregate counts public repository mentions only when each summary was
+created with `--repository-mention-approved yes`. Private or unapproved
+repository names remain excluded from the public list.
+
 Review the report manually. Useful pilot notes are:
 
 - whether the root cause was correct;
