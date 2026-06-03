@@ -860,6 +860,78 @@
     },
     {
       "actual_confidence": 0.89,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-bundler-conflict.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-bundler-missing-gem.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-bundler-platform-lock.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-gem-native-extension.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-rake-aborted.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-rspec-failure.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-ruby-version-lock.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "ruby_bundle_failure",
+      "expected_failure_class": "ruby_bundle_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "ruby-yanked-gem.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
       "actual_failure_class": "rust_test_failure",
       "expected_failure_class": "rust_test_failure",
       "expected_minimum_confidence": 0.7,
@@ -1166,6 +1238,11 @@
       "passed": 9,
       "total_cases": 9
     },
+    "ruby_bundle_failure": {
+      "failed": 0,
+      "passed": 8,
+      "total_cases": 8
+    },
     "rust_test_failure": {
       "failed": 0,
       "passed": 10,
@@ -1178,7 +1255,7 @@
     }
   },
   "failed": 0,
-  "passed": 124,
+  "passed": 132,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -1186,5 +1263,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 124
+  "total_cases": 132
 }

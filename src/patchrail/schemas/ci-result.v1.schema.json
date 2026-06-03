@@ -32,6 +32,7 @@
         "docker_build_failure",
         "browser_test_failure",
         "rust_test_failure",
+        "ruby_bundle_failure",
         "go_test_failure"
       ]
     },

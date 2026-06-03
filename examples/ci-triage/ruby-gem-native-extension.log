@@ -1,0 +1,4 @@
+bundle install
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+An error occurred while installing pg (1.5.6), and Bundler cannot continue.
+Make sure that `gem install pg -v '1.5.6'` succeeds before bundling.

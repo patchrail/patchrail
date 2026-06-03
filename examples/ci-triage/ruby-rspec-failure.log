@@ -1,0 +1,6 @@
+bundle exec rspec
+Failures:
+  1) WidgetPresenter renders title
+     Failure/Error: expect(rendered).to include("Dashboard")
+       expected "<h1>Overview</h1>" to include "Dashboard"
+rspec 1 failure

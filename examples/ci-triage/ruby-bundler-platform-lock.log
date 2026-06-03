@@ -1,0 +1,4 @@
+bundle install
+Your bundle is locked to nokogiri (1.16.2-x86_64-linux), but that version could
+not be found in any of the sources listed in your Gemfile.
+Run `bundle lock --add-platform arm64-darwin-23` and commit the updated lockfile.

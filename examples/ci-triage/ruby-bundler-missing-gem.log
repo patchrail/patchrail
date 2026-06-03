@@ -1,0 +1,5 @@
+bundle install
+Could not find gem 'rails-observability (~> 2.0)' in rubygems repository
+or installed locally.
+The source contains the following gems matching 'rails-observability':
+  * rails-observability-1.4.2

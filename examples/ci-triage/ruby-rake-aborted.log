@@ -1,0 +1,5 @@
+bundle exec rake test
+rake aborted!
+LoadError: cannot load such file -- minitest/autorun
+Tasks: TOP => test
+test result: FAILED
