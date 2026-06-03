@@ -12,6 +12,7 @@
     "local_first",
     "host_boundary",
     "counts",
+    "human_gate_summary",
     "latest_audit_event",
     "safety"
   ],
@@ -80,6 +81,57 @@
         "audit_events_total": {
           "type": "integer",
           "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "human_gate_summary": {
+      "type": "object",
+      "required": [
+        "status",
+        "pending_work_items",
+        "pending_proposals",
+        "total_pending_decisions",
+        "approved_work_items",
+        "rejected_work_items",
+        "approved_proposals",
+        "rejected_proposals",
+        "write_actions_unlocked"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["awaiting_human_review", "no_pending_decisions"]
+        },
+        "pending_work_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pending_proposals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_pending_decisions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approved_work_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rejected_work_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approved_proposals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rejected_proposals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "write_actions_unlocked": {
+          "const": false
         }
       },
       "additionalProperties": false

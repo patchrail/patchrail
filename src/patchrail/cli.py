@@ -1820,6 +1820,7 @@ def _render_queue_bundle_text(payload: dict[str, Any]) -> str:
 
 def _render_queue_status_text(payload: dict[str, Any]) -> str:
     counts = payload["counts"]
+    gate_summary = payload["human_gate_summary"]
     latest = payload["latest_audit_event"]
     latest_label = (
         f"{latest['id']} {latest['event_type']} {latest['work_item_id'] or 'queue'}"
@@ -1836,6 +1837,8 @@ def _render_queue_status_text(payload: dict[str, Any]) -> str:
         f"Proposals: {counts['proposals_total']}",
         f"Proposal approvals: {counts['proposals_by_approval_state']}",
         f"Audit events: {counts['audit_events_total']}",
+        f"Human gate status: {gate_summary['status']}",
+        f"Pending human decisions: {gate_summary['total_pending_decisions']}",
         f"Latest audit event: {latest_label}",
         "Write actions allowed by default: False",
         "Network required: False",
@@ -1846,6 +1849,7 @@ def _render_queue_status_text(payload: dict[str, Any]) -> str:
 
 def _render_queue_status_markdown(payload: dict[str, Any]) -> str:
     counts = payload["counts"]
+    gate_summary = payload["human_gate_summary"]
     latest = payload["latest_audit_event"]
     lines = [
         "# PatchRail Queue Status",
@@ -1870,6 +1874,18 @@ def _render_queue_status_markdown(payload: dict[str, Any]) -> str:
         lines.extend(f"- `{state}`: `{count}`" for state, count in proposal_states.items())
     else:
         lines.append("- No proposals recorded.")
+    lines.extend(
+        [
+            "",
+            "## Human Gate Summary",
+            "",
+            f"- Status: `{gate_summary['status']}`",
+            f"- Pending work items: `{gate_summary['pending_work_items']}`",
+            f"- Pending proposals: `{gate_summary['pending_proposals']}`",
+            f"- Total pending decisions: `{gate_summary['total_pending_decisions']}`",
+            f"- Write actions unlocked: `{gate_summary['write_actions_unlocked']}`",
+        ]
+    )
     lines.extend(["", "## Latest Audit Event", ""])
     if latest:
         lines.extend(

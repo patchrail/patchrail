@@ -71,6 +71,9 @@ def queue_status_payload(
     work_item_approval_counts = Counter(item["approval_state"] for item in work_items)
     work_item_status_counts = Counter(item["status"] for item in work_items)
     proposal_approval_counts = Counter(proposal["approval_state"] for proposal in proposals)
+    pending_work_items = work_item_approval_counts.get("pending", 0)
+    pending_proposals = proposal_approval_counts.get("pending", 0)
+    total_pending_decisions = pending_work_items + pending_proposals
     latest_audit_event = audit_events[-1] if audit_events else None
     payload: dict[str, Any] = {
         "schema_version": QUEUE_STATUS_SCHEMA_VERSION,
@@ -86,6 +89,19 @@ def queue_status_payload(
             "proposals_total": len(proposals),
             "proposals_by_approval_state": dict(sorted(proposal_approval_counts.items())),
             "audit_events_total": len(audit_events),
+        },
+        "human_gate_summary": {
+            "status": (
+                "awaiting_human_review" if total_pending_decisions > 0 else "no_pending_decisions"
+            ),
+            "pending_work_items": pending_work_items,
+            "pending_proposals": pending_proposals,
+            "total_pending_decisions": total_pending_decisions,
+            "approved_work_items": work_item_approval_counts.get("approved", 0),
+            "rejected_work_items": work_item_approval_counts.get("rejected", 0),
+            "approved_proposals": proposal_approval_counts.get("approved", 0),
+            "rejected_proposals": proposal_approval_counts.get("rejected", 0),
+            "write_actions_unlocked": False,
         },
         "latest_audit_event": latest_audit_event,
         "safety": SAFE_QUEUE_STATUS,
