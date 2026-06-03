@@ -260,6 +260,12 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
 
         report = (Path(tmpdir) / "ci-report.md").read_text(encoding="utf-8")
         item = json.loads((Path(tmpdir) / "approved.json").read_text(encoding="utf-8"))
+        rejected_item = json.loads(
+            (Path(tmpdir) / "rejected-item.json").read_text(encoding="utf-8")
+        )
+        queue_before_decisions = json.loads(
+            (Path(tmpdir) / "queue-before-decisions.json").read_text(encoding="utf-8")
+        )
         proposal = json.loads((Path(tmpdir) / "proposal-approved.json").read_text(encoding="utf-8"))
         events = [
             json.loads(line)
@@ -273,6 +279,9 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
         assert item["write_actions_allowed"] is False
         assert item["payload"]["markdown_report"] == "ci-report.md"
         assert item["payload"]["ci_result"]["requirements"]["external_model_required"] is False
+        assert rejected_item["approval_state"] == "rejected"
+        assert rejected_item["write_actions_allowed"] is False
+        assert len(queue_before_decisions["work_items"]) == 2
         assert proposal["approval_state"] == "approved"
         assert [event["event_type"] for event in events] == expected["audit_event_types"]
 

@@ -14,6 +14,9 @@ ARTIFACTS = [
     "ci-result.json",
     "item.json",
     "item.md",
+    "rejected-item.json",
+    "rejected-item.md",
+    "queue-before-decisions.json",
     "proposal.json",
     "proposal.md",
     "proposal-approved.json",
@@ -88,6 +91,9 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     init_json = output / "init.json"
     item_json = output / "item.json"
     item_md = output / "item.md"
+    rejected_item_json = output / "rejected-item.json"
+    rejected_item_md = output / "rejected-item.md"
+    queue_before_decisions_json = output / "queue-before-decisions.json"
     proposal_json = output / "proposal.json"
     proposal_md = output / "proposal.md"
     proposal_approved_json = output / "proposal-approved.json"
@@ -136,6 +142,56 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     _run_patchrail(
         root,
         ["queue", "--db", str(db), "show", item_id, "--format", "markdown", "--out", str(item_md)],
+    )
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "add",
+            "--kind",
+            "ci_failure",
+            "--title",
+            "Review duplicate CI report",
+            "--source",
+            "local-demo",
+            "--payload-json",
+            json.dumps({"reason": "duplicate of approved local evidence"}, sort_keys=True),
+            "--out",
+            str(rejected_item_json),
+        ],
+    )
+    rejected_item = _json_file(rejected_item_json)
+    rejected_item_id = str(rejected_item["id"])
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "list",
+            "--approval-state",
+            "pending",
+            "--format",
+            "json",
+            "--out",
+            str(queue_before_decisions_json),
+        ],
+    )
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "show",
+            rejected_item_id,
+            "--format",
+            "markdown",
+            "--out",
+            str(rejected_item_md),
+        ],
     )
     _run_patchrail(
         root,
@@ -210,6 +266,20 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     )
     _run_patchrail(
         root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "reject",
+            rejected_item_id,
+            "--note",
+            "Maintainer rejected the duplicate local queue item.",
+            "--out",
+            str(rejected_item_json),
+        ],
+    )
+    _run_patchrail(
+        root,
         ["queue", "--db", str(db), "export", "--format", "jsonl", "--out", str(queue_jsonl)],
     )
     _run_patchrail(
@@ -219,17 +289,22 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
 
     ci_payload = _json_file(ci_result)
     approved_item = _json_file(approved_json)
+    rejected_item = _json_file(rejected_item_json)
     approved_proposal = _json_file(proposal_approved_json)
+    queue_before_decisions = _json_file(queue_before_decisions_json)
     events = [json.loads(line) for line in audit_jsonl.read_text(encoding="utf-8").splitlines()]
 
     summary = {
         "schema_version": "patchrail.local_agent_queue_demo.v1",
         "local_first": True,
         "source_failure_class": ci_payload["failure_class"],
+        "pending_items_before_decisions": len(queue_before_decisions["work_items"]),
         "item_approval_state": approved_item["approval_state"],
+        "rejected_item_approval_state": rejected_item["approval_state"],
         "proposal_approval_state": approved_proposal["approval_state"],
         "proposal_risk_level": approved_proposal["risk_level"],
         "write_actions_allowed": approved_item["write_actions_allowed"],
+        "rejected_item_write_actions_allowed": rejected_item["write_actions_allowed"],
         "audit_event_types": [event["event_type"] for event in events],
         "artifact_files": ARTIFACTS,
     }
@@ -238,6 +313,8 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         raise AssertionError("Demo must not grant write actions.")
     if summary["item_approval_state"] != "approved":
         raise AssertionError("Work item approval was not recorded.")
+    if summary["rejected_item_approval_state"] != "rejected":
+        raise AssertionError("Work item rejection was not recorded.")
     if summary["proposal_approval_state"] != "approved":
         raise AssertionError("Proposal approval was not recorded.")
 
