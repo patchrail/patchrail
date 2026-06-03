@@ -1,0 +1,5 @@
+Run docker build -f Dockerfile .
+#4 [internal] load build context
+#5 [2/5] COPY package.json pnpm-lock.yaml ./
+ERROR: failed to solve: failed to compute cache key: "/pnpm-lock.yaml": not found
+Docker build context did not include the expected lockfile.

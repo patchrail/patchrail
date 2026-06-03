@@ -4,11 +4,47 @@
   },
   "cases": [
     {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "browser_test_failure",
+      "expected_failure_class": "browser_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "cypress-browser-launch.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
       "actual_confidence": 0.95,
       "actual_failure_class": "python_dependency_resolution",
       "expected_failure_class": "python_dependency_resolution",
       "expected_minimum_confidence": 0.8,
       "log": "dependency-failure.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "docker_build_failure",
+      "expected_failure_class": "docker_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "docker-buildkit-missing-context.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "docker_build_failure",
+      "expected_failure_class": "docker_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "docker-buildkit-missing-stage.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.71,
+      "actual_failure_class": "docker_build_failure",
+      "expected_failure_class": "docker_build_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "docker-compose-healthcheck.log",
       "mismatches": [],
       "passed": true
     },
@@ -459,6 +495,24 @@
       "expected_failure_class": "node_dependency_install",
       "expected_minimum_confidence": 0.7,
       "log": "node-yarn-peer-version.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "browser_test_failure",
+      "expected_failure_class": "browser_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "playwright-missing-browsers.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
+      "actual_failure_class": "browser_test_failure",
+      "expected_failure_class": "browser_test_failure",
+      "expected_minimum_confidence": 0.7,
+      "log": "playwright-selector-timeout.log",
       "mismatches": [],
       "passed": true
     },
@@ -1040,6 +1094,16 @@
     }
   ],
   "class_summary": {
+    "browser_test_failure": {
+      "failed": 0,
+      "passed": 3,
+      "total_cases": 3
+    },
+    "docker_build_failure": {
+      "failed": 0,
+      "passed": 3,
+      "total_cases": 3
+    },
     "github_actions_workflow": {
       "failed": 0,
       "passed": 10,
@@ -1082,7 +1146,7 @@
     }
   },
   "failed": 0,
-  "passed": 115,
+  "passed": 121,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -1090,5 +1154,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 115
+  "total_cases": 121
 }

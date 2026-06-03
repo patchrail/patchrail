@@ -18,6 +18,8 @@ CI Janitor is PatchRail's first public module. It turns failed CI logs into:
 - TypeScript type checking.
 - JavaScript or TypeScript linting.
 - GitHub Actions workflow wiring.
+- Docker and Docker Compose build/runtime setup.
+- Playwright and Cypress browser test failures.
 - Rust test failures.
 - Go test failures.
 
@@ -53,10 +55,10 @@ The expectation file declares the target `failure_class` and an optional
 patchrail ci benchmark examples/ci-triage --format markdown
 ```
 
-The initial fixture set contains 20 sanitized synthetic examples across the
-supported v0.1 classes. The benchmark does not require network access, billing,
-a GitHub App, or an external model. It exits non-zero when any fixture
-expectation fails.
+The fixture set contains 121 sanitized synthetic examples across ten supported
+root-cause families. The benchmark does not require network access, billing, a
+GitHub App, or an external model. It exits non-zero when any fixture expectation
+fails.
 
 ## Boundary
 

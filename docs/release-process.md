@@ -161,9 +161,9 @@ CI Janitor v0.2 milestone before any version bump, tag, PyPI publish, public
 announcement, or external application.
 
 - [ ] `patchrail ci fixture-check examples/ci-triage --format json` reports
-  `115 / 115` fixtures passing.
+  `121 / 121` fixtures passing.
 - [ ] `patchrail ci benchmark examples/ci-triage --format json` reports
-  `115` total and `0` failed.
+  `121` total and `0` failed.
 - [ ] GitHub Actions triage remains read-only with `contents: read` and
   `actions: read`.
 - [ ] The example `patchrail-ci-triage` artifact includes Markdown, JSON,

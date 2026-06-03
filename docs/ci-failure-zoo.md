@@ -11,9 +11,11 @@ access, repository write permissions, billing, or an external model call.
 
 ## Current Coverage
 
-The fixture zoo currently contains 115 cases across these root-cause families:
+The fixture zoo currently contains 121 cases across these root-cause families:
 
 - `github_actions_workflow`
+- `docker_build_failure`
+- `browser_test_failure`
 - `go_test_failure`
 - `javascript_lint`
 - `node_dependency_install`
@@ -32,6 +34,11 @@ conflicting constraints, Python version markers, yanked releases, Poetry solver
 conflicts, pip-tools conflicts, uv resolution failures, extras conflicts, tox
 constraint drift, build dependency misses, prerelease ranges, platform wheel
 selectors and transitive solver conflicts.
+
+Docker coverage includes BuildKit missing-stage errors, missing build context
+inputs, and Docker Compose healthcheck failures. Browser-test coverage includes
+Playwright missing browser installs, Playwright selector timeouts, and Cypress
+browser launch failures.
 
 The current set also includes additional Go, Rust, JavaScript lint, GitHub
 Actions workflow, and Python test variants so the benchmark crosses the v0.2
@@ -59,7 +66,7 @@ classification and confidence floor.
 Current aggregate snapshot:
 
 - Top-1 fixture accuracy: `1.0`.
-- Root-cause families covered: `8`.
+- Root-cause families covered: `10`.
 - Largest families: `python_dependency_resolution` (`27` cases),
   `node_dependency_install` (`19` cases), and `typescript_typecheck`
   (`19` cases).

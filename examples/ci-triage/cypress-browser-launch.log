@@ -1,0 +1,4 @@
+Run npx cypress run --browser chrome
+CypressError: The browser exited unexpectedly before the tests could run.
+The browser exited unexpectedly with code 1.
+Verify the browser install, launch flags, and CI sandbox configuration.
