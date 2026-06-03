@@ -26,6 +26,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows the safe
   shape for a public pilot summary without raw logs or unapproved repo mentions
+- Public maintenance workflow ledger:
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
+  issues to focused pull requests without claiming external adoption
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
 - Pilot pack queue importer: `patchrail queue add --from-pilot-pack` turns that
@@ -37,12 +40,18 @@ Pablo Guillén is the primary maintainer of PatchRail.
 
 ## Codex Workflows In Use
 
-Current public evidence is local and preparatory:
+Current public evidence is local, owned-repository, and preparatory:
 
-- PR review: pending public PR history
-- Issue triage: launch issue queue created for fixture and docs work
-- Release automation: first release-prep checklist is documented in
-  [release-process.md](release-process.md); public PR history is pending
+- PR review: public own-repo PR history is tracked in
+  [public-workflow-ledger.md](public-workflow-ledger.md); formal visible Codex
+  review links are still pending
+- Issue triage: public own-repo issues are tracked in
+  [public-workflow-ledger.md](public-workflow-ledger.md), including CI fixture,
+  Agent Control Plane, security-boundary, and pilot-feedback work
+- Release automation: release-prep checklists and evidence PRs are documented
+  in [release-process.md](release-process.md) and
+  [public-workflow-ledger.md](public-workflow-ledger.md); formal visible Codex
+  release-prep links are still pending
 - Agent skills: `.agents/skills/patchrail-ci-triage`,
   `.agents/skills/patchrail-release-captain`, and
   `.agents/skills/patchrail-review-guardrails` document bounded maintainer
@@ -153,6 +162,10 @@ Last verified: 2026-06-03.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) gives maintainers
   a copyable safe summary that does not count as adoption evidence.
+- Public maintenance workflow ledger:
+  [docs/public-workflow-ledger.md](public-workflow-ledger.md) records issue-to-PR
+  cycles for owned-repo work such as #59 -> #60, #57 -> #58, #55 -> #56,
+  #53 -> #54, and #51 -> #52.
 
 ## Public Launch Issues
 
@@ -181,9 +194,9 @@ Last verified: 2026-06-03.
 
 ## Evidence To Add Before Applying
 
-- Public PR links reviewed with Codex
-- Public issues triaged with Codex
-- Release-prep PR prepared with Codex
+- Formal public PR links reviewed with Codex
+- Formal public issues triaged with Codex
+- Formal release-prep PR prepared with Codex
 - PyPI release link after package index publish
 - PyPI download stats
 - External adopter feedback
