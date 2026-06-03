@@ -36,7 +36,7 @@ jobs:
 
       - name: Download failed workflow artifacts
         if: github.event_name == 'workflow_run'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8.0.1
         with:
           github-token: ${{ github.token }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -68,7 +68,7 @@ jobs:
           uv run patchrail doctor --format json --out patchrail-report/doctor.json
 
       - name: Upload PatchRail report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: patchrail-ci-triage
           path: patchrail-report/

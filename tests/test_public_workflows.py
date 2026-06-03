@@ -19,7 +19,7 @@ def test_ci_triage_workflow_is_read_only_and_human_reviewed() -> None:
     assert "pull-requests: write" not in workflow
     assert "uv run patchrail ci explain --redact" in workflow
     assert "uv run patchrail ci classify --redact" in workflow
-    assert "actions/upload-artifact@v4" in workflow
+    assert "actions/upload-artifact@v7.0.1" in workflow
     assert "gh pr create" not in workflow
     assert "gh issue comment" not in workflow
 
@@ -56,8 +56,8 @@ def test_github_actions_runtime_review_keeps_workflows_node24_ready() -> None:
     assert "actions/checkout@v6" in combined
     assert "actions/setup-python@v6" in combined
     assert "astral-sh/setup-uv@v8.1.0" in combined
-    assert "actions/download-artifact@v4" in triage
-    assert "actions/upload-artifact@v4" in triage
+    assert "actions/download-artifact@v8.0.1" in triage
+    assert "actions/upload-artifact@v7.0.1" in triage
 
     assert "contents: read" in triage
     assert "actions: read" in triage
@@ -69,8 +69,8 @@ def test_github_actions_runtime_review_keeps_workflows_node24_ready() -> None:
     assert "`actions/checkout` | `v6` | `node24` | No" in docs
     assert "`actions/setup-python` | `v6` | `node24` | No" in docs
     assert "`astral-sh/setup-uv` | `v8.1.0` | `node24` | No" in docs
-    assert "`actions/download-artifact` | `v4` | `node20` | No change" in docs
-    assert "`actions/upload-artifact` | `v4` | `node20` | No change" in docs
+    assert "`actions/download-artifact` | `v8.0.1` | `node24` | No" in docs
+    assert "`actions/upload-artifact` | `v7.0.1` | `node24` | No" in docs
 
 
 def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions() -> None:
@@ -651,7 +651,7 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "needs: [test, package-smoke]" in workflow
     assert "uv run patchrail evidence snapshot --format json" in workflow
     assert "uv run patchrail evidence snapshot --format markdown" in workflow
-    assert "actions/upload-artifact@v4" in workflow
+    assert "actions/upload-artifact@v7.0.1" in workflow
     assert "name: patchrail-oss-evidence" in workflow
     assert "patchrail-oss-evidence/evidence-snapshot.json" in workflow
     assert "patchrail-oss-evidence/evidence-snapshot.md" in workflow

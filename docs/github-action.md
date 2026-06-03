@@ -58,8 +58,8 @@ Reviewed on 2026-06-03 for GitHub's Node 24 action runtime transition.
 | `ci.yml` and `ci-triage.yml` | `actions/checkout` | `v6` | `node24` | No |
 | `ci.yml` and `ci-triage.yml` | `actions/setup-python` | `v6` | `node24` | No |
 | `ci.yml` and `ci-triage.yml` | `astral-sh/setup-uv` | `v8.1.0` | `node24` | No |
-| `ci-triage.yml` | `actions/download-artifact` | `v4` | `node20` | No change for v0.2.0; keep monitored |
-| `ci-triage.yml` | `actions/upload-artifact` | `v4` | `node20` | No change for v0.2.0; keep monitored |
+| `ci-triage.yml` | `actions/download-artifact` | `v8.0.1` | `node24` | No |
+| `ci.yml` and `ci-triage.yml` | `actions/upload-artifact` | `v7.0.1` | `node24` | No |
 
 The two PatchRail workflows also set:
 
