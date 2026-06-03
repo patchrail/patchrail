@@ -233,8 +233,14 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     release_process = (ROOT / "docs" / "release-process.md").read_text(encoding="utf-8")
     release_evidence = (ROOT / "docs" / "release-v0.1.0-evidence.md").read_text(encoding="utf-8")
+    release_v02_evidence = (ROOT / "docs" / "release-v0.2.0-evidence.md").read_text(
+        encoding="utf-8"
+    )
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     oss_evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
+    program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
 
     assert "package-smoke:" in workflow
     assert "uv run --extra dev python -m build" in workflow
@@ -249,6 +255,7 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "python -m pip install dist/*.whl" in release_process
     assert "patchrail ci explain --log examples/ci-triage/dependency-failure.log" in release_process
     assert "release-v0.1.0-evidence.md" in release_process
+    assert "release-v0.2.0-evidence.md" in release_process
     assert "docs/release-v0.1.0-evidence.md" in readme
     assert "release-v0.1.0-evidence.md" in oss_evidence
 
@@ -258,6 +265,23 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "Tests: 34 passed." in release_evidence
     assert "Benchmark: 101 total, 101 passed, 0 failed." in release_evidence
     assert "https://github.com/patchrail/patchrail/pull/17" in release_evidence
+
+    assert "Status: release candidate evidence, not a published release." in release_v02_evidence
+    assert "uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json" in (
+        release_v02_evidence
+    )
+    assert "Fixture hygiene: 101 / 101 fixtures passed." in release_v02_evidence
+    assert "Benchmark: 101 total, 101 passed, 0 failed." in release_v02_evidence
+    assert "Bump `pyproject.toml` from `0.1.0` to `0.2.0`." in release_v02_evidence
+    assert "Publish to PyPI only when the maintainer has configured the credential." in (
+        release_v02_evidence
+    )
+    assert "External adoption evidence is still pending consent-only pilots." in (
+        release_v02_evidence
+    )
+    assert "release-v0.2.0-evidence.md" in program_evidence
+    assert "v0.2.0 release-candidate evidence page" in roadmap
+    assert "## 0.2.0 - draft" in changelog
     assert "https://github.com/patchrail/patchrail/actions/runs/26869827161" in release_evidence
     assert "https://github.com/patchrail/patchrail/releases/tag/v0.1.0" in release_evidence
     assert "07b4934d91866c3ea2978c2aff265f923cd232bf" in release_evidence

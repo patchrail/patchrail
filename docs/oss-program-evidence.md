@@ -61,6 +61,11 @@ Last verified: 2026-06-03.
   [docs/release-v0.1.0-evidence.md](release-v0.1.0-evidence.md) records the
   checked sdist/wheel names, local command results, wheel smoke test, safety
   review, public CI run, and remaining manual gates.
+- v0.2.0 release-candidate artifact:
+  [docs/release-v0.2.0-evidence.md](release-v0.2.0-evidence.md) records the
+  101-fixture benchmark, fixture hygiene gate, read-only GitHub Action artifact,
+  pilot/adopter evidence surfaces, and remaining manual gates before any version
+  bump, tag, PyPI publish, announcement, or external application.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
 - Tests: `uv run --extra dev pytest -q` -> 37 passed.
