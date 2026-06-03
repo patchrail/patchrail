@@ -116,17 +116,17 @@ Last verified: 2026-06-03.
 
 ## Public Launch Issues
 
-- <https://github.com/patchrail/patchrail/issues/1> - add more Python dependency-resolution CI fixtures.
-- <https://github.com/patchrail/patchrail/issues/2> - add Node and TypeScript CI drift fixtures.
-- <https://github.com/patchrail/patchrail/issues/3> - document the contributor path for sanitized CI fixtures.
-- <https://github.com/patchrail/patchrail/issues/4> - create the first release-prep evidence checklist.
-- <https://github.com/patchrail/patchrail/issues/5> - review GitHub Actions Node 24 compatibility before the runner default changes.
-- <https://github.com/patchrail/patchrail/issues/6> - add Agent Control Plane demo flow.
-- <https://github.com/patchrail/patchrail/issues/7> - add GitHub Actions triage artifact example.
-- <https://github.com/patchrail/patchrail/issues/8> - import CI result JSON into the local queue.
-- <https://github.com/patchrail/patchrail/issues/9> - export queue audit events for Agent Control Plane.
-- <https://github.com/patchrail/patchrail/issues/10> - add proposal records for the local Agent Control Plane.
-- <https://github.com/patchrail/patchrail/issues/11> - add read-only funded issue scout.
+- <https://github.com/patchrail/patchrail/issues/27> - add more Python dependency-resolution CI fixtures.
+- <https://github.com/patchrail/patchrail/issues/28> - add Node and TypeScript CI drift fixtures.
+- <https://github.com/patchrail/patchrail/issues/29> - document the contributor path for sanitized CI fixtures.
+- <https://github.com/patchrail/patchrail/issues/30> - create the first release-prep evidence checklist.
+- <https://github.com/patchrail/patchrail/issues/31> - review GitHub Actions Node 24 compatibility before the runner default changes.
+- <https://github.com/patchrail/patchrail/issues/32> - add Agent Control Plane demo flow.
+- <https://github.com/patchrail/patchrail/issues/33> - add GitHub Actions triage artifact example.
+- <https://github.com/patchrail/patchrail/issues/34> - import CI result JSON into the local queue.
+- <https://github.com/patchrail/patchrail/issues/35> - export queue audit events for Agent Control Plane.
+- <https://github.com/patchrail/patchrail/issues/36> - add proposal records for the local Agent Control Plane.
+- <https://github.com/patchrail/patchrail/issues/37> - add read-only funded issue scout.
 
 ## Evidence To Add Before Applying
 
