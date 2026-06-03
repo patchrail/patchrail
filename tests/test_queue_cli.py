@@ -193,6 +193,74 @@ class PatchRailQueueTests(unittest.TestCase):
             self.assertEqual(item["approval_state"], "pending")
             self.assertEqual(proposal["approval_state"], "pending")
 
+    def test_queue_status_summarizes_local_control_plane_without_write_permissions(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "ci_failure",
+                    "--title",
+                    "Review failing dependency install",
+                    "--payload-json",
+                    '{"report": "ci-result.json"}',
+                ]
+            )
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+            item = json.loads(add_proc.stdout)
+
+            proposal_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "proposal",
+                    "add",
+                    "--item-id",
+                    item["id"],
+                    "--title",
+                    "Patch dependency range",
+                    "--summary",
+                    "Prepare a local patch plan.",
+                    "--patch-plan",
+                    "1. Reproduce.\n2. Patch.\n3. Test.",
+                    "--risk-level",
+                    "low",
+                ]
+            )
+            self.assertEqual(proposal_proc.returncode, 0, proposal_proc.stderr)
+
+            status_proc = run_patchrail(["queue", "--db", str(db), "status", "--format", "json"])
+            self.assertEqual(status_proc.returncode, 0, status_proc.stderr)
+            status = json.loads(status_proc.stdout)
+
+            self.assertEqual(status["schema_version"], "patchrail.queue_status.v1")
+            self.assertEqual(status["counts"]["work_items_total"], 1)
+            self.assertEqual(status["counts"]["work_items_by_approval_state"]["pending"], 1)
+            self.assertEqual(status["counts"]["proposals_total"], 1)
+            self.assertEqual(status["counts"]["proposals_by_approval_state"]["pending"], 1)
+            self.assertEqual(status["counts"]["audit_events_total"], 2)
+            self.assertEqual(status["latest_audit_event"]["event_type"], "proposal_added")
+            self.assertEqual(status["latest_audit_event"]["work_item_id"], item["id"])
+            self.assertEqual(status["safety"]["write_actions_allowed_by_default"], False)
+            self.assertEqual(status["safety"]["github_write_permission_required"], False)
+            self.assertEqual(status["safety"]["network_required"], False)
+            self.assertEqual(status["safety"]["external_model_required"], False)
+            self.assertEqual(status["safety"]["billing_required"], False)
+            self.assertEqual(status["safety"]["approval_records_execute_actions"], False)
+
+            markdown_proc = run_patchrail(
+                ["queue", "--db", str(db), "status", "--format", "markdown"]
+            )
+            self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
+            self.assertIn("# PatchRail Queue Status", markdown_proc.stdout)
+            self.assertIn("Write actions allowed by default: `False`", markdown_proc.stdout)
+            self.assertIn("Approval records execute actions: `False`", markdown_proc.stdout)
+
     def test_queue_reject_marks_item_closed_locally(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             db = Path(tmpdir) / "queue.sqlite"

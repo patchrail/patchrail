@@ -1046,6 +1046,119 @@ def _render_queue_audit_text(events: list[dict[str, Any]]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _queue_status_payload(db_path: Path) -> dict[str, Any]:
+    init_result = init_queue(db_path)
+    work_items = [item.to_dict() for item in list_work_items(db_path=db_path)]
+    proposals = [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
+    audit_events = export_audit_events(db_path=db_path)["audit_events"]
+    work_item_approval_counts = Counter(item["approval_state"] for item in work_items)
+    work_item_status_counts = Counter(item["status"] for item in work_items)
+    proposal_approval_counts = Counter(proposal["approval_state"] for proposal in proposals)
+    latest_audit_event = audit_events[-1] if audit_events else None
+    return {
+        "schema_version": "patchrail.queue_status.v1",
+        "queue_schema_version": init_result["schema_version"],
+        "db_path": str(db_path),
+        "local_first": True,
+        "counts": {
+            "work_items_total": len(work_items),
+            "work_items_by_status": dict(sorted(work_item_status_counts.items())),
+            "work_items_by_approval_state": dict(sorted(work_item_approval_counts.items())),
+            "proposals_total": len(proposals),
+            "proposals_by_approval_state": dict(sorted(proposal_approval_counts.items())),
+            "audit_events_total": len(audit_events),
+        },
+        "latest_audit_event": latest_audit_event,
+        "safety": {
+            "write_actions_allowed_by_default": False,
+            "github_write_permission_required": False,
+            "network_required": False,
+            "external_model_required": False,
+            "billing_required": False,
+            "approval_records_execute_actions": False,
+        },
+    }
+
+
+def _render_queue_status_text(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    latest = payload["latest_audit_event"]
+    latest_label = (
+        f"{latest['id']} {latest['event_type']} {latest['work_item_id'] or 'queue'}"
+        if latest
+        else "none"
+    )
+    lines = [
+        "PatchRail Queue Status",
+        f"DB: {payload['db_path']}",
+        f"Local-first: {payload['local_first']}",
+        f"Work items: {counts['work_items_total']}",
+        f"Work item approvals: {counts['work_items_by_approval_state']}",
+        f"Work item statuses: {counts['work_items_by_status']}",
+        f"Proposals: {counts['proposals_total']}",
+        f"Proposal approvals: {counts['proposals_by_approval_state']}",
+        f"Audit events: {counts['audit_events_total']}",
+        f"Latest audit event: {latest_label}",
+        "Write actions allowed by default: False",
+        "Network required: False",
+        "External model required: False",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _render_queue_status_markdown(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    latest = payload["latest_audit_event"]
+    lines = [
+        "# PatchRail Queue Status",
+        "",
+        f"- DB: `{payload['db_path']}`",
+        f"- Local-first: `{payload['local_first']}`",
+        f"- Work items: `{counts['work_items_total']}`",
+        f"- Proposals: `{counts['proposals_total']}`",
+        f"- Audit events: `{counts['audit_events_total']}`",
+        "",
+        "## Work Items",
+        "",
+    ]
+    work_item_states = counts["work_items_by_approval_state"] or {}
+    if work_item_states:
+        lines.extend(f"- `{state}`: `{count}`" for state, count in work_item_states.items())
+    else:
+        lines.append("- No work items recorded.")
+    lines.extend(["", "## Proposals", ""])
+    proposal_states = counts["proposals_by_approval_state"] or {}
+    if proposal_states:
+        lines.extend(f"- `{state}`: `{count}`" for state, count in proposal_states.items())
+    else:
+        lines.append("- No proposals recorded.")
+    lines.extend(["", "## Latest Audit Event", ""])
+    if latest:
+        lines.extend(
+            [
+                f"- ID: `{latest['id']}`",
+                f"- Type: `{latest['event_type']}`",
+                f"- Work item: `{latest['work_item_id'] or 'queue'}`",
+            ]
+        )
+    else:
+        lines.append("- No audit events recorded.")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            "- Write actions allowed by default: `False`",
+            "- GitHub write permission required: `False`",
+            "- Network required: `False`",
+            "- External model required: `False`",
+            "- Billing required: `False`",
+            "- Approval records execute actions: `False`",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
 def _render_proposals_text(proposals: list[dict[str, Any]]) -> str:
     if not proposals:
         return "No proposals.\n"
@@ -1229,6 +1342,18 @@ def _queue_audit(args: argparse.Namespace) -> int:
         text = _json_dump(payload)
     else:
         text = _render_queue_audit_text(payload["audit_events"])
+    _write_or_print(text, args.out)
+    return 0
+
+
+def _queue_status(args: argparse.Namespace) -> int:
+    payload = _queue_status_payload(_queue_db(args))
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_queue_status_markdown(payload)
+    else:
+        text = _render_queue_status_text(payload)
     _write_or_print(text, args.out)
     return 0
 
@@ -2494,6 +2619,19 @@ def _build_parser() -> argparse.ArgumentParser:
     queue_init = queue_subparsers.add_parser("init", help="Initialize the local queue database.")
     queue_init.add_argument("--out", type=Path, help="Optional output path.")
     queue_init.set_defaults(func=_queue_init)
+
+    queue_status = queue_subparsers.add_parser(
+        "status",
+        help="Summarize the local queue, proposal, audit, and safety state.",
+    )
+    queue_status.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="text",
+        help="Output format.",
+    )
+    queue_status.add_argument("--out", type=Path, help="Optional output path.")
+    queue_status.set_defaults(func=_queue_status)
 
     queue_add = queue_subparsers.add_parser("add", help="Add a local work item.")
     queue_add.add_argument("--kind", help="Work item kind, for example ci_failure.")
