@@ -95,6 +95,7 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [CI Janitor](docs/ci-janitor.md)
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
 - [Maintainer pilot guide](docs/pilot-guide.md)
+- [Consent-only pilot outcome example](examples/pilot-outcome/README.md)
 - [Adopters](ADOPTERS.md)
 - [Metrics](docs/metrics.md)
 - [GitHub Actions CI triage](docs/github-action.md)

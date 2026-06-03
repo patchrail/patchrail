@@ -21,6 +21,7 @@ Last updated: 2026-06-03.
 | Supported benchmark categories | Python, Node, TypeScript, Go, Rust, GitHub Actions | `docs/ci-failure-zoo.md` |
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
 | Funded issue read-only demos | 1 | `examples/funded-issues-readonly` |
+| Consent-only pilot outcome examples | 1 | `examples/pilot-outcome` |
 
 ## Quality Gates
 
@@ -61,6 +62,7 @@ current evidence gaps are:
 
 - first PyPI release and download telemetry;
 - external maintainer pilots with permission to cite outcomes;
+- safe pilot summaries based on [examples/pilot-outcome](../examples/pilot-outcome/README.md);
 - permissioned pilot fixture submissions that pass `fixture-check`;
 - public PRs reviewed with Codex;
 - public issues triaged with Codex;

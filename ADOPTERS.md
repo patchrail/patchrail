@@ -8,6 +8,9 @@ details.
 
 PatchRail is collecting first read-only maintainer pilots. There are no public external adopters listed yet.
 
+Use [examples/pilot-outcome](examples/pilot-outcome/README.md) as the safe
+shape for a pilot summary before requesting a public adopter listing.
+
 ## How To Be Listed
 
 Open an adopter report issue when you have run PatchRail on a repository you
