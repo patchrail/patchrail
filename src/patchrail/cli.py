@@ -35,7 +35,7 @@ from patchrail.queue import (
     show_work_item,
 )
 from patchrail.queue.server import serve_queue_api
-from patchrail.queue.status import queue_status_payload
+from patchrail.queue.status import queue_audit_summary_payload, queue_status_payload
 
 
 def _read_log(path: Path | None) -> str:
@@ -133,6 +133,7 @@ def _load_schema(name: str) -> str:
     schema_files = {
         "ci-result": "ci-result.v1.schema.json",
         "queue-audit-event": "queue-audit-event.v1.schema.json",
+        "queue-audit-summary": "queue-audit-summary.v1.schema.json",
         "queue-proposal": "queue-proposal.v1.schema.json",
         "queue-status": "queue-status.v1.schema.json",
         "queue-work-item": "queue-work-item.v1.schema.json",
@@ -943,6 +944,7 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
         "rejected-item.json",
         "queue.jsonl",
         "audit-events.jsonl",
+        "audit-summary.json",
     ]
     missing_artifacts = [
         artifact for artifact in required_artifacts if artifact not in artifact_files
@@ -963,6 +965,8 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
     proposal_rejected = summary.get("rejected_proposal_approval_state") == "rejected"
     proposal_approved = summary.get("proposal_approval_state") == "approved"
     item_approved = summary.get("item_approval_state") == "approved"
+    audit_summary_ready = summary.get("audit_summary_status") == "human_gates_exercised"
+    audit_summary_missing_events = list(summary.get("audit_summary_missing_required_events") or [])
     local_first = summary.get("local_first") is True
     safety_gaps = []
     if not local_first:
@@ -977,6 +981,10 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
         safety_gaps.append("proposal_approval_gate_exercised")
     if not proposal_rejected:
         safety_gaps.append("risky_proposal_rejection_exercised")
+    if not audit_summary_ready:
+        safety_gaps.append("audit_summary_human_gates_exercised")
+    if audit_summary_missing_events:
+        safety_gaps.append("audit_summary_missing_required_events")
     gaps = [*missing_events, *missing_artifacts, *missing_source_files, *safety_gaps]
     return {
         "schema_version": "patchrail.control_plane_evidence.v1",
@@ -995,6 +1003,7 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
             "proposal_risk_level": summary.get("proposal_risk_level"),
             "rejected_item_approval_state": summary.get("rejected_item_approval_state"),
             "rejected_proposal_approval_state": summary.get("rejected_proposal_approval_state"),
+            "audit_summary_status": summary.get("audit_summary_status"),
         },
         "safety": {
             "local_first": local_first,
@@ -1003,6 +1012,7 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
             "human_approval_gate_exercised": item_approved,
             "proposal_approval_gate_exercised": proposal_approved,
             "risky_proposal_rejection_exercised": proposal_rejected,
+            "audit_summary_human_gates_exercised": audit_summary_ready,
             "github_write_permission_required": False,
             "external_model_required": False,
             "billing_required": False,
@@ -1015,6 +1025,7 @@ def _control_plane_evidence_payload(root: Path, summary_path: Path | None) -> di
             "missing_events": missing_events,
             "missing_artifacts": missing_artifacts,
             "missing_source_files": missing_source_files,
+            "audit_summary_missing_required_events": audit_summary_missing_events,
             "safety_gaps": safety_gaps,
         },
         "remaining_evidence_gaps": [
@@ -1040,6 +1051,7 @@ def _render_control_plane_evidence_markdown(payload: dict[str, Any]) -> str:
         f"- Source failure class: `{signals['source_failure_class']}`",
         f"- Proposal approval state: `{signals['proposal_approval_state']}`",
         f"- Risky proposal rejection state: `{signals['rejected_proposal_approval_state']}`",
+        f"- Audit summary status: `{signals['audit_summary_status']}`",
         "",
         "## Safety",
         "",
@@ -1049,6 +1061,7 @@ def _render_control_plane_evidence_markdown(payload: dict[str, Any]) -> str:
         f"- Human approval gate exercised: `{safety['human_approval_gate_exercised']}`",
         f"- Proposal approval gate exercised: `{safety['proposal_approval_gate_exercised']}`",
         f"- Risky proposal rejection exercised: `{safety['risky_proposal_rejection_exercised']}`",
+        f"- Audit summary human gates exercised: `{safety['audit_summary_human_gates_exercised']}`",
         f"- GitHub write permission required: `{safety['github_write_permission_required']}`",
         f"- External model required: `{safety['external_model_required']}`",
         f"- Billing required: `{safety['billing_required']}`",
@@ -1081,6 +1094,10 @@ def _render_control_plane_evidence_text(payload: dict[str, Any]) -> str:
                 (
                     "Risky proposal rejected: "
                     f"{payload['safety']['risky_proposal_rejection_exercised']}"
+                ),
+                (
+                    "Audit summary human gates exercised: "
+                    f"{payload['safety']['audit_summary_human_gates_exercised']}"
                 ),
             ]
         )
@@ -1218,6 +1235,69 @@ def _render_queue_audit_text(events: list[dict[str, Any]]) -> str:
     for event in events:
         target = event["work_item_id"] or "queue"
         lines.append(f"{event['id']} {event['ts']} {event['event_type']} {target}")
+    return "\n".join(lines) + "\n"
+
+
+def _render_queue_audit_summary_text(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    lines = [
+        "PatchRail Queue Audit Summary",
+        f"DB: {payload['db_path']}",
+        f"Status: {payload['status']}",
+        f"Audit events: {counts['audit_events_total']}",
+        f"Affected work items: {counts['affected_work_items']}",
+        f"Missing required events: {payload['missing_required_events']}",
+        "Write actions allowed by default: False",
+        "Approval records execute actions: False",
+    ]
+    for event_type, count in counts["event_types"].items():
+        lines.append(f"{event_type}: {count}")
+    return "\n".join(lines) + "\n"
+
+
+def _render_queue_audit_summary_markdown(payload: dict[str, Any]) -> str:
+    counts = payload["counts"]
+    gates = payload["gates"]
+    lines = [
+        "# PatchRail Queue Audit Summary",
+        "",
+        f"- DB: `{payload['db_path']}`",
+        f"- Status: `{payload['status']}`",
+        f"- Audit events: `{counts['audit_events_total']}`",
+        f"- Work items: `{counts['work_items_total']}`",
+        f"- Proposals: `{counts['proposals_total']}`",
+        f"- Affected work items: `{counts['affected_work_items']}`",
+        "",
+        "## Required Events",
+        "",
+    ]
+    for event_type in payload["required_events"]:
+        present = event_type not in payload["missing_required_events"]
+        lines.append(f"- `{event_type}`: `{present}`")
+    lines.extend(["", "## Human Gates", ""])
+    for gate, exercised in gates.items():
+        lines.append(f"- `{gate}`: `{exercised}`")
+    lines.extend(["", "## Event Counts", ""])
+    if counts["event_types"]:
+        lines.extend(
+            f"- `{event_type}`: `{count}`" for event_type, count in counts["event_types"].items()
+        )
+    else:
+        lines.append("- No audit events recorded.")
+    lines.extend(
+        [
+            "",
+            "## Safety",
+            "",
+            "- Local-first: `True`",
+            "- Write actions allowed by default: `False`",
+            "- GitHub write permission required: `False`",
+            "- Network required: `False`",
+            "- External model required: `False`",
+            "- Billing required: `False`",
+            "- Approval records execute actions: `False`",
+        ]
+    )
     return "\n".join(lines) + "\n"
 
 
@@ -1485,6 +1565,21 @@ def _queue_audit(args: argparse.Namespace) -> int:
         text = _render_queue_audit_text(payload["audit_events"])
     _write_or_print(text, args.out)
     return 0
+
+
+def _queue_audit_summary(args: argparse.Namespace) -> int:
+    payload = queue_audit_summary_payload(
+        _queue_db(args),
+        required_events=args.require_event,
+    )
+    if args.format == "json":
+        text = _json_dump(payload)
+    elif args.format == "markdown":
+        text = _render_queue_audit_summary_markdown(payload)
+    else:
+        text = _render_queue_audit_summary_text(payload)
+    _write_or_print(text, args.out)
+    return 0 if payload["status"] == "human_gates_exercised" else 1
 
 
 def _queue_status(args: argparse.Namespace) -> int:
@@ -2690,6 +2785,7 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=[
             "ci-result",
             "queue-audit-event",
+            "queue-audit-summary",
             "queue-proposal",
             "queue-status",
             "queue-work-item",
@@ -2919,6 +3015,27 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     queue_audit.add_argument("--out", type=Path, help="Optional output path.")
     queue_audit.set_defaults(func=_queue_audit)
+
+    queue_audit_summary = queue_subparsers.add_parser(
+        "audit-summary",
+        help="Summarize local audit events and verify human gate coverage.",
+    )
+    queue_audit_summary.add_argument(
+        "--require-event",
+        action="append",
+        help=(
+            "Audit event type required for success. May be repeated. Defaults to the "
+            "full local demo gate sequence."
+        ),
+    )
+    queue_audit_summary.add_argument(
+        "--format",
+        choices=["json", "markdown", "text"],
+        default="text",
+        help="Output format.",
+    )
+    queue_audit_summary.add_argument("--out", type=Path, help="Optional output path.")
+    queue_audit_summary.set_defaults(func=_queue_audit_summary)
 
     queue_proposal = queue_subparsers.add_parser(
         "proposal",

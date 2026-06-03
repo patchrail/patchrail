@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/queue-audit-summary.v1.schema.json",
+  "title": "PatchRail Queue Audit Summary",
+  "description": "Local audit summary emitted by patchrail queue audit-summary for Agent Control Plane gate evidence.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "queue_schema_version",
+    "patchrail_version",
+    "db_path",
+    "local_first",
+    "status",
+    "counts",
+    "required_events",
+    "missing_required_events",
+    "gates",
+    "affected_work_item_ids",
+    "latest_audit_event",
+    "safety"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.queue_audit_summary.v1"
+    },
+    "queue_schema_version": {
+      "const": "patchrail.queue.v1"
+    },
+    "patchrail_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "db_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "local_first": {
+      "const": true
+    },
+    "status": {
+      "type": "string",
+      "enum": ["human_gates_exercised", "needs_more_audit_evidence"]
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "audit_events_total",
+        "event_types",
+        "work_items_total",
+        "proposals_total",
+        "affected_work_items"
+      ],
+      "properties": {
+        "audit_events_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "event_types": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "work_items_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "proposals_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "affected_work_items": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "required_events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "missing_required_events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": [
+        "work_item_approval_gate_exercised",
+        "work_item_rejection_gate_exercised",
+        "proposal_approval_gate_exercised",
+        "proposal_rejection_gate_exercised",
+        "queue_export_recorded"
+      ],
+      "properties": {
+        "work_item_approval_gate_exercised": {
+          "type": "boolean"
+        },
+        "work_item_rejection_gate_exercised": {
+          "type": "boolean"
+        },
+        "proposal_approval_gate_exercised": {
+          "type": "boolean"
+        },
+        "proposal_rejection_gate_exercised": {
+          "type": "boolean"
+        },
+        "queue_export_recorded": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "affected_work_item_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^prq_[0-9a-f]{12}$"
+      }
+    },
+    "latest_audit_event": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "queue-audit-event.v1.schema.json" }
+      ]
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "write_actions_allowed_by_default",
+        "github_write_permission_required",
+        "network_required",
+        "external_model_required",
+        "billing_required",
+        "approval_records_execute_actions"
+      ],
+      "properties": {
+        "write_actions_allowed_by_default": {
+          "const": false
+        },
+        "github_write_permission_required": {
+          "const": false
+        },
+        "network_required": {
+          "const": false
+        },
+        "external_model_required": {
+          "const": false
+        },
+        "billing_required": {
+          "const": false
+        },
+        "approval_records_execute_actions": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

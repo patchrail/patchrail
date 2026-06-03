@@ -28,6 +28,7 @@ ARTIFACTS = [
     "approved.json",
     "queue.jsonl",
     "audit-events.jsonl",
+    "audit-summary.json",
 ]
 
 
@@ -107,6 +108,7 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     approved_json = output / "approved.json"
     queue_jsonl = output / "queue.jsonl"
     audit_jsonl = output / "audit-events.jsonl"
+    audit_summary_json = output / "audit-summary.json"
     summary_json = output / "summary.json"
 
     fixture_log = Path("examples") / "ci-triage" / "dependency-failure.log"
@@ -342,6 +344,19 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         root,
         ["queue", "--db", str(db), "audit", "--format", "jsonl", "--out", str(audit_jsonl)],
     )
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "audit-summary",
+            "--format",
+            "json",
+            "--out",
+            str(audit_summary_json),
+        ],
+    )
 
     ci_payload = _json_file(ci_result)
     approved_item = _json_file(approved_json)
@@ -349,6 +364,7 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     approved_proposal = _json_file(proposal_approved_json)
     rejected_proposal = _json_file(proposal_rejected_json)
     queue_before_decisions = _json_file(queue_before_decisions_json)
+    audit_summary = _json_file(audit_summary_json)
     events = [json.loads(line) for line in audit_jsonl.read_text(encoding="utf-8").splitlines()]
 
     summary = {
@@ -365,6 +381,9 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         "write_actions_allowed": approved_item["write_actions_allowed"],
         "rejected_item_write_actions_allowed": rejected_item["write_actions_allowed"],
         "audit_event_types": [event["event_type"] for event in events],
+        "audit_summary_status": audit_summary["status"],
+        "audit_summary_missing_required_events": audit_summary["missing_required_events"],
+        "audit_summary_gates": audit_summary["gates"],
         "artifact_files": ARTIFACTS,
     }
 
@@ -378,6 +397,10 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         raise AssertionError("Proposal approval was not recorded.")
     if summary["rejected_proposal_approval_state"] != "rejected":
         raise AssertionError("Proposal rejection was not recorded.")
+    if summary["audit_summary_status"] != "human_gates_exercised":
+        raise AssertionError("Audit summary did not verify the local gate sequence.")
+    if summary["audit_summary_missing_required_events"]:
+        raise AssertionError("Audit summary must not miss required gate events.")
 
     summary_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return summary

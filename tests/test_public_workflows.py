@@ -196,7 +196,7 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
     assert payload["generated_from"] == "local_checkout"
     assert payload["summary_file"] == "examples/local-agent-queue/demo-summary.expected.json"
     assert payload["status"] == "local_demo_ready"
-    assert payload["signals"]["artifact_count"] == 18
+    assert payload["signals"]["artifact_count"] == 19
     assert payload["signals"]["audit_event_count"] == 9
     assert payload["signals"]["source_failure_class"] == "python_dependency_resolution"
     assert payload["signals"]["item_approval_state"] == "approved"
@@ -204,12 +204,14 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
     assert payload["signals"]["proposal_risk_level"] == "low"
     assert payload["signals"]["rejected_item_approval_state"] == "rejected"
     assert payload["signals"]["rejected_proposal_approval_state"] == "rejected"
+    assert payload["signals"]["audit_summary_status"] == "human_gates_exercised"
     assert payload["safety"]["local_first"] is True
     assert payload["safety"]["write_actions_allowed"] is False
     assert payload["safety"]["rejected_item_write_actions_allowed"] is False
     assert payload["safety"]["human_approval_gate_exercised"] is True
     assert payload["safety"]["proposal_approval_gate_exercised"] is True
     assert payload["safety"]["risky_proposal_rejection_exercised"] is True
+    assert payload["safety"]["audit_summary_human_gates_exercised"] is True
     assert payload["safety"]["github_write_permission_required"] is False
     assert payload["safety"]["external_model_required"] is False
     assert payload["safety"]["billing_required"] is False
@@ -220,6 +222,7 @@ def test_control_plane_evidence_audits_local_demo_without_write_actions() -> Non
     assert payload["artifact_presence"]["missing_events"] == []
     assert payload["artifact_presence"]["missing_artifacts"] == []
     assert payload["artifact_presence"]["missing_source_files"] == []
+    assert payload["artifact_presence"]["audit_summary_missing_required_events"] == []
     assert payload["artifact_presence"]["safety_gaps"] == []
     assert (
         "permissioned external maintainer control-plane demo"
@@ -528,7 +531,14 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference
     assert "patchrail schema queue-work-item" in api_reference
+    assert "patchrail schema queue-audit-summary" in api_reference
     assert "schemas/queue_work_item.schema.json" in api_reference
+    assert "schemas/queue_audit_summary.schema.json" in api_reference
+    assert "## CLI Audit Summary" in api_reference
+    assert "patchrail queue --db patchrail-pilot.sqlite audit-summary --format markdown" in (
+        api_reference
+    )
+    assert "patchrail.queue_audit_summary.v1" in api_reference
     assert "## CLI Queue Imports" in api_reference
     assert "patchrail queue --db patchrail-pilot.sqlite add" in api_reference
     assert "--from-pilot-pack patchrail-pilot-pack" in api_reference

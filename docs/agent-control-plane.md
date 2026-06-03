@@ -130,7 +130,16 @@ Export the local audit trail:
 ```bash
 patchrail queue export --format jsonl > patchrail-queue.jsonl
 patchrail queue audit --format jsonl > patchrail-audit-events.jsonl
+patchrail queue audit-summary --format markdown
 ```
+
+`patchrail queue audit-summary` turns the append-only audit trail into a
+release-checkable gate summary. By default it expects the full local demo
+sequence: work item creation, proposal creation, proposal approval, proposal
+rejection, work item approval, work item rejection, and queue export. It exits
+successfully only when the required events are present. The command is read-only
+against the local SQLite queue: it does not create a new audit event, execute a
+proposal, open a pull request, post a comment, or contact a repository.
 
 Run the local-only HTTP API:
 
@@ -219,4 +228,5 @@ The current queue is enough for local demos and release evidence:
   approval decisions, and audit events;
 - export work items;
 - export audit events for item creation, proposals, maintainer decisions, and
-  handoffs.
+  handoffs;
+- summarize local audit events into a release-checkable human-gate report.

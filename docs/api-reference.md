@@ -63,6 +63,7 @@ patchrail schema queue-status
 patchrail schema queue-work-item
 patchrail schema queue-proposal
 patchrail schema queue-audit-event
+patchrail schema queue-audit-summary
 ```
 
 The same schema files are mirrored in `schemas/` for repository consumers:
@@ -70,11 +71,33 @@ The same schema files are mirrored in `schemas/` for repository consumers:
 - `schemas/queue_work_item.schema.json`
 - `schemas/queue_proposal.schema.json`
 - `schemas/queue_audit_event.schema.json`
+- `schemas/queue_audit_summary.schema.json`
 - `schemas/queue_status.schema.json`
 
 The schemas preserve the human-approval boundary: work items require
 `write_actions_allowed=false`, proposals are local patch-plan records, and audit
 events are local append-only records of queue operations.
+
+## CLI Audit Summary
+
+`patchrail queue audit-summary` summarizes the append-only local audit events
+and verifies whether required human-gate events are present. It reads the local
+SQLite queue and emits `patchrail.queue_audit_summary.v1`; it does not append a
+new event or execute any queued proposal.
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite audit-summary --format markdown
+```
+
+By default the command expects the complete local Agent Control Plane demo gate
+sequence: work item add, proposal add, proposal approve, proposal reject, work
+item approve, work item reject, and queue export. Custom release checks can
+provide repeated `--require-event` flags when they need a smaller contract.
+
+The command exits with success only when the required events are present. A
+failed audit summary is still local evidence: it reports the missing event
+types without contacting GitHub, calling external models, opening pull requests,
+posting comments, or requiring billing.
 
 ## Local Evidence Audit
 

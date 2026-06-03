@@ -24,6 +24,7 @@ class PatchRailQueueTests(unittest.TestCase):
             "queue-work-item": "PatchRail Queue Work Item",
             "queue-proposal": "PatchRail Queue Proposal",
             "queue-audit-event": "PatchRail Queue Audit Event",
+            "queue-audit-summary": "PatchRail Queue Audit Summary",
         }
         for schema_name, title in expected_titles.items():
             proc = run_patchrail(["schema", schema_name])
@@ -117,6 +118,40 @@ class PatchRailQueueTests(unittest.TestCase):
             )
             self.assertEqual(audit["audit_events"][2]["payload"]["count"], 1)
 
+            audit_summary_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "audit-summary",
+                    "--format",
+                    "json",
+                    "--require-event",
+                    "work_item_added",
+                    "--require-event",
+                    "work_item_approved",
+                    "--require-event",
+                    "work_items_exported",
+                ]
+            )
+            self.assertEqual(audit_summary_proc.returncode, 0, audit_summary_proc.stderr)
+            audit_summary = json.loads(audit_summary_proc.stdout)
+            self.assertEqual(
+                audit_summary["schema_version"],
+                "patchrail.queue_audit_summary.v1",
+            )
+            self.assertEqual(audit_summary["status"], "human_gates_exercised")
+            self.assertEqual(audit_summary["missing_required_events"], [])
+            self.assertEqual(audit_summary["counts"]["audit_events_total"], 3)
+            self.assertEqual(audit_summary["counts"]["event_types"]["work_item_added"], 1)
+            self.assertEqual(audit_summary["counts"]["affected_work_items"], 1)
+            self.assertEqual(audit_summary["gates"]["work_item_approval_gate_exercised"], True)
+            self.assertEqual(audit_summary["gates"]["queue_export_recorded"], True)
+            self.assertEqual(
+                audit_summary["safety"]["approval_records_execute_actions"],
+                False,
+            )
+
             item_audit_proc = run_patchrail(
                 [
                     "queue",
@@ -193,6 +228,36 @@ class PatchRailQueueTests(unittest.TestCase):
             self.assertEqual(item_schema["properties"]["write_actions_allowed"]["const"], False)
             self.assertEqual(item["approval_state"], "pending")
             self.assertEqual(proposal["approval_state"], "pending")
+
+    def test_queue_audit_summary_requires_gate_events_for_success(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "ci_failure",
+                    "--title",
+                    "Review failing dependency install",
+                ]
+            )
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+
+            summary_proc = run_patchrail(
+                ["queue", "--db", str(db), "audit-summary", "--format", "json"]
+            )
+
+            self.assertEqual(summary_proc.returncode, 1)
+            summary = json.loads(summary_proc.stdout)
+            self.assertEqual(summary["status"], "needs_more_audit_evidence")
+            self.assertIn("proposal_approved", summary["missing_required_events"])
+            self.assertIn("work_items_exported", summary["missing_required_events"])
+            self.assertEqual(summary["gates"]["work_item_approval_gate_exercised"], False)
+            self.assertEqual(summary["safety"]["github_write_permission_required"], False)
+            self.assertEqual(summary["safety"]["network_required"], False)
 
     def test_queue_status_summarizes_local_control_plane_without_write_permissions(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
