@@ -62,3 +62,17 @@ links, and package build output. It must not publish to PyPI, create tags, push
 release commits, or announce releases without maintainer approval.
 
 See [Release process](release-process.md).
+
+## Agent Skills
+
+PatchRail ships maintainer-facing agent skill prompts under `.agents/skills/`.
+They are part of the public evidence pack because they make the human approval
+boundary reviewable in the repository:
+
+- `patchrail-ci-triage` for classifier, fixture, and failed-log work;
+- `patchrail-release-captain` for release-prep checks and evidence pages;
+- `patchrail-review-guardrails` for safety-sensitive review of network access,
+  GitHub writes, funded issue discovery, redaction, and approval gates.
+
+The skills do not grant permissions. They document review workflows and checks
+that maintainers can apply before any external write action.

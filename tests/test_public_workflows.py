@@ -80,18 +80,31 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     quickstart = (ROOT / "docs" / "quickstart.md").read_text(encoding="utf-8")
+    skill_dir = ROOT / ".agents" / "skills"
+    ci_skill = (skill_dir / "patchrail-ci-triage" / "SKILL.md").read_text(encoding="utf-8")
+    release_skill = (skill_dir / "patchrail-release-captain" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    guardrails_skill = (skill_dir / "patchrail-review-guardrails" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "docs/codex-workflows.md" in readme
     assert "docs/openai-codex-for-oss-evidence.md" in readme
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
+    assert ".agents/skills" in readme
     assert "pipx install patchrail" in readme
     assert "pipx install patchrail" in quickstart
     assert "patchrail ci explain --log failed-github-actions.log" in quickstart
     assert "The v0.1 release does not require Codex or any external model" in codex_workflows
     assert "no automatic pull requests" in codex_workflows
+    assert "patchrail-ci-triage" in codex_workflows
+    assert "patchrail-release-captain" in codex_workflows
+    assert "patchrail-review-guardrails" in codex_workflows
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
+    assert ".agents/skills/patchrail-ci-triage" in evidence
     assert "patchrail.queue_api.v1" in api_reference
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference
@@ -103,6 +116,12 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "patchrail ci classify --log failed-ci.redacted.log --format json" in pilot_guide
     assert "patchrail queue --db patchrail-pilot.sqlite add --from-ci-result" in pilot_guide
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
+    assert "Do not quote raw logs that may contain secrets" in ci_skill
+    assert "uv run --extra dev patchrail ci benchmark examples/ci-triage --format json" in ci_skill
+    assert "Do not publish to PyPI without an explicit maintainer release request" in release_skill
+    assert "uv run --extra dev twine check dist/*" in release_skill
+    assert "automatic bounty or funded-issue claiming" in guardrails_skill
+    assert "GitHub write actions without dry-run and human approval" in guardrails_skill
 
 
 def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
@@ -178,6 +197,7 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "uv run --extra dev python -m build" in workflow
     assert "uv run --extra dev twine check dist/*" in workflow
     assert "uv run ruff format --check ." in workflow
+    assert '"/.agents"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert "python -m venv .pkg-smoke" in workflow
     assert "python -m pip install dist/*.whl" in workflow
     assert "patchrail doctor --format json" in workflow
