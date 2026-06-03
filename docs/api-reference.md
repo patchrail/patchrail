@@ -99,6 +99,25 @@ failed audit summary is still local evidence: it reports the missing event
 types without contacting GitHub, calling external models, opening pull requests,
 posting comments, or requiring billing.
 
+## CLI Queue Bundle
+
+`patchrail queue bundle` emits a read-only handoff packet from the same local
+SQLite database:
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite bundle --format markdown
+```
+
+The bundle includes queue status, audit-summary gate coverage, work items,
+proposals, audit events, safety requirements, and remaining gate gaps. It emits
+`patchrail.queue_bundle.v1` JSON by default, exits successfully only when the
+required gate events are present, redacts absolute local paths in the emitted
+payload, and does not append a new audit event while reading the queue.
+
+Like the other queue commands, the bundle does not execute proposals, open pull
+requests, post comments, contact repositories, call external models, require
+billing, or ask for GitHub write permission.
+
 ## Local Evidence Audit
 
 PatchRail also exposes a local evidence command for the Agent Control Plane

@@ -131,6 +131,7 @@ Export the local audit trail:
 patchrail queue export --format jsonl > patchrail-queue.jsonl
 patchrail queue audit --format jsonl > patchrail-audit-events.jsonl
 patchrail queue audit-summary --format markdown
+patchrail queue bundle --format markdown > patchrail-queue-bundle.md
 ```
 
 `patchrail queue audit-summary` turns the append-only audit trail into a
@@ -140,6 +141,14 @@ rejection, work item approval, work item rejection, and queue export. It exits
 successfully only when the required events are present. The command is read-only
 against the local SQLite queue: it does not create a new audit event, execute a
 proposal, open a pull request, post a comment, or contact a repository.
+
+`patchrail queue bundle` emits a read-only handoff packet from the same SQLite
+database. The bundle includes queue status, audit-summary gate coverage, work
+items, proposals, audit events, safety requirements, and remaining gate gaps in
+one JSON or Markdown artifact. It redacts absolute local paths in the emitted
+bundle and leaves the original SQLite records unchanged. Reading the bundle
+does not add an audit event, execute a proposal, open a pull request, post a
+comment, or contact a repository.
 
 Run the local-only HTTP API:
 
@@ -229,4 +238,5 @@ The current queue is enough for local demos and release evidence:
 - export work items;
 - export audit events for item creation, proposals, maintainer decisions, and
   handoffs;
-- summarize local audit events into a release-checkable human-gate report.
+- summarize local audit events into a release-checkable human-gate report;
+- emit a read-only queue bundle for maintainer handoff and release evidence.

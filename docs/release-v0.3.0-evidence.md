@@ -30,6 +30,10 @@ candidate evidence covers:
 - Shared `patchrail.queue_audit_summary.v1` contract for
   `patchrail queue audit-summary` and
   `patchrail schema queue-audit-summary`.
+- Read-only `patchrail.queue_bundle.v1` handoff packet from
+  `patchrail queue bundle`, including status, gate coverage, queue records,
+  proposals, audit events, and safety metadata without appending a new audit
+  event.
 - Executable demo in `examples/local-agent-queue`.
 - No pull request creation, issue comments, repository writes, external model
   calls, billing, or GitHub write permissions.
@@ -50,6 +54,7 @@ uv run --extra dev patchrail schema queue-audit-event
 uv run --extra dev patchrail schema queue-audit-summary
 uv run --extra dev patchrail schema queue-status
 uv run --extra dev patchrail queue --db .patchrail-queue-demo/queue.sqlite audit-summary --format markdown
+uv run --extra dev patchrail queue --db .patchrail-queue-demo/queue.sqlite bundle --format markdown
 uv run --extra dev patchrail evidence control-plane --format markdown
 uv run --extra dev patchrail evidence http-api --format markdown
 uv run --extra dev patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke
@@ -73,6 +78,11 @@ Current evidence snapshot from 2026-06-03:
 - The same demo writes `audit-summary.json`; `patchrail queue audit-summary`
   reports `human_gates_exercised` only after required approval, rejection,
   proposal, and export events are present.
+- `patchrail queue bundle --format json` emits a read-only handoff packet with
+  work items, proposals, audit events, status, audit summary, safety metadata,
+  and `remaining_gate_gaps=[]` once the demo gate sequence is complete. Reading
+  the bundle redacts absolute local paths in the emitted artifact and does not
+  add another audit event.
 - `patchrail evidence control-plane --format markdown` reports
   `local_demo_ready` from the checked-in summary when required audit events,
   artifacts, source docs, human approval, proposal approval, risky-proposal
