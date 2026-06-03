@@ -39,6 +39,10 @@ for maintainer handoffs and release evidence: approval records are visible, but
 write actions, network access, billing, and external models remain off by
 default.
 
+The local HTTP API exposes the same `patchrail.queue_status.v1` payload at
+`GET /status`, so CLI handoffs and local dashboards use one shared status
+contract.
+
 Add a work item from a local pilot pack:
 
 ```bash

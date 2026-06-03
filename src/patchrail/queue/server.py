@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from patchrail import __version__
+from patchrail.queue.status import SAFE_QUEUE_REQUIREMENTS, queue_status_payload
 from patchrail.queue.store import (
     DEFAULT_QUEUE_PATH,
     SCHEMA_VERSION,
@@ -25,15 +25,6 @@ from patchrail.queue.store import (
 )
 
 
-SAFE_REQUIREMENTS = {
-    "billing_required": False,
-    "external_model_required": False,
-    "network_required": False,
-    "github_write_permission_required": False,
-    "write_actions_allowed_by_default": False,
-}
-
-
 def _json_response(payload: dict[str, Any], status: int = 200) -> tuple[int, dict[str, Any]]:
     return status, payload
 
@@ -49,31 +40,6 @@ def _bad_request(message: str) -> tuple[int, dict[str, Any]]:
 def _approval_note(payload: dict[str, Any]) -> str | None:
     note = payload.get("note")
     return str(note) if note is not None else None
-
-
-def _status_payload(db_path: Path) -> dict[str, Any]:
-    init_result = init_queue(db_path)
-    work_items = [item.to_dict() for item in list_work_items(db_path=db_path)]
-    proposals = [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
-    return {
-        "schema_version": SCHEMA_VERSION,
-        "patchrail_version": __version__,
-        "db_path": str(db_path),
-        "local_first": True,
-        "host_boundary": "127.0.0.1 only by default",
-        "requirements": SAFE_REQUIREMENTS,
-        "queue": {
-            "schema_version": init_result["schema_version"],
-            "work_items": len(work_items),
-            "pending_work_items": sum(
-                1 for item in work_items if item["approval_state"] == "pending"
-            ),
-            "proposals": len(proposals),
-            "pending_proposals": sum(
-                1 for proposal in proposals if proposal["approval_state"] == "pending"
-            ),
-        },
-    }
 
 
 def _decode_json_body(body: bytes) -> dict[str, Any]:
@@ -107,12 +73,12 @@ def handle_queue_api_request(
                 "status": "ok",
                 "schema_version": "patchrail.queue_api.v1",
                 "local_first": True,
-                "requirements": SAFE_REQUIREMENTS,
+                "requirements": SAFE_QUEUE_REQUIREMENTS,
             }
         )
 
     if method == "GET" and path_parts == ["status"]:
-        return _json_response(_status_payload(db_path))
+        return _json_response(queue_status_payload(db_path, include_api_compat=True))
 
     if method == "GET" and path_parts == ["work-items"]:
         try:

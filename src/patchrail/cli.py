@@ -34,6 +34,7 @@ from patchrail.queue import (
     show_work_item,
 )
 from patchrail.queue.server import serve_queue_api
+from patchrail.queue.status import queue_status_payload
 
 
 def _read_log(path: Path | None) -> str:
@@ -132,6 +133,7 @@ def _load_schema(name: str) -> str:
         "ci-result": "ci-result.v1.schema.json",
         "queue-audit-event": "queue-audit-event.v1.schema.json",
         "queue-proposal": "queue-proposal.v1.schema.json",
+        "queue-status": "queue-status.v1.schema.json",
         "queue-work-item": "queue-work-item.v1.schema.json",
     }
     schema_file = schema_files.get(name)
@@ -1046,40 +1048,6 @@ def _render_queue_audit_text(events: list[dict[str, Any]]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _queue_status_payload(db_path: Path) -> dict[str, Any]:
-    init_result = init_queue(db_path)
-    work_items = [item.to_dict() for item in list_work_items(db_path=db_path)]
-    proposals = [proposal.to_dict() for proposal in list_proposals(db_path=db_path)]
-    audit_events = export_audit_events(db_path=db_path)["audit_events"]
-    work_item_approval_counts = Counter(item["approval_state"] for item in work_items)
-    work_item_status_counts = Counter(item["status"] for item in work_items)
-    proposal_approval_counts = Counter(proposal["approval_state"] for proposal in proposals)
-    latest_audit_event = audit_events[-1] if audit_events else None
-    return {
-        "schema_version": "patchrail.queue_status.v1",
-        "queue_schema_version": init_result["schema_version"],
-        "db_path": str(db_path),
-        "local_first": True,
-        "counts": {
-            "work_items_total": len(work_items),
-            "work_items_by_status": dict(sorted(work_item_status_counts.items())),
-            "work_items_by_approval_state": dict(sorted(work_item_approval_counts.items())),
-            "proposals_total": len(proposals),
-            "proposals_by_approval_state": dict(sorted(proposal_approval_counts.items())),
-            "audit_events_total": len(audit_events),
-        },
-        "latest_audit_event": latest_audit_event,
-        "safety": {
-            "write_actions_allowed_by_default": False,
-            "github_write_permission_required": False,
-            "network_required": False,
-            "external_model_required": False,
-            "billing_required": False,
-            "approval_records_execute_actions": False,
-        },
-    }
-
-
 def _render_queue_status_text(payload: dict[str, Any]) -> str:
     counts = payload["counts"]
     latest = payload["latest_audit_event"]
@@ -1347,7 +1315,7 @@ def _queue_audit(args: argparse.Namespace) -> int:
 
 
 def _queue_status(args: argparse.Namespace) -> int:
-    payload = _queue_status_payload(_queue_db(args))
+    payload = queue_status_payload(_queue_db(args))
     if args.format == "json":
         text = _json_dump(payload)
     elif args.format == "markdown":
@@ -2515,7 +2483,13 @@ def _build_parser() -> argparse.ArgumentParser:
     schema = subparsers.add_parser("schema", help="Print PatchRail's versioned JSON schemas.")
     schema.add_argument(
         "schema",
-        choices=["ci-result", "queue-audit-event", "queue-proposal", "queue-work-item"],
+        choices=[
+            "ci-result",
+            "queue-audit-event",
+            "queue-proposal",
+            "queue-status",
+            "queue-work-item",
+        ],
         help="Schema name to emit.",
     )
     schema.add_argument("--out", type=Path, help="Optional output path.")

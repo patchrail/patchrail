@@ -20,6 +20,7 @@ def run_patchrail(args: list[str]) -> subprocess.CompletedProcess[str]:
 class PatchRailQueueTests(unittest.TestCase):
     def test_queue_schema_command_exposes_public_control_plane_contracts(self) -> None:
         expected_titles = {
+            "queue-status": "PatchRail Queue Status",
             "queue-work-item": "PatchRail Queue Work Item",
             "queue-proposal": "PatchRail Queue Proposal",
             "queue-audit-event": "PatchRail Queue Audit Event",
