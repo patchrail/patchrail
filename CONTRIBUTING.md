@@ -4,7 +4,9 @@ Thanks for helping improve PatchRail.
 
 The easiest contribution is a sanitized CI failure fixture. If you are not sure
 where to start, open the [CI failure fixture issue template](.github/ISSUE_TEMPLATE/ci_failure_fixture.md)
-and include the smallest redacted log excerpt you can share.
+and include the smallest redacted log excerpt you can share. Maintainers who
+want to try PatchRail before contributing can follow the
+[maintainer pilot guide](docs/pilot-guide.md).
 
 ## Adding a CI fixture
 

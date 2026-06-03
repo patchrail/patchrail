@@ -15,6 +15,9 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - External repositories using PatchRail: pending pilots
 - External contributors: pending external contributions
 - Public CI fixtures: 101 sanitized synthetic fixtures in the local benchmark
+- Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
+  consent-only read-only trial flow for redacted CI logs and optional fixture
+  contributions
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, and the
   Agent Control Plane
@@ -91,6 +94,9 @@ Last verified: 2026-06-03.
   shows `patchrail funded-issues list/explain` over local JSON. The command
   reports blocked actions including automatic claims, comments, pull requests,
   mass outreach, and money-only ranking.
+- Maintainer pilot guide: [docs/pilot-guide.md](pilot-guide.md) gives external
+  maintainers a no-write-access path to run `doctor`, `redact`, `ci explain`,
+  `ci classify`, optional local queue import, and fixture contribution.
 
 ## Public Launch Issues
 
@@ -124,3 +130,4 @@ Last verified: 2026-06-03.
 - Release links
 - PyPI download stats
 - External adopter feedback
+- Pilot outcomes from maintainers who opted into read-only local trials

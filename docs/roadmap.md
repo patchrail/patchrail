@@ -24,6 +24,8 @@
 - Reproducible `patchrail-ci-triage` artifact example with Markdown, JSON,
   benchmark and doctor outputs.
 - Classifier fixture contribution flow.
+- Maintainer pilot guide for consent-only, read-only CI log trials and optional
+  sanitized fixture contributions.
 
 ## v0.3
 

@@ -83,6 +83,11 @@ fixture. Create a minimal synthetic reproduction instead.
 Use the [CI failure fixture issue template](../.github/ISSUE_TEMPLATE/ci_failure_fixture.md)
 when requesting or proposing a new fixture.
 
+Maintainers who want to test PatchRail before contributing a fixture can follow
+the [maintainer pilot guide](pilot-guide.md). The pilot path is read-only:
+redact a log, classify it locally, review the report, and share only safe
+evidence or a sanitized fixture.
+
 ## Non-Goals
 
 The fixture zoo is not a leaderboard and does not justify automatic write
