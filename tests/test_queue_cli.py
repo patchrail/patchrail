@@ -18,6 +18,20 @@ def run_patchrail(args: list[str]) -> subprocess.CompletedProcess[str]:
 
 
 class PatchRailQueueTests(unittest.TestCase):
+    def test_queue_schema_command_exposes_public_control_plane_contracts(self) -> None:
+        expected_titles = {
+            "queue-work-item": "PatchRail Queue Work Item",
+            "queue-proposal": "PatchRail Queue Proposal",
+            "queue-audit-event": "PatchRail Queue Audit Event",
+        }
+        for schema_name, title in expected_titles.items():
+            proc = run_patchrail(["schema", schema_name])
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            schema = json.loads(proc.stdout)
+            self.assertEqual(schema["title"], title)
+            self.assertIn("https://patchrail.dev/schemas/", schema["$id"])
+
     def test_queue_flow_keeps_work_items_local_and_human_gated(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             db = Path(tmpdir) / "queue.sqlite"
@@ -120,6 +134,64 @@ class PatchRailQueueTests(unittest.TestCase):
                 [event["event_type"] for event in item_events],
                 ["work_item_added", "work_item_approved"],
             )
+
+    def test_queue_outputs_match_public_schema_required_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = Path(tmpdir) / "queue.sqlite"
+            add_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "add",
+                    "--kind",
+                    "ci_failure",
+                    "--title",
+                    "Review failing dependency install",
+                    "--payload-json",
+                    '{"report": "ci-result.json"}',
+                ]
+            )
+            self.assertEqual(add_proc.returncode, 0, add_proc.stderr)
+            item = json.loads(add_proc.stdout)
+
+            proposal_proc = run_patchrail(
+                [
+                    "queue",
+                    "--db",
+                    str(db),
+                    "proposal",
+                    "add",
+                    "--item-id",
+                    item["id"],
+                    "--title",
+                    "Patch dependency range",
+                    "--summary",
+                    "Prepare a local patch plan for maintainer review.",
+                    "--patch-plan",
+                    "1. Reproduce.\n2. Patch.\n3. Test.",
+                    "--risk-level",
+                    "low",
+                ]
+            )
+            self.assertEqual(proposal_proc.returncode, 0, proposal_proc.stderr)
+            proposal = json.loads(proposal_proc.stdout)
+
+            audit_proc = run_patchrail(["queue", "--db", str(db), "audit", "--format", "json"])
+            self.assertEqual(audit_proc.returncode, 0, audit_proc.stderr)
+            audit_event = json.loads(audit_proc.stdout)["audit_events"][0]
+
+            item_schema = json.loads(run_patchrail(["schema", "queue-work-item"]).stdout)
+            proposal_schema = json.loads(run_patchrail(["schema", "queue-proposal"]).stdout)
+            audit_schema = json.loads(run_patchrail(["schema", "queue-audit-event"]).stdout)
+
+            self.assertEqual(sorted(item_schema["required"]), sorted(item))
+            self.assertEqual(sorted(proposal_schema["required"]), sorted(proposal))
+            self.assertEqual(sorted(audit_schema["required"]), sorted(audit_event))
+            self.assertEqual(item["write_actions_allowed"], False)
+            self.assertEqual(item_schema["properties"]["write_actions_allowed"]["const"], False)
+            self.assertEqual(item["approval_state"], "pending")
+            self.assertEqual(proposal["approval_state"], "pending")
 
     def test_queue_reject_marks_item_closed_locally(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -52,6 +52,28 @@ Errors use an `error` field:
 }
 ```
 
+## Public Schemas
+
+The queue records have versioned JSON Schema contracts. They are available from
+the CLI so local dashboards, tests, demos, and handoff tools can validate
+PatchRail output without importing private runtime code:
+
+```bash
+patchrail schema queue-work-item
+patchrail schema queue-proposal
+patchrail schema queue-audit-event
+```
+
+The same schema files are mirrored in `schemas/` for repository consumers:
+
+- `schemas/queue_work_item.schema.json`
+- `schemas/queue_proposal.schema.json`
+- `schemas/queue_audit_event.schema.json`
+
+The schemas preserve the human-approval boundary: work items require
+`write_actions_allowed=false`, proposals are local patch-plan records, and audit
+events are local append-only records of queue operations.
+
 ## Health And Status
 
 ### `GET /health`
