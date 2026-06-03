@@ -141,6 +141,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     workflow_ledger = (ROOT / "docs" / "public-workflow-ledger.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
+    pilot_request_package = (ROOT / "docs" / "pilot-request-package.md").read_text(encoding="utf-8")
     security = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
     threat_model = (ROOT / "docs" / "threat-model.md").read_text(encoding="utf-8")
     metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
@@ -176,6 +177,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "docs/public-workflow-ledger.md" in readme
     assert "docs/api-reference.md" in readme
     assert "docs/pilot-guide.md" in readme
+    assert "docs/pilot-request-package.md" in readme
     assert "examples/pilot-outcome/README.md" in readme
     assert "docs/metrics.md" in readme
     assert "patchrail ci pilot-pack --log failed.log --out-dir patchrail-pilot-pack" in readme
@@ -330,6 +332,38 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     )
     assert "no raw log copy" in evidence
     assert "Do not share raw logs that contain secrets or personal data" in pilot_guide
+    assert "Consent-Only Pilot Request Package" in pilot_request_package
+    assert "It is not an outreach automation\ntemplate" in pilot_request_package
+    assert "PatchRail should count a pilot as public evidence only after" in (pilot_request_package)
+    assert "the maintainer owns the repository or is authorized to test it" in (
+        pilot_request_package
+    )
+    assert "no pull request, issue comment, funded-issue claim, or other write action" in (
+        pilot_request_package
+    )
+    assert "no external model or billing service was required for the pilot" in (
+        pilot_request_package
+    )
+    assert "If any item is missing, keep the result as private feedback" in (pilot_request_package)
+    assert "pipx install patchrail" in pilot_request_package
+    assert "patchrail doctor --format markdown" in pilot_request_package
+    assert "patchrail ci pilot-pack --log failed-ci.log --out-dir patchrail-pilot-pack" in (
+        pilot_request_package
+    )
+    assert "patchrail ci pilot-summary" in pilot_request_package
+    assert "--repository owner/repo --repository-mention-approved yes" in (pilot_request_package)
+    assert "does not grant repository write permission" in pilot_request_package
+    assert "claim funded issues" in pilot_request_package
+    assert "The aggregate may count reviewed summaries and approved public repository" in (
+        pilot_request_package
+    )
+    assert "must not turn unapproved private pilots into adopter listings" in (
+        pilot_request_package
+    )
+    assert "docs/pilot-request-package.md" in metrics
+    assert "docs/pilot-request-package.md" in adopters
+    assert "Consent-only pilot request package" in oss_program_evidence
+    assert "Pilot request package" in oss_program_evidence
     assert "Sanitized fixture contribution path" in contributing
     assert "patchrail redact --log failed-ci.log > failed-ci.redacted.log" in contributing
     assert "patchrail ci fixture-check examples/ci-triage --format json" in contributing
@@ -389,6 +423,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Adopter or pilot report" in adopter_report
     assert "I maintain this repository or have permission" in adopter_report
     assert "PatchRail may list the repository in `ADOPTERS.md`" in adopter_report
+    assert "did not need repository write access" in adopter_report
+    assert "did not claim a funded issue" in adopter_report
     assert "Use `patchrail redact`" in adopter_report
     assert "Do not quote raw logs that may contain secrets" in ci_skill
     assert "uv run --extra dev patchrail ci benchmark examples/ci-triage --format json" in ci_skill

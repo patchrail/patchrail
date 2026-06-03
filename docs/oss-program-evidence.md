@@ -25,6 +25,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
   contributions
+- Consent-only pilot request package:
+  [docs/pilot-request-package.md](pilot-request-package.md) records the
+  maintainer consent checklist, evidence intake rules, and `ADOPTERS.md`
+  listing boundary before any external pilot is counted
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) shows how to
   summarize a pilot without raw logs or unapproved repository mentions
@@ -150,6 +154,10 @@ Last verified: 2026-06-03.
 - Maintainer pilot guide: [docs/pilot-guide.md](pilot-guide.md) gives external
   maintainers a no-write-access path to run `doctor`, `redact`, `ci explain`,
   `ci classify`, optional local queue import, and fixture contribution.
+- Pilot request package: [docs/pilot-request-package.md](pilot-request-package.md)
+  gives maintainers copyable local instructions while preserving the rule that
+  PatchRail does not open pull requests, comment on issues, claim funded issues,
+  contact maintainers automatically, or count unapproved repository names.
 - Consent-only pilot outcome example:
   [examples/pilot-outcome](../examples/pilot-outcome/README.md) is synthetic and
   does not count as adoption evidence.
@@ -186,6 +194,7 @@ Last verified: 2026-06-03.
 - PyPI download stats.
 - External adopter feedback and permissioned adopter entries.
 - External pilot outcomes from maintainers who opted into read-only local trials.
+- Permissioned pilot request package outcomes that pass the public listing rule.
 - Pilot outcome summaries following
   [examples/pilot-outcome](../examples/pilot-outcome/README.md).
 

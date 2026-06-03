@@ -10,6 +10,8 @@ PatchRail is collecting first read-only maintainer pilots. There are no public e
 
 Use [examples/pilot-outcome](examples/pilot-outcome/README.md) as the safe
 shape for a pilot summary before requesting a public adopter listing.
+Use [docs/pilot-request-package.md](docs/pilot-request-package.md) for the
+consent checklist and public listing rules.
 
 ## How To Be Listed
 

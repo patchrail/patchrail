@@ -97,6 +97,7 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [CI Janitor](docs/ci-janitor.md)
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
 - [Maintainer pilot guide](docs/pilot-guide.md)
+- [Consent-only pilot request package](docs/pilot-request-package.md)
 - [Consent-only pilot outcome example](examples/pilot-outcome/README.md)
 - [Adopters](ADOPTERS.md)
 - [Metrics](docs/metrics.md)
@@ -132,7 +133,10 @@ report issue template. `patchrail ci pilot-pack` creates a local redacted pack
 for that review path. `patchrail ci pilot-summary` creates a safe outcome
 snippet and keeps repository names private unless
 `--repository-mention-approved yes` is set. Public adopter listings require
-explicit permission.
+explicit permission. The
+[consent-only pilot request package](docs/pilot-request-package.md) has a
+copyable maintainer checklist and intake rules for pilots that should become
+public evidence.
 
 When you have multiple reviewed summaries, aggregate them without exposing
 private repository names:

@@ -9,6 +9,9 @@ labels: adopter-report, pilot-feedback, needs-triage
 - [ ] I maintain this repository or have permission to run PatchRail on it.
 - [ ] I am not sharing raw secrets, private logs, personal data, or private paths.
 - [ ] PatchRail may list the repository in `ADOPTERS.md` if this report is accepted.
+- [ ] I understand PatchRail did not need repository write access, did not open
+  a pull request, did not comment on an issue, and did not claim a funded issue
+  for this pilot.
 
 Repository approved for public mention:
 
