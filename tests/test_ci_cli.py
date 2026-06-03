@@ -343,6 +343,79 @@ class PatchRailCITests(unittest.TestCase):
             self.assertNotIn("maintainer@example.com", markdown)
             self.assertNotIn("/Users/example", markdown)
 
+    def test_ci_pilot_pack_generates_local_redacted_consent_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "failed-ci.log"
+            out_dir = root / "pilot-pack"
+            fake_github_token = "ghp_" + "abcdefghijklmnopqrstuvwxyz123456"
+            log.write_text(
+                "python -m pip install -r requirements.txt\n"
+                "ERROR: Could not find a version that satisfies the requirement demo==99\n"
+                "ResolutionImpossible\n"
+                f"GITHUB_TOKEN={fake_github_token}\n"
+                "Contact maintainer@example.com\n"
+                "Path /Users/example/project\n",
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "pilot-pack",
+                    "--log",
+                    str(log),
+                    "--out-dir",
+                    str(out_dir),
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            summary = json.loads(proc.stdout)
+            self.assertEqual(summary["schema_version"], "patchrail.ci_pilot_pack_result.v1")
+            self.assertEqual(summary["requirements"]["network_required"], False)
+            self.assertEqual(summary["requirements"]["github_write_permission_required"], False)
+            self.assertIn("open_pull_request", summary["blocked_actions"])
+            self.assertIn("contact_maintainer", summary["blocked_actions"])
+
+            manifest = json.loads((out_dir / "pilot-manifest.json").read_text(encoding="utf-8"))
+            result = json.loads((out_dir / "patchrail-result.json").read_text(encoding="utf-8"))
+            redacted_log = (out_dir / "failed-ci.redacted.log").read_text(encoding="utf-8")
+            report = (out_dir / "patchrail-report.md").read_text(encoding="utf-8")
+            readme = (out_dir / "README.md").read_text(encoding="utf-8")
+
+            self.assertEqual(manifest["schema_version"], "patchrail.ci_pilot_pack.v1")
+            self.assertEqual(manifest["source"]["source_log_name"], "failed-ci.log")
+            self.assertEqual(manifest["source"]["raw_log_copied"], False)
+            self.assertEqual(
+                manifest["classification"]["failure_class"], "python_dependency_resolution"
+            )
+            self.assertEqual(result["failure_class"], "python_dependency_resolution")
+            self.assertEqual(
+                manifest["consent_boundary"]["maintainer_review_required_before_sharing"], True
+            )
+            self.assertEqual(
+                manifest["consent_boundary"]["repository_write_access_required"], False
+            )
+            self.assertEqual(manifest["requirements"]["external_model_required"], False)
+
+            serialized = "\n".join([redacted_log, report, readme, json.dumps(manifest)])
+            self.assertIn("python_dependency_resolution", serialized)
+            self.assertIn("PatchRail did not copy the raw log", readme)
+            self.assertIn("Share only after a maintainer reviews", readme)
+            self.assertNotIn(fake_github_token, serialized)
+            self.assertNotIn("maintainer@example.com", serialized)
+            self.assertNotIn("/Users/example", serialized)
+            self.assertIn("GITHUB_TOKEN=<redacted>", redacted_log)
+            self.assertIn("<email>", redacted_log)
+            self.assertIn("/Users/<user>/project", redacted_log)
+
     def test_redact_command_emits_redacted_text(self) -> None:
         proc = subprocess.run(
             [sys.executable, "-m", "patchrail", "redact"],

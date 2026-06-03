@@ -68,7 +68,7 @@ Last verified: 2026-06-03.
   bump, tag, PyPI publish, announcement, or external application.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 40 passed.
+- Tests: `uv run --extra dev pytest -q` -> 42 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 19 files already formatted.
 - Fixture hygiene: `uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json` -> 115 / 115 fixtures passed.

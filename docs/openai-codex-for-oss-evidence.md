@@ -23,6 +23,8 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Maintainer pilot path: [docs/pilot-guide.md](pilot-guide.md) documents a
   consent-only read-only trial flow for redacted CI logs and optional fixture
   contributions
+- Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
+  bundle with a manifest, report, result JSON, and no raw log copy
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, and the
   Agent Control Plane
@@ -83,7 +85,7 @@ Last verified: 2026-06-03.
   sdist/wheel assets.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 40 passed.
+- Tests: `uv run --extra dev pytest -q` -> 42 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
 - Format: `uv run --extra dev ruff format --check .` -> 19 files already formatted.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 115 / 115 fixtures passed.
@@ -124,6 +126,10 @@ Last verified: 2026-06-03.
   read-only `patchrail-ci-triage` artifact with `ci-report.md`,
   `ci-result.json`, `fixture-benchmark.json`, `fixture-benchmark-summary.md`,
   and `doctor.json`.
+- Pilot pack smoke:
+  `patchrail ci pilot-pack --log examples/ci-triage/dependency-failure.log --out-dir .patchrail-pilot-pack-smoke`
+  creates a local redacted bundle with `pilot-manifest.json`, `patchrail-report.md`,
+  `patchrail-result.json`, `failed-ci.redacted.log`, and no raw log copy.
 - Funded issue read-only demo:
   [`examples/funded-issues-readonly`](../examples/funded-issues-readonly/README.md)
   shows `patchrail funded-issues list/explain` over local JSON and
