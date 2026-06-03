@@ -90,8 +90,9 @@ Current evidence snapshot from 2026-06-03:
 - `patchrail evidence http-api --format markdown` starts an ephemeral
   `127.0.0.1` server, creates local work items and proposals, approves and
   rejects records, reads `/status`, lists queue/proposal state, exports
-  `/audit-events`, and reports `local_http_api_ready` without printing local
-  filesystem paths.
+  `/audit-events`, reports the `/status` human gate summary, verifies that
+  write actions remain locked, and reports `local_http_api_ready` without
+  printing local filesystem paths.
 - Queue schemas are emitted from the CLI and bundled in the wheel under
   `patchrail/schemas/`.
 - `patchrail queue status --format json` and `GET /status` share

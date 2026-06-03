@@ -1350,6 +1350,7 @@ def _http_api_evidence_payload() -> dict[str, Any]:
 
     requirements = dict(health.get("requirements") or {})
     safety = dict(status.get("safety") or {})
+    human_gate_summary = dict(status.get("human_gate_summary") or {})
     audit_event_types = [
         str(event.get("event_type")) for event in audit_events.get("audit_events", [])
     ]
@@ -1399,6 +1400,10 @@ def _http_api_evidence_payload() -> dict[str, Any]:
         safety_gaps.append("proposal_approval_gate_exercised")
     if rejected_proposal.get("approval_state") != "rejected":
         safety_gaps.append("proposal_rejection_gate_exercised")
+    if human_gate_summary.get("write_actions_unlocked") is not False:
+        safety_gaps.append("human_gate_write_actions_unlocked_false")
+    if human_gate_summary.get("total_pending_decisions") != 0:
+        safety_gaps.append("human_gate_total_pending_decisions_zero")
     gaps = [*missing_events, *missing_endpoints, *safety_gaps]
     return {
         "schema_version": "patchrail.http_api_evidence.v1",
@@ -1431,6 +1436,11 @@ def _http_api_evidence_payload() -> dict[str, Any]:
             ),
             "listed_work_items": len(work_items.get("work_items", [])),
             "listed_proposals": len(proposals.get("proposals", [])),
+            "human_gate_status": human_gate_summary.get("status"),
+            "human_gate_total_pending_decisions": human_gate_summary.get("total_pending_decisions"),
+            "human_gate_pending_work_items": human_gate_summary.get("pending_work_items"),
+            "human_gate_pending_proposals": human_gate_summary.get("pending_proposals"),
+            "human_gate_write_actions_unlocked": human_gate_summary.get("write_actions_unlocked"),
         },
         "safety": {
             "local_first": health.get("local_first") is True,
@@ -1448,6 +1458,8 @@ def _http_api_evidence_payload() -> dict[str, Any]:
             == "approved",
             "proposal_rejection_gate_exercised": rejected_proposal.get("approval_state")
             == "rejected",
+            "human_gate_summary_exposed": bool(human_gate_summary),
+            "human_gate_write_actions_unlocked": human_gate_summary.get("write_actions_unlocked"),
         },
         "artifact_presence": {
             "required_events_present": missing_events == [],
@@ -1494,6 +1506,12 @@ def _render_http_api_evidence_markdown(payload: dict[str, Any]) -> str:
             f"- Rejected work items: `{signals['rejected_work_items']}`",
             f"- Approved proposals: `{signals['approved_proposals']}`",
             f"- Rejected proposals: `{signals['rejected_proposals']}`",
+            f"- Human gate status: `{signals['human_gate_status']}`",
+            (f"- Human gate pending decisions: `{signals['human_gate_total_pending_decisions']}`"),
+            (
+                "- Human gate write actions unlocked: "
+                f"`{signals['human_gate_write_actions_unlocked']}`"
+            ),
             "",
             "## Safety",
             "",
@@ -1516,6 +1534,11 @@ def _render_http_api_evidence_markdown(payload: dict[str, Any]) -> str:
             (
                 "- Proposal rejection gate exercised: "
                 f"`{safety['proposal_rejection_gate_exercised']}`"
+            ),
+            f"- Human gate summary exposed: `{safety['human_gate_summary_exposed']}`",
+            (
+                "- Human gate write actions unlocked: "
+                f"`{safety['human_gate_write_actions_unlocked']}`"
             ),
             "",
             "## Artifact Presence",
@@ -1544,6 +1567,12 @@ def _render_http_api_evidence_text(payload: dict[str, Any]) -> str:
                 f"Work items: {signals['work_items_total']}",
                 f"Proposals: {signals['proposals_total']}",
                 f"Audit events: {signals['audit_events_total']}",
+                f"Human gate status: {signals['human_gate_status']}",
+                (f"Human gate pending decisions: {signals['human_gate_total_pending_decisions']}"),
+                (
+                    "Human gate write actions unlocked: "
+                    f"{signals['human_gate_write_actions_unlocked']}"
+                ),
                 f"Network required: {safety['network_required']}",
                 (f"GitHub write permission required: {safety['github_write_permission_required']}"),
                 (f"Approval records execute actions: {safety['approval_records_execute_actions']}"),

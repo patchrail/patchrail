@@ -184,7 +184,9 @@ ephemeral server bound to `127.0.0.1`, creating local work items and proposals,
 recording approval and rejection decisions, reading `/status`, and exporting
 `/audit-events`. The command reports `local_http_api_ready` only when the
 required endpoints, human-gate events, and local-first safety flags are present.
-It stores data in a temporary SQLite database and does not print the local
+It also reports the `/status` human gate summary so maintainers can verify that
+all local approval decisions were exercised and write actions remain locked. It
+stores data in a temporary SQLite database and does not print the local
 filesystem path.
 
 ## Health And Status
