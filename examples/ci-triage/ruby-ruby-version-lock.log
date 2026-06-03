@@ -1,0 +1,5 @@
+bundle install
+Bundler could not find compatible versions for gem "ruby":
+  In Gemfile:
+    ruby (~> 3.3.0)
+Current Ruby version is 3.2.2.

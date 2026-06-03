@@ -188,6 +188,27 @@ RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "failure_class": "ruby_bundle_failure",
+        "likely_subsystem": "Ruby dependency installation or test lifecycle",
+        "patterns": [
+            r"\bbundle install\b",
+            r"\bbundle exec\b",
+            r"\bbundler\b",
+            r"Bundler could not find compatible versions",
+            r"Could not find gem",
+            r"Gem::Ext::BuildError",
+            r"An error occurred while installing",
+            r"Your bundle is locked to",
+            r"rake aborted!",
+            r"rspec .*failures?",
+        ],
+        "reproduction_command": "bundle install && bundle exec rake test",
+        "minimal_repair_strategy": (
+            "Reproduce the failing Bundler, Rake, or RSpec command, then fix the narrow "
+            "Gemfile, lockfile, native extension, or test drift before rerunning it."
+        ),
+    },
+    {
         "failure_class": "go_test_failure",
         "likely_subsystem": "Go tests",
         "patterns": [r"\bgo test\b", r"FAIL\t", r"undefined:", r"panic: test timed out"],

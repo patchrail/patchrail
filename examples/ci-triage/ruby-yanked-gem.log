@@ -1,0 +1,5 @@
+bundle install
+Could not find mimemagic-0.3.5 in locally installed gems
+Bundler could not find compatible versions for gem "mimemagic":
+  In Gemfile.lock:
+    mimemagic (= 0.3.5)

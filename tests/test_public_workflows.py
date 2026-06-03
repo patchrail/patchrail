@@ -88,9 +88,9 @@ def test_evidence_snapshot_summarizes_public_oss_signals_without_write_actions()
     assert payload["repository"] == "patchrail/patchrail"
     assert payload["generated_from"] == "local_checkout"
     assert payload["status"] == "needs_more_evidence"
-    assert payload["signals"]["ci_fixtures"] == 124
-    assert payload["signals"]["ci_expected_files"] == 124
-    assert payload["signals"]["ci_benchmark_passed"] == 124
+    assert payload["signals"]["ci_fixtures"] == 132
+    assert payload["signals"]["ci_expected_files"] == 132
+    assert payload["signals"]["ci_benchmark_passed"] == 132
     assert payload["signals"]["ci_benchmark_failed"] == 0
     assert payload["signals"]["public_external_adopters"] == 0
     assert payload["signals"]["pilot_summary_count"] == 1
@@ -147,7 +147,7 @@ def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> No
         "first PyPI publish and clean install verification"
         in (payload["versions"]["v0.1.0"]["gaps"])
     )
-    assert payload["versions"]["v0.2.0"]["signals"]["ci_fixtures"] == 124
+    assert payload["versions"]["v0.2.0"]["signals"]["ci_fixtures"] == 132
     assert payload["versions"]["v0.2.0"]["signals"]["ci_benchmark_failed"] == 0
     assert payload["versions"]["v0.2.0"]["signals"]["read_only_github_action"] is True
     assert payload["versions"]["v0.3.0"]["signals"]["owned_repo_issue_pr_cycles"] == 20
@@ -333,18 +333,19 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert "PatchRail classified this log locally" in report
     assert "did not create a pull request" in report
     assert "# PatchRail CI Benchmark" in benchmark_summary
-    assert "- Total cases: `124`" in benchmark_summary
+    assert "- Total cases: `132`" in benchmark_summary
     assert "## Class summary" in benchmark_summary
     assert "## Cases" not in benchmark_summary
     assert result["failure_class"] == "python_dependency_resolution"
     assert result["requirements"]["billing_required"] is False
     assert result["requirements"]["external_model_required"] is False
-    assert benchmark["total_cases"] == 124
+    assert benchmark["total_cases"] == 132
     assert benchmark["failed"] == 0
     assert benchmark["accuracy"]["top_1"] == 1.0
     assert benchmark["class_summary"]["python_dependency_resolution"]["total_cases"] == 27
     assert benchmark["class_summary"]["node_dependency_install"]["total_cases"] == 19
     assert benchmark["class_summary"]["typescript_typecheck"]["total_cases"] == 19
+    assert benchmark["class_summary"]["ruby_bundle_failure"]["total_cases"] == 8
     assert benchmark["class_summary"]["java_build_failure"]["total_cases"] == 3
     assert doctor["status"] == "ok"
     assert doctor["requirements"]["github_write_permission_required"] is False
@@ -436,7 +437,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "#59 -> #60" in evidence
     assert "Consent-only pilot outcome example" in evidence
     assert "examples/pilot-outcome" in evidence
-    assert "Public CI fixtures: 124 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Public CI fixtures: 132 sanitized synthetic fixtures" in oss_program_evidence
     assert "Local evidence snapshot: `patchrail evidence snapshot --format markdown`" in (
         oss_program_evidence
     )
@@ -473,7 +474,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Tests: `uv run --extra dev pytest -q` -> 55 passed." in oss_program_evidence
     assert (
         "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
-        "examples/ci-triage --format json` -> 124 / 124 fixtures passed."
+        "examples/ci-triage --format json` -> 132 / 132 fixtures passed."
     ) in oss_program_evidence
     assert "GitHub Release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>" in (
         oss_program_evidence
@@ -639,8 +640,8 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Owned-repo consent-only pilot outcomes | 1" in metrics
     assert "not an external adopter" in metrics
     assert "Public releases | 1" in metrics
-    assert "Fixture hygiene gate | 124 / 124 passing" in metrics
-    assert "Docker/Compose, browser E2E" in metrics
+    assert "Fixture hygiene gate | 132 / 132 passing" in metrics
+    assert "Ruby, GitHub Actions, Docker/Compose, browser E2E" in metrics
     assert "Do not use placeholders as evidence" in metrics
     assert "public PRs reviewed with Codex" in metrics
     assert "only with explicit maintainer permission" in adopters
@@ -930,10 +931,10 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     )
     assert "Tests: 54 passed." in release_v02_evidence
     assert "Format: 20 files already formatted." in release_v02_evidence
-    assert "Fixture hygiene: 124 / 124 fixtures passed." in release_v02_evidence
-    assert "Benchmark: 124 total, 124 passed, 0 failed." in release_v02_evidence
+    assert "Fixture hygiene: 132 / 132 fixtures passed." in release_v02_evidence
+    assert "Benchmark: 132 total, 132 passed, 0 failed." in release_v02_evidence
     assert "Top-1 fixture accuracy: 1.0." in release_v02_evidence
-    assert "Class coverage: 11 root-cause families." in release_v02_evidence
+    assert "Class coverage: 12 root-cause families." in release_v02_evidence
     assert "Bump `pyproject.toml` from `0.1.0` to `0.2.0`." in release_v02_evidence
     assert "Publish to PyPI only when the maintainer has configured the credential." in (
         release_v02_evidence

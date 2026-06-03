@@ -1,0 +1,5 @@
+bundle install
+Bundler could not find compatible versions for gem "rack":
+  In Gemfile:
+    rails was resolved to 7.1.0, which depends on rack (~> 2.2)
+    rack (3.0.8)
