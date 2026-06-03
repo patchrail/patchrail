@@ -34,6 +34,12 @@ Pablo Guillén is the primary maintainer of PatchRail.
 - Public issue queue: launch issues for fixtures, contribution docs,
   release-prep evidence, CI maintenance, GitHub Actions artifacts, the Agent
   Control Plane, and the read-only Funded Issue Scout
+- Current evidence follow-up issues:
+  [#67](https://github.com/patchrail/patchrail/issues/67) for PyPI publish,
+  [#68](https://github.com/patchrail/patchrail/issues/68) for the first
+  consent-only maintainer pilot, and
+  [#69](https://github.com/patchrail/patchrail/issues/69) for real adoption
+  and ecosystem signal tracking
 
 ## Maintenance Workflows
 
@@ -150,6 +156,12 @@ Last verified: 2026-06-03.
 - <https://github.com/patchrail/patchrail/issues/35> - export queue audit events for Agent Control Plane.
 - <https://github.com/patchrail/patchrail/issues/36> - add proposal records for the local Agent Control Plane.
 - <https://github.com/patchrail/patchrail/issues/37> - add read-only funded issue scout.
+
+## Active Evidence Follow-Up Issues
+
+- <https://github.com/patchrail/patchrail/issues/67> - publish v0.1.0 to PyPI and verify the public install path.
+- <https://github.com/patchrail/patchrail/issues/68> - run the first consent-only CI pilot and record an approved outcome.
+- <https://github.com/patchrail/patchrail/issues/69> - track real adoption and ecosystem signals before any external application.
 
 ## Evidence To Add Before Applying
 
