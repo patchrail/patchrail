@@ -54,7 +54,7 @@ Last verified: 2026-06-03.
 - v0.1.0 release-prep artifact:
   [docs/release-v0.1.0-evidence.md](release-v0.1.0-evidence.md) records the
   checked sdist/wheel names, local command results, wheel smoke test, safety
-  review, and remaining manual gates.
+  review, public CI run, and remaining manual gates.
 - Manual gates: release tags, PyPI publish, GitHub releases, public
   announcements, and external applications remain explicit maintainer actions.
 - Tests: `uv run --extra dev pytest -q` -> 32 passed.
@@ -88,6 +88,8 @@ Last verified: 2026-06-03.
 - Distribution check: `uv run --extra dev python -m build` produced wheel and sdist; `uv run --extra dev twine check dist/*` passed both artifacts.
 - Wheel smoke: installed `dist/patchrail-0.1.0-py3-none-any.whl` in a fresh `.pkg-smoke` virtual environment, then ran `patchrail doctor --format json` and `patchrail ci explain --log examples/ci-triage/dependency-failure.log --format text`.
 - Public CI: <https://github.com/patchrail/patchrail/actions/workflows/ci.yml> runs tests, lint, benchmark and package smoke on every push to `main`; the test matrix covers Python 3.11, 3.12, and 3.13.
+- v0.1.0 release evidence PR: <https://github.com/patchrail/patchrail/pull/17>
+  passed remote CI at <https://github.com/patchrail/patchrail/actions/runs/26869827161>.
 - Public triage workflow: <https://github.com/patchrail/patchrail/actions/runs/26862165709> -> skipped because the triggering CI run succeeded.
 - GitHub Actions artifact example:
   [`examples/github-action`](../examples/github-action/README.md) documents the

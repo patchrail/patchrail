@@ -98,6 +98,21 @@ Release-prep preserved the public safety boundary:
 - manual maintainer gate for tags, PyPI publishing, GitHub Releases, public
   announcements, and external applications.
 
+## Public CI Evidence
+
+Release-prep pull request:
+<https://github.com/patchrail/patchrail/pull/17>
+
+GitHub Actions run:
+<https://github.com/patchrail/patchrail/actions/runs/26869827161>
+
+Remote jobs passed:
+
+- `test (3.11)`;
+- `test (3.12)`;
+- `test (3.13)`;
+- `package-smoke`.
+
 ## Manual Gates Remaining
 
 These steps are intentionally not performed by automation:
@@ -110,7 +125,6 @@ These steps are intentionally not performed by automation:
 
 ## Next Evidence To Add
 
-- public CI run URL for the release-prep pull request;
 - first PyPI release URL after manual publish;
 - install verification from PyPI after publish;
 - external maintainer pilot outcomes;
