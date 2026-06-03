@@ -1,0 +1,6 @@
+pnpm prettier --check "src/**/*.{ts,tsx,json}"
+Checking formatting...
+[warn] src/generated/api-client.ts
+[warn] Code style issues found in the above file. Run prettier --write to fix.
+lint failed because generated client formatting drifted.
+prettier exited with code 1

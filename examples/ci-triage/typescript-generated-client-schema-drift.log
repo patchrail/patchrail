@@ -1,0 +1,4 @@
+pnpm tsc --noEmit
+src/generated/api-client.ts:42:7 - error TS2322: Type '"pending_review"' is not assignable to type '"open" | "closed"'.
+src/pages/issues.tsx:18:29 - error TS2345: Argument of type 'ApiIssue' is not assignable to parameter of type 'IssueViewModel'.
+tsc exited with code 2

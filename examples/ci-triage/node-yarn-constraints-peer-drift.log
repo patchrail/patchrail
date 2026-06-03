@@ -1,0 +1,4 @@
+yarn install --immutable
+YN0002: @example/web does not provide react, requested by @example/ui.
+YN0060: @example/web provides typescript with version 5.6.0, which does not satisfy what ts-jest requests.
+YN0028: The lockfile would have been modified by this install, which is explicitly forbidden.

@@ -104,7 +104,7 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
     assert result["failure_class"] == "python_dependency_resolution"
     assert result["requirements"]["billing_required"] is False
     assert result["requirements"]["external_model_required"] is False
-    assert benchmark["total_cases"] == 101
+    assert benchmark["total_cases"] == 109
     assert benchmark["failed"] == 0
     assert doctor["status"] == "ok"
     assert doctor["requirements"]["github_write_permission_required"] is False
@@ -165,7 +165,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
-    assert "Public CI fixtures: 101 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Public CI fixtures: 109 sanitized synthetic fixtures" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/27" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/37" in oss_program_evidence
     assert "https://github.com/patchrail/patchrail/issues/1>" not in oss_program_evidence
@@ -176,10 +176,10 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
     )
-    assert "Tests: `uv run --extra dev pytest -q` -> 37 passed." in oss_program_evidence
+    assert "Tests: `uv run --extra dev pytest -q` -> 40 passed." in oss_program_evidence
     assert (
         "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
-        "examples/ci-triage --format json` -> 101/101 fixtures passed."
+        "examples/ci-triage --format json` -> 109 / 109 fixtures passed."
     ) in oss_program_evidence
     assert "GitHub Release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>" in (
         oss_program_evidence
@@ -213,7 +213,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
     assert "Public releases | 1" in metrics
-    assert "Fixture hygiene gate | 101 / 101 passing" in metrics
+    assert "Fixture hygiene gate | 109 / 109 passing" in metrics
     assert "Do not use placeholders as evidence" in metrics
     assert "public PRs reviewed with Codex" in metrics
     assert "only with explicit maintainer permission" in adopters
@@ -406,15 +406,15 @@ def test_ci_workflow_builds_and_smokes_installable_package() -> None:
     assert "dist/patchrail-0.1.0-py3-none-any.whl" in release_evidence
     assert "Tests: 32 passed." in release_evidence
     assert "Tests: 34 passed." in release_evidence
-    assert "Benchmark: 101 total, 101 passed, 0 failed." in release_evidence
+    assert "Benchmark: 109 total, 109 passed, 0 failed." in release_evidence
     assert "https://github.com/patchrail/patchrail/pull/17" in release_evidence
 
     assert "Status: release candidate evidence, not a published release." in release_v02_evidence
     assert "uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json" in (
         release_v02_evidence
     )
-    assert "Fixture hygiene: 101 / 101 fixtures passed." in release_v02_evidence
-    assert "Benchmark: 101 total, 101 passed, 0 failed." in release_v02_evidence
+    assert "Fixture hygiene: 109 / 109 fixtures passed." in release_v02_evidence
+    assert "Benchmark: 109 total, 109 passed, 0 failed." in release_v02_evidence
     assert "Bump `pyproject.toml` from `0.1.0` to `0.2.0`." in release_v02_evidence
     assert "Publish to PyPI only when the maintainer has configured the credential." in (
         release_v02_evidence

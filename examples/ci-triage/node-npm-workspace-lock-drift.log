@@ -1,0 +1,5 @@
+npm ci --workspaces
+npm ERR! code EUSAGE
+npm ERR! Missing: @example/api@1.4.0 from lockfile
+npm ERR! The package-lock.json is out of sync with package.json in workspace packages/api
+npm ERR! Run npm install locally and commit the updated lockfile.

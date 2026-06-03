@@ -121,6 +121,11 @@ def _json_dump(payload: Any) -> str:
     return json.dumps(payload, indent=2, sort_keys=True) + "\n"
 
 
+def _display_path(path: Path) -> str:
+    text = str(path)
+    return "." if text == "" else text
+
+
 def _load_schema(name: str) -> str:
     schema_files = {
         "ci-result": "ci-result.v1.schema.json",
@@ -200,7 +205,7 @@ def _render_doctor_markdown(result: dict[str, Any]) -> str:
 
 
 def _doctor(args: argparse.Namespace) -> int:
-    result = _doctor_payload(Path.cwd())
+    result = _doctor_payload(Path("."))
     if args.format == "json":
         text = json.dumps(result, indent=2, sort_keys=True) + "\n"
     elif args.format == "markdown":
@@ -635,19 +640,22 @@ def _benchmark_case(root: Path, log_path: Path) -> dict[str, Any]:
 
 
 def _run_ci_benchmark(path: Path) -> dict[str, Any]:
-    root = path.resolve()
+    resolved_path = path.resolve()
+    root = resolved_path
     if root.is_file():
         log_paths = [root]
         root = root.parent
+        display_root = path.parent if not path.is_absolute() else root
     else:
         log_paths = sorted(root.rglob("*.log"))
+        display_root = path if not path.is_absolute() else root
 
     cases = [_benchmark_case(root, log_path) for log_path in log_paths]
     passed = sum(1 for case in cases if case["passed"])
     failed = len(cases) - passed
     return {
         "schema_version": "patchrail.ci_benchmark.v1",
-        "root": str(root),
+        "root": _display_path(display_root),
         "total_cases": len(cases),
         "passed": passed,
         "failed": failed,

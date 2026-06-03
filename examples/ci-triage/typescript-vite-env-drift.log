@@ -1,0 +1,4 @@
+pnpm tsc --noEmit
+src/env.ts:3:26 - error TS2339: Property 'VITE_PUBLIC_API_URL' does not exist on type 'ImportMetaEnv'.
+src/env.ts:7:12 - error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+TypeScript typecheck failed after env schema drift.
