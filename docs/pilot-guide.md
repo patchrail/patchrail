@@ -177,6 +177,17 @@ Useful pilot evidence is small and reviewable:
 Do not share raw logs that contain secrets or personal data. Do not grant write
 permissions for a pilot.
 
+Aggregate pilot summaries locally before promoting them as evidence:
+
+```bash
+patchrail ci pilot-metrics examples/pilot-outcome/*.summary.json --format markdown
+```
+
+`pilot-metrics` separates owned-repo public mentions such as `patchrail/*` from
+external repository mentions. Owned-repo outcomes are useful project evidence,
+but they are not external adopter listings. Private or unapproved repository
+names stay private and must not be counted as public evidence.
+
 ## Example Outcome
 
 See [examples/pilot-outcome](../examples/pilot-outcome/README.md) for a

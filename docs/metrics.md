@@ -63,6 +63,18 @@ Use [docs/pilot-request-package.md](pilot-request-package.md) before promoting
 any pilot to public evidence. It records the maintainer consent checklist,
 evidence intake rules, and `ADOPTERS.md` listing boundary.
 
+Use `patchrail ci pilot-metrics` to aggregate consent-only pilot summaries
+before publishing a snapshot:
+
+```bash
+patchrail ci pilot-metrics examples/pilot-outcome/*.summary.json --format markdown
+```
+
+The command separates owned-repo public mentions from external repository
+mentions. Outcomes for `patchrail/*` are project evidence, but they are not
+external adopters. Private or unapproved repository names stay private and must
+not be counted as public evidence.
+
 ## Weekly Snapshot Template
 
 ```markdown
@@ -81,6 +93,9 @@ evidence intake rules, and `ADOPTERS.md` listing boundary.
 - Codex-triaged issues:
 - Consent-only pilot summaries:
 - Public repository mentions approved:
+- Owned-repo public mentions:
+- External public repository mentions:
+- Countable external adopters:
 - Release or package status:
 - Notable maintainer feedback:
 ```

@@ -1678,6 +1678,8 @@ def _pilot_metrics_payload(paths: list[Path]) -> dict[str, Any]:
         if item["public_listing"].get("repository_mention_approved") is True
         and item["public_listing"].get("repository")
     ]
+    owned_mentions = [repo for repo in public_mentions if repo.startswith("patchrail/")]
+    external_mentions = [repo for repo in public_mentions if not repo.startswith("patchrail/")]
     private_count = len(summaries) - len(public_mentions)
     classification_values = [
         str(item["pilot_context"].get("classification_correct", "unknown")) for item in summaries
@@ -1696,7 +1698,24 @@ def _pilot_metrics_payload(paths: list[Path]) -> dict[str, Any]:
         "total_pilot_summaries": len(summaries),
         "public_repository_mentions": len(public_mentions),
         "private_or_unapproved_repository_mentions": private_count,
+        "owned_repository_mentions": len(owned_mentions),
+        "external_repository_mentions": len(external_mentions),
         "public_repositories": public_mentions,
+        "owned_repositories": owned_mentions,
+        "external_repositories": external_mentions,
+        "evidence_readiness": {
+            "status": (
+                "external_evidence_ready"
+                if external_mentions
+                else "owned_repo_evidence_only"
+                if owned_mentions
+                else "private_feedback_only"
+            ),
+            "external_adopters_countable": len(external_mentions),
+            "owned_repo_evidence_countable": len(owned_mentions),
+            "private_feedback_count": private_count,
+            "do_not_count_private_or_unapproved_as_public": True,
+        },
         "classification_correct": _pilot_metric_counter(classification_values),
         "maintainer_action_useful": _pilot_metric_counter(usefulness_values),
         "local_only_and_no_raw_log": local_only_count,
@@ -1711,16 +1730,21 @@ def _pilot_metrics_payload(paths: list[Path]) -> dict[str, Any]:
 
 
 def _render_pilot_metrics_markdown(payload: dict[str, Any]) -> str:
+    readiness = payload["evidence_readiness"]
     lines = [
         "# PatchRail Consent-Only Pilot Metrics",
         "",
         f"- Total pilot summaries: `{payload['total_pilot_summaries']}`",
         f"- Public repository mentions: `{payload['public_repository_mentions']}`",
+        f"- Owned-repo public mentions: `{payload['owned_repository_mentions']}`",
+        f"- External public repository mentions: `{payload['external_repository_mentions']}`",
         (
             "- Private or unapproved repository mentions: "
             f"`{payload['private_or_unapproved_repository_mentions']}`"
         ),
         f"- Local-only summaries with no raw log copied: `{payload['local_only_and_no_raw_log']}`",
+        f"- Evidence readiness: `{readiness['status']}`",
+        f"- Countable external adopters: `{readiness['external_adopters_countable']}`",
         "",
         "## Maintainer Review Outcomes",
         "",
@@ -1745,6 +1769,12 @@ def _render_pilot_metrics_markdown(payload: dict[str, Any]) -> str:
         lines.extend(f"- `{repo}`" for repo in public_repositories)
     else:
         lines.append("- None approved for public listing.")
+    lines.extend(["", "## External Repositories", ""])
+    external_repositories = payload["external_repositories"]
+    if external_repositories:
+        lines.extend(f"- `{repo}`" for repo in external_repositories)
+    else:
+        lines.append("- None approved for external adopter listing.")
     lines.extend(
         [
             "",
@@ -1752,7 +1782,8 @@ def _render_pilot_metrics_markdown(payload: dict[str, Any]) -> str:
             "",
             (
                 "These metrics are derived from local pilot-summary JSON files. "
-                "They do not count private or unapproved repository names as public adoption."
+                "They do not count private, unapproved, or owned-repo-only repository names as "
+                "external public adoption."
             ),
         ]
     )

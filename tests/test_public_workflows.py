@@ -539,9 +539,16 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         pilot_request_package
     )
     assert "docs/pilot-request-package.md" in metrics
+    assert "patchrail ci pilot-metrics examples/pilot-outcome/*.summary.json --format markdown" in (
+        metrics
+    )
+    assert "Countable external adopters:" in metrics
     assert "docs/pilot-request-package.md" in adopters
     assert "Consent-only pilot request package" in oss_program_evidence
     assert "Pilot request package" in oss_program_evidence
+    assert "Consent-only pilot metrics: `uv run --extra dev patchrail ci pilot-metrics" in (
+        oss_program_evidence
+    )
     assert "Sanitized fixture contribution path" in contributing
     assert "patchrail redact --log failed-ci.log > failed-ci.redacted.log" in contributing
     assert "patchrail ci fixture-check examples/ci-triage --format json" in contributing
@@ -601,6 +608,33 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "/Volumes/" not in json.dumps(own_repo_pilot_json)
     assert "/Users/" not in json.dumps(own_repo_pilot_json)
     assert "/home/" not in json.dumps(own_repo_pilot_json)
+    metrics_proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "patchrail",
+            "ci",
+            "pilot-metrics",
+            "examples/pilot-outcome/patchrail-own-repo-20260603.summary.json",
+            "--format",
+            "json",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert metrics_proc.returncode == 0, metrics_proc.stderr
+    pilot_metrics = json.loads(metrics_proc.stdout)
+    assert pilot_metrics["owned_repository_mentions"] == 1
+    assert pilot_metrics["external_repository_mentions"] == 0
+    assert pilot_metrics["evidence_readiness"]["status"] == "owned_repo_evidence_only"
+    assert pilot_metrics["evidence_readiness"]["external_adopters_countable"] == 0
+    assert pilot_metrics["owned_repositories"] == ["patchrail/patchrail"]
+    assert pilot_metrics["external_repositories"] == []
+    assert "/Volumes/" not in metrics_proc.stdout
+    assert "/Users/" not in metrics_proc.stdout
+    assert "/home/" not in metrics_proc.stdout
     assert "Adopter or pilot report" in adopter_report
     assert "I maintain this repository or have permission" in adopter_report
     assert "PatchRail may list the repository in `ADOPTERS.md`" in adopter_report

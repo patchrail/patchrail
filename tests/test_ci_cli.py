@@ -728,6 +728,14 @@ class PatchRailCITests(unittest.TestCase):
             self.assertEqual(payload["public_repository_mentions"], 1)
             self.assertEqual(payload["private_or_unapproved_repository_mentions"], 1)
             self.assertEqual(payload["public_repositories"], ["patchrail/example"])
+            self.assertEqual(payload["owned_repository_mentions"], 1)
+            self.assertEqual(payload["external_repository_mentions"], 0)
+            self.assertEqual(payload["owned_repositories"], ["patchrail/example"])
+            self.assertEqual(payload["external_repositories"], [])
+            self.assertEqual(payload["evidence_readiness"]["status"], "owned_repo_evidence_only")
+            self.assertEqual(payload["evidence_readiness"]["external_adopters_countable"], 0)
+            self.assertEqual(payload["evidence_readiness"]["owned_repo_evidence_countable"], 1)
+            self.assertEqual(payload["evidence_readiness"]["private_feedback_count"], 1)
             self.assertEqual(payload["classification_correct"]["yes"], 1)
             self.assertEqual(payload["classification_correct"]["no"], 1)
             self.assertEqual(payload["maintainer_action_useful"]["yes"], 1)
@@ -752,7 +760,12 @@ class PatchRailCITests(unittest.TestCase):
             self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
             self.assertIn("# PatchRail Consent-Only Pilot Metrics", markdown_proc.stdout)
             self.assertIn("- Public repository mentions: `1`", markdown_proc.stdout)
+            self.assertIn("- Owned-repo public mentions: `1`", markdown_proc.stdout)
+            self.assertIn("- External public repository mentions: `0`", markdown_proc.stdout)
+            self.assertIn("- Evidence readiness: `owned_repo_evidence_only`", markdown_proc.stdout)
+            self.assertIn("- Countable external adopters: `0`", markdown_proc.stdout)
             self.assertIn("- `patchrail/example`", markdown_proc.stdout)
+            self.assertIn("- None approved for external adopter listing.", markdown_proc.stdout)
 
     def test_redact_command_emits_redacted_text(self) -> None:
         proc = subprocess.run(
