@@ -44,6 +44,10 @@ repository names:
 patchrail ci pilot-metrics pilot-summary-*.json --format markdown
 ```
 
+Use [docs/pilot-request-package.md](pilot-request-package.md) before promoting
+any pilot to public evidence. It records the maintainer consent checklist,
+evidence intake rules, and `ADOPTERS.md` listing boundary.
+
 ## Weekly Snapshot Template
 
 ```markdown
@@ -73,6 +77,7 @@ current evidence gaps are:
 
 - first PyPI release and download telemetry;
 - external maintainer pilots with permission to cite outcomes;
+- consent checklist coverage from [docs/pilot-request-package.md](pilot-request-package.md);
 - safe external pilot summaries based on [examples/pilot-outcome](../examples/pilot-outcome/README.md);
 - permissioned pilot fixture submissions that pass `fixture-check`;
 - public PRs reviewed with Codex;
