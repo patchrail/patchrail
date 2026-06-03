@@ -33,11 +33,11 @@ Check the local control-plane status:
 patchrail queue status --format markdown
 ```
 
-The status command summarizes work item counts, proposal counts, audit-event
-counts, the latest local audit event, and the safety boundary. It is intended
-for maintainer handoffs and release evidence: approval records are visible, but
-write actions, network access, billing, and external models remain off by
-default.
+The status command summarizes work item counts, proposal counts, pending human
+decisions, audit-event counts, the latest local audit event, and the safety
+boundary. It is intended for maintainer handoffs and release evidence: approval
+records are visible, but write actions, network access, billing, and external
+models remain off by default.
 
 The local HTTP API exposes the same `patchrail.queue_status.v1` payload at
 `GET /status`, so CLI handoffs and local dashboards use one shared status

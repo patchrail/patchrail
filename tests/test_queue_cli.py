@@ -58,6 +58,14 @@ class PatchRailQueueTests(unittest.TestCase):
             schema = json.loads(proc.stdout)
             self.assertEqual(schema["title"], title)
             self.assertIn("https://patchrail.dev/schemas/", schema["$id"])
+            if schema_name == "queue-status":
+                self.assertIn("human_gate_summary", schema["required"])
+                self.assertEqual(
+                    schema["properties"]["human_gate_summary"]["properties"][
+                        "write_actions_unlocked"
+                    ]["const"],
+                    False,
+                )
 
     def test_queue_flow_keeps_work_items_local_and_human_gated(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -337,6 +345,11 @@ class PatchRailQueueTests(unittest.TestCase):
             self.assertEqual(status["counts"]["audit_events_total"], 2)
             self.assertEqual(status["latest_audit_event"]["event_type"], "proposal_added")
             self.assertEqual(status["latest_audit_event"]["work_item_id"], item["id"])
+            self.assertEqual(status["human_gate_summary"]["status"], "awaiting_human_review")
+            self.assertEqual(status["human_gate_summary"]["pending_work_items"], 1)
+            self.assertEqual(status["human_gate_summary"]["pending_proposals"], 1)
+            self.assertEqual(status["human_gate_summary"]["total_pending_decisions"], 2)
+            self.assertEqual(status["human_gate_summary"]["write_actions_unlocked"], False)
             self.assertEqual(status["safety"]["write_actions_allowed_by_default"], False)
             self.assertEqual(status["safety"]["github_write_permission_required"], False)
             self.assertEqual(status["safety"]["network_required"], False)
@@ -349,6 +362,8 @@ class PatchRailQueueTests(unittest.TestCase):
             )
             self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
             self.assertIn("# PatchRail Queue Status", markdown_proc.stdout)
+            self.assertIn("## Human Gate Summary", markdown_proc.stdout)
+            self.assertIn("Total pending decisions: `2`", markdown_proc.stdout)
             self.assertIn("Write actions allowed by default: `False`", markdown_proc.stdout)
             self.assertIn("Approval records execute actions: `False`", markdown_proc.stdout)
 

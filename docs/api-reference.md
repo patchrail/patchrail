@@ -201,9 +201,10 @@ curl -sS http://127.0.0.1:8765/health
 
 Returns the same `patchrail.queue_status.v1` contract emitted by
 `patchrail queue status --format json`: queue counts, approval-state counts,
-audit-event counts, the latest local audit event, database path, and the safety
-boundary. The endpoint also keeps the small legacy `queue` and `requirements`
-objects for local dashboards that already consumed `/status`.
+pending human decisions, audit-event counts, the latest local audit event,
+database path, and the safety boundary. The endpoint also keeps the small
+legacy `queue` and `requirements` objects for local dashboards that already
+consumed `/status`.
 
 ```bash
 curl -sS http://127.0.0.1:8765/status
