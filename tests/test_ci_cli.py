@@ -132,6 +132,9 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["passed"], 138)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
+        self.assertEqual(payload["coverage_gate"]["min_cases_per_class"], 0)
+        self.assertEqual(payload["coverage_gate"]["passed"], True)
+        self.assertEqual(payload["coverage_gate"]["failures"], [])
         self.assertEqual(payload["root"], "examples/ci-triage")
         self.assertEqual(
             payload["class_summary"],
@@ -199,7 +202,9 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["passed"], 138)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
+        self.assertEqual(payload["coverage_gate"]["passed"], True)
         self.assertIn("class_summary", payload)
+        self.assertIn("coverage_gate", payload)
         self.assertNotIn("cases", payload)
 
         markdown_proc = subprocess.run(
@@ -222,8 +227,85 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
         self.assertIn("# PatchRail CI Benchmark", markdown_proc.stdout)
         self.assertIn("- Total cases: `138`", markdown_proc.stdout)
+        self.assertIn("- Coverage gate passed: `True`", markdown_proc.stdout)
         self.assertIn("## Class summary", markdown_proc.stdout)
         self.assertNotIn("## Cases", markdown_proc.stdout)
+
+    def test_ci_benchmark_coverage_gate_can_require_depth_per_class(self) -> None:
+        pass_proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "patchrail",
+                "ci",
+                "benchmark",
+                "examples/ci-triage",
+                "--format",
+                "json",
+                "--summary-only",
+                "--min-cases-per-class",
+                "3",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(pass_proc.returncode, 0, pass_proc.stderr)
+        pass_payload = json.loads(pass_proc.stdout)
+        self.assertEqual(pass_payload["coverage_gate"]["min_cases_per_class"], 3)
+        self.assertEqual(pass_payload["coverage_gate"]["passed"], True)
+        self.assertEqual(pass_payload["coverage_gate"]["failures"], [])
+
+        fail_proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "patchrail",
+                "ci",
+                "benchmark",
+                "examples/ci-triage",
+                "--format",
+                "json",
+                "--summary-only",
+                "--min-cases-per-class",
+                "4",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(fail_proc.returncode, 1)
+        fail_payload = json.loads(fail_proc.stdout)
+        self.assertEqual(fail_payload["failed"], 0)
+        self.assertEqual(fail_payload["coverage_gate"]["passed"], False)
+        failing_classes = {
+            failure["failure_class"]: failure
+            for failure in fail_payload["coverage_gate"]["failures"]
+        }
+        self.assertEqual(failing_classes["browser_test_failure"]["total_cases"], 3)
+        self.assertEqual(failing_classes["browser_test_failure"]["minimum_cases"], 4)
+
+    def test_ci_benchmark_rejects_negative_coverage_gate(self) -> None:
+        proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "patchrail",
+                "ci",
+                "benchmark",
+                "examples/ci-triage",
+                "--min-cases-per-class",
+                "-1",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("--min-cases-per-class must be >= 0", proc.stderr)
 
     def test_ci_fixture_check_accepts_clean_fixture_pair(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
