@@ -11,11 +11,12 @@ access, repository write permissions, billing, or an external model call.
 
 ## Current Coverage
 
-The fixture zoo currently contains 135 cases across these root-cause families:
+The fixture zoo currently contains 138 cases across these root-cause families:
 
 - `github_actions_workflow`
 - `docker_build_failure`
 - `browser_test_failure`
+- `dotnet_build_failure`
 - `go_test_failure`
 - `java_build_failure`
 - `javascript_lint`
@@ -55,6 +56,10 @@ PHP coverage includes Composer platform-version mismatches, Composer lockfile
 drift, and PHPUnit assertion failures. These fixtures are synthetic and preserve
 the same local-only/no-secrets boundary as the rest of the zoo.
 
+.NET coverage includes NuGet version conflicts, C# compiler errors, and xUnit
+assertion failures. These fixtures are synthetic and keep restore, build, and
+test signals local to the fixture text.
+
 The current set also includes additional Go, Rust, JavaScript lint, GitHub
 Actions workflow, and Python test variants so the benchmark crosses the v0.2
 100-fixture bar without needing external logs or private repository data.
@@ -81,7 +86,7 @@ classification and confidence floor.
 Current aggregate snapshot:
 
 - Top-1 fixture accuracy: `1.0`.
-- Root-cause families covered: `13`.
+- Root-cause families covered: `14`.
 - Largest families: `python_dependency_resolution` (`27` cases),
   `node_dependency_install` (`19` cases), and `typescript_typecheck`
   (`19` cases).
