@@ -122,7 +122,8 @@ Last verified: 2026-06-03.
 - GitHub Actions artifact example:
   [`examples/github-action`](../examples/github-action/README.md) documents the
   read-only `patchrail-ci-triage` artifact with `ci-report.md`,
-  `ci-result.json`, `fixture-benchmark.json`, and `doctor.json`.
+  `ci-result.json`, `fixture-benchmark.json`, `fixture-benchmark-summary.md`,
+  and `doctor.json`.
 - Funded issue read-only demo:
   [`examples/funded-issues-readonly`](../examples/funded-issues-readonly/README.md)
   shows `patchrail funded-issues list/explain` over local JSON and

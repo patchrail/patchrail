@@ -14,6 +14,7 @@ plan. The current candidate evidence covers:
 
 - CI fixture zoo expanded past the 100-case v0.2 bar.
 - `patchrail ci benchmark` over 115 sanitized synthetic fixtures.
+- `patchrail ci benchmark --summary-only` for short Markdown aggregate evidence.
 - `patchrail ci fixture-check` as the pre-PR hygiene gate for fixture metadata,
   classifier agreement, confidence floors, and redaction checks.
 - Read-only GitHub Actions triage workflow and artifact example.
@@ -32,6 +33,7 @@ uv run --extra dev ruff check .
 uv run --extra dev ruff format --check .
 uv run --extra dev patchrail ci fixture-check examples/ci-triage --format json
 uv run --extra dev patchrail ci benchmark examples/ci-triage --format json
+uv run --extra dev patchrail ci benchmark examples/ci-triage --format markdown --summary-only
 uv run --extra dev patchrail doctor --format json
 uv run --extra dev python -m build
 uv run --extra dev twine check dist/*

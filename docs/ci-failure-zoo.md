@@ -41,6 +41,7 @@ Run the benchmark:
 
 ```bash
 patchrail ci benchmark examples/ci-triage --format markdown
+patchrail ci benchmark examples/ci-triage --format markdown --summary-only
 patchrail ci benchmark examples/ci-triage --format json
 patchrail ci fixture-check examples/ci-triage --format json
 ```
@@ -52,6 +53,8 @@ classification and confidence floor.
 
 - `accuracy.top_1`: passed fixtures divided by total fixtures.
 - `class_summary`: total, passed and failed cases per root-cause family.
+- `--summary-only`: omit per-fixture cases and keep only aggregate evidence for
+  GitHub artifact summaries, release notes, or local review.
 
 Current aggregate snapshot:
 

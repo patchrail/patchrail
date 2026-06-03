@@ -127,6 +127,57 @@ class PatchRailCITests(unittest.TestCase):
         )
         self.assertEqual(payload["requirements"]["network_required"], False)
 
+    def test_ci_benchmark_summary_only_omits_case_details(self) -> None:
+        json_proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "patchrail",
+                "ci",
+                "benchmark",
+                "examples/ci-triage",
+                "--format",
+                "json",
+                "--summary-only",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(json_proc.returncode, 0, json_proc.stderr)
+        payload = json.loads(json_proc.stdout)
+        self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
+        self.assertEqual(payload["total_cases"], 115)
+        self.assertEqual(payload["passed"], 115)
+        self.assertEqual(payload["failed"], 0)
+        self.assertEqual(payload["accuracy"]["top_1"], 1.0)
+        self.assertIn("class_summary", payload)
+        self.assertNotIn("cases", payload)
+
+        markdown_proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "patchrail",
+                "ci",
+                "benchmark",
+                "examples/ci-triage",
+                "--format",
+                "markdown",
+                "--summary-only",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
+        self.assertIn("# PatchRail CI Benchmark", markdown_proc.stdout)
+        self.assertIn("- Total cases: `115`", markdown_proc.stdout)
+        self.assertIn("## Class summary", markdown_proc.stdout)
+        self.assertNotIn("## Cases", markdown_proc.stdout)
+
     def test_ci_fixture_check_accepts_clean_fixture_pair(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
