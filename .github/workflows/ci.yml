@@ -61,3 +61,26 @@ jobs:
           python -m pip install dist/*.whl
           patchrail doctor --format json
           patchrail ci explain --log examples/ci-triage/dependency-failure.log --format text
+
+  oss-evidence-snapshot:
+    runs-on: ubuntu-latest
+    needs: [test, package-smoke]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v8.1.0
+      - name: Install
+        run: uv sync --extra dev
+      - name: Generate OSS evidence snapshot
+        run: |
+          mkdir -p patchrail-oss-evidence
+          uv run patchrail evidence snapshot --format json --out patchrail-oss-evidence/evidence-snapshot.json
+          uv run patchrail evidence snapshot --format markdown --out patchrail-oss-evidence/evidence-snapshot.md
+      - name: Upload OSS evidence snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: patchrail-oss-evidence
+          path: patchrail-oss-evidence/
+          if-no-files-found: error

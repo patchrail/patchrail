@@ -21,6 +21,10 @@ Pablo Guillén is the primary maintainer of PatchRail.
   summarizes CI fixtures, read-only workflow posture, release evidence pages,
   Agent Control Plane demo, Funded Issue Scout demo, pilot summaries, and
   remaining evidence gaps without network or write actions
+- Public CI artifact: the main CI workflow uploads `patchrail-oss-evidence`
+  with `evidence-snapshot.json` and `evidence-snapshot.md` after tests,
+  benchmark, and package smoke pass. This is project-health evidence only; it
+  does not count as external adoption or PyPI download evidence.
 - Adopter list: [ADOPTERS.md](../ADOPTERS.md) is permission-only and currently
   has no public external adopters listed
 - Public CI fixtures: 115 sanitized synthetic fixtures in the local benchmark
