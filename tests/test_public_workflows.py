@@ -76,6 +76,7 @@ def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
 def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     codex_workflows = (ROOT / "docs" / "codex-workflows.md").read_text(encoding="utf-8")
     evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
+    oss_program_evidence = (ROOT / "docs" / "oss-program-evidence.md").read_text(encoding="utf-8")
     api_reference = (ROOT / "docs" / "api-reference.md").read_text(encoding="utf-8")
     pilot_guide = (ROOT / "docs" / "pilot-guide.md").read_text(encoding="utf-8")
     metrics = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
@@ -112,6 +113,18 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Human approval gates for write actions" in evidence
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
+    assert "Public CI fixtures: 101 sanitized synthetic fixtures" in oss_program_evidence
+    assert "Tests: `uv run --extra dev pytest -q` -> 34 passed." in oss_program_evidence
+    assert "GitHub Release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>" in (
+        oss_program_evidence
+    )
+    assert "Agent Control Plane demo" in oss_program_evidence
+    assert "Local queue API: `patchrail serve --host 127.0.0.1 --port 8765`" in (
+        oss_program_evidence
+    )
+    assert "Funded issue read-only demo" in oss_program_evidence
+    assert "External repositories using PatchRail: pending pilots" in oss_program_evidence
+    assert "PyPI release link after package index publish" in oss_program_evidence
     assert "patchrail.queue_api.v1" in api_reference
     assert "write_actions_allowed_by_default" in api_reference
     assert "Approval does not open a pull request" in api_reference
