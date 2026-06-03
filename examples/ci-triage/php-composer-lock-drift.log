@@ -1,0 +1,6 @@
+Run composer install --no-interaction --prefer-dist
+Installing dependencies from lock file
+Warning: The lock file is not up to date with the latest changes in composer.json.
+- Required package "symfony/console" is not present in the lock file.
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about resolving merge conflicts in Composer metadata.

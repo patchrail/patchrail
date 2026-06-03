@@ -527,6 +527,33 @@
     },
     {
       "actual_confidence": 0.89,
+      "actual_failure_class": "php_composer_failure",
+      "expected_failure_class": "php_composer_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "php-composer-lock-drift.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "php_composer_failure",
+      "expected_failure_class": "php_composer_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "php-composer-platform-version.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.95,
+      "actual_failure_class": "php_composer_failure",
+      "expected_failure_class": "php_composer_failure",
+      "expected_minimum_confidence": 0.85,
+      "log": "php-phpunit-failure.log",
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "actual_confidence": 0.89,
       "actual_failure_class": "browser_test_failure",
       "expected_failure_class": "browser_test_failure",
       "expected_minimum_confidence": 0.7,
@@ -1228,6 +1255,11 @@
       "passed": 19,
       "total_cases": 19
     },
+    "php_composer_failure": {
+      "failed": 0,
+      "passed": 3,
+      "total_cases": 3
+    },
     "python_dependency_resolution": {
       "failed": 0,
       "passed": 27,
@@ -1255,7 +1287,7 @@
     }
   },
   "failed": 0,
-  "passed": 132,
+  "passed": 135,
   "requirements": {
     "billing_required": false,
     "external_model_required": false,
@@ -1263,5 +1295,5 @@
   },
   "root": "examples/ci-triage",
   "schema_version": "patchrail.ci_benchmark.v1",
-  "total_cases": 132
+  "total_cases": 135
 }

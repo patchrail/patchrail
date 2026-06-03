@@ -49,6 +49,7 @@ class PatchRailCITests(unittest.TestCase):
         self.assertIn("docker_build_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("browser_test_failure", schema["properties"]["failure_class"]["enum"])
         self.assertIn("ruby_bundle_failure", schema["properties"]["failure_class"]["enum"])
+        self.assertIn("php_composer_failure", schema["properties"]["failure_class"]["enum"])
         self.assertEqual(
             schema["properties"]["requirements"]["properties"]["billing_required"]["const"], False
         )
@@ -70,7 +71,7 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(payload["schema_version"], "patchrail.doctor.v1")
         self.assertEqual(payload["status"], "ok")
         self.assertEqual(payload["local_first"], True)
-        self.assertEqual(payload["checks"]["ci_fixture_count"], 132)
+        self.assertEqual(payload["checks"]["ci_fixture_count"], 135)
         self.assertEqual(payload["checks"]["ci_result_schema_available"], True)
         self.assertEqual(payload["requirements"]["billing_required"], False)
         self.assertEqual(payload["requirements"]["external_model_required"], False)
@@ -97,8 +98,8 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         payload = json.loads(proc.stdout)
         self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
-        self.assertEqual(payload["total_cases"], 132)
-        self.assertEqual(payload["passed"], 132)
+        self.assertEqual(payload["total_cases"], 135)
+        self.assertEqual(payload["passed"], 135)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
         self.assertEqual(payload["root"], "examples/ci-triage")
@@ -112,6 +113,7 @@ class PatchRailCITests(unittest.TestCase):
                 "java_build_failure": {"failed": 0, "passed": 3, "total_cases": 3},
                 "javascript_lint": {"failed": 0, "passed": 11, "total_cases": 11},
                 "node_dependency_install": {"failed": 0, "passed": 19, "total_cases": 19},
+                "php_composer_failure": {"failed": 0, "passed": 3, "total_cases": 3},
                 "python_dependency_resolution": {"failed": 0, "passed": 27, "total_cases": 27},
                 "python_test_failure": {"failed": 0, "passed": 9, "total_cases": 9},
                 "ruby_bundle_failure": {"failed": 0, "passed": 8, "total_cases": 8},
@@ -130,6 +132,7 @@ class PatchRailCITests(unittest.TestCase):
                 "java_build_failure",
                 "javascript_lint",
                 "node_dependency_install",
+                "php_composer_failure",
                 "python_dependency_resolution",
                 "python_test_failure",
                 "ruby_bundle_failure",
@@ -160,8 +163,8 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(json_proc.returncode, 0, json_proc.stderr)
         payload = json.loads(json_proc.stdout)
         self.assertEqual(payload["schema_version"], "patchrail.ci_benchmark.v1")
-        self.assertEqual(payload["total_cases"], 132)
-        self.assertEqual(payload["passed"], 132)
+        self.assertEqual(payload["total_cases"], 135)
+        self.assertEqual(payload["passed"], 135)
         self.assertEqual(payload["failed"], 0)
         self.assertEqual(payload["accuracy"]["top_1"], 1.0)
         self.assertIn("class_summary", payload)
@@ -186,7 +189,7 @@ class PatchRailCITests(unittest.TestCase):
 
         self.assertEqual(markdown_proc.returncode, 0, markdown_proc.stderr)
         self.assertIn("# PatchRail CI Benchmark", markdown_proc.stdout)
-        self.assertIn("- Total cases: `132`", markdown_proc.stdout)
+        self.assertIn("- Total cases: `135`", markdown_proc.stdout)
         self.assertIn("## Class summary", markdown_proc.stdout)
         self.assertNotIn("## Cases", markdown_proc.stdout)
 
@@ -319,6 +322,30 @@ class PatchRailCITests(unittest.TestCase):
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["failure_class"], "ruby_bundle_failure")
             self.assertIn("bundle install", payload["reproduction_command"])
+            self.assertEqual(payload["requirements"]["external_model_required"], False)
+
+    def test_ci_classify_detects_php_composer_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log = Path(tmpdir) / "php.log"
+            log.write_text(
+                "Run composer install --no-interaction --prefer-dist\n"
+                "Your requirements could not be resolved to an installable set of packages.\n"
+                "Problem 1\n"
+                "Root composer.json requires php ^8.3 but your php version (8.2.14) does not satisfy that requirement.\n",
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [sys.executable, "-m", "patchrail", "ci", "classify", "--log", str(log)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["failure_class"], "php_composer_failure")
+            self.assertIn("composer install", payload["reproduction_command"])
             self.assertEqual(payload["requirements"]["external_model_required"], False)
 
     def test_ci_fixture_check_fails_for_missing_expected_metadata(self) -> None:
