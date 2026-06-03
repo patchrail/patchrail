@@ -114,7 +114,15 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "No automatic bounty claiming" in evidence
     assert ".agents/skills/patchrail-ci-triage" in evidence
     assert "Public CI fixtures: 101 sanitized synthetic fixtures" in oss_program_evidence
-    assert "Tests: `uv run --extra dev pytest -q` -> 34 passed." in oss_program_evidence
+    assert (
+        "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
+        in oss_program_evidence
+    )
+    assert "Tests: `uv run --extra dev pytest -q` -> 37 passed." in oss_program_evidence
+    assert (
+        "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
+        "examples/ci-triage --format json` -> 101/101 fixtures passed."
+    ) in oss_program_evidence
     assert "GitHub Release: <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>" in (
         oss_program_evidence
     )
@@ -141,6 +149,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "Pending first PyPI release" in metrics
     assert "Public external adopters | 0" in metrics
     assert "Public releases | 1" in metrics
+    assert "Fixture hygiene gate | 101 / 101 passing" in metrics
     assert "Do not use placeholders as evidence" in metrics
     assert "public PRs reviewed with Codex" in metrics
     assert "only with explicit maintainer permission" in adopters
