@@ -36,6 +36,7 @@
 
 ## v0.3
 
+- Agent Control Plane milestone for local, reviewable maintainer work.
 - Experimental local SQLite queue for maintainer work items.
 - Human approval states for local decisions.
 - Exportable audit log.
@@ -48,9 +49,12 @@
 - Proposal approval/rejection audit events without granting write permission.
 - Local-only HTTP API for queue health, status, work items, proposals,
   approvals, and audit events.
+- v0.3.0 release-candidate evidence page tying queue CLI/API, schemas, demo,
+  audit exports, proposal gates, and remaining manual gates.
 
 ## v0.4
 
+- Funded Issue Scout read-only milestone for sustainability metadata.
 - Experimental `patchrail funded-issues list/explain` over local JSON metadata.
 - Offline `patchrail funded-issues import` normalizes local provider exports for
   `algora`, `github`, `openpledge`, and `polar` into PatchRail's read-only schema.
@@ -59,3 +63,5 @@
 - Risk explanations for ambiguous scope, spam-attractive work, and missing contribution guidelines.
 - No automatic claims, comments, pull requests, maintainer contact, external API fetch, scraping,
   credential use, or model call.
+- v0.4.0 release-candidate evidence page tying read-only local metadata,
+  provider export import, ethics boundaries, demo output, and remaining manual gates.

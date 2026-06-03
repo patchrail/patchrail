@@ -9,7 +9,10 @@ announce a release.
 The current v0.1.0 prep artifact is tracked in
 [release-v0.1.0-evidence.md](release-v0.1.0-evidence.md). The current
 v0.2.0 release-candidate evidence is tracked in
-[release-v0.2.0-evidence.md](release-v0.2.0-evidence.md).
+[release-v0.2.0-evidence.md](release-v0.2.0-evidence.md). Agent Control Plane
+evidence is tracked in [release-v0.3.0-evidence.md](release-v0.3.0-evidence.md).
+Funded issue read-only evidence is tracked in
+[release-v0.4.0-evidence.md](release-v0.4.0-evidence.md).
 
 ## v0.1.0 Release-Prep Evidence Checklist
 
@@ -154,6 +157,40 @@ announcement, or external application.
 - [ ] `docs/metrics.md` does not promote placeholder adoption, PyPI, or Codex
   evidence.
 - [ ] `ADOPTERS.md` lists only permissioned adopters.
+- [ ] Manual gates are clear for version bump, tag, PyPI publish, announcements,
+  and external program applications.
+
+## v0.3.0 Release-Candidate Evidence Checklist
+
+Use [docs/release-v0.3.0-evidence.md](release-v0.3.0-evidence.md) to track the
+Agent Control Plane milestone before any version bump, tag, PyPI publish, public
+announcement, or external application.
+
+- [ ] `examples/local-agent-queue/run_demo.py` produces the expected stable
+  summary.
+- [ ] Queue item import from CI result keeps `write_actions_allowed=false`.
+- [ ] Queue audit export records local decisions as JSONL.
+- [ ] Proposal approval/rejection records human decisions only and does not
+  execute patches.
+- [ ] `patchrail serve --host 127.0.0.1 --port 8765` remains local-only.
+- [ ] Queue schemas are emitted by `patchrail schema` and bundled in the wheel.
+- [ ] Manual gates are clear for version bump, tag, PyPI publish, announcements,
+  and external program applications.
+
+## v0.4.0 Release-Candidate Evidence Checklist
+
+Use [docs/release-v0.4.0-evidence.md](release-v0.4.0-evidence.md) to track the
+Funded Issue Scout read-only milestone before any version bump, tag, PyPI
+publish, public announcement, or external application.
+
+- [ ] `examples/funded-issues-readonly/run_demo.py` produces the expected stable
+  summary.
+- [ ] `patchrail funded-issues list` filters risky records by default.
+- [ ] `patchrail funded-issues explain` reports blocked actions and contribution
+  etiquette.
+- [ ] `patchrail funded-issues import` reads local provider exports only.
+- [ ] No funded issue command fetches provider APIs, scrapes websites, claims
+  rewards, posts comments, opens pull requests, or contacts maintainers.
 - [ ] Manual gates are clear for version bump, tag, PyPI publish, announcements,
   and external program applications.
 

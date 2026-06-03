@@ -1,0 +1,92 @@
+# v0.3.0 Release Evidence
+
+Status: release candidate evidence, not a published release.
+
+This page records the current evidence for the local Agent Control Plane
+milestone. It is safe to prepare and review locally. It does not bump the
+package version, create or push tags, publish to PyPI, announce publicly,
+contact third-party maintainers, or apply to external programs.
+
+## Scope
+
+v0.3.0 is the local agent queue milestone from the OSS plan. The current
+candidate evidence covers:
+
+- SQLite-backed work items for reviewable maintainer tasks.
+- CI result import into pending local queue items.
+- Human approval and rejection states for work items.
+- Local proposal records linked to queue items.
+- Proposal approval and rejection audit events.
+- JSON and JSONL exports for queue items, proposals, and audit events.
+- Versioned queue JSON Schemas bundled in the package and mirrored in
+  `schemas/`.
+- Local-only HTTP API for status, health, work items, proposals, approvals, and
+  audit events.
+- Executable demo in `examples/local-agent-queue`.
+- No pull request creation, issue comments, repository writes, external model
+  calls, billing, or GitHub write permissions.
+
+## Local Evidence Commands
+
+Run these commands from the repository root before tagging v0.3.0:
+
+```bash
+uv run --extra dev pytest -q tests/test_queue_cli.py tests/test_queue_http_api.py tests/test_public_workflows.py
+uv run --extra dev pytest -q
+uv run --extra dev ruff check .
+uv run --extra dev ruff format --check .
+uv run --extra dev python examples/local-agent-queue/run_demo.py --output .patchrail-queue-demo --force
+uv run --extra dev patchrail schema queue-work-item
+uv run --extra dev patchrail schema queue-proposal
+uv run --extra dev patchrail schema queue-audit-event
+uv run --extra dev patchrail serve --host 127.0.0.1 --port 8765 --db .patchrail-queue-demo/queue.sqlite
+uv run --extra dev patchrail doctor --format json
+uv run --extra dev python -m build
+uv run --extra dev twine check dist/*
+```
+
+Current evidence snapshot from 2026-06-03:
+
+- Queue CLI coverage includes init, add, import from CI result, list, show,
+  approve, reject, export, audit, and proposal operations.
+- Queue HTTP API coverage includes local bind validation, health, status,
+  work-item reads, approval decisions, proposal reads, proposal decisions, and
+  audit event export.
+- The local-agent-queue demo runs end-to-end and produces a stable
+  `summary.json` matching
+  [demo-summary.expected.json](../examples/local-agent-queue/demo-summary.expected.json).
+- Queue schemas are emitted from the CLI and bundled in the wheel under
+  `patchrail/schemas/`.
+- Safety boundary remains explicit: approving a work item or proposal records a
+  local human decision only.
+
+## Public Artifacts
+
+- Agent Control Plane guide: [docs/agent-control-plane.md](agent-control-plane.md)
+- API reference: [docs/api-reference.md](api-reference.md)
+- Local queue demo: [examples/local-agent-queue](../examples/local-agent-queue/README.md)
+- Queue work item schema: [schemas/queue_work_item.schema.json](../schemas/queue_work_item.schema.json)
+- Queue proposal schema: [schemas/queue_proposal.schema.json](../schemas/queue_proposal.schema.json)
+- Queue audit event schema: [schemas/queue_audit_event.schema.json](../schemas/queue_audit_event.schema.json)
+- OSS evidence tracker: [docs/oss-program-evidence.md](oss-program-evidence.md)
+
+## Manual Gates Before Publishing
+
+These actions remain maintainer gates:
+
+- Bump `pyproject.toml` to the intended v0.3.x version.
+- Rebuild sdist and wheel after the version bump.
+- Run wheel smoke from a fresh environment.
+- Push a release-prep PR and wait for public CI success.
+- Tag the release and create the GitHub Release.
+- Publish to PyPI only when the maintainer has configured the credential.
+- Announce or request external program review only with real, current metrics.
+
+## Current Blockers
+
+- PyPI publishing is blocked by missing local publishing credentials.
+- External adoption evidence is still pending consent-only pilots.
+- Public Codex review/triage evidence is still pending real PR/issue examples.
+
+These blockers do not prevent local v0.3.0 preparation, docs, tests, schemas, or
+demo hardening.
