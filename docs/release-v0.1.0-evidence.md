@@ -12,7 +12,7 @@ v0.1.0 is the first public CI Janitor release candidate:
 - local CI failure explanation and classification;
 - Markdown, JSON, and text report output;
 - local redaction helper;
-- 101 sanitized benchmark fixtures;
+- 109 sanitized benchmark fixtures;
 - read-only GitHub Actions triage artifact workflow;
 - experimental local SQLite queue and human approval states;
 - experimental read-only funded issue metadata over local JSON;
@@ -54,7 +54,7 @@ Results:
 - Tests: 32 passed.
 - Lint: all checks passed.
 - Format: 17 files already formatted.
-- Benchmark: 101 total, 101 passed, 0 failed.
+- Benchmark: 109 total, 109 passed, 0 failed.
 - Doctor: `status=ok`, `local_first=true`, no billing, network, external model,
   or GitHub write permission required.
 - Build: produced `patchrail-0.1.0.tar.gz` and
@@ -67,7 +67,7 @@ Re-verified before GitHub Release publication:
 - Tests: 34 passed.
 - Lint: all checks passed.
 - Format: 18 files already formatted.
-- Benchmark: 101 total, 101 passed, 0 failed.
+- Benchmark: 109 total, 109 passed, 0 failed.
 - Doctor: `status=ok`, `local_first=true`, no billing, network, external model,
   or GitHub write permission required.
 - Build: produced `patchrail-0.1.0.tar.gz` and

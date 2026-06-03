@@ -13,7 +13,7 @@ v0.2.0 is the GitHub Actions integration and benchmark milestone from the OSS
 plan. The current candidate evidence covers:
 
 - CI fixture zoo expanded past the 100-case v0.2 bar.
-- `patchrail ci benchmark` over 101 sanitized synthetic fixtures.
+- `patchrail ci benchmark` over 109 sanitized synthetic fixtures.
 - `patchrail ci fixture-check` as the pre-PR hygiene gate for fixture metadata,
   classifier agreement, confidence floors, and redaction checks.
 - Read-only GitHub Actions triage workflow and artifact example.
@@ -39,11 +39,11 @@ uv run --extra dev twine check dist/*
 
 Current evidence snapshot from 2026-06-03:
 
-- Tests: 37 passed.
+- Tests: 40 passed.
 - Lint: all checks passed.
-- Format: 18 files already formatted.
-- Fixture hygiene: 101 / 101 fixtures passed.
-- Benchmark: 101 total, 101 passed, 0 failed.
+- Format: 19 files already formatted.
+- Fixture hygiene: 109 / 109 fixtures passed.
+- Benchmark: 109 total, 109 passed, 0 failed.
 - Safety doctor: `status=ok`, `local_first=true`, and no billing, network,
   external model, or GitHub write permission required.
 - v0.1.0 package artifacts already passed build, `twine check`, and wheel smoke;

@@ -1,0 +1,4 @@
+pnpm tsc -p tsconfig.json --noEmit
+src/workers/cache.ts:14:20 - error TS2304: Cannot find name 'ReadableStream'.
+src/workers/cache.ts:25:18 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node?
+tsc failed after tsconfig lib drift

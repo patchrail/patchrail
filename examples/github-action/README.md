@@ -68,7 +68,7 @@ python -m json.tool patchrail-ci-triage/doctor.json
   requirements showing no billing, external model, webhook, GitHub App, or PR
   creation requirement.
 - `fixture-benchmark.json`: benchmark result over the public CI Failure Zoo. The
-  example records `101` total cases, `101` passed, and `0` failed.
+  example records `109` total cases, `109` passed, and `0` failed.
 - `doctor.json`: local safety check. It records `status=ok`, `local_first=true`,
   and no billing, network, external model, or GitHub write permission required.
 

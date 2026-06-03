@@ -1,0 +1,6 @@
+pnpm eslint "src/**/*.{ts,tsx}"
+ESLint: 9.12.0
+Parsing error: ESLint was configured to run on src/pages/demo.tsx using parserOptions.project,
+but that TSConfig does not include this file.
+lint failed after eslint project config drift.
+eslint exited with code 1
