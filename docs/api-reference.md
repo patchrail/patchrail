@@ -136,6 +136,53 @@ curl -sS -X POST http://127.0.0.1:8765/work-items \
 Created items always include `write_actions_allowed=false` unless a future
 maintainer-reviewed execution layer explicitly changes that policy.
 
+## CLI Queue Imports
+
+The HTTP API creates generic work items. The CLI also exposes import helpers
+that turn local CI artifacts into the same queue schema without granting
+repository write permissions.
+
+### `patchrail queue add --from-ci-result`
+
+Imports a local `patchrail-result.json` produced by `patchrail ci classify` and
+creates a pending `ci_failure` work item.
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite add \
+  --from-ci-result patchrail-result.json
+```
+
+The imported payload includes:
+
+- `failure_class`
+- `ci_result.schema_version`
+- `ci_result.requirements`
+- local report or result references supplied by the caller
+
+### `patchrail queue add --from-pilot-pack`
+
+Imports a consent-only pilot pack created by `patchrail ci pilot-pack`. The
+argument may be either the pack directory or its `pilot-manifest.json` file.
+
+```bash
+patchrail queue --db patchrail-pilot.sqlite add \
+  --from-pilot-pack patchrail-pilot-pack
+```
+
+Importer contract:
+
+- requires `schema_version=patchrail.ci_pilot_pack.v1`;
+- rejects manifests where `source.raw_log_copied` is not `false`;
+- loads `patchrail-result.json` from the local pack;
+- stores references to `failed-ci.redacted.log`, `patchrail-report.md`,
+  `patchrail-result.json`, `pilot-manifest.json`, and `README.md`;
+- creates a pending `ci_failure` work item;
+- keeps `write_actions_allowed=false`.
+
+The importer does not read or store the original raw CI log, does not call
+external models, does not contact GitHub, and does not create pull requests,
+comments, branches, funded issue actions, or billing events.
+
 ### `GET /work-items/<id>`
 
 Fetches one work item.
