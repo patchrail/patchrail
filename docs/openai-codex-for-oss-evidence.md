@@ -32,7 +32,8 @@ Pablo Guillén is the primary maintainer of PatchRail.
   public project evidence, not an external adopter signal
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) links owned-repo
-  issues to focused pull requests without claiming external adoption
+  issues to focused pull requests and tracks focused maintainer PR evidence
+  without claiming external adoption
 - Pilot pack command: `patchrail ci pilot-pack` creates a local redacted review
   bundle with a manifest, report, result JSON, and no raw log copy
 - Pilot summary command: `patchrail ci pilot-summary` turns a reviewed pack into
@@ -58,7 +59,11 @@ Current public evidence is local, owned-repository, and preparatory:
 
 - PR review: public own-repo PR history is tracked in
   [public-workflow-ledger.md](public-workflow-ledger.md); formal visible Codex
-  review links are still pending
+  review links are still pending. Recent owned-repo PR evidence includes
+  [#83](https://github.com/patchrail/patchrail/pull/83),
+  [#84](https://github.com/patchrail/patchrail/pull/84), and
+  [#85](https://github.com/patchrail/patchrail/pull/85), all merged with public
+  CI success.
 - Issue triage: public own-repo issues are tracked in
   [public-workflow-ledger.md](public-workflow-ledger.md), including CI fixture,
   Agent Control Plane, security-boundary, and pilot-feedback work
@@ -114,9 +119,9 @@ Last verified: 2026-06-03.
   sdist/wheel assets.
 - Manual gates: PyPI publish, public announcements, and external applications
   remain explicit maintainer actions.
-- Tests: `uv run --extra dev pytest -q` -> 54 passed.
+- Tests after the shared queue status contract: `uv run --extra dev pytest -q` -> 55 passed.
 - Lint: `uv run --extra dev ruff check .` -> all checks passed.
-- Format: `uv run --extra dev ruff format --check .` -> 20 files already formatted.
+- Format after the shared queue status contract: `uv run --extra dev ruff format --check .` -> 21 files already formatted.
 - CI benchmark: `uv run --extra dev patchrail ci benchmark examples/ci-triage --format json` -> 121 / 121 fixtures passed.
 - Queue demo: `uv run --extra dev patchrail queue --db /tmp/patchrail-demo.sqlite init` and `patchrail queue add/list/approve/export` run locally with no write actions.
 - Agent Control Plane demo:
@@ -145,6 +150,10 @@ Last verified: 2026-06-03.
   `/health`, `/status`, `/work-items`, `/proposals`, and `/audit-events` for
   local dashboards/demos. The API rejects non-local bind hosts and reports no
   billing, external model, network, or GitHub write permission requirement.
+- Shared queue status contract: `patchrail queue status --format json` and
+  `GET /status` both expose `patchrail.queue_status.v1`, with the schema
+  available through `patchrail schema queue-status` and
+  [schemas/queue_status.schema.json](../schemas/queue_status.schema.json).
 - Safety doctor: `uv run --extra dev patchrail doctor --format json` -> `status: ok`, `local_first: true`, and no billing, network, external model, or GitHub write permission required.
 - Distribution check: `uv run --extra dev python -m build` produced wheel and sdist; `uv run --extra dev twine check dist/*` passed both artifacts.
 - Wheel smoke: installed `dist/patchrail-0.1.0-py3-none-any.whl` in a fresh `.pkg-smoke` virtual environment, then ran `patchrail doctor --format json` and `patchrail ci explain --log examples/ci-triage/dependency-failure.log --format text`.
@@ -186,7 +195,11 @@ Last verified: 2026-06-03.
 - Public maintenance workflow ledger:
   [docs/public-workflow-ledger.md](public-workflow-ledger.md) records issue-to-PR
   cycles for owned-repo work such as #59 -> #60, #57 -> #58, #55 -> #56,
-  #53 -> #54, #51 -> #52, and #61 -> #62.
+  #53 -> #54, #51 -> #52, and #61 -> #62, plus recent focused maintainer PRs including
+  [#83](https://github.com/patchrail/patchrail/pull/83),
+  [#84](https://github.com/patchrail/patchrail/pull/84), and
+  [#85](https://github.com/patchrail/patchrail/pull/85). These remain
+  owned-repo workflow evidence, not external adoption.
 
 ## Public Launch Issues
 

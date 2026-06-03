@@ -399,7 +399,7 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
         "Fixture hygiene gate: `patchrail ci fixture-check examples/ci-triage --format json`"
         in oss_program_evidence
     )
-    assert "Tests: `uv run --extra dev pytest -q` -> 54 passed." in oss_program_evidence
+    assert "Tests: `uv run --extra dev pytest -q` -> 55 passed." in oss_program_evidence
     assert (
         "Fixture hygiene: `uv run --extra dev patchrail ci fixture-check "
         "examples/ci-triage --format json` -> 121 / 121 fixtures passed."
