@@ -20,6 +20,8 @@ ARTIFACTS = [
     "proposal.json",
     "proposal.md",
     "proposal-approved.json",
+    "proposal-rejected.json",
+    "proposal-rejected.md",
     "approved.json",
     "queue.jsonl",
     "audit-events.jsonl",
@@ -97,6 +99,8 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     proposal_json = output / "proposal.json"
     proposal_md = output / "proposal.md"
     proposal_approved_json = output / "proposal-approved.json"
+    proposal_rejected_json = output / "proposal-rejected.json"
+    proposal_rejected_md = output / "proposal-rejected.md"
     approved_json = output / "approved.json"
     queue_jsonl = output / "queue.jsonl"
     audit_jsonl = output / "audit-events.jsonl"
@@ -219,7 +223,6 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     )
     proposal = _json_file(proposal_json)
     proposal_id = str(proposal["id"])
-
     _run_patchrail(
         root,
         [
@@ -242,12 +245,68 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
             "--db",
             str(db),
             "proposal",
+            "add",
+            "--item-id",
+            rejected_item_id,
+            "--title",
+            "Open a pull request immediately",
+            "--summary",
+            "Too broad for the local evidence and would skip maintainer review.",
+            "--patch-plan",
+            "1. Generate a patch.\n"
+            "2. Open a pull request automatically.\n"
+            "3. Ask for review after the write action.",
+            "--risk-level",
+            "high",
+            "--out",
+            str(proposal_rejected_json),
+        ],
+    )
+    rejected_proposal = _json_file(proposal_rejected_json)
+    rejected_proposal_id = str(rejected_proposal["id"])
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "proposal",
+            "show",
+            rejected_proposal_id,
+            "--format",
+            "markdown",
+            "--out",
+            str(proposal_rejected_md),
+        ],
+    )
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "proposal",
             "approve",
             proposal_id,
             "--note",
             "Maintainer approved the local patch plan.",
             "--out",
             str(proposal_approved_json),
+        ],
+    )
+    _run_patchrail(
+        root,
+        [
+            "queue",
+            "--db",
+            str(db),
+            "proposal",
+            "reject",
+            rejected_proposal_id,
+            "--note",
+            "Maintainer rejected the proposal because it attempted an automatic PR.",
+            "--out",
+            str(proposal_rejected_json),
         ],
     )
     _run_patchrail(
@@ -291,6 +350,7 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
     approved_item = _json_file(approved_json)
     rejected_item = _json_file(rejected_item_json)
     approved_proposal = _json_file(proposal_approved_json)
+    rejected_proposal = _json_file(proposal_rejected_json)
     queue_before_decisions = _json_file(queue_before_decisions_json)
     events = [json.loads(line) for line in audit_jsonl.read_text(encoding="utf-8").splitlines()]
 
@@ -303,6 +363,8 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         "rejected_item_approval_state": rejected_item["approval_state"],
         "proposal_approval_state": approved_proposal["approval_state"],
         "proposal_risk_level": approved_proposal["risk_level"],
+        "rejected_proposal_approval_state": rejected_proposal["approval_state"],
+        "rejected_proposal_risk_level": rejected_proposal["risk_level"],
         "write_actions_allowed": approved_item["write_actions_allowed"],
         "rejected_item_write_actions_allowed": rejected_item["write_actions_allowed"],
         "audit_event_types": [event["event_type"] for event in events],
@@ -317,6 +379,8 @@ def run_demo(output: Path, *, force: bool = False) -> dict[str, Any]:
         raise AssertionError("Work item rejection was not recorded.")
     if summary["proposal_approval_state"] != "approved":
         raise AssertionError("Proposal approval was not recorded.")
+    if summary["rejected_proposal_approval_state"] != "rejected":
+        raise AssertionError("Proposal rejection was not recorded.")
 
     summary_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return summary

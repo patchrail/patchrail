@@ -326,6 +326,12 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
             (Path(tmpdir) / "queue-before-decisions.json").read_text(encoding="utf-8")
         )
         proposal = json.loads((Path(tmpdir) / "proposal-approved.json").read_text(encoding="utf-8"))
+        rejected_proposal = json.loads(
+            (Path(tmpdir) / "proposal-rejected.json").read_text(encoding="utf-8")
+        )
+        rejected_proposal_markdown = (Path(tmpdir) / "proposal-rejected.md").read_text(
+            encoding="utf-8"
+        )
         events = [
             json.loads(line)
             for line in (Path(tmpdir) / "audit-events.jsonl")
@@ -342,6 +348,11 @@ def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
         assert rejected_item["write_actions_allowed"] is False
         assert len(queue_before_decisions["work_items"]) == 2
         assert proposal["approval_state"] == "approved"
+        assert proposal["risk_level"] == "low"
+        assert rejected_proposal["approval_state"] == "rejected"
+        assert rejected_proposal["risk_level"] == "high"
+        assert "Open a pull request immediately" in rejected_proposal_markdown
+        assert "does not push commits" in rejected_proposal_markdown
         assert [event["event_type"] for event in events] == expected["audit_event_types"]
 
 

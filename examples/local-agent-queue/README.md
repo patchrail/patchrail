@@ -79,9 +79,29 @@ patchrail queue --db .patchrail-demo/queue.sqlite proposal show "$PROPOSAL_ID" \
   --format markdown \
   --out .patchrail-demo/proposal.md
 
+patchrail queue --db .patchrail-demo/queue.sqlite proposal add \
+  --item-id "$REJECTED_ITEM_ID" \
+  --title "Open a pull request immediately" \
+  --summary "Too broad for the local evidence and would skip maintainer review." \
+  --patch-plan "1. Generate a patch.
+2. Open a pull request automatically.
+3. Ask for review after the write action." \
+  --risk-level high \
+  --out .patchrail-demo/proposal-rejected.json
+
+REJECTED_PROPOSAL_ID=$(python3 -c 'import json; print(json.load(open(".patchrail-demo/proposal-rejected.json"))["id"])')
+
+patchrail queue --db .patchrail-demo/queue.sqlite proposal show "$REJECTED_PROPOSAL_ID" \
+  --format markdown \
+  --out .patchrail-demo/proposal-rejected.md
+
 patchrail queue --db .patchrail-demo/queue.sqlite proposal approve "$PROPOSAL_ID" \
   --note "Maintainer approved the local patch plan." \
   --out .patchrail-demo/proposal-approved.json
+
+patchrail queue --db .patchrail-demo/queue.sqlite proposal reject "$REJECTED_PROPOSAL_ID" \
+  --note "Maintainer rejected the proposal because it attempted an automatic PR." \
+  --out .patchrail-demo/proposal-rejected.json
 
 patchrail queue --db .patchrail-demo/queue.sqlite approve "$ITEM_ID" \
   --note "Maintainer reviewed the local CI evidence and approved handoff." \
@@ -124,6 +144,10 @@ Expected local artifacts:
 - `.patchrail-demo/proposal.json`: the pending patch proposal.
 - `.patchrail-demo/proposal.md`: a human-readable proposal record.
 - `.patchrail-demo/proposal-approved.json`: the local proposal approval decision.
+- `.patchrail-demo/proposal-rejected.json`: the local proposal rejection
+  decision for a high-risk plan.
+- `.patchrail-demo/proposal-rejected.md`: a human-readable proposal before
+  rejection.
 - `.patchrail-demo/approved.json`: the approval decision.
 - `.patchrail-demo/queue.jsonl`: the exported work items.
 - `.patchrail-demo/audit-events.jsonl`: the append-only local event trail for
@@ -143,6 +167,7 @@ from pathlib import Path
 item = json.loads(Path(".patchrail-demo/approved.json").read_text())
 rejected_item = json.loads(Path(".patchrail-demo/rejected-item.json").read_text())
 proposal = json.loads(Path(".patchrail-demo/proposal-approved.json").read_text())
+rejected_proposal = json.loads(Path(".patchrail-demo/proposal-rejected.json").read_text())
 pending_list = json.loads(Path(".patchrail-demo/queue-before-decisions.json").read_text())
 assert item["approval_state"] == "approved"
 assert item["write_actions_allowed"] is False
@@ -153,13 +178,17 @@ assert rejected_item["write_actions_allowed"] is False
 assert len(pending_list["work_items"]) == 2
 assert proposal["approval_state"] == "approved"
 assert proposal["risk_level"] == "low"
+assert rejected_proposal["approval_state"] == "rejected"
+assert rejected_proposal["risk_level"] == "high"
 
 events = [json.loads(line) for line in Path(".patchrail-demo/audit-events.jsonl").read_text().splitlines()]
 assert [event["event_type"] for event in events] == [
     "work_item_added",
     "work_item_added",
     "proposal_added",
+    "proposal_added",
     "proposal_approved",
+    "proposal_rejected",
     "work_item_approved",
     "work_item_rejected",
     "work_items_exported",
