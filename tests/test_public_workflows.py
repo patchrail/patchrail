@@ -34,6 +34,43 @@ def test_github_action_docs_preserve_safety_boundary() -> None:
     assert "actions: read" in docs
     assert "patchrail-ci-triage" in docs
     assert "examples/github-action" in docs
+    assert "JavaScript Action Runtime Review" in docs
+    assert "Reviewed on 2026-06-03" in docs
+    assert "actions/checkout" in docs
+    assert "`v6` | `node24` | No" in docs
+    assert "actions/setup-python" in docs
+    assert "astral-sh/setup-uv" in docs
+    assert "`v8.1.0` | `node24` | No" in docs
+    assert "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24" in docs
+    assert "read-only" in docs
+
+
+def test_github_actions_runtime_review_keeps_workflows_node24_ready() -> None:
+    ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    triage = (ROOT / ".github" / "workflows" / "ci-triage.yml").read_text(encoding="utf-8")
+    docs = (ROOT / "docs" / "github-action.md").read_text(encoding="utf-8")
+
+    combined = "\n".join([ci, triage])
+    assert 'FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"' in ci
+    assert 'FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"' in triage
+    assert "actions/checkout@v6" in combined
+    assert "actions/setup-python@v6" in combined
+    assert "astral-sh/setup-uv@v8.1.0" in combined
+    assert "actions/download-artifact@v4" in triage
+    assert "actions/upload-artifact@v4" in triage
+
+    assert "contents: read" in triage
+    assert "actions: read" in triage
+    assert "issues: write" not in triage
+    assert "pull-requests: write" not in triage
+    assert "gh pr create" not in combined
+    assert "gh issue comment" not in combined
+
+    assert "`actions/checkout` | `v6` | `node24` | No" in docs
+    assert "`actions/setup-python` | `v6` | `node24` | No" in docs
+    assert "`astral-sh/setup-uv` | `v8.1.0` | `node24` | No" in docs
+    assert "`actions/download-artifact` | `v4` | `node20` | No change" in docs
+    assert "`actions/upload-artifact` | `v4` | `node20` | No change" in docs
 
 
 def test_github_action_artifact_example_is_report_only_and_sanitized() -> None:
