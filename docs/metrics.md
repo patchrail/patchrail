@@ -22,6 +22,7 @@ Last updated: 2026-06-03.
 | Agent Control Plane demos | 1 | `examples/local-agent-queue` |
 | Funded issue read-only demos | 1 | `examples/funded-issues-readonly` |
 | Consent-only pilot outcome examples | 1 | `examples/pilot-outcome` |
+| Active evidence follow-up issues | 3 | [#67](https://github.com/patchrail/patchrail/issues/67), [#68](https://github.com/patchrail/patchrail/issues/68), [#69](https://github.com/patchrail/patchrail/issues/69) |
 
 ## Quality Gates
 
@@ -67,3 +68,9 @@ current evidence gaps are:
 - public PRs reviewed with Codex;
 - public issues triaged with Codex;
 - real adopter entries approved for [ADOPTERS.md](../ADOPTERS.md).
+
+Active follow-up issues:
+
+- [#67](https://github.com/patchrail/patchrail/issues/67) for PyPI publication and clean install verification.
+- [#68](https://github.com/patchrail/patchrail/issues/68) for the first consent-only maintainer pilot.
+- [#69](https://github.com/patchrail/patchrail/issues/69) for verified adoption and ecosystem signal tracking.
