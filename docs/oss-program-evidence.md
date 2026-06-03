@@ -205,7 +205,8 @@ Last verified: 2026-06-03.
   [#84](https://github.com/patchrail/patchrail/pull/84), and
   [#85](https://github.com/patchrail/patchrail/pull/85),
   [#86](https://github.com/patchrail/patchrail/pull/86), and
-  [#87](https://github.com/patchrail/patchrail/pull/87), each with public CI
+  [#87](https://github.com/patchrail/patchrail/pull/87), now extended through
+  [#94](https://github.com/patchrail/patchrail/pull/94), each with public CI
   success. These PRs are owned-repo workflow evidence, not external adoption.
 - Public review packet: `uv run --extra dev patchrail evidence review-packet --format json`
   reports owned-repo review evidence from the ledger while keeping external

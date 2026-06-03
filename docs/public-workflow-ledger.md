@@ -72,6 +72,13 @@ count as issue-to-PR cycles because no public issue was linked by the PR.
 | Shared queue status CLI/API contract | [#85](https://github.com/patchrail/patchrail/pull/85) | [CI run 26895362360](https://github.com/patchrail/patchrail/actions/runs/26895362360) | versioned status schema and API parity |
 | Recent owned workflow evidence | [#86](https://github.com/patchrail/patchrail/pull/86) | [CI run 26896092846](https://github.com/patchrail/patchrail/actions/runs/26896092846) | public evidence ledger maintenance |
 | Pilot metrics evidence boundary | [#87](https://github.com/patchrail/patchrail/pull/87) | [CI run 26896840989](https://github.com/patchrail/patchrail/actions/runs/26896840989) | owned-repo vs external-adopter boundary |
+| Owned review evidence packet | [#88](https://github.com/patchrail/patchrail/pull/88) | [CI run 26897513539](https://github.com/patchrail/patchrail/actions/runs/26897513539) | reproducible review-packet evidence |
+| CI Janitor Java coverage | [#89](https://github.com/patchrail/patchrail/pull/89) | [CI run 26898070805](https://github.com/patchrail/patchrail/actions/runs/26898070805) | classifier and benchmark expansion |
+| CI Janitor Ruby coverage | [#90](https://github.com/patchrail/patchrail/pull/90) | [CI run 26898756284](https://github.com/patchrail/patchrail/actions/runs/26898756284) | classifier and benchmark expansion |
+| CI Janitor PHP coverage | [#91](https://github.com/patchrail/patchrail/pull/91) | [CI run 26899367260](https://github.com/patchrail/patchrail/actions/runs/26899367260) | classifier and benchmark expansion |
+| Queue audit summary gate | [#92](https://github.com/patchrail/patchrail/pull/92) | [CI run 26900396583](https://github.com/patchrail/patchrail/actions/runs/26900396583) | Agent Control Plane audit evidence |
+| CI Janitor .NET coverage | [#93](https://github.com/patchrail/patchrail/pull/93) | [CI run 26901089624](https://github.com/patchrail/patchrail/actions/runs/26901089624) | classifier and benchmark expansion |
+| HTTP API evidence smoke test | [#94](https://github.com/patchrail/patchrail/pull/94) | [CI run 26901794678](https://github.com/patchrail/patchrail/actions/runs/26901794678) | local control-plane API evidence |
 
 ## How To Read This Ledger
 
