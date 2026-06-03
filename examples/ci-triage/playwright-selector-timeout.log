@@ -1,0 +1,5 @@
+Run npx playwright test tests/login.spec.ts
+Error: Timeout 30000ms exceeded.
+waiting for locator("[data-testid=submit]")
+  at tests/login.spec.ts:22:38
+1 failed

@@ -1,0 +1,5 @@
+Run docker compose up --wait --build
+service api is unhealthy
+container example-api-1 exited with code 1
+ERROR: docker compose failed because service api is unhealthy
+Inspect the service healthcheck and startup command.

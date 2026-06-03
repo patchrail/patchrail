@@ -1,0 +1,5 @@
+Run npx playwright test
+Error: browserType.launch: Executable doesn't exist at <cache>/ms-playwright/chromium-1105/chrome-linux/chrome
+Please run the following command to download new browsers:
+  npx playwright install
+1 failed

@@ -28,6 +28,8 @@
         "typescript_typecheck",
         "javascript_lint",
         "github_actions_workflow",
+        "docker_build_failure",
+        "browser_test_failure",
         "rust_test_failure",
         "go_test_failure"
       ]

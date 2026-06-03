@@ -110,6 +110,45 @@ RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "failure_class": "docker_build_failure",
+        "likely_subsystem": "Container image build",
+        "patterns": [
+            r"\bdocker build\b",
+            r"\bdocker buildx build\b",
+            r"\bdocker compose\b",
+            r"failed to solve",
+            r"failed to compute cache key",
+            r"no such file or directory",
+            r"target stage .* could not be found",
+            r"service .* is unhealthy",
+            r"manifest .* not found",
+        ],
+        "reproduction_command": "docker build .",
+        "minimal_repair_strategy": (
+            "Reproduce the failing image build locally, then fix the narrow Dockerfile, "
+            "build context, compose healthcheck, or base-image reference drift."
+        ),
+    },
+    {
+        "failure_class": "browser_test_failure",
+        "likely_subsystem": "Browser end-to-end tests",
+        "patterns": [
+            r"\bplaywright test\b",
+            r"\bcypress run\b",
+            r"browserType\.launch",
+            r"Executable doesn't exist",
+            r"Timeout \d+ms exceeded",
+            r"locator\(",
+            r"CypressError",
+            r"browser exited unexpectedly",
+        ],
+        "reproduction_command": "npx playwright test || npx cypress run",
+        "minimal_repair_strategy": (
+            "Reproduce the browser test locally, install missing browsers if needed, "
+            "then patch the selector, fixture, or launch configuration causing the failure."
+        ),
+    },
+    {
         "failure_class": "rust_test_failure",
         "likely_subsystem": "Rust tests",
         "patterns": [
