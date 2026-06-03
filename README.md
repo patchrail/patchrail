@@ -107,6 +107,9 @@ See [ETHICS.md](ETHICS.md), [SECURITY.md](SECURITY.md), and
 - [Roadmap](docs/roadmap.md)
 - [Release process](docs/release-process.md)
 - [v0.1.0 release evidence](docs/release-v0.1.0-evidence.md)
+- [v0.2.0 release evidence](docs/release-v0.2.0-evidence.md)
+- [v0.3.0 release evidence](docs/release-v0.3.0-evidence.md)
+- [v0.4.0 release evidence](docs/release-v0.4.0-evidence.md)
 - [Codex for Open Source evidence](docs/openai-codex-for-oss-evidence.md)
 - [Open source evidence tracker](docs/oss-program-evidence.md)
 

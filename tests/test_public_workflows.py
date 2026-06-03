@@ -231,6 +231,65 @@ def test_oss_plan_canonical_docs_exist_and_preserve_human_gates() -> None:
     assert "GitHub write actions without dry-run and human approval" in guardrails_skill
 
 
+def test_release_evidence_pages_cover_v01_to_v04_without_publish_actions() -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    release_process = (ROOT / "docs" / "release-process.md").read_text(encoding="utf-8")
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    oss_evidence = (ROOT / "docs" / "openai-codex-for-oss-evidence.md").read_text(encoding="utf-8")
+
+    for version in ("v0.1.0", "v0.2.0", "v0.3.0", "v0.4.0"):
+        path = ROOT / "docs" / f"release-{version}-evidence.md"
+        doc = path.read_text(encoding="utf-8")
+
+        assert f"docs/release-{version}-evidence.md" in readme
+        assert f"release-{version}-evidence.md" in release_process
+        assert f"release-{version}-evidence.md" in oss_evidence
+        assert "PyPI" in doc
+        assert "external applications" in doc or "external program" in doc
+
+    v01 = (ROOT / "docs" / "release-v0.1.0-evidence.md").read_text(encoding="utf-8")
+    assert "Published release:" in v01
+    assert "Manual Gates Remaining" in v01
+    assert "publish the package to PyPI when package index credentials are available" in v01
+    assert "announce the release publicly" in v01
+    assert "submit the Codex for Open Source application" in v01
+
+    for version in ("v0.2.0", "v0.3.0", "v0.4.0"):
+        doc = (ROOT / "docs" / f"release-{version}-evidence.md").read_text(encoding="utf-8")
+        assert "Status:" in doc
+        assert "not a published release" in doc
+        assert "Manual Gates Before Publishing" in doc
+        assert "Publish to PyPI only when the maintainer has configured the credential" in doc
+        assert "Announce or request external program review only with real, current metrics" in doc
+        assert (
+            ("contact third-party" in doc and "maintainers" in doc)
+            or "external applications" in doc
+            or "external program applications" in doc
+        )
+
+    v03 = (ROOT / "docs" / "release-v0.3.0-evidence.md").read_text(encoding="utf-8")
+    v04 = (ROOT / "docs" / "release-v0.4.0-evidence.md").read_text(encoding="utf-8")
+
+    assert "Agent Control Plane" in roadmap
+    assert "v0.3.0 release-candidate evidence page" in roadmap
+    assert "Funded Issue Scout read-only" in roadmap
+    assert "v0.4.0 release-candidate evidence page" in roadmap
+
+    assert "examples/local-agent-queue/run_demo.py" in v03
+    assert "patchrail schema queue-work-item" in v03
+    assert "patchrail serve --host 127.0.0.1 --port 8765" in v03
+    assert "Proposal approval/rejection records human decisions only" in release_process
+    assert "No pull request creation" in v03
+    assert "GitHub write permissions" in v03
+
+    assert "examples/funded-issues-readonly/run_demo.py" in v04
+    assert "patchrail funded-issues list" in v04
+    assert "patchrail funded-issues import" in v04
+    assert "No funded issue command fetches provider APIs" in release_process
+    assert "automatic claims" in v04
+    assert "money-only ranking" in v04
+
+
 def test_local_agent_queue_demo_runs_end_to_end_with_stable_summary() -> None:
     expected = json.loads(
         (ROOT / "examples" / "local-agent-queue" / "demo-summary.expected.json").read_text(

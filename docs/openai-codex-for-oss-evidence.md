@@ -65,6 +65,18 @@ Last verified: 2026-06-03.
   [docs/release-v0.1.0-evidence.md](release-v0.1.0-evidence.md) records the
   checked sdist/wheel names, local command results, wheel smoke test, safety
   review, public CI run, and remaining manual gates.
+- v0.2.0 release-candidate evidence:
+  [docs/release-v0.2.0-evidence.md](release-v0.2.0-evidence.md) records the
+  101-fixture CI Janitor benchmark, read-only GitHub Actions artifact, pilot
+  guide, metrics tracker, and remaining manual gates.
+- v0.3.0 release-candidate evidence:
+  [docs/release-v0.3.0-evidence.md](release-v0.3.0-evidence.md) records the
+  Agent Control Plane queue CLI/API, schemas, demo flow, approval gates, and
+  remaining manual gates.
+- v0.4.0 release-candidate evidence:
+  [docs/release-v0.4.0-evidence.md](release-v0.4.0-evidence.md) records the
+  funded issue read-only CLI, safe-only filters, offline provider export import,
+  ethics boundary, demo output, and remaining manual gates.
 - Published GitHub Release:
   <https://github.com/patchrail/patchrail/releases/tag/v0.1.0>
   targets `07b4934d91866c3ea2978c2aff265f923cd232bf` and includes checked
