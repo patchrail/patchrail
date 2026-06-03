@@ -83,9 +83,10 @@ The easiest contribution is a sanitized CI fixture:
 3. Remove secrets, emails, user names, private repo names, and local home paths.
 4. Add `examples/ci-triage/<short-name>.log`.
 5. Add `examples/ci-triage/<short-name>.expected.json`.
-6. Run the benchmark:
+6. Run the fixture hygiene check and benchmark:
 
 ```bash
+patchrail ci fixture-check examples/ci-triage --format json
 patchrail ci benchmark examples/ci-triage --format json
 ```
 
@@ -107,6 +108,7 @@ Useful pilot evidence is small and reviewable:
 
 - the PatchRail version;
 - the CI provider and toolchain;
+- the `patchrail ci fixture-check` result if a fixture is proposed;
 - the redacted report, if safe to share;
 - whether the classification was correct;
 - whether the suggested maintainer action was useful;

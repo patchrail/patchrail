@@ -112,6 +112,110 @@ class PatchRailCITests(unittest.TestCase):
         )
         self.assertEqual(payload["requirements"]["network_required"], False)
 
+    def test_ci_fixture_check_accepts_clean_fixture_pair(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "python-test.log"
+            log.write_text(
+                "python -m pytest -q\nFAILED tests/test_app.py::test_ok - AssertionError\n",
+                encoding="utf-8",
+            )
+            log.with_suffix(".expected.json").write_text(
+                json.dumps({"failure_class": "python_test_failure", "minimum_confidence": 0.7}),
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "fixture-check",
+                    str(root),
+                    "--format",
+                    "json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["schema_version"], "patchrail.ci_fixture_check.v1")
+            self.assertEqual(payload["total_cases"], 1)
+            self.assertEqual(payload["passed"], 1)
+            self.assertEqual(payload["failed"], 0)
+            self.assertEqual(payload["requirements"]["network_required"], False)
+            self.assertEqual(payload["requirements"]["github_write_permission_required"], False)
+
+    def test_ci_fixture_check_fails_for_missing_expected_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "missing-metadata.log"
+            log.write_text("cargo test\nthread 'demo' panicked\n", encoding="utf-8")
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "fixture-check",
+                    str(root),
+                    "--format",
+                    "json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 1)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["failed"], 1)
+            self.assertIn("missing neighboring .expected.json file", payload["cases"][0]["issues"])
+
+    def test_ci_fixture_check_fails_for_unredacted_sensitive_data(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log = root / "unredacted.log"
+            log.write_text(
+                "python -m pytest -q\n"
+                "FAILED tests/test_app.py::test_ok - AssertionError\n"
+                "Contact maintainer@example.com\n"
+                "Path /Users/example/project\n",
+                encoding="utf-8",
+            )
+            log.with_suffix(".expected.json").write_text(
+                json.dumps({"failure_class": "python_test_failure", "minimum_confidence": 0.7}),
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "patchrail",
+                    "ci",
+                    "fixture-check",
+                    str(root),
+                    "--format",
+                    "json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 1)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["failed"], 1)
+            self.assertIn("email", payload["cases"][0]["redactions"])
+            self.assertIn("mac_home_path", payload["cases"][0]["redactions"])
+            self.assertIn("possible unredacted sensitive data", payload["cases"][0]["issues"][0])
+
     def test_ci_explain_defaults_to_markdown_and_states_safety_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log = Path(tmpdir) / "failed.log"
