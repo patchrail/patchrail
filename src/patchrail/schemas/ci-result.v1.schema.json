@@ -51,7 +51,8 @@
         "release_publish_failure",
         "git_checkout_failure",
         "git_merge_conflict",
-        "secrets_or_permissions_failure"
+        "secrets_or_permissions_failure",
+        "terraform_iac_failure"
       ]
     },
     "likely_subsystem": {

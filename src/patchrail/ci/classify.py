@@ -787,6 +787,35 @@ RULES: list[dict[str, Any]] = [
             "only in the touched files and rerun golangci-lint."
         ),
     },
+    {
+        "failure_class": "terraform_iac_failure",
+        "likely_subsystem": "Terraform/OpenTofu infrastructure-as-code plan, apply, or init",
+        "patterns": [
+            r"Error acquiring the state lock",
+            r"Error: Inconsistent dependency lock file",
+            r"Error: Failed to query available provider packages",
+            r"Error: Failed to install provider",
+            r"Error: Reference to undeclared (?:resource|input variable|local value|module)",
+            r"Error: Unsupported (?:argument|block type)",
+            r"Error: Invalid (?:value for|reference|resource type)",
+            r"Error: Module not installed",
+            r"Error: Provider configuration not present",
+            r"╷\s*\n\s*│\s*Error:",
+            r"\bterraform (?:init|plan|apply|validate|fmt)\b",
+            r"\bopentofu\b|\btofu (?:init|plan|apply)\b",
+            r"\bterragrunt\b",
+            r"Terraform planned the following actions, but then encountered a problem",
+        ],
+        "reproduction_command": (
+            "run the failing stage locally against the same workspace "
+            "(e.g. terraform init && terraform validate && terraform plan)"
+        ),
+        "minimal_repair_strategy": (
+            "Confirm the failure is a Terraform/IaC configuration or state issue rather than a "
+            "downstream provider outage, then fix the reported HCL argument, lock file, or provider "
+            "constraint (or release a stale state lock) and rerun plan before apply."
+        ),
+    },
 ]
 
 

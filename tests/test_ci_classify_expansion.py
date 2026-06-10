@@ -508,6 +508,37 @@ class ArtifactOrCacheFailureClassification(unittest.TestCase):
         self.assertEqual(classify_ci_log(log)["failure_class"], "artifact_or_cache_failure")
 
 
+class TerraformIacFailureClassification(unittest.TestCase):
+    def test_terraform_plan_config_error_classifies_as_terraform_iac_failure(self) -> None:
+        log = (
+            "Run terraform plan -no-color\n"
+            "Initializing the backend...\n"
+            "╷\n"
+            "│ Error: Reference to undeclared resource\n"
+            "│\n"
+            '│   on main.tf line 22, in resource "aws_instance" "web":\n'
+            "│   22:   subnet_id = aws_subnet.private.id\n"
+            "│\n"
+            '│ A managed resource "aws_subnet" "private" has not been declared.\n'
+            "╵\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "terraform_iac_failure")
+        self.assertIn("terraform", result["reproduction_command"])
+        self.assertEqual(result["requirements"]["external_model_required"], False)
+
+    def test_terraform_state_lock_classifies_as_terraform_iac_failure(self) -> None:
+        log = (
+            "Run terraform apply -auto-approve\n"
+            "Acquiring state lock. This may take a few moments...\n"
+            "│ Error: Error acquiring the state lock\n"
+            "│ Lock Info:\n"
+            "│   ID:        9f3c-...\n"
+            "│   Operation: OperationTypeApply\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "terraform_iac_failure")
+
+
 class SchemaContractExpansion(unittest.TestCase):
     def test_schema_command_lists_new_failure_classes(self) -> None:
         proc = subprocess.run(
