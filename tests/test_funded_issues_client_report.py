@@ -197,6 +197,25 @@ class ClientReportPayloadTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             client_report_funded_issues(issues, client_name="Acme", report_date="")
 
+    def test_rejects_malformed_report_date(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "issues.json"
+            source.write_text(json.dumps(_fixture_payload()), encoding="utf-8")
+            issues = load_funded_issues(source)
+        for bad in ("next tuesday", "2026-13-45", "06/09/2026", "2026-6-9x"):
+            with self.assertRaises(ValueError):
+                client_report_funded_issues(issues, client_name="Acme", report_date=bad)
+
+    def test_normalizes_valid_report_date(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "issues.json"
+            source.write_text(json.dumps(_fixture_payload()), encoding="utf-8")
+            issues = load_funded_issues(source)
+        payload = client_report_funded_issues(
+            issues, client_name="Acme", report_date="  2026-06-09  "
+        )
+        self.assertEqual(payload["date"], "2026-06-09")
+
 
 class ClientReportCliTests(unittest.TestCase):
     def _write_fixture(self, tmp: str) -> Path:

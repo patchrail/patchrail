@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from collections import Counter
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -971,6 +972,26 @@ def _client_report_operating_procedure(
     return steps
 
 
+def _normalize_report_date(report_date: str) -> str:
+    """Validate an injected report date and return its canonical string form.
+
+    Accepts an ISO calendar date (``YYYY-MM-DD``) or an ISO datetime; rejects
+    anything else so a client-facing deliverable can never ship a garbage date.
+    """
+    stripped = report_date.strip()
+    try:
+        return date.fromisoformat(stripped).isoformat()
+    except ValueError:
+        pass
+    try:
+        datetime.fromisoformat(stripped)
+    except ValueError:
+        raise ValueError(
+            f"report_date must be a valid ISO date (YYYY-MM-DD), got {report_date!r}"
+        ) from None
+    return stripped
+
+
 def client_report_funded_issues(
     issues: list[FundedIssue],
     *,
@@ -990,6 +1011,7 @@ def client_report_funded_issues(
         raise ValueError("client_name must be a non-empty string")
     if not report_date or not report_date.strip():
         raise ValueError("report_date must be a non-empty ISO date string")
+    normalized_date = _normalize_report_date(report_date)
     shortlist_payload = shortlist_funded_issues(
         issues,
         safe_only=safe_only,
@@ -1016,7 +1038,7 @@ def client_report_funded_issues(
         "read_only": True,
         "client_name": client_name.strip(),
         "prepared_by": prepared_by,
-        "date": report_date.strip(),
+        "date": normalized_date,
         "scope": f"{reviewed} public funded open-source issues reviewed",
         "blocked_actions": BLOCKED_ACTIONS,
         "filters": shortlist_payload["filters"],
