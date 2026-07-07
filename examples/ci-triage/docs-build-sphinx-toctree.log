@@ -1,0 +1,18 @@
+Run sphinx-build -W -b html docs docs/_build/html
+Running Sphinx v7.2.6
+making output directory... done
+building [mo]: targets for 0 po files that are out of date
+building [html]: targets for 3 source files that are out of date
+updating environment: [new config] 3 added, 0 changed, 0 removed
+reading sources... [ 33%] guide/advanced
+reading sources... [ 66%] guide/install
+reading sources... [100%] index
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency...
+/home/runner/work/project/project/docs/guide/advanced.rst: WARNING: document isn't included in any toctree
+
+Warning, treated as error:
+/home/runner/work/project/project/docs/index.rst:12: toctree contains reference to nonexisting document 'guide/missing'
+make: *** [Makefile:20: html] Error 2
+Error: Process completed with exit code 2.

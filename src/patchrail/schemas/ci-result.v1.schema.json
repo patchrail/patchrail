@@ -58,7 +58,9 @@
         "elixir_mix_failure",
         "database_migration_failure",
         "kubernetes_deploy_failure",
-        "helm_chart_failure"
+        "helm_chart_failure",
+        "node_script_missing",
+        "docs_build_failure"
       ]
     },
     "likely_subsystem": {

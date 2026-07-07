@@ -1,0 +1,21 @@
+Run npm run build
+
+> docs@0.0.0 build
+> docusaurus build
+
+[INFO] [en] Creating an optimized production build...
+[SUCCESS] Compiled successfully in 24.13s
+[INFO] Generating static files for 42 paths.
+[ERROR] Docusaurus found broken links!
+
+Please check the pages of your site in the list below, and make sure you don't reference any path that does not exist.
+
+Exhaustive list of all broken links found:
+- Broken link on source page path = /docs/intro:
+   -> linking to /docs/getting-started/missing-page (resolved as: /docs/getting-started/missing-page)
+- Broken link on source page path = /docs/guide:
+   -> linking to ./configuration
+
+Error: Unable to build website for locale en.
+    at Object.build (/home/runner/work/site/node_modules/@docusaurus/core/lib/index.js:210:15)
+Error: Process completed with exit code 1.

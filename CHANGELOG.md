@@ -4,11 +4,23 @@
 
 ### Added
 
+- New `docs_build_failure` class classifies documentation-site build failures
+  from Sphinx (`sphinx-build -W` warnings-as-errors, missing toctree entries),
+  MkDocs (`mkdocs build --strict` broken links), and Docusaurus (`docusaurus
+  build` broken links). Backed by three sanitized fixtures in
+  `examples/ci-triage/`, bringing the benchmark zoo to 166 cases.
 - `patchrail ci classes` lists every supported failure class with its likely
   subsystem and reproduction command (plus the `unknown` fallback), in stable
   order. Supports `--format text|json|markdown` and `--out`, so the set of
   classes the classifier can diagnose is discoverable from the CLI instead of
   only in the source. Closes #150.
+
+### Fixed
+
+- Added `node_script_missing` to the published `ci-result` schema enum; the
+  classifier could already emit it, so a valid classification previously failed
+  schema validation for downstream consumers. A new test guards that every rule
+  class is declared in the schema enum.
 
 ## 0.2.0 - 2026-07-07
 

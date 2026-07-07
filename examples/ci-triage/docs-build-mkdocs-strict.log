@@ -1,0 +1,7 @@
+Run mkdocs build --strict
+INFO    -  Cleaning site directory
+INFO    -  Building documentation to directory: /home/runner/work/site/site
+WARNING -  Doc file 'guide/configuration.md' contains a relative link 'install.md', but the target 'guide/install.md' is not found among documentation files.
+WARNING -  Doc file 'index.md' contains a link '../CONTRIBUTING.md', but the target is not found among documentation files.
+Aborted with 2 warnings in strict mode!
+Error: Process completed with exit code 1.

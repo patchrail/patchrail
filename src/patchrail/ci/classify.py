@@ -966,6 +966,38 @@ RULES: list[dict[str, Any]] = [
             "and rerun the same helm command."
         ),
     },
+    {
+        "failure_class": "docs_build_failure",
+        "likely_subsystem": "Documentation site build (Sphinx, MkDocs, Docusaurus)",
+        "patterns": [
+            r"\bsphinx-build\b",
+            r"Warning, treated as error",
+            r"WARNING: document isn't included in any toctree",
+            r"toctree contains reference to nonexisting document",
+            r"WARNING: undefined label:",
+            r"WARNING: unknown document:",
+            r"\bmkdocs build\b",
+            r"Aborted with \d+ warnings in strict mode",
+            r"is not found among documentation files",
+            r"mkdocs\.exceptions\.",
+            r"\bdocusaurus build\b",
+            r"Docusaurus found broken links",
+            r"Broken link on source page path",
+            r"Docs markdown link couldn't be resolved",
+            r"Error: Unable to build website for locale",
+        ],
+        "reproduction_command": (
+            "build the docs locally with the same strict flags "
+            "(e.g. sphinx-build -W -b html docs docs/_build, mkdocs build --strict, "
+            "or npm run docusaurus build) and fix the first reported warning"
+        ),
+        "minimal_repair_strategy": (
+            "Confirm the docs build failed on a warning-as-error (broken cross-reference, "
+            "missing toctree entry, or unresolved link) rather than a code defect, then fix the "
+            "offending reference or add the page to the site navigation before rerunning the "
+            "strict build."
+        ),
+    },
 ]
 
 

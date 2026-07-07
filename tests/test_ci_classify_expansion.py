@@ -779,6 +779,48 @@ class HelmChartFailureClassification(unittest.TestCase):
         self.assertGreaterEqual(result["confidence"], 0.7)
 
 
+class DocsBuildFailureClassification(unittest.TestCase):
+    def test_sphinx_warning_as_error_classifies_as_docs_build_failure(self) -> None:
+        log = (
+            "Run sphinx-build -W -b html docs docs/_build/html\n"
+            "checking consistency...\n"
+            "docs/guide/advanced.rst: WARNING: document isn't included in any toctree\n"
+            "\n"
+            "Warning, treated as error:\n"
+            "docs/index.rst:12: toctree contains reference to nonexisting document "
+            "'guide/missing'\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "docs_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_mkdocs_strict_broken_link_classifies_as_docs_build_failure(self) -> None:
+        log = (
+            "Run mkdocs build --strict\n"
+            "WARNING -  Doc file 'guide/configuration.md' contains a relative link "
+            "'install.md', but the target 'guide/install.md' is not found among "
+            "documentation files.\n"
+            "Aborted with 1 warnings in strict mode!\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "docs_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_docusaurus_broken_link_wins_over_node_dependency_install(self) -> None:
+        # The log runs through npm; the Docusaurus signals must still win so the
+        # failure is not misread as a Node dependency problem.
+        log = (
+            "Run npm run build\n"
+            "> docs@0.0.0 build\n"
+            "> docusaurus build\n"
+            "[ERROR] Docusaurus found broken links!\n"
+            "- Broken link on source page path = /docs/intro:\n"
+            "   -> linking to /docs/getting-started/missing-page\n"
+            "Error: Unable to build website for locale en.\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "docs_build_failure")
+
+
 class SchemaContractExpansion(unittest.TestCase):
     def test_schema_command_lists_new_failure_classes(self) -> None:
         proc = subprocess.run(
@@ -801,12 +843,32 @@ class SchemaContractExpansion(unittest.TestCase):
         self.assertIn("secrets_or_permissions_failure", enum)
         self.assertIn("artifact_or_cache_failure", enum)
         self.assertIn("pre_commit_hook_failure", enum)
+        self.assertIn("docs_build_failure", enum)
+        self.assertIn("node_script_missing", enum)
         self.assertNotIn("node_dependency_failure", enum)
         self.assertNotIn("lint_failure", enum)
         self.assertNotIn("typecheck_failure", enum)
         self.assertNotIn("publish_failure", enum)
         self.assertNotIn("checkout_failure", enum)
         self.assertNotIn("permissions_failure", enum)
+
+    def test_every_rule_failure_class_is_declared_in_the_schema_enum(self) -> None:
+        # Guard against drift: any class the classifier can emit must be a valid
+        # value in the published ci-result schema, or downstream consumers that
+        # validate against it will reject a legitimate classification.
+        from patchrail.ci.classify import RULES
+
+        proc = subprocess.run(
+            [sys.executable, "-m", "patchrail", "schema", "ci-result"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        enum = set(json.loads(proc.stdout)["properties"]["failure_class"]["enum"])
+        missing = [rule["failure_class"] for rule in RULES if rule["failure_class"] not in enum]
+        self.assertEqual(missing, [], f"rule classes missing from schema enum: {missing}")
+        self.assertIn("unknown", enum)
 
 
 if __name__ == "__main__":
