@@ -18,12 +18,13 @@ entirely on your machine.
 
 ## Why maintainers use it
 
-- **39 failure classes** backed by real log signatures — dependency
+- **40 failure classes** backed by real log signatures — dependency
   resolution, flaky network, OOM-killed runners, Docker builds, lint,
   type checks, docs-site builds, and test failures across Python, Node,
-  TypeScript, Go, Rust, Java, .NET, Ruby, PHP, and C++. Run `patchrail ci
-  classes` to list them all (add `--format json` to check coverage from a script).
-- **166 sanitized CI log fixtures** keep the classifier honest: every rule is
+  TypeScript, Go, Rust, Java, .NET, Ruby, PHP, C++, and Swift/Xcode. Run
+  `patchrail ci classes` to list them all (add `--format json` to check
+  coverage from a script).
+- **169 sanitized CI log fixtures** keep the classifier honest: every rule is
   benchmarked against the public fixture zoo in `examples/ci-triage/` on every
   test run.
 - **23 secret-redaction patterns** (GitHub/GitLab/npm/PyPI/AWS tokens, private
@@ -106,7 +107,7 @@ report artifact shape.
 
 | Feature | Status | Notes |
 | --- | --- | --- |
-| CI failure triage (`ci explain`, `ci classify`, `ci classes`) | Beta | 39 failure classes for GitHub Actions-style logs and common toolchains |
+| CI failure triage (`ci explain`, `ci classify`, `ci classes`) | Beta | 40 failure classes for GitHub Actions-style logs and common toolchains |
 | Secret redaction (`redact`, `ci explain --redact`) | Beta | 23 patterns for tokens, keys, emails, and home paths |
 | Reports | Beta | Markdown, JSON, and plain text |
 | Fixture benchmark (`ci benchmark`) | Beta | Scores the classifier against all 153 public fixtures |

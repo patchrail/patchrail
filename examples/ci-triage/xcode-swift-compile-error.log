@@ -1,0 +1,14 @@
++ xcodebuild -scheme App -destination 'platform=iOS Simulator,name=iPhone 15' build
+Compiling Swift Module 'App' (24 sources)
+CompileSwift normal arm64 Sources/App/LoginView.swift
+Sources/App/LoginView.swift:8:8: error: no such module 'Networking'
+import Networking
+       ^
+Sources/App/LoginView.swift:42:22: error: cannot find 'AuthClient' in scope
+        let client = AuthClient(session: .shared)
+                     ^~~~~~~~~~
+The following build commands failed:
+	CompileSwift normal arm64 Compiling\ LoginView.swift (in target 'App' from project 'App')
+(1 failure)
+** BUILD FAILED **
+Error: Process completed with exit code 65.

@@ -1,0 +1,10 @@
++ swift build --build-tests
+Fetching https://github.com/example/swift-log from cache
+Fetching https://github.com/example/swift-metrics from cache
+Computing version for https://github.com/example/swift-log
+Computing version for https://github.com/example/swift-metrics
+error: Dependencies could not be resolved because root depends on 'swift-metrics' 2.4.0..<3.0.0 and root depends on 'swift-log' 1.6.0..<2.0.0.
+'swift-metrics' >= 2.4.0 practically depends on 'swift-log' 1.4.0..<1.5.0.
+error: could not find target(s) 'AppNetworking' in package 'app'; valid targets are: 'App', 'AppKit'
+** BUILD FAILED **
+Error: Process completed with exit code 1.

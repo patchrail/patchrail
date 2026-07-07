@@ -11,7 +11,8 @@ access, repository write permissions, billing, or an external model call.
 
 ## Current Coverage
 
-The fixture zoo currently contains 153 cases across these root-cause families:
+The fixture zoo currently contains 169 cases. A representative slice of the
+covered root-cause families (run `patchrail ci classes` for the full list):
 
 - `github_actions_workflow`
 - `docker_build_failure`
@@ -60,6 +61,11 @@ the same local-only/no-secrets boundary as the rest of the zoo.
 .NET coverage includes NuGet version conflicts, C# compiler errors, and xUnit
 assertion failures. These fixtures are synthetic and keep restore, build, and
 test signals local to the fixture text.
+
+Apple-platform coverage (`xcode_build_failure`) includes Swift Package Manager
+dependency-resolution failures, `xcodebuild`/`swift build` compile errors with
+missing modules, and XCTest failures. These fixtures are synthetic and keep the
+same local-only/no-secrets boundary as the rest of the zoo.
 
 The current set also includes additional Go, Rust, JavaScript lint, GitHub
 Actions workflow, and Python test variants so the benchmark crosses the v0.2

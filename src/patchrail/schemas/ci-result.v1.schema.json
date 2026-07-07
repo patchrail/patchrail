@@ -60,7 +60,8 @@
         "kubernetes_deploy_failure",
         "helm_chart_failure",
         "node_script_missing",
-        "docs_build_failure"
+        "docs_build_failure",
+        "xcode_build_failure"
       ]
     },
     "likely_subsystem": {

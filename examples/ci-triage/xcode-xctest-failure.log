@@ -1,0 +1,13 @@
++ xcodebuild test -scheme App -destination 'platform=iOS Simulator,name=iPhone 15'
+Test Suite 'AppTests.xctest' started at 2024-01-01 00:00:00.000
+Test Case '-[AppTests.LoginTests testValidCredentialsReturn200]' started.
+Sources/AppTests/LoginTests.swift:57: error: -[AppTests.LoginTests testValidCredentialsReturn200] : XCTAssertEqual failed: ("401") is not equal to ("200")
+Test Case '-[AppTests.LoginTests testValidCredentialsReturn200]' failed (0.184 seconds).
+Test Suite 'AppTests.xctest' failed at 2024-01-01 00:00:00.400.
+	 Executed 12 tests, with 1 failure (0 unexpected) in 0.184 seconds
+Testing failed:
+	LoginTests.testValidCredentialsReturn200, XCTAssertEqual failed: ("401") is not equal to ("200")
+** TEST FAILED **
+The following build commands failed:
+	Testing workspace App with scheme App
+Error: Process completed with exit code 65.

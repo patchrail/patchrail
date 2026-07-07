@@ -998,6 +998,35 @@ RULES: list[dict[str, Any]] = [
             "strict build."
         ),
     },
+    {
+        "failure_class": "xcode_build_failure",
+        "likely_subsystem": "Apple platform build/test (xcodebuild, swift build, Swift Package Manager)",
+        "patterns": [
+            r"\bxcodebuild\b",
+            r"\bswift build\b",
+            r"\bswift test\b",
+            r"The following build commands failed:",
+            r"\*\* BUILD FAILED \*\*",
+            r"\*\* TEST FAILED \*\*",
+            r"xcodebuild: error:",
+            r"error: no such module ",
+            r"error: Dependencies could not be resolved",
+            r"error: could not find target",
+            r"Testing failed:",
+            r"\bCompileSwift(?:Sources)?\b",
+        ],
+        "reproduction_command": (
+            "reproduce the failing Apple build/test locally against the same scheme "
+            "(e.g. swift build && swift test, or "
+            "xcodebuild -scheme <Scheme> build test)"
+        ),
+        "minimal_repair_strategy": (
+            "Confirm the failure is an Xcode/SwiftPM build, module-resolution, or XCTest "
+            "issue rather than a code-signing or provisioning problem, then fix the reported "
+            "Swift compile error, missing module, or unresolved package dependency and rerun "
+            "the same swift or xcodebuild command."
+        ),
+    },
 ]
 
 

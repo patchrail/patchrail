@@ -4,6 +4,13 @@
 
 ### Added
 
+- New `xcode_build_failure` class classifies Apple-platform build and test
+  failures from `xcodebuild`, `swift build`/`swift test`, and Swift Package
+  Manager — Swift compile errors, missing modules (`error: no such module`),
+  unresolved package dependencies, and XCTest failures (`** BUILD FAILED **`,
+  `** TEST FAILED **`, `The following build commands failed:`). Backed by three
+  sanitized fixtures in `examples/ci-triage/`, bringing the benchmark zoo to 169
+  cases and the classifier to 40 failure classes.
 - New `docs_build_failure` class classifies documentation-site build failures
   from Sphinx (`sphinx-build -W` warnings-as-errors, missing toctree entries),
   MkDocs (`mkdocs build --strict` broken links), and Docusaurus (`docusaurus
