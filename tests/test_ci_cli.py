@@ -2438,6 +2438,72 @@ class PatchRailCITests(unittest.TestCase):
         self.assertTrue(any("python_test_failure" in line for line in class_lines))
         self.assertTrue(all("reproduce:" in line for line in class_lines))
 
+    def test_ci_explain_empty_log_file_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "empty.log"
+            log_path.write_text("", encoding="utf-8")
+            out_path = Path(tmpdir) / "should-not-exist.md"
+
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain", "--log", str(log_path), "--out", str(out_path)])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("log input is empty", stderr.getvalue())
+        self.assertIn("explain", stderr.getvalue())
+        # Nothing misleading is emitted on stdout or written to --out.
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertFalse(out_path.exists())
+
+    def test_ci_classify_whitespace_only_log_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "blank.log"
+            log_path.write_text("   \n\t\n  ", encoding="utf-8")
+
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "classify", "--log", str(log_path)])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("log input is empty", stderr.getvalue())
+        self.assertIn("classify", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_explain_empty_stdin_fails_clearly(self) -> None:
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = StringIO("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("log input is empty", stderr.getvalue())
+        self.assertIn("stdin", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_explain_non_empty_log_still_classifies(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "real.log"
+            log_path.write_text(
+                "E   ModuleNotFoundError: No module named 'requests'\n",
+                encoding="utf-8",
+            )
+
+            stdout = StringIO()
+            with redirect_stdout(stdout):
+                exit_code = main(["ci", "explain", "--log", str(log_path), "--format", "json"])
+
+        self.assertEqual(exit_code, 0)
+        payload = json.loads(stdout.getvalue())
+        self.assertEqual(payload["schema_version"], "patchrail.ci_result.v1")
+        self.assertNotEqual(payload["failure_class"], "")
+
 
 if __name__ == "__main__":
     unittest.main()

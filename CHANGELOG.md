@@ -17,6 +17,12 @@
 
 ### Fixed
 
+- `patchrail ci explain` and `ci classify` now fail clearly on empty or
+  whitespace-only input (from `--log` or stdin) instead of silently reporting
+  `failure_class: unknown` with confidence `0.15` and exit code `0`. They print
+  `log input is empty` to stderr, exit with code `2`, and write nothing to
+  `--out`, so a bad shell redirect is no longer mistaken for an unclassifiable
+  log. Closes #151.
 - Added `node_script_missing` to the published `ci-result` schema enum; the
   classifier could already emit it, so a valid classification previously failed
   schema validation for downstream consumers. A new test guards that every rule

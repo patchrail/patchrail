@@ -3681,6 +3681,13 @@ def _ci_classes(args: argparse.Namespace) -> int:
 
 def _ci_explain(args: argparse.Namespace) -> int:
     raw_log = _read_log(args.log)
+    if not raw_log.strip():
+        source = f"--log {args.log}" if args.log is not None else "stdin"
+        print(
+            f"patchrail ci {args.ci_command}: log input is empty (checked {source})",
+            file=sys.stderr,
+        )
+        return 2
     result = classify_ci_log(raw_log)
     if args.redact:
         redaction = redact_ci_log(raw_log)
