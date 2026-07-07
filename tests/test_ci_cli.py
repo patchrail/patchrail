@@ -2377,6 +2377,55 @@ class PatchRailCITests(unittest.TestCase):
         self.assertNotIn("sample_url", result)
         self.assertNotIn("action_url", result)
 
+    def test_ci_classes_lists_every_supported_class_as_json(self) -> None:
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            exit_code = main(["ci", "classes", "--format", "json"])
+
+        self.assertEqual(exit_code, 0)
+        payload = json.loads(stdout.getvalue())
+        self.assertEqual(payload["schema_version"], "patchrail.ci_classes.v1")
+
+        classes = payload["classes"]
+        self.assertEqual(payload["count"], len(classes))
+        names = [entry["failure_class"] for entry in classes]
+
+        # A known rule and the unknown fallback are both listed, once each.
+        self.assertIn("python_test_failure", names)
+        self.assertEqual(names.count("python_test_failure"), 1)
+        self.assertEqual(names[-1], "unknown")
+        self.assertEqual(len(names), len(set(names)))
+
+        # Every entry is machine-readable with the three documented fields.
+        for entry in classes:
+            self.assertEqual(
+                set(entry),
+                {"failure_class", "likely_subsystem", "reproduction_command"},
+            )
+            self.assertTrue(entry["reproduction_command"])
+
+        # Stable ordering: two runs emit the same sequence.
+        second = StringIO()
+        with redirect_stdout(second):
+            main(["ci", "classes", "--format", "json"])
+        self.assertEqual(
+            names,
+            [entry["failure_class"] for entry in json.loads(second.getvalue())["classes"]],
+        )
+
+    def test_ci_classes_text_output_is_terminal_readable(self) -> None:
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            exit_code = main(["ci", "classes"])
+
+        self.assertEqual(exit_code, 0)
+        text = stdout.getvalue()
+        self.assertIn("supported failure classes", text)
+        # One class per line, each carrying its subsystem and reproduce hint.
+        class_lines = [line for line in text.splitlines() if line.startswith("- ")]
+        self.assertTrue(any("python_test_failure" in line for line in class_lines))
+        self.assertTrue(all("reproduce:" in line for line in class_lines))
+
 
 if __name__ == "__main__":
     unittest.main()

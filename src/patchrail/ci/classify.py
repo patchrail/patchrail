@@ -892,6 +892,41 @@ def redact_ci_log(text: str) -> dict[str, Any]:
     }
 
 
+UNKNOWN_FAILURE_CLASS = "unknown"
+UNKNOWN_LIKELY_SUBSYSTEM = "unknown"
+UNKNOWN_REPRODUCTION_COMMAND = "inspect CI log and run the failing job locally"
+
+
+def list_failure_classes() -> dict[str, Any]:
+    """List every supported failure class in stable rule order.
+
+    Emits ``failure_class``, ``likely_subsystem`` and ``reproduction_command``
+    for each rule, plus the ``unknown`` fallback classifier returns when no
+    rule matches. This is the machine-readable inventory of what PatchRail can
+    diagnose locally, without having to read the source ``RULES`` table.
+    """
+    classes = [
+        {
+            "failure_class": rule["failure_class"],
+            "likely_subsystem": rule["likely_subsystem"],
+            "reproduction_command": rule["reproduction_command"],
+        }
+        for rule in RULES
+    ]
+    classes.append(
+        {
+            "failure_class": UNKNOWN_FAILURE_CLASS,
+            "likely_subsystem": UNKNOWN_LIKELY_SUBSYSTEM,
+            "reproduction_command": UNKNOWN_REPRODUCTION_COMMAND,
+        }
+    )
+    return {
+        "schema_version": "patchrail.ci_classes.v1",
+        "count": len(classes),
+        "classes": classes,
+    }
+
+
 def classify_ci_log(text: str) -> dict[str, Any]:
     best_rule: dict[str, Any] | None = None
     best_signals: list[str] = []
@@ -904,9 +939,9 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     if best_rule is None or not best_signals:
         return {
             "schema_version": "patchrail.ci_result.v1",
-            "failure_class": "unknown",
-            "likely_subsystem": "unknown",
-            "reproduction_command": "inspect CI log and run the failing job locally",
+            "failure_class": UNKNOWN_FAILURE_CLASS,
+            "likely_subsystem": UNKNOWN_LIKELY_SUBSYSTEM,
+            "reproduction_command": UNKNOWN_REPRODUCTION_COMMAND,
             "minimal_repair_strategy": (
                 "Do not auto-repair until the failing subsystem is identified."
             ),

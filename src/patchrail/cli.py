@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from patchrail import __version__
-from patchrail.ci import classify_ci_log, redact_ci_log
+from patchrail.ci import classify_ci_log, list_failure_classes, redact_ci_log
 from patchrail.funded_issues import (
     SUPPORTED_PROVIDERS,
     VALID_OPPORTUNITY_STATES,
@@ -3637,6 +3637,45 @@ def _serve(args: argparse.Namespace) -> int:
     except KeyboardInterrupt:
         print("PatchRail local API stopped.", file=sys.stderr)
         return 130
+    return 0
+
+
+def _render_classes_text(payload: dict[str, Any]) -> str:
+    classes = list(payload.get("classes") or [])
+    lines = [f"{payload['count']} supported failure classes:", ""]
+    for entry in classes:
+        lines.append(
+            f"- {entry['failure_class']}: {entry['likely_subsystem']} "
+            f"— reproduce: {entry['reproduction_command']}"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def _render_classes_markdown(payload: dict[str, Any]) -> str:
+    classes = list(payload.get("classes") or [])
+    lines = [
+        "# PatchRail supported failure classes",
+        "",
+        f"{payload['count']} classes the local classifier can diagnose.",
+        "",
+    ]
+    for entry in classes:
+        lines.append(f"- `{entry['failure_class']}` — {entry['likely_subsystem']}")
+        lines.append(f"  - reproduce: `{entry['reproduction_command']}`")
+    return "\n".join(lines) + "\n"
+
+
+def _format_classes(payload: dict[str, Any], output_format: str) -> str:
+    if output_format == "json":
+        return _json_dump(payload)
+    if output_format == "markdown":
+        return _render_classes_markdown(payload)
+    return _render_classes_text(payload)
+
+
+def _ci_classes(args: argparse.Namespace) -> int:
+    payload = list_failure_classes()
+    _write_or_print(_format_classes(payload, args.format), args.out)
     return 0
 
 
@@ -8647,6 +8686,19 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     explain.add_argument("--out", type=Path, help="Optional output path.")
     explain.set_defaults(func=_ci_explain)
+
+    classes = ci_subparsers.add_parser(
+        "classes",
+        help="List every supported failure class the classifier can diagnose.",
+    )
+    classes.add_argument(
+        "--format",
+        choices=["text", "json", "markdown"],
+        default="text",
+        help="Output format.",
+    )
+    classes.add_argument("--out", type=Path, help="Optional output path.")
+    classes.set_defaults(func=_ci_classes)
 
     classify = ci_subparsers.add_parser("classify", help="Emit machine-readable CI classification.")
     classify.add_argument("--log", type=Path, help="CI log file. Reads stdin when omitted.")

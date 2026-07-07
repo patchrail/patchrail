@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `patchrail ci classes` lists every supported failure class with its likely
+  subsystem and reproduction command (plus the `unknown` fallback), in stable
+  order. Supports `--format text|json|markdown` and `--out`, so the set of
+  classes the classifier can diagnose is discoverable from the CLI instead of
+  only in the source. Closes #150.
+
 ## 0.2.0 - 2026-07-07
 
 ### Removed
