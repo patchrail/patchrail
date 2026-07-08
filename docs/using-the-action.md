@@ -6,6 +6,15 @@ maintain a different repository and want the
 [`patchrail/ci-triage-action`](https://github.com/patchrail/ci-triage-action)
 step in your own workflow.
 
+That published `@v1` drop-in is the version this page documents. It installs
+`patchrail` from PyPI and needs nothing from the PatchRail repo. It is a
+deliberately small wrapper: it classifies the log and links the matching
+`/fix` guide. If you want the richer artifact surface (a `report-dir` with a
+Markdown report and the `adoption-*` / `workflow-*` outputs), that is the
+in-repo composite documented in
+[`examples/ci-triage-action`](../examples/ci-triage-action/README.md) and
+[`docs/github-action.md`](github-action.md), not this drop-in.
+
 ## 1. Capture the failing log to a file
 
 The action reads a log file from disk — it does not capture your test
@@ -34,9 +43,11 @@ Inputs:
 
 | Input | Required | Default | Description |
 |-------|----------|---------|--------------|
-| `log-path` | yes | — | Path to the failed CI log inside the checked-out repository. |
-| `report-dir` | no | `patchrail-ci-triage` | Directory where the action writes the Markdown and JSON reports. |
-| `redact` | no | `true` | Redact secrets, emails, and local home paths before writing reports. |
+| `log-path` | one of `log-path`/`log-text` | `''` | Path to the failed CI log inside the checked-out repository. |
+| `log-text` | one of `log-path`/`log-text` | `''` | Raw log text, used when no log file is available. |
+| `redact` | no | `true` | Redact secrets, emails, and local home paths before classifying. |
+| `patchrail-version` | no | `''` (latest) | Pin a specific `patchrail` version from PyPI. |
+| `python-version` | no | `3.x` | Python version used to run the classifier. |
 
 `if: failure()` is what makes this a triage-on-red step: it only runs after
 a prior step in the same job has failed, so `log-path` points at a log that
@@ -44,9 +55,18 @@ already contains the failure.
 
 ## 3. What you get on a red run
 
-The action classifies the log locally and exposes the result two ways —
-there is no run annotation; look in the step's own outputs and the job
-summary.
+The action classifies the log locally and surfaces the result three ways: a
+run annotation, a job-summary block, and step outputs. It also writes the
+structured result to `patchrail-ci-result.json` in the workspace.
+
+### Run annotation
+
+The action emits a single `::warning` annotation that appears inline on the
+run, so the failure class is visible without opening the job summary:
+
+```text
+python_dependency_resolution (confidence 0.89) — guide: https://getpatchrail.com/fix/python-dependency-resolution
+```
 
 ### Step outputs
 
@@ -55,20 +75,9 @@ Reference these from a later step with
 
 | Output | Description |
 |--------|--------------|
-| `failure-class` | PatchRail failure class for the CI log. |
-| `failure-slug` | URL-safe version of the failure class, for labels and artifact names. |
+| `failure-class` | PatchRail failure class for the CI log (e.g. `python_dependency_resolution`). |
 | `confidence` | Classifier confidence, `0`-`1`. |
-| `json-result` | Path to the structured PatchRail result JSON. |
-| `markdown-report` | Path to the maintainer-readable PatchRail report. |
-| `artifact-name` | Stable artifact name for uploading the triage bundle. |
-| `summary-line` | One-line triage summary, the same text written to the job summary. |
-| `redacted-categories` | Number of local redaction categories found in the log. |
-| `next-step` | Minimal next repair step for the detected failure. |
-| `reproduction-command` | Local command PatchRail recommends to reproduce the failure. |
-| `adoption-key` | Stable key for this failure class, for downstream adoption dashboards. |
-| `adoption-event-id` | Stable per-run/per-job event id, for deduplicating evidence. |
-| `adoption-event-json` | Single-line adoption event JSON, appendable to an evidence ledger. |
-| `workflow-repository`, `workflow-run-url`, `workflow-run-host` | Attribution for the run that produced the triage, when available. |
+| `guide-url` | PatchRail `/fix` remediation guide URL for the failure class. |
 
 Give the step an `id` to reference these:
 
@@ -80,7 +89,7 @@ Give the step an `id` to reference these:
   with:
     log-path: test.log
 
-- name: Label the issue with the failure class
+- name: Show the detected failure class
   if: failure()
   run: echo "Detected ${{ steps.triage.outputs.failure-class }} (confidence ${{ steps.triage.outputs.confidence }})"
 ```
@@ -91,36 +100,39 @@ The action appends a section to the job's `GITHUB_STEP_SUMMARY`, visible on
 the workflow run page without opening any artifact:
 
 ```markdown
-## PatchRail CI triage
+## PatchRail CI Triage
 
-- Summary: PatchRail CI triage: python_dependency_resolution (0.95)
-- Next step: Pin or relax the conflicting dependency range, then rerun the same install command and the affected tests.
-- Adoption key: `ci-triage:python-dependency-resolution`
-- Adoption event ID: `ci-triage-run:owner/repo:123456:triage:python-dependency-resolution`
-- Redacted categories: `0`
-- Report: `patchrail-ci-triage/ci-report.md`
-- Workflow run: https://github.com/owner/repo/actions/runs/123456
+- **Root cause:** `python_dependency_resolution`
+- **Confidence:** `0.89`
+- **Subsystem:** Python dependency installation
+- **Reproduce:** `python -m pip install -r requirements.txt`
+- **Suggested action:** Pin or relax the conflicting dependency range, then rerun the same install command and the affected tests.
+- **Remediation guide:** https://getpatchrail.com/fix/python-dependency-resolution
+
+_Classified locally. No pull request, comment or external call was made._
 ```
 
-### Report files
+### Result file
 
-By default under `patchrail-ci-triage/` (or wherever `report-dir` points):
-
-- `ci-report.md` — the Markdown report also referenced by `markdown-report`.
-- `ci-result.json` — the structured `patchrail.ci_result.v1` result also
-  referenced by `json-result`. See the
-  [jq cookbook](json-cookbook.md) for scripting against it.
-
-Upload it as a workflow artifact if you want it downloadable from the run:
+The structured classification is written to `patchrail-ci-result.json` in the
+workspace — the `patchrail.ci_result.v1` result. See the
+[jq cookbook](json-cookbook.md) for scripting against it. Upload it as a
+workflow artifact if you want it downloadable from the run:
 
 ```yaml
-- name: Upload PatchRail report
+- name: Upload PatchRail result
   if: failure()
   uses: actions/upload-artifact@v4
   with:
-    name: ${{ steps.triage.outputs.artifact-name }}
-    path: patchrail-ci-triage/
+    name: patchrail-ci-result
+    path: patchrail-ci-result.json
 ```
+
+> Note: this `@v1` drop-in does not write a Markdown report or a `report-dir`,
+> and it does not emit `failure-slug`, `next-step`, `artifact-name`, the
+> `adoption-*` outputs, or the `workflow-*` outputs. Those belong to the
+> in-repo composite (`actions/ci-triage`) documented in
+> [`examples/ci-triage-action`](../examples/ci-triage-action/README.md).
 
 ## 4. Permissions and privacy
 
@@ -148,8 +160,15 @@ uses: patchrail/ci-triage-action@v1        # tag
 uses: patchrail/ci-triage-action@<full-sha> # commit
 ```
 
-There is no separate PatchRail-version input — pinning the action ref pins
-the PatchRail version it installs.
+Pinning the action ref pins the wrapper. If you also want to pin the exact
+PatchRail CLI it installs from PyPI, set the `patchrail-version` input:
+
+```yaml
+- uses: patchrail/ci-triage-action@v1
+  with:
+    log-path: test.log
+    patchrail-version: "0.2.0"
+```
 
 ## Full example
 
@@ -177,16 +196,15 @@ jobs:
         uses: patchrail/ci-triage-action@v1
         with:
           log-path: test.log
-      - name: Upload PatchRail report
+      - name: Upload PatchRail result
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.triage.outputs.artifact-name }}
-          path: patchrail-ci-triage/
+          name: patchrail-ci-result
+          path: patchrail-ci-result.json
 ```
 
 See [`examples/ci-triage-action`](../examples/ci-triage-action/README.md) for
-a reproducible sample of the exact artifact shape (`ci-result.json`,
-`ci-report.md`, `github-output.txt`, `step-summary.md`) and
-`docs/github-action.md` for how PatchRail uses this same action against its
-own `CI` workflow.
+the artifact shapes of both the `@v1` drop-in and the richer in-repo composite,
+and `docs/github-action.md` for how PatchRail uses the in-repo composite against
+its own `CI` workflow.

@@ -100,8 +100,11 @@ leaves the job:
     log-path: test.log
 ```
 
-See [examples/ci-triage-action](examples/ci-triage-action/README.md) for the
-report artifact shape.
+The `@v1` drop-in exposes `failure-class`, `confidence`, and `guide-url`, plus a
+run annotation and job summary. See
+[docs/using-the-action.md](docs/using-the-action.md) for its full inputs and
+outputs, or [examples/ci-triage-action](examples/ci-triage-action/README.md) for
+the artifact shapes of both `@v1` and the richer in-repo composite.
 
 ## Features
 
