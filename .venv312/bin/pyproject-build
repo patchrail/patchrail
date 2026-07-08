@@ -1,6 +1,0 @@
-#!/Volumes/CorsairSSD/OpenClaw/tmp/patchrail-dogfood.LVdn/.venv312/bin/python3.12
-import sys
-from build.__main__ import entrypoint
-if __name__ == '__main__':
-    sys.argv[0] = sys.argv[0].removesuffix('.exe')
-    sys.exit(entrypoint())
