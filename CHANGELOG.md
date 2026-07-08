@@ -4,6 +4,9 @@
 
 ### Added
 
+- New sanitized `ruby-rspec-parallel-failure` fixture captures a real
+  `rubocop/rubocop` RSpec failure tail (parallel/turbo_tests summary with
+  `pending` before `failures`), bringing the benchmark zoo to 207 cases.
 - New `xcode_build_failure` class classifies Apple-platform build and test
   failures from `xcodebuild`, `swift build`/`swift test`, and Swift Package
   Manager — Swift compile errors, missing modules (`error: no such module`),
@@ -24,6 +27,13 @@
 
 ### Fixed
 
+- Real RSpec failures now classify as `ruby_bundle_failure` instead of
+  `unknown`. RSpec prints its rerun list as `rspec ./path/to/thing_spec.rb[…]`
+  and its summary as `N examples, [K pending, ]M failures` (rspec, parallel and
+  turbo_tests) — neither of which the old `rspec .*failures?` pattern matched,
+  so a pasted spec-failure tail without bundler setup lines fell through to
+  `unknown`. Two shape-matching patterns were added to the rule. Surfaced by
+  dogfooding a real `rubocop/rubocop` CI run.
 - Python CI logs no longer misclassify as `python_dependency_resolution` just
   because they run `python -m pip install`. That bare command line was a
   detection pattern, but it appears in almost every Python CI job regardless of

@@ -751,6 +751,12 @@ RULES: list[dict[str, Any]] = [
             r"Your bundle is locked to",
             r"rake aborted!",
             r"rspec .*failures?",
+            # Real RSpec output rarely puts "rspec" and "failures" on one line.
+            # Its rerun list is `rspec ./path/to/thing_spec.rb[1:2]` and its
+            # summary is `N examples, [K pending, ]M failures` (rspec, parallel
+            # and turbo_tests all emit this), so match those shapes directly.
+            r"rspec \./\S+_spec\.rb",
+            r"\b\d+ examples?, (?:\d+ \w+, )*\d+ failures?\b",
         ],
         "reproduction_command": "bundle install && bundle exec rake test",
         "minimal_repair_strategy": (

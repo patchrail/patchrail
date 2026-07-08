@@ -1181,5 +1181,43 @@ class SchemaContractExpansion(unittest.TestCase):
         self.assertIn("unknown", enum)
 
 
+class RubyRspecFailureClassification(unittest.TestCase):
+    # Real RSpec failure output does not print "bundle"/"bundler" — the
+    # classifier used to fall back to `unknown` on a pasted spec-failure tail
+    # unless bundler setup boilerplate happened to be included. Regression for
+    # the rubocop dogfood (run 28923797241) that surfaced the gap.
+    def test_standard_rspec_summary_classifies_without_bundler_boilerplate(self) -> None:
+        log = (
+            "Failures:\n"
+            "  1) WidgetPresenter renders title\n"
+            '     Failure/Error: expect(rendered).to include("Dashboard")\n'
+            "5 examples, 1 failure\n"
+            "\n"
+            "Failed examples:\n"
+            "rspec ./spec/widget_presenter_spec.rb:12 # WidgetPresenter renders title\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "ruby_bundle_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_parallel_rspec_summary_pending_before_failures_classifies(self) -> None:
+        # turbo_tests / parallel_tests print `N examples, K pending, M failures`
+        # (pending before failures), which the old `rspec .*failures?` pattern
+        # never matched. Shape taken from the real rubocop run.
+        log = (
+            "[ 2]                        20381 examples, 2 pending, 4 failures       "
+            "441 suites in 143.0840s      (pid 2323 exit 1 )\n"
+            "\n"
+            "==> Failed Examples\n"
+            "\n"
+            "rspec ./spec/rubocop/cop/style/format_string_token_spec.rb[1:44:4:2] "
+            "# RuboCop::Cop::Style::FormatStringToken does not register an offense\n"
+            "##[error]Process completed with exit code 4.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "ruby_bundle_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+
 if __name__ == "__main__":
     unittest.main()

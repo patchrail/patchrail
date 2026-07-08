@@ -1,0 +1,10 @@
+[ 2]                        20381 examples, 2 pending, 4 failures       441 suites in 143.0840s      (pid 2323 exit 1 )
+
+==> Failed Examples
+
+rspec ./spec/rubocop/cop/style/format_string_token_spec.rb[1:44:4:2] # RuboCop::Cop::Style::FormatStringToken when enforced style is annotated when AllowedPatterns is enabled does not register an offense for value in nested structure
+rspec ./spec/rubocop/cop/style/format_string_token_spec.rb[1:44:4:3] # RuboCop::Cop::Style::FormatStringToken when enforced style is annotated when AllowedPatterns is enabled registers an offense for different method call within ignored method
+rspec ./spec/rubocop/cop/style/format_string_token_spec.rb[1:44:4:1] # RuboCop::Cop::Style::FormatStringToken when enforced style is annotated when AllowedPatterns is enabled does not register an offense
+rspec ./spec/rubocop/cop/lint/ambiguous_block_association_spec.rb[1:28:1] # RuboCop::Cop::Lint::AmbiguousBlockAssociation when AllowedPatterns is enabled does not register an offense for an allowed method
+
+##[error]Process completed with exit code 4.
