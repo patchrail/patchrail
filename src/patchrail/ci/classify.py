@@ -310,7 +310,10 @@ RULES: list[dict[str, Any]] = [
             r"Usage Error: Couldn't find a script named",
             r"error Command [\"'](?:build|test|lint|typecheck|ci)[\"'] not found",
         ],
-        "reproduction_command": "npm run build || pnpm build || yarn build",
+        "reproduction_command": (
+            "npm run  # lists the scripts package.json actually defines; compare against the "
+            "one your workflow calls (also: pnpm run, yarn run)"
+        ),
         "minimal_repair_strategy": (
             "Confirm the CI job is calling a package script that does not exist in the target "
             "workspace, then add the narrow missing script or point the workflow at the existing "
@@ -386,7 +389,11 @@ RULES: list[dict[str, Any]] = [
             r"Unable to resolve action",
             r"Resource not accessible by integration",
         ],
-        "reproduction_command": "gh workflow view <workflow> --yaml",
+        "reproduction_command": (
+            "actionlint .github/workflows/  # validates workflow syntax and action refs "
+            'locally; for "Resource not accessible" errors check the permissions: block and '
+            "gh secret list"
+        ),
         "minimal_repair_strategy": (
             "Inspect workflow syntax, action versions, and permissions, then adjust only the "
             "broken job or permission stanza."
@@ -573,7 +580,10 @@ RULES: list[dict[str, Any]] = [
             r"Scan failed",
             r"gosec found issues",
         ],
-        "reproduction_command": "rerun the failing security scan locally",
+        "reproduction_command": (
+            "rerun the same scanner locally (e.g. npm audit, pip-audit, cargo audit, "
+            "trivy fs ., bandit -r ., or semgrep --config auto)"
+        ),
         "minimal_repair_strategy": (
             "Confirm the vulnerable package or finding, upgrade or patch the narrow affected "
             "dependency/configuration, and rerun the same scanner before broad CI."

@@ -24,6 +24,16 @@
 
 ### Fixed
 
+- Sharper reproduce commands for three failure classes surfaced by `patchrail ci
+  classes` / `ci explain`. `node_script_missing` no longer suggests `npm run
+  build` (which just re-triggers the "missing script" error) and instead runs
+  `npm run` to list the scripts `package.json` actually defines, so you can
+  compare against the one your workflow calls. `security_scan_failure` names the
+  concrete scanners to rerun locally (`npm audit`, `pip-audit`, `cargo audit`,
+  `trivy fs .`, `bandit -r .`, `semgrep --config auto`) instead of the generic
+  "rerun the failing security scan locally". `github_actions_workflow` points at
+  `actionlint .github/workflows/`, which validates workflow syntax and action
+  refs locally, rather than only printing the YAML back with `gh workflow view`.
 - Real GitHub Actions logs no longer misclassify as `git_checkout_failure` when
   checkout actually succeeded. The rule dropped three boilerplate signals that
   appear in almost every Actions log regardless of outcome — the `actions/checkout`

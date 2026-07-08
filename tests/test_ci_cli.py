@@ -2440,6 +2440,37 @@ class PatchRailCITests(unittest.TestCase):
         self.assertTrue(any("python_test_failure" in line for line in class_lines))
         self.assertTrue(all("reproduce:" in line for line in class_lines))
 
+    def test_ci_classes_reproduce_hints_are_concrete_and_actionable(self) -> None:
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            main(["ci", "classes", "--format", "json"])
+        repro = {
+            entry["failure_class"]: entry["reproduction_command"]
+            for entry in json.loads(stdout.getvalue())["classes"]
+        }
+
+        # node_script_missing: the class fires because a called script is absent,
+        # so the hint must list defined scripts, not blindly run `npm run build`.
+        self.assertIn("npm run", repro["node_script_missing"])
+        self.assertNotIn("npm run build", repro["node_script_missing"])
+
+        # security_scan_failure: name the concrete scanners instead of "rerun it".
+        self.assertNotEqual(
+            repro["security_scan_failure"], "rerun the failing security scan locally"
+        )
+        self.assertTrue(
+            sum(
+                tool in repro["security_scan_failure"]
+                for tool in ("audit", "trivy", "bandit", "semgrep")
+            )
+            >= 2,
+            repro["security_scan_failure"],
+        )
+
+        # github_actions_workflow: validate the workflow locally rather than just
+        # printing it back.
+        self.assertIn("actionlint", repro["github_actions_workflow"])
+
     def test_ci_explain_empty_log_file_fails_clearly(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log_path = Path(tmpdir) / "empty.log"
