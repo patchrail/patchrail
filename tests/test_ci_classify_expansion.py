@@ -582,6 +582,49 @@ class GitHubActionsWorkflowReDoS(unittest.TestCase):
         self.assertIn("actionlint", result["reproduction_command"])
 
 
+class HelmTemplateReDoS(unittest.TestCase):
+    """Regression: the helm_chart_failure rule carried
+    ``Error: template: .* executing .* at <.*>:`` -- three greedy, unanchored
+    ``.*`` segments whose intermediate literals (`` executing ``, `` at ``) can
+    reappear many times inside one line. Under re.search that is O(n^3): a single
+    long line that starts ``Error: template:`` but never closes with ``>:`` drove
+    the matcher to seconds-to-minutes (13ms -> 6.4s across 200->1600 hostile reps,
+    same catastrophic-backtracking class as the github_actions_workflow hang).
+    The greedy segments are now bounded by newline-excluding negated classes
+    (``[^<\\n]*?``/``[^"\\n]*``/``[^>\\n]*``), which keeps the single-line match
+    semantics but evaluates in linear time."""
+
+    def test_long_helm_template_line_classifies_fast(self) -> None:
+        # A single ~250 KB line that opens with the helm-template signature and
+        # repeats the intermediate literals but never completes the match -- the
+        # exact shape that made the old three-``.*`` pattern blow up.
+        hostile_line = "Error: template: " + ' executing "x" at <y ' * 12_000 + " zzz"
+        log = "Run helm template ./chart\n" + hostile_line + "\n"
+        self.assertGreater(len(log), 200_000)
+
+        start = time.perf_counter()
+        classify_ci_log(log)
+        elapsed = time.perf_counter() - start
+
+        # Linear matcher returns in milliseconds; the old O(n^3) form took
+        # seconds-to-minutes. Generous ceiling keeps the guard non-flaky on a
+        # loaded CI runner while still catching a regression to backtracking.
+        self.assertLess(elapsed, 5.0)
+
+    def test_genuine_helm_template_error_still_classifies(self) -> None:
+        # The bounded classes must preserve the "bare `helm template` render
+        # error" signal (no INSTALLATION/UPGRADE FAILED wrapper), or the fix
+        # would silently weaken the rule.
+        log = (
+            "Run helm template web ./chart -f values-prod.yaml\n"
+            "Error: template: web/templates/deployment.yaml:14:8: "
+            'executing "web/templates/deployment.yaml" at <.Values.image.tag>: '
+            "nil pointer evaluating interface {}.Tag\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "helm_chart_failure")
+
+
 class GitMergeConflictClassification(unittest.TestCase):
     def test_automatic_merge_failed_classifies_as_git_merge_conflict(self) -> None:
         log = (

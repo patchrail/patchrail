@@ -988,7 +988,7 @@ RULES: list[dict[str, Any]] = [
             r"Error: found in Chart\.yaml, but missing in charts/ directory",
             r"Error: YAML parse error on",
             r"Error: values don't meet the specifications of the schema",
-            r"Error: template: .* executing .* at <.*>:",
+            r"Error: template: [^<\n]*? executing \"[^\"\n]*\" at <[^>\n]*>:",
             r"Error: INSTALLATION FAILED",
             r"Error: UPGRADE FAILED",
         ],
