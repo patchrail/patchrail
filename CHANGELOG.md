@@ -24,6 +24,20 @@
 
 ### Fixed
 
+- Real GitHub Actions logs no longer misclassify as `git_checkout_failure` when
+  checkout actually succeeded. The rule dropped three boilerplate signals that
+  appear in almost every Actions log regardless of outcome — the `actions/checkout`
+  setup step, the `git submodule foreach` post-job cleanup line, and a bare
+  `git-lfs` mention — keeping only genuine checkout/clone/submodule/LFS *failure*
+  markers (`fatal: ...`, `Failed to fetch submodule`, `smudge filter lfs failed`,
+  `error downloading object`, …). Dogfooded against a real `pallets/flask` CI run
+  whose pytest jobs failed on a conftest `SyntaxError` but were reported as a git
+  checkout problem.
+- `python_test_failure` now also recognizes pytest collection failures
+  (`ImportError while loading conftest ...`, `N errors during collection`), so a
+  broken `conftest.py` or import-time error surfaces as a test failure with the
+  `python -m pytest -q` reproduce line instead of falling through to a weaker or
+  wrong class.
 - `patchrail ci explain` and `ci classify` now fail clearly on empty or
   whitespace-only input (from `--log` or stdin) instead of silently reporting
   `failure_class: unknown` with confidence `0.15` and exit code `0`. They print

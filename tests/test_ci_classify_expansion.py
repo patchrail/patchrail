@@ -348,6 +348,46 @@ class GitCheckoutFailureClassification(unittest.TestCase):
         self.assertEqual(classify_ci_log(redacted["text"])["failure_class"], "git_checkout_failure")
 
 
+class GitHubActionsBoilerplateFalsePositives(unittest.TestCase):
+    """Regression: real GitHub Actions logs always carry `actions/checkout` setup and
+    a `git submodule foreach` post-job cleanup line, even when checkout succeeded.
+    Those must not be read as a checkout failure. Dogfooded against a real
+    pallets/flask CI run (2026-07-08) whose pytest jobs failed on a conftest
+    SyntaxError but were misclassified as git_checkout_failure."""
+
+    def test_pytest_conftest_import_error_is_python_test_failure_not_git_checkout(self) -> None:
+        log = (
+            "##[group]Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd\n"
+            "Syncing repository: pallets/flask\n"
+            "##[endgroup]\n"
+            "py3.10: commands[0]> pytest -v --tb=short\n"
+            "ImportError while loading conftest '/home/runner/work/flask/flask/tests/conftest.py'.\n"
+            "tests/conftest.py:7: in <module>\n"
+            "    from flask import Flask\n"
+            "E       from __future__ import annotations\n"
+            "E   SyntaxError: from __future__ imports must occur at the beginning of the file\n"
+            "py3.10: exit 4 (0.78 seconds)\n"
+            "##[error]Process completed with exit code 4.\n"
+            "Post job cleanup.\n"
+            '[command]/usr/bin/git submodule foreach --recursive sh -c "git config ..."\n'
+            "Cleaning up orphan processes\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+        self.assertIn("pytest", result["reproduction_command"])
+
+    def test_successful_checkout_boilerplate_alone_is_not_git_checkout_failure(self) -> None:
+        log = (
+            "##[group]Run actions/checkout@v4\n"
+            "Syncing repository: acme/widget\n"
+            "##[endgroup]\n"
+            "Post job cleanup.\n"
+            '[command]/usr/bin/git submodule foreach --recursive sh -c "git config ..."\n'
+            "Cleaning up orphan processes\n"
+        )
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "git_checkout_failure")
+
+
 class GitMergeConflictClassification(unittest.TestCase):
     def test_automatic_merge_failed_classifies_as_git_merge_conflict(self) -> None:
         log = (

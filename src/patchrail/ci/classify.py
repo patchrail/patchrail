@@ -284,7 +284,14 @@ RULES: list[dict[str, Any]] = [
     {
         "failure_class": "python_test_failure",
         "likely_subsystem": "Python tests",
-        "patterns": [r"\bpytest\b", r"FAILED .*::", r"AssertionError", r"ModuleNotFoundError"],
+        "patterns": [
+            r"\bpytest\b",
+            r"FAILED .*::",
+            r"AssertionError",
+            r"ModuleNotFoundError",
+            r"ImportError while loading conftest",
+            r"\berrors? during collection\b",
+        ],
         "reproduction_command": "python -m pytest -q",
         "minimal_repair_strategy": (
             "Reproduce the failing test, patch the narrow behavior drift, and rerun the "
@@ -463,15 +470,12 @@ RULES: list[dict[str, Any]] = [
             r"fatal: clone of '.*' (?:into submodule path|failed)",
             r"Fetched in submodule path",
             r"Failed to (?:clone|fetch|recurse into) submodule",
-            r"git submodule",
-            r"git-lfs",
             r"smudge filter lfs failed",
             r"error downloading object",
             r"reference is not a tree",
             r"fatal: reference is not a tree",
             r"error: pathspec '.*' did not match",
             r"fatal: not a git repository",
-            r"actions/checkout",
         ],
         "reproduction_command": (
             "reproduce the checkout locally with the same ref and credentials "
