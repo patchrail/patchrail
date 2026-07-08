@@ -1344,6 +1344,8 @@ class PatchRailCITests(unittest.TestCase):
                 "network_transient_failure": {"failed": 0, "passed": 1, "total_cases": 1},
                 "runner_resource_exhaustion": {"failed": 0, "passed": 1, "total_cases": 1},
                 "git_checkout_failure": {"failed": 0, "passed": 1, "total_cases": 1},
+                "node_test_failure": {"failed": 0, "passed": 1, "total_cases": 1},
+                "go_lint": {"failed": 0, "passed": 1, "total_cases": 1},
             },
         )
         actual_classes = {case["actual_failure_class"] for case in payload["cases"]}
@@ -1377,6 +1379,8 @@ class PatchRailCITests(unittest.TestCase):
                 "network_transient_failure",
                 "runner_resource_exhaustion",
                 "git_checkout_failure",
+                "node_test_failure",
+                "go_lint",
             },
         )
         self.assertEqual(payload["requirements"]["network_required"], False)
@@ -1488,8 +1492,8 @@ class PatchRailCITests(unittest.TestCase):
             failure["failure_class"]: failure
             for failure in fail_payload["coverage_gate"]["failures"]
         }
-        self.assertEqual(failing_classes["browser_test_failure"]["total_cases"], 6)
-        self.assertEqual(failing_classes["browser_test_failure"]["minimum_cases"], 7)
+        self.assertEqual(failing_classes["php_composer_failure"]["total_cases"], 6)
+        self.assertEqual(failing_classes["php_composer_failure"]["minimum_cases"], 7)
 
     def test_ci_benchmark_rejects_negative_coverage_gate(self) -> None:
         proc = subprocess.run(
