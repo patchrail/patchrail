@@ -328,6 +328,7 @@ RULES: list[dict[str, Any]] = [
             r"npm error\b",
             r"ERR_PNPM",
             r"ERR_PNPM_NO_MATCHING_VERSION",
+            r"ERR_PNPM_MINIMUM_RELEASE_AGE",
             r"YN\d{4}",
             r"lockfile",
             r"peer dep",
@@ -345,7 +346,10 @@ RULES: list[dict[str, Any]] = [
         ],
         "reproduction_command": "corepack pnpm install --frozen-lockfile || npm ci",
         "minimal_repair_strategy": (
-            "Reconcile lockfile and package metadata without upgrading unrelated dependencies."
+            "Reconcile lockfile and package metadata without upgrading unrelated dependencies; "
+            "if a supply-chain policy rejected a too-new entry (for example pnpm's "
+            "minimumReleaseAge / ERR_PNPM_MINIMUM_RELEASE_AGE), pin an already-aged version or "
+            "widen the policy window rather than force-reinstalling."
         ),
     },
     {

@@ -125,6 +125,26 @@ class NodeDependencyInstallClassification(unittest.TestCase):
         )
         self.assertEqual(classify_ci_log(log)["failure_class"], "node_dependency_install")
 
+    def test_pnpm_minimum_release_age_violation_is_node_dependency_install(self) -> None:
+        # Real 2026 failure mode: pnpm's supply-chain minimumReleaseAge gate rejects a
+        # too-new lockfile entry, surfacing through `make ui-install` in a job whose name
+        # ("Go tests") does not describe the real failure. The pnpm signal must still win.
+        log = (
+            "cd web/ui/react-app && pnpm install\n"
+            "Verifying lockfile against supply-chain policies (1423 entries)...\n"
+            "Lockfile failed supply-chain policy check (1423 entries in 3.5s)\n"
+            "[ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION] 1 lockfile entries failed verification:\n"
+            "  jest-fetch-mock@3.2.0 was published within the minimumReleaseAge cutoff\n"
+            "The lockfile contains entries that the active policies reject. "
+            'Run "pnpm clean --lockfile" and then "pnpm install" to rebuild.\n'
+            "make: *** [Makefile:68: ui-install] Error 1\n"
+            "go: downloading github.com/prometheus/common v0.66.1\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "node_dependency_install")
+        self.assertIn(r"ERR_PNPM_MINIMUM_RELEASE_AGE", result["signals"])
+        self.assertIn("minimumReleaseAge", result["minimal_repair_strategy"])
+
 
 class RustLintClassification(unittest.TestCase):
     def test_clippy_run_classifies_as_rust_lint(self) -> None:
