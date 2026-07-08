@@ -233,18 +233,19 @@ RULES: list[dict[str, Any]] = [
     {
         "failure_class": "python_lint",
         "likely_subsystem": "Python linting or formatting",
+        # Match evidence of a lint/format *failure*, never a bare tool mention.
+        # A repo that *is* a linter (e.g. astral-sh/ruff) or a type checker that
+        # models these tools prints "ruff"/"pylint"/"isort" thousands of times in
+        # passing output; the bare tool names used to accumulate enough signals to
+        # hijack real Rust/test failures. Require an invocation or diagnostic instead.
         "patterns": [
-            r"\bruff\b",
             r"ruff check",
-            r"\bflake8\b",
-            r"\bpycodestyle\b",
-            r"\bpyflakes\b",
-            r"\bpylint\b",
-            r"\bautopep8\b",
-            r"\bisort\b",
+            r"flake8 \S",
+            r"pylint \S",
             r"imported but unused",
             r"\bF401\b",
             r"\bE501\b",
+            r"\.py:\d+:\d+: [EWFCBN]\d{2,4}\b",
             r"line too long \(\d+ > \d+",
             r"Your code has been rated at",
             r"\((?:unused-import|line-too-long|missing-(?:module|function|class)-docstring"
@@ -713,7 +714,9 @@ RULES: list[dict[str, Any]] = [
         "patterns": [
             r"\bcargo test\b",
             r"error\[E\d{4}\]",
-            r"thread '.*' panicked",
+            # Modern Rust prints an optional thread id between the name and
+            # "panicked" for unnamed threads: `thread '<unnamed>' (4467) panicked`.
+            r"thread '[^']*'(?: \(\d+\))? panicked",
             r"test result: FAILED",
         ],
         "reproduction_command": "cargo test",

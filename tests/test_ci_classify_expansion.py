@@ -211,6 +211,82 @@ class RustCiBoilerplateClassification(unittest.TestCase):
         self.assertNotIn(actual, {"dotnet_build_failure", "java_build_failure"})
 
 
+class PythonLintToolMentionClassification(unittest.TestCase):
+    """A lint *failure* needs failure evidence, not a bare tool mention.
+
+    Regression for a real ``astral-sh/ruff`` ``cargo test (linux)`` run piped in
+    the exact ``gh run view --log-failed`` format. Because ruff/ty model Python
+    linters, the log mentioned ``ruff``/``pylint``/``isort``/``pyflakes``/
+    ``pycodestyle`` thousands of times with zero actual lint diagnostics; the old
+    bare tool-name patterns accumulated 5 signals and hijacked the Rust test
+    panic (``python_lint`` 0.95) over the real ``rust_test_failure``.
+    """
+
+    def test_rust_panic_wins_over_python_lint_tool_mentions(self) -> None:
+        log = (
+            "cargo test (linux)\tUNKNOWN STEP\t2026-07-08T07:11:18Z Run cargo test\n"
+            "cargo test (linux)\tUNKNOWN STEP\t2026-07-08T07:12:19Z ruff pylint isort "
+            "pyflakes pycodestyle are all mentioned here as concepts\n"
+            "cargo test (linux)\tUNKNOWN STEP\t2026-07-08T07:12:19Z thread '<unnamed>' "
+            "(4467) panicked at crates/mdtest/src/lib.rs:154:5:\n"
+            "cargo test (linux)\tUNKNOWN STEP\t2026-07-08T07:12:24Z test result: FAILED. "
+            "472 passed; 1 failed; 0 ignored\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+        self.assertNotEqual(result["failure_class"], "python_lint")
+
+    def test_bare_tool_mentions_alone_are_not_python_lint(self) -> None:
+        # Mentioning the linters without any diagnostic must not read as a failure.
+        log = (
+            "We use ruff, flake8, pylint, isort, pycodestyle and pyflakes in this repo.\n"
+            "All checks passed.\n"
+        )
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "python_lint")
+
+    def test_real_ruff_diagnostics_still_classify_as_python_lint(self) -> None:
+        # Recall guard: an actual ruff failure with diagnostics must still land.
+        log = (
+            "Run ruff check .\napp/main.py:1:8: F401 [*] `os` imported but unused\nFound 1 error.\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "python_lint")
+
+    def test_flake8_diagnostic_code_classifies_as_python_lint(self) -> None:
+        # The generic ``file.py:line:col: CODE`` diagnostic is a strong lint signal.
+        log = (
+            "Run flake8 .\n"
+            "src/app.py:12:80: E501 line too long (92 > 79 characters)\n"
+            "src/app.py:3:1: F811 redefinition of unused 'json'\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "python_lint")
+
+
+class RustPanicThreadIdClassification(unittest.TestCase):
+    """Modern Rust prints a thread id for unnamed threads before ``panicked``."""
+
+    def test_unnamed_thread_id_panic_is_recognized(self) -> None:
+        log = (
+            "Run cargo test\n"
+            "thread '<unnamed>' (70523) panicked at src/lib.rs:9:5:\n"
+            "assertion failed\n"
+            "test result: FAILED. 1 passed; 1 failed\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+        self.assertIn(
+            r"thread '[^']*'(?: \(\d+\))? panicked",
+            result["signals"],
+        )
+
+    def test_classic_named_thread_panic_still_recognized(self) -> None:
+        log = (
+            "Run cargo test\n"
+            "thread 'main' panicked at src/main.rs:2:5:\n"
+            "test result: FAILED. 0 passed; 1 failed\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "rust_test_failure")
+
+
 class GoLintClassification(unittest.TestCase):
     def test_golangci_lint_run_classifies_as_go_lint(self) -> None:
         log = (
