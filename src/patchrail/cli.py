@@ -5161,10 +5161,10 @@ def _intake_followup_summary(intake_followup: dict[str, Any]) -> str:
 
 def _cash_path_summary(cash_path_status: dict[str, Any]) -> str:
     return (
-        "Cash path: "
+        "Funding path: "
         f"{cash_path_status['next_revenue_action']}, "
-        f"buyer ready: {cash_path_status['buyer_ready']}, "
-        f"payment route allowed now: {cash_path_status['payment_route_allowed_now']}"
+        f"handoff ready: {cash_path_status['buyer_ready']}, "
+        f"outbound action allowed now: {cash_path_status['payment_route_allowed_now']}"
     )
 
 
@@ -5174,7 +5174,7 @@ def _operator_next_steps_summary(operator_next_steps: dict[str, Any]) -> str:
         f"{operator_next_steps['primary_action']}, "
         f"{len(operator_next_steps['steps'])} steps, "
         f"external body allowed: {operator_next_steps['external_body_allowed']}, "
-        f"payment route allowed now: {operator_next_steps['payment_route_allowed_now']}"
+        f"outbound action allowed now: {operator_next_steps['payment_route_allowed_now']}"
     )
 
 
@@ -5347,7 +5347,7 @@ def _append_evidence_debt_markdown(
             f"- Archive-only rows: `{evidence_debt['archive_only_rows']}`",
             f"- Highest priority: `{evidence_debt['highest_priority']}`",
             f"- Next action: `{evidence_debt['next_action']}`",
-            f"- Payment route allowed now: `{evidence_debt['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{evidence_debt['payment_route_allowed_now']}`",
             f"- External body allowed: `{evidence_debt['external_body_allowed']}`",
             "",
             "| Action | Count |",
@@ -5443,14 +5443,14 @@ def _append_cash_path_status_markdown(
     lines.extend(
         [
             "",
-            "## Cash Path Status",
+            "## Funding Path Status",
             "",
             f"- Status: `{cash_path_status['status']}`",
-            f"- Next revenue action: `{cash_path_status['next_revenue_action']}`",
+            f"- Next internal action: `{cash_path_status['next_revenue_action']}`",
             f"- Copy-brief facts available: `{cash_path_status['copy_brief_facts_available']}`",
-            f"- Buyer ready: `{cash_path_status['buyer_ready']}`",
-            f"- Payment route allowed now: `{cash_path_status['payment_route_allowed_now']}`",
-            "- Requires written acceptance before payment route: "
+            f"- Handoff ready: `{cash_path_status['buyer_ready']}`",
+            f"- Outbound action allowed now: `{cash_path_status['payment_route_allowed_now']}`",
+            "- Requires written acceptance before any outbound action: "
             f"`{cash_path_status['requires_written_acceptance_before_payment_route']}`",
             "",
             cash_path_status["boundary"],
@@ -5471,7 +5471,7 @@ def _append_operator_next_steps_markdown(
             f"- Primary action: `{operator_next_steps['primary_action']}`",
             f"- Copy-brief facts available: `{operator_next_steps['copy_brief_facts_available']}`",
             f"- External body allowed: `{operator_next_steps['external_body_allowed']}`",
-            f"- Payment route allowed now: `{operator_next_steps['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{operator_next_steps['payment_route_allowed_now']}`",
             "",
             "| Priority | Action | Source | Scope | Evidence required | Blocks paid delivery | Copy brief allowed | Reason |",
             "|---|---|---|---|---|---:|---:|---|",
@@ -6275,12 +6275,12 @@ def _render_funded_issues_cash_actions_text(payload: dict[str, Any]) -> str:
     lines = [
         "PatchRail Funded Issues Cash Actions",
         f"Read-only: {payload['read_only']}",
-        f"Cash-path status: {cash_path['status']}",
-        f"Next revenue action: {cash_path['next_revenue_action']}",
+        f"Funding-path status: {cash_path['status']}",
+        f"Next internal action: {cash_path['next_revenue_action']}",
         f"Action limit: {payload['action_limit']}",
         f"Actions before limit: {payload['actions_before_limit']}",
         f"Action rows: {payload['action_rows']}",
-        f"Payment route allowed now: {cash_path['payment_route_allowed_now']}",
+        f"Outbound action allowed now: {cash_path['payment_route_allowed_now']}",
         _operator_next_steps_summary(payload["operator_next_steps"]),
         f"Boundary: {payload['boundary']}",
     ]
@@ -6295,7 +6295,7 @@ def _render_funded_issues_cash_actions_text(payload: dict[str, Any]) -> str:
             f"{item['priority']} | {item['action']} | "
             f"copy brief allowed: {item['copy_brief_allowed']} | "
             f"copy brief facts: {facts_status} | "
-            f"payment route allowed now: {item['payment_route_allowed_now']}"
+            f"outbound action allowed now: {item['payment_route_allowed_now']}"
         )
     return "\n".join(lines) + "\n"
 
@@ -6307,13 +6307,13 @@ def _render_funded_issues_cash_actions_markdown(payload: dict[str, Any]) -> str:
         "",
         f"- Read-only: `{payload['read_only']}`",
         f"- Safe-only: `{payload['safe_only']}`",
-        f"- Cash-path status: `{cash_path['status']}`",
-        f"- Next revenue action: `{cash_path['next_revenue_action']}`",
+        f"- Funding-path status: `{cash_path['status']}`",
+        f"- Next internal action: `{cash_path['next_revenue_action']}`",
         f"- Action limit: `{payload['action_limit']}`",
         f"- Actions before limit: `{payload['actions_before_limit']}`",
         f"- Action rows: `{payload['action_rows']}`",
         f"- Copy-brief facts available: `{cash_path['copy_brief_facts_available']}`",
-        f"- Payment route allowed now: `{cash_path['payment_route_allowed_now']}`",
+        f"- Outbound action allowed now: `{cash_path['payment_route_allowed_now']}`",
         "",
         "## Actions",
         "",
@@ -6321,7 +6321,7 @@ def _render_funded_issues_cash_actions_markdown(payload: dict[str, Any]) -> str:
     if payload["items"]:
         lines.extend(
             [
-                "| Priority | Action | Package | Requested fields | Evidence refs | Copy brief facts | External body | Payment route | Reason |",
+                "| Priority | Action | Package | Requested fields | Evidence refs | Copy brief facts | External body | Outbound action | Reason |",
                 "|---|---|---|---|---|---|---:|---:|---|",
             ]
         )
@@ -6358,7 +6358,7 @@ def _render_funded_issues_cash_actions_markdown(payload: dict[str, Any]) -> str:
             cash_path["boundary"],
             "",
             "Each row is internal facts-only handoff data, not external prose, and does not "
-            "create a payment route.",
+            "enable any outbound action.",
             "",
             "## Blocked Actions",
             "",
@@ -6388,8 +6388,8 @@ def _render_funded_issues_fulfillment_packet_text(payload: dict[str, Any]) -> st
         f"Item rows: {payload['item_rows']}",
         f"Candidate references: {totals['candidate_references']}",
         f"Active rechecks: {totals['active_rechecks']}",
-        f"Next revenue action: {cash_path['next_revenue_action']}",
-        f"Payment route allowed now: {cash_path['payment_route_allowed_now']}",
+        f"Next internal action: {cash_path['next_revenue_action']}",
+        f"Outbound action allowed now: {cash_path['payment_route_allowed_now']}",
         f"Operations digest: {digest['status']}",
         f"Operations blocking count: {digest['blocking_count']}",
         f"Next safe local action: {_digest_action_summary(digest['next_safe_local_action'])}",
@@ -6433,12 +6433,12 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
         f"- Active rechecks: `{totals['active_rechecks']}`",
         f"- Source count: `{totals['source_count']}`",
         "",
-        "## Cash Path",
+        "## Funding Path",
         "",
-        f"- Next revenue action: `{cash_path['next_revenue_action']}`",
-        f"- Buyer ready: `{cash_path['buyer_ready']}`",
-        f"- Payment route allowed now: `{cash_path['payment_route_allowed_now']}`",
-        "- Requires written acceptance before payment route: "
+        f"- Next internal action: `{cash_path['next_revenue_action']}`",
+        f"- Handoff ready: `{cash_path['buyer_ready']}`",
+        f"- Outbound action allowed now: `{cash_path['payment_route_allowed_now']}`",
+        "- Requires written acceptance before any outbound action: "
         f"`{cash_path['requires_written_acceptance_before_payment_route']}`",
         "",
         "## QA Gates",
@@ -6462,7 +6462,7 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             f"- Status: `{readiness['status']}`",
             f"- Ready for paid delivery: `{readiness['ready_for_paid_delivery']}`",
             f"- Next internal action: `{readiness['next_internal_action']}`",
-            f"- Payment route allowed now: `{readiness['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{readiness['payment_route_allowed_now']}`",
             f"- External body allowed: `{readiness['external_body_allowed']}`",
             "- Blocking gates: " + _format_reference_list(readiness["blocking_gates"]),
             "- Blocking item actions: "
@@ -6479,7 +6479,7 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             f"- Gate pass rate: `{digest['gate_pass_rate']}`",
             "- Next blocker: " + _digest_action_summary(digest["next_blocker"]),
             "- Next safe local action: " + _digest_action_summary(digest["next_safe_local_action"]),
-            f"- Payment route allowed now: `{digest['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{digest['payment_route_allowed_now']}`",
             f"- External body allowed: `{digest['external_body_allowed']}`",
             "- Non-blocking actions: " + _format_reference_list(digest["non_blocking_actions"]),
             "",
@@ -6508,7 +6508,7 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             f"- Required artifact count: `{evidence['required_artifact_count']}`",
             f"- Ready required artifacts: `{evidence['ready_required_artifact_count']}`",
             "- Blocked artifacts: " + _format_reference_list(evidence["blocked_artifacts"]),
-            f"- Payment route allowed now: `{evidence['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{evidence['payment_route_allowed_now']}`",
             f"- External body allowed: `{evidence['external_body_allowed']}`",
             "",
             "| Artifact | Status | Required | Sources | References | Next safe local action |",
@@ -6544,7 +6544,7 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             + _format_reference_list(report_plan["verification_references"]),
             "- No-go references: " + _format_reference_list(report_plan["no_go_references"]),
             f"- No-go signal count: `{report_plan['no_go_signal_count']}`",
-            f"- Payment route allowed now: `{report_plan['payment_route_allowed_now']}`",
+            f"- Outbound action allowed now: `{report_plan['payment_route_allowed_now']}`",
             f"- External body allowed: `{report_plan['external_body_allowed']}`",
             f"- Customer-facing prose allowed: `{report_plan['customer_facing_prose_allowed']}`",
             "",
@@ -6595,8 +6595,8 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             "- No-go references: " + _format_reference_list(handoff["no_go_references"]),
             "- Sections: " + _format_reference_list(handoff["sections"]),
             f"- External body allowed: `{handoff['external_body_allowed']}`",
-            f"- Payment route allowed now: `{handoff['payment_route_allowed_now']}`",
-            "- Requires written acceptance before payment route: "
+            f"- Outbound action allowed now: `{handoff['payment_route_allowed_now']}`",
+            "- Requires written acceptance before any outbound action: "
             f"`{handoff['requires_written_acceptance_before_payment_route']}`",
             "",
             "## Boundary",
@@ -6606,7 +6606,7 @@ def _render_funded_issues_fulfillment_packet_markdown(payload: dict[str, Any]) -
             cash_path["boundary"],
             "",
             "Each row is internal delivery operations data, not customer-facing prose, and "
-            "does not create a payment route.",
+            "does not enable any outbound action.",
             "",
             "## Blocked Actions",
             "",
@@ -9912,7 +9912,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     funded_cash_actions = funded_subparsers.add_parser(
         "cash-actions",
-        help="Build an internal read-only next-action queue for Opportunity Desk cash path work.",
+        help="Build an internal read-only next-action queue for funded-issues review.",
     )
     funded_cash_actions.add_argument(
         "--source",
