@@ -24,6 +24,16 @@
 
 ### Fixed
 
+- Rust CI failures no longer misclassify as `node_dependency_install`,
+  `dotnet_build_failure`, or `java_build_failure` because of generic boilerplate.
+  The `Swatinem/rust-cache` action prints `Lockfiles considered:` (which matched
+  the old bare `lockfile` node signal) and cargo prints `build failed, waiting
+  for other jobs to finish` (which matched the case-insensitive `Build FAILED` /
+  `BUILD FAILED` banners). The node lockfile signal now requires a whole-word
+  `lockfile`, and the .NET/Gradle banners are matched case-sensitively so they
+  fire only on the tool's actual `Build FAILED` / `BUILD FAILED` output. A real
+  `tokio-rs/tokio` rustdoc failure (`error[E0433]`) now classifies as
+  `rust_test_failure`. Regression covered in `tests/`.
 - Sharper reproduce commands for three failure classes surfaced by `patchrail ci
   classes` / `ci explain`. `node_script_missing` no longer suggests `npm run
   build` (which just re-triggers the "missing script" error) and instead runs

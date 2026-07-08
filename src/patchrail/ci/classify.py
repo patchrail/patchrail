@@ -330,7 +330,7 @@ RULES: list[dict[str, Any]] = [
             r"ERR_PNPM_NO_MATCHING_VERSION",
             r"ERR_PNPM_MINIMUM_RELEASE_AGE",
             r"YN\d{4}",
-            r"lockfile",
+            r"\blockfile\b",
             r"peer dep",
             r"\bERESOLVE\b",
             r"unable to resolve dependency tree",
@@ -608,7 +608,9 @@ RULES: list[dict[str, Any]] = [
             r"Unable to resolve",
             r"Xunit\.Sdk",
             r"Failed!  - Failed:",
-            r"Build FAILED",
+            # Case-sensitive banner: msbuild prints "Build FAILED"; do not match
+            # cargo's lowercase "build failed, waiting for other jobs to finish".
+            r"(?-i:Build FAILED)",
         ],
         "reproduction_command": "dotnet restore && dotnet test",
         "minimal_repair_strategy": (
@@ -630,7 +632,9 @@ RULES: list[dict[str, Any]] = [
             r"Could not determine java version",
             r"Unsupported class file major version",
             r"No tests found for given includes",
-            r"BUILD FAILED",
+            # Case-sensitive banner: Gradle prints "BUILD FAILED"; do not match
+            # cargo's lowercase "build failed" or Go's lowercase "build failed".
+            r"(?-i:BUILD FAILED)",
             r"cannot find symbol",
             r"package .* does not exist",
         ],

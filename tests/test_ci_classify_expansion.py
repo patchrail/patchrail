@@ -171,6 +171,46 @@ class RustLintClassification(unittest.TestCase):
         self.assertEqual(classify_ci_log(log)["failure_class"], "rust_lint")
 
 
+class RustCiBoilerplateClassification(unittest.TestCase):
+    """A real Rust CI failure must not be hijacked by generic boilerplate.
+
+    Regression for a real ``tokio-rs/tokio`` rustdoc run that was misclassified:
+    the ``Swatinem/rust-cache`` action prints ``Lockfiles considered:`` (matched
+    the old bare ``lockfile`` pattern -> node_dependency_install) and cargo prints
+    ``build failed, waiting for other jobs`` (matched the case-insensitive
+    ``Build FAILED`` / ``BUILD FAILED`` banners -> dotnet/java_build_failure).
+    """
+
+    def test_rustdoc_compile_error_is_rust_not_node_or_dotnet(self) -> None:
+        log = (
+            "env:\n"
+            "  rust_clippy: 1.88\n"
+            "Run Swatinem/rust-cache@v2\n"
+            ".. Lockfiles considered:\n"
+            "  Cargo.lock\n"
+            "Run cargo doc --lib --no-deps\n"
+            "error[E0433]: failed to resolve: could not find `windows` in `os`\n"
+            "   --> tokio/src/net/windows/named_pipe.rs:113:23\n"
+            "error: could not document `tokio`\n"
+            "warning: build failed, waiting for other jobs to finish...\n"
+            "##[error]Process completed with exit code 101.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+        self.assertNotEqual(result["failure_class"], "node_dependency_install")
+
+    def test_rust_cache_lockfiles_line_alone_is_not_node(self) -> None:
+        # rust-cache boilerplate must not, on its own, read as a Node lockfile issue.
+        log = "Run Swatinem/rust-cache@v2\n.. Lockfiles considered:\n  Cargo.lock\n"
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "node_dependency_install")
+
+    def test_cargo_build_failed_line_is_not_dotnet_or_java(self) -> None:
+        # cargo's lowercase "build failed" must not match the msbuild/Gradle banners.
+        log = "Run cargo build\nwarning: build failed, waiting for other jobs to finish...\n"
+        actual = classify_ci_log(log)["failure_class"]
+        self.assertNotIn(actual, {"dotnet_build_failure", "java_build_failure"})
+
+
 class GoLintClassification(unittest.TestCase):
     def test_golangci_lint_run_classifies_as_go_lint(self) -> None:
         log = (
