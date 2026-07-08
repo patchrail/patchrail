@@ -1,5 +1,5 @@
 {
-  "confidence": 0.95,
+  "confidence": 0.89,
   "failure_class": "python_dependency_resolution",
   "likely_subsystem": "Python dependency installation",
   "minimal_repair_strategy": "Pin or relax the conflicting dependency range, then rerun the same install command and the affected tests.",
@@ -15,7 +15,6 @@
   "signals": [
     "Could not find a version that satisfies the requirement",
     "Cannot install .*because these package versions have conflicting dependencies",
-    "ResolutionImpossible",
-    "python -m pip install"
+    "ResolutionImpossible"
   ]
 }

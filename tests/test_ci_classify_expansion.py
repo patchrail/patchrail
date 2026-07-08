@@ -962,6 +962,39 @@ class ElixirMixFailureClassification(unittest.TestCase):
         )
         self.assertEqual(classify_ci_log(log)["failure_class"], "python_dependency_resolution")
 
+    def test_pip_metadata_generation_build_failure_is_not_dependency_resolution(self) -> None:
+        # A `pip install` build/metadata failure (modeled on a real pandas i686 CI
+        # run) is not a version-resolution conflict: its only python_dependency_resolution
+        # signal used to be the bare `python -m pip install` command line, which appears
+        # in almost every Python CI log. With no genuine resolution signal the classifier
+        # must stay honest (`unknown`) instead of claiming python_dependency_resolution
+        # and advising "pin or relax the conflicting dependency range".
+        log = (
+            "+ python -m pip install --no-cache-dir cython hypothesis\n"
+            "  error: subprocess-exited-with-error\n"
+            "  x Preparing metadata (pyproject.toml) did not run successfully.\n"
+            "  | exit code: 1\n"
+            "      Target triple not supported by rustup: i386-unknown-linux-gnu\n"
+            "      Rust not found, installing into a temporary directory\n"
+            "note: This error originates from a subprocess, and is likely not a problem with pip.\n"
+            "error: metadata-generation-failed\n"
+            "x Encountered error while generating package metadata.\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "unknown")
+
+    def test_pip_requires_different_python_marker_still_resolves(self) -> None:
+        # pip's real Requires-Python conflict wording ("requires a different Python:")
+        # must count as a genuine python_dependency_resolution signal, not lean on the
+        # `python -m pip install` command boilerplate that was removed.
+        log = (
+            "python -m pip install -r requirements.txt\n"
+            "ERROR: Package demo-reporter requires a different Python: 3.10.14 not in '>=3.11'\n"
+            "ResolutionImpossible\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_dependency_resolution")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
 
 class DatabaseMigrationFailureClassification(unittest.TestCase):
     def test_alembic_missing_revision_classifies_as_database_migration_failure(self) -> None:

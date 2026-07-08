@@ -165,7 +165,7 @@ def test_ci_triage_action_helper_exports_reusable_outputs(tmp_path: Path, monkey
         "adoption_event_id": "ci-triage:python-dependency-resolution",
         "failure_class": "python_dependency_resolution",
         "failure_slug": "python-dependency-resolution",
-        "confidence": "0.95",
+        "confidence": "0.89",
         "redacted_categories": 0,
         "artifact_name": "patchrail-ci-triage-python-dependency-resolution",
         "json_result": str(result_path),

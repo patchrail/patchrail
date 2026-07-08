@@ -24,6 +24,24 @@
 
 ### Fixed
 
+- Python CI logs no longer misclassify as `python_dependency_resolution` just
+  because they run `python -m pip install`. That bare command line was a
+  detection pattern, but it appears in almost every Python CI job regardless of
+  what actually failed, so any failing Python job with no stronger signal was
+  reported as a dependency-resolution conflict with the misleading "pin or relax
+  the conflicting dependency range" advice. Dogfooded against a real
+  `pandas-dev/pandas` 32-bit CI run whose `pip install` failed at
+  `metadata-generation-failed` (a package build error, `Rust not found`) — it was
+  reported as `python_dependency_resolution` (0.53). The boilerplate pattern is
+  dropped, so a build/metadata failure with no genuine resolution signal now
+  stays honest (`unknown`) instead. To keep recall on real conflicts, two
+  genuine pip signals were added: pip's actual Requires-Python wording
+  (`requires a different Python:`) and its no-distribution `(from versions: …)`
+  line; the three synthetic no-matching-distribution fixtures were updated to
+  include the real `(from versions: …)` output pip prints. Benchmark stays at
+  206/206 top-1 with all confidence floors met; the bundled dependency-failure
+  demo now reports 0.89 (three genuine resolution signals) instead of 0.95.
+  Regression covered in `tests/`.
 - `patchrail ci explain`/`classify` no longer hangs on large CI logs. The
   `github_actions_workflow` rule paired two unanchored lookaheads
   (`(?=[\s\S]*.github/workflows/…)(?=[\s\S]*Invalid workflow file…)`); under

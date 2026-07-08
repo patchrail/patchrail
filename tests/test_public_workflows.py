@@ -316,7 +316,7 @@ def test_readme_and_quickstart_document_published_pypi_install() -> None:
     assert "patchrail ci explain --log examples/ci-triage/dependency-failure.log" in readme
     for expected_line in (
         "- Root cause: `python_dependency_resolution`",
-        "- Confidence: `0.95`",
+        "- Confidence: `0.89`",
         "- Subsystem: Python dependency installation",
         "- Reproduce: `python -m pip install -r requirements.txt`",
         "- `ResolutionImpossible`",
