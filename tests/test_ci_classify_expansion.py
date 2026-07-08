@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import time
 import unittest
 
 from patchrail.ci.classify import classify_ci_log, redact_ci_log
@@ -522,6 +523,63 @@ class GitHubActionsBoilerplateFalsePositives(unittest.TestCase):
             "Cleaning up orphan processes\n"
         )
         self.assertNotEqual(classify_ci_log(log)["failure_class"], "git_checkout_failure")
+
+
+class GitHubActionsWorkflowReDoS(unittest.TestCase):
+    """Regression: the github_actions_workflow rule paired two unanchored
+    lookaheads ``(?=[\\s\\S]*...)(?=[\\s\\S]*...)``. Under re.search that compound
+    is retried at every start position, so a large log that mentions
+    ``.github/workflows/*.yml`` (every checkout step does) but *not* a
+    workflow-error phrase drove the matcher into O(n^2) backtracking and hung for
+    minutes. Dogfooded against a real cli/cli Go CI run (2026-07-08, ~200 KB) that
+    pegged a core at 100% and never returned. The pattern is now anchored with
+    ``\\A`` so the lookahead is evaluated once, in linear time."""
+
+    def test_large_go_log_with_workflow_path_classifies_fast(self) -> None:
+        # Reproduce the trigger: many `.github/workflows/ci.yml` checkout lines
+        # (no workflow-error phrase) around a genuine Go test failure, at a size
+        # that made the old unanchored lookahead hang.
+        checkout = (
+            "##[group]Run actions/checkout@v4\n"
+            "Syncing repository: cli/cli\n"
+            ".github/workflows/ci.yml\n"
+            "##[endgroup]\n"
+        )
+        filler = "ok  \tgithub.com/cli/cli/v2/pkg/foo\t0.031s\n" * 4000
+        failure = (
+            "--- FAIL: TestThing (0.00s)\n"
+            "    thing_test.go:42: expected 3, got 4\n"
+            "FAIL\tgithub.com/cli/cli/v2/pkg/bar\t0.12s\n"
+            "FAIL\n"
+        )
+        log = checkout * 12 + filler + failure
+        self.assertGreater(len(log), 150_000)
+
+        start = time.perf_counter()
+        result = classify_ci_log(log)
+        elapsed = time.perf_counter() - start
+
+        # The fixed linear-time matcher classifies this in well under a second;
+        # the old O(n^2) version took minutes. A generous ceiling keeps the guard
+        # meaningful without being flaky on a loaded CI runner.
+        self.assertLess(elapsed, 10.0)
+        self.assertEqual(result["failure_class"], "go_test_failure")
+
+    def test_genuine_invalid_workflow_file_still_classifies(self) -> None:
+        # The \A anchor must preserve the "workflow path AND error phrase present
+        # anywhere in the log" signal that identifies a real workflow-wiring
+        # failure -- otherwise the fix would silently weaken the rule.
+        log = (
+            "##[group]Run actions/checkout@v4\n"
+            ".github/workflows/deploy.yml\n"
+            "##[endgroup]\n"
+            "Error: .github/workflows/deploy.yml: Invalid workflow file\n"
+            "The workflow is not valid. .github/workflows/deploy.yml (Line: 12, Col: 7):\n"
+            "Unexpected value 'runs-on'\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "github_actions_workflow")
+        self.assertIn("actionlint", result["reproduction_command"])
 
 
 class GitMergeConflictClassification(unittest.TestCase):

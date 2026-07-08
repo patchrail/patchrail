@@ -24,6 +24,16 @@
 
 ### Fixed
 
+- `patchrail ci explain`/`classify` no longer hangs on large CI logs. The
+  `github_actions_workflow` rule paired two unanchored lookaheads
+  (`(?=[\s\S]*.github/workflows/…)(?=[\s\S]*Invalid workflow file…)`); under
+  `re.search` that compound is retried at every start position, so a log that
+  mentions `.github/workflows/*.yml` (every `actions/checkout` step does) but not
+  a workflow-error phrase drove the matcher into O(n²) backtracking and pegged a
+  core at 100% for minutes. Dogfooded against a real `cli/cli` Go CI run
+  (~200 KB) that never returned. The lookahead is now anchored with `\A` so it is
+  evaluated once, in linear time; the "workflow path AND error phrase present"
+  signal is unchanged. Regression covered in `tests/`.
 - Rust CI failures no longer misclassify as `node_dependency_install`,
   `dotnet_build_failure`, or `java_build_failure` because of generic boilerplate.
   The `Swatinem/rust-cache` action prints `Lockfiles considered:` (which matched

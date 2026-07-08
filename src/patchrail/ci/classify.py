@@ -395,7 +395,12 @@ RULES: list[dict[str, Any]] = [
         "patterns": [
             r"Invalid workflow file",
             (
-                r"(?=[\s\S]*\.github/workflows/\S+\.ya?ml)"
+                # Anchored with \A so re.search evaluates the compound lookahead
+                # once instead of retrying it at every start position. Without the
+                # anchor this is O(n^2) on large logs (catastrophic backtracking)
+                # and hangs on real CI output; \A keeps the "both present anywhere"
+                # semantics while running in linear time.
+                r"\A(?=[\s\S]*\.github/workflows/\S+\.ya?ml)"
                 r"(?=[\s\S]*(?:Invalid workflow file|Unable to resolve action"
                 r"|Resource not accessible by integration))"
             ),
