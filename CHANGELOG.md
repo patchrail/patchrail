@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `patchrail -V` is now a short alias for `--version`. Both print
+  `patchrail <version>` and exit `0`, matching the conventional single-letter
+  flag most CLIs expose (handy in bug reports and CI logs).
+
 ## 0.3.0 - 2026-07-09
 
 ### Fixed

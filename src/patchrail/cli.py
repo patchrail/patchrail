@@ -8676,6 +8676,7 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Local-first maintainer automation for open-source projects.",
     )
     parser.add_argument(
+        "-V",
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",

@@ -45,7 +45,7 @@ pipx install patchrail
 Confirm which release you have:
 
 ```bash
-patchrail --version
+patchrail --version   # or: patchrail -V
 # patchrail 0.3.0
 ```
 
