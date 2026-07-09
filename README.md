@@ -42,6 +42,13 @@ PatchRail is published on PyPI:
 pipx install patchrail
 ```
 
+Confirm which release you have:
+
+```bash
+patchrail --version
+# patchrail 0.3.0
+```
+
 Classify any failed CI log:
 
 ```bash
