@@ -814,6 +814,17 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(exit_code, 1)
         self.assertIn("--require-workflow-context", stderr.getvalue())
 
+    def test_version_flag_reports_installed_version(self) -> None:
+        from patchrail import __version__
+
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            with self.assertRaises(SystemExit) as ctx:
+                main(["--version"])
+
+        self.assertEqual(ctx.exception.code, 0)
+        self.assertEqual(stdout.getvalue().strip(), f"patchrail {__version__}")
+
     def test_ci_classify_emits_json_without_external_requirements(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log = Path(tmpdir) / "failed.log"

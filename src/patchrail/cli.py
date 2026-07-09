@@ -8675,6 +8675,12 @@ def _build_parser() -> argparse.ArgumentParser:
         prog="patchrail",
         description="Local-first maintainer automation for open-source projects.",
     )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show the installed PatchRail version and exit.",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     ci_parser = subparsers.add_parser("ci", help="Classify and explain CI failures locally.")

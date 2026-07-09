@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - 2026-07-09
 
 ### Fixed
 
@@ -18,6 +18,9 @@
 
 ### Added
 
+- `patchrail --version` now prints the installed version (e.g. `patchrail 0.3.0`)
+  and exits, so a maintainer can confirm which release they are running without
+  invoking a subcommand.
 - `java_build_failure` now also recognises **sbt** (Scala on the JVM). sbt prints
   none of the Maven/Gradle banners the rule keyed on, so a genuine
   `(project / Test / compileIncremental) Compilation failed` — or an
