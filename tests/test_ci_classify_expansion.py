@@ -1310,5 +1310,45 @@ class SbtScalaBuildClassification(unittest.TestCase):
         self.assertEqual(classify_ci_log(log)["failure_class"], "java_build_failure")
 
 
+class KotlinAndroidBuildClassification(unittest.TestCase):
+    """Kotlin/Android Gradle compile failures must not fall through to ``unknown``.
+
+    A maintainer pasting only the interesting excerpt of a Kotlin/Android CI
+    failure often keeps the kotlinc diagnostics (``e: File.kt: (line, col):
+    Unresolved reference: ...``) but trims the Gradle ``Execution failed for
+    task`` / ``BUILD FAILED`` banner that appears further down the log. Before
+    kotlinc's own markers were added to ``java_build_failure``, that trimmed
+    excerpt classified ``unknown`` at 0.15 confidence.
+    """
+
+    def test_kotlin_compile_excerpt_without_gradle_banner_is_java_build_failure(
+        self,
+    ) -> None:
+        log = (
+            "e: app/src/main/kotlin/com/example/inventory/StockViewModel.kt: "
+            "(58, 21): Unresolved reference: reservedUnits\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "java_build_failure")
+
+    def test_kotlin_gradle_task_failure_is_java_build_failure(self) -> None:
+        log = (
+            "> Task :app:compileDebugKotlin FAILED\n"
+            "e: app/src/main/kotlin/com/example/inventory/StockViewModel.kt: "
+            "(58, 21): Unresolved reference: reservedUnits\n\n"
+            "FAILURE: Build failed with an exception.\n\n"
+            "* What went wrong:\n"
+            "Execution failed for task ':app:compileDebugKotlin'.\n"
+            "> A failure occurred while executing "
+            "org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers"
+            "$GradleKotlinCompilerWorkAction\n"
+            "   > Compilation error. See log for more details\n\n"
+            "BUILD FAILED in 12s\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "java_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+
 if __name__ == "__main__":
     unittest.main()

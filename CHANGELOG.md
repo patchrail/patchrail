@@ -13,7 +13,7 @@
   dependencies). Previously `_load_schema()` only read schema files as text
   to print them via `patchrail ci schema`; nothing checked that a payload
   builder's output still matched its schema. Covers `ci-result` (every
-  fixture in `examples/ci-triage/`, 220 cases), `ci-benchmark`, and
+  fixture in `examples/ci-triage/`, 221 cases), `ci-benchmark`, and
   `ci-fixture-check`.
 - `mypy --strict` now runs on `src/patchrail/ci/classify.py` (the classifier
   engine) as a dev dependency and a CI step, alongside `ruff check`/`ruff
@@ -24,6 +24,14 @@
   CMake + g++ undeclared-identifier link failure for `cpp_build_failure`, which
   previously had a classifier rule but no fixture in the benchmark zoo despite
   the README advertising C++ support. Bringing the benchmark zoo to 220 cases.
+- `java_build_failure` now also recognises kotlinc's own diagnostic format
+  (`e: File.kt: (line, col): ...`), `Unresolved reference:`, and Kotlin Gradle
+  task failures (`:compileDebugKotlin FAILED`). A maintainer pasting only the
+  kotlinc excerpt of a Kotlin/Android CI failure — without the Gradle
+  `Execution failed for task` / `BUILD FAILED` banner further down the log —
+  previously fell through to `unknown` at 0.15 confidence. New sanitized
+  `github-actions-kotlin-compile-excerpt-no-banner` fixture guards this,
+  bringing the benchmark zoo to 221 cases.
 
 ### Changed
 

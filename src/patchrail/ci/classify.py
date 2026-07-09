@@ -644,7 +644,7 @@ RULES: list[dict[str, Any]] = [
     },
     {
         "failure_class": "java_build_failure",
-        "likely_subsystem": "JVM build or test lifecycle (Maven, Gradle, or sbt)",
+        "likely_subsystem": "JVM build or test lifecycle (Maven, Gradle, sbt, or Kotlin/Android)",
         "patterns": [
             r"\bmvn\b",
             r"\bgradle\b",
@@ -669,12 +669,20 @@ RULES: list[dict[str, Any]] = [
             r"not found: value ",
             r"not found: type ",
             r"sbt\.TestsFailedException",
+            # Kotlin/Android: kotlinc's own diagnostic format and Gradle Kotlin
+            # plugin task names. A trimmed CI paste that keeps only the compiler
+            # diagnostics (no "Execution failed for task" / "BUILD FAILED"
+            # banner further down the log) would otherwise fall through to
+            # `unknown`, so key on kotlinc's own markers too.
+            r"e: .*\.kt: \(\d+, \d+\): ",
+            r"Unresolved reference: \S+",
+            r":compile(?:Debug|Release)?Kotlin\b.*FAILED",
         ],
         "reproduction_command": "./gradlew test || mvn test || sbt test",
         "minimal_repair_strategy": (
-            "Reproduce the failing Maven, Gradle, or sbt task, then fix the narrow "
-            "dependency, toolchain, compiler, or test-selection drift before rerunning "
-            "the same task."
+            "Reproduce the failing Maven, Gradle, sbt, or Kotlin compile task, then "
+            "fix the narrow dependency, toolchain, compiler, or test-selection drift "
+            "before rerunning the same task."
         ),
     },
     {

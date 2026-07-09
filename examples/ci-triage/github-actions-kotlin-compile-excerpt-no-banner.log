@@ -1,0 +1,2 @@
+e: app/src/main/kotlin/com/example/inventory/StockViewModel.kt: (58, 21): Unresolved reference: reservedUnits
+e: app/src/main/kotlin/com/example/inventory/StockViewModel.kt: (61, 34): Unresolved reference: reservedUnits
