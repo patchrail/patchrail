@@ -791,7 +791,13 @@ RULES: list[dict[str, Any]] = [
     {
         "failure_class": "go_test_failure",
         "likely_subsystem": "Go tests",
-        "patterns": [r"\bgo test\b", r"FAIL\t", r"undefined:", r"panic: test timed out"],
+        "patterns": [
+            r"\bgo test\b",
+            r"FAIL\t",
+            r"--- FAIL:",
+            r"undefined:",
+            r"panic: test timed out",
+        ],
         "reproduction_command": "go test ./...",
         "minimal_repair_strategy": (
             "Run the failing package test and make the smallest compile or runtime fix in "
@@ -1141,14 +1147,65 @@ def list_failure_classes() -> dict[str, Any]:
     }
 
 
-def classify_ci_log(text: str) -> dict[str, Any]:
+# Patterns in ``network_transient_failure`` that, on their own, do NOT prove a
+# transient outage: they routinely appear *inside* a deterministic test or build
+# failure (a Go test dialing a service that never started, a gRPC deadline in a
+# broken test, a socket reset in a failing integration case). A genuine outage
+# also trips a terminal signal (DNS resolution, rate limit, gateway error, TLS
+# handshake, or a git remote hang-up), none of which are in this set.
+AMBIGUOUS_NETWORK_PATTERNS = frozenset(
+    {
+        r"\bECONNREFUSED\b",
+        r"Connection refused",
+        r"\bECONNRESET\b",
+        r"Connection reset by peer",
+        r"\bi/o timeout\b",
+        r"context deadline exceeded",
+        r"\bdial tcp\b",
+    }
+)
+
+
+def _highest_scoring_rule(
+    scored: list[tuple[dict[str, Any], list[str]]],
+) -> tuple[dict[str, Any] | None, list[str]]:
     best_rule: dict[str, Any] | None = None
     best_signals: list[str] = []
-    for rule in RULES:
-        signals = _matching_signals(text, list(rule["patterns"]))
+    for rule, signals in scored:
         if len(signals) > len(best_signals):
             best_rule = rule
             best_signals = signals
+    return best_rule, best_signals
+
+
+def classify_ci_log(text: str) -> dict[str, Any]:
+    scored = [(rule, _matching_signals(text, list(rule["patterns"]))) for rule in RULES]
+    scored = [(rule, signals) for rule, signals in scored if signals]
+
+    best_rule, best_signals = _highest_scoring_rule(scored)
+
+    # A broad "transient network" match built ENTIRELY from ambiguous signals
+    # (dial tcp / connection refused / context deadline exceeded / i/o timeout …)
+    # usually means a deterministic test or build failure produced network-shaped
+    # noise, not that the network is at fault. Don't let it mask a concrete cause
+    # the maintainer must actually fix: defer to the best non-transient rule when
+    # one also matched. A real outage keeps winning because it also trips a
+    # terminal network signal outside the ambiguous set.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] == "network_transient_failure"
+        and set(best_signals) <= AMBIGUOUS_NETWORK_PATTERNS
+    ):
+        alternative_rule, alternative_signals = _highest_scoring_rule(
+            [
+                (rule, signals)
+                for rule, signals in scored
+                if rule["failure_class"] != "network_transient_failure"
+            ]
+        )
+        if alternative_rule is not None:
+            best_rule = alternative_rule
+            best_signals = alternative_signals
 
     if best_rule is None or not best_signals:
         return {

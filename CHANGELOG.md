@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Fixed
+
+- Deterministic Go test failures are no longer misread as
+  `network_transient_failure` when their logs contain incidental
+  network-shaped noise (`dial tcp`, `connection refused`, `context deadline
+  exceeded`, `i/o timeout`). The classifier now defers a broad transient-network
+  match built *entirely* from these ambiguous signals to the concrete failure
+  when one also matched, so a real bug isn't mislabeled "just retry". Genuine
+  outages still classify as transient because they trip a terminal signal (DNS
+  resolution, rate limit, gateway error, TLS handshake, or a git remote hang-up)
+  outside the ambiguous set. `go_test_failure` also now recognises the canonical
+  `--- FAIL:` marker. New `go-integration-test-network-noise` fixture guards this,
+  bringing the benchmark zoo to 208 cases.
+
 ### Added
 
 - New sanitized `ruby-rspec-parallel-failure` fixture captures a real

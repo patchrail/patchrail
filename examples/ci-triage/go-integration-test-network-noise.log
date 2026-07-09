@@ -1,0 +1,14 @@
++ go test -race ./...
+=== RUN   TestGatewayForwardsRequest
+    gateway_test.go:52: starting in-process backend
+    gateway_test.go:61: Get "http://127.0.0.1:39218/healthz": dial tcp 127.0.0.1:39218: connect: connection refused
+    gateway_test.go:73: waiting for backend readiness: context deadline exceeded
+--- FAIL: TestGatewayForwardsRequest (5.02s)
+=== RUN   TestRetryBudgetExhausted
+    retry_test.go:40: expected 0 pending retries, got 4
+--- FAIL: TestRetryBudgetExhausted (0.00s)
+FAIL
+FAIL	github.com/acme/gateway/internal/proxy	5.041s
+ok  	github.com/acme/gateway/internal/config	0.008s
+FAIL
+make: *** [Makefile:23: test] Error 2

@@ -1219,5 +1219,50 @@ class RubyRspecFailureClassification(unittest.TestCase):
         self.assertGreaterEqual(result["confidence"], 0.7)
 
 
+class NetworkTransientPrecedence(unittest.TestCase):
+    def test_go_test_failure_with_network_noise_is_not_transient(self) -> None:
+        # A deterministic Go test failure whose log happens to contain
+        # network-shaped strings (dial tcp / connection refused / context
+        # deadline exceeded) must classify as the real cause, not as a
+        # transient outage the maintainer would be told to just retry.
+        log = (
+            "+ go test -race ./...\n"
+            "=== RUN   TestGatewayForwardsRequest\n"
+            '    gateway_test.go:61: Get "http://127.0.0.1:39218/healthz": '
+            "dial tcp 127.0.0.1:39218: connect: connection refused\n"
+            "    gateway_test.go:73: waiting for readiness: context deadline exceeded\n"
+            "--- FAIL: TestGatewayForwardsRequest (5.02s)\n"
+            "--- FAIL: TestRetryBudgetExhausted (0.00s)\n"
+            "FAIL\tgithub.com/acme/gateway/internal/proxy\t5.041s\n"
+            "FAIL\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "go_test_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_genuine_dns_outage_stays_network_transient_failure(self) -> None:
+        # A terminal transience signal (DNS resolution) still wins even though
+        # the guard defers away from ambiguous-only network matches.
+        log = (
+            "$ npm install --registry https://registry.example.com\n"
+            "npm ERR! Could not resolve host: registry.example.com\n"
+            "npm ERR! Temporary failure in name resolution\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "network_transient_failure")
+
+    def test_ambiguous_only_network_with_no_other_rule_stays_network(self) -> None:
+        # When nothing but the ambiguous network signal matched, there is no
+        # concrete cause to defer to, so the transient classification stands.
+        log = (
+            "Run kubectl get nodes\n"
+            "The connection to the server 10.0.0.1:6443 was refused - did you "
+            "specify the right host or port?\n"
+            "Connection refused\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "network_transient_failure")
+
+
 if __name__ == "__main__":
     unittest.main()
