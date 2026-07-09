@@ -18,6 +18,16 @@
 
 ### Added
 
+- `java_build_failure` now also recognises **sbt** (Scala on the JVM). sbt prints
+  none of the Maven/Gradle banners the rule keyed on, so a genuine
+  `(project / Test / compileIncremental) Compilation failed` — or an
+  `sbt.TestsFailedException` — previously fell through to `unknown`. New signals
+  cover the sbt session banner, incremental-compile failure, Scala
+  `not found: value`/`not found: type` errors, and the sbt test-failure
+  exception; the reproduction command now suggests `sbt test`. New sanitized
+  `github-actions-sbt-scala-compile` fixture (modelled on a real
+  `scalatest/scalatest` GitHub Actions run) guards this, bringing the benchmark
+  zoo to 209 cases.
 - New sanitized `ruby-rspec-parallel-failure` fixture captures a real
   `rubocop/rubocop` RSpec failure tail (parallel/turbo_tests summary with
   `pending` before `failures`), bringing the benchmark zoo to 207 cases.

@@ -644,7 +644,7 @@ RULES: list[dict[str, Any]] = [
     },
     {
         "failure_class": "java_build_failure",
-        "likely_subsystem": "Java build or test lifecycle",
+        "likely_subsystem": "JVM build or test lifecycle (Maven, Gradle, or sbt)",
         "patterns": [
             r"\bmvn\b",
             r"\bgradle\b",
@@ -661,11 +661,20 @@ RULES: list[dict[str, Any]] = [
             r"(?-i:BUILD FAILED)",
             r"cannot find symbol",
             r"package .* does not exist",
+            # sbt (Scala on the JVM): sbt prints none of the Maven/Gradle banners
+            # above, so a real sbt compile/test failure fell through to `unknown`.
+            # Key on sbt's own markers instead.
+            r"welcome to sbt",
+            r"compileIncremental\) Compilation failed",
+            r"not found: value ",
+            r"not found: type ",
+            r"sbt\.TestsFailedException",
         ],
-        "reproduction_command": "./gradlew test || mvn test",
+        "reproduction_command": "./gradlew test || mvn test || sbt test",
         "minimal_repair_strategy": (
-            "Reproduce the failing Maven or Gradle task, then fix the narrow dependency, "
-            "toolchain, compiler, or test-selection drift before rerunning the same task."
+            "Reproduce the failing Maven, Gradle, or sbt task, then fix the narrow "
+            "dependency, toolchain, compiler, or test-selection drift before rerunning "
+            "the same task."
         ),
     },
     {

@@ -1,0 +1,14 @@
+##[group]Run sbt inventoryService/test
+sbt inventoryService/test
+##[endgroup]
+[info] welcome to sbt 1.11.7 (Eclipse Adoptium Java 21.0.4)
+[info] loading settings for project inventory-build from plugins.sbt ...
+[info] loading settings for project root from build.sbt ...
+[info] compiling 14 Scala sources to /home/runner/work/inventory-service/target/scala-2.13/classes ...
+[error] /home/runner/work/inventory-service/src/main/scala/inventory/StockLedger.scala:48:32: not found: value reservedUnits
+[error]     val available = onHand - reservedUnits
+[error]                              ^
+[error] one error found
+[error] (inventoryService / Compile / compileIncremental) Compilation failed
+[error] Total time: 34 s, completed Jul 4, 2026, 1:45:30 PM
+##[error]Process completed with exit code 1.

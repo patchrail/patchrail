@@ -933,9 +933,9 @@ def test_evidence_snapshot_summarizes_public_open_source_signals_without_write_a
     assert payload["repository"] == "patchrail/patchrail"
     assert payload["generated_from"] == "local_checkout"
     assert payload["status"] == "needs_more_evidence"
-    assert payload["signals"]["ci_fixtures"] == 208
-    assert payload["signals"]["ci_expected_files"] == 208
-    assert payload["signals"]["ci_benchmark_passed"] == 208
+    assert payload["signals"]["ci_fixtures"] == 209
+    assert payload["signals"]["ci_expected_files"] == 209
+    assert payload["signals"]["ci_benchmark_passed"] == 209
     assert payload["signals"]["ci_benchmark_failed"] == 0
     assert payload["signals"]["public_external_adopters"] == 0
     assert payload["adoption_evidence"] == {
@@ -1148,7 +1148,7 @@ def test_roadmap_audit_tracks_versions_and_weeks_without_external_claims() -> No
         "first PyPI publish and clean install verification"
         in (payload["versions"]["v0.1.0"]["gaps"])
     )
-    assert payload["versions"]["v0.2.0"]["signals"]["ci_fixtures"] == 208
+    assert payload["versions"]["v0.2.0"]["signals"]["ci_fixtures"] == 209
     assert payload["versions"]["v0.2.0"]["signals"]["ci_benchmark_failed"] == 0
     assert payload["versions"]["v0.2.0"]["signals"]["read_only_github_action"] is True
     assert payload["versions"]["v0.3.0"]["signals"]["owned_repo_issue_pr_cycles"] == 20
@@ -1237,7 +1237,7 @@ def test_application_gate_fails_closed_until_public_evidence_is_real() -> None:
         "keep README, quickstart, release-readiness, and application-gate docs honest",
         "prepare upstream contributions only when a real bug or maintenance improvement exists",
     ]
-    assert payload["signals"]["ci_fixtures"] == 208
+    assert payload["signals"]["ci_fixtures"] == 209
     assert payload["signals"]["public_external_adopters"] == 0
     assert payload["signals"]["owned_repo_issue_pr_cycles"] == 20
     assert payload["signals"]["pypi_initial_download_telemetry_present"] is True
@@ -2548,7 +2548,7 @@ def test_application_dossier_compiles_evidence_without_submission_permission() -
     assert payload["schema_version"] == "patchrail.application_dossier.v1"
     assert payload["status"] == "draft_only_do_not_submit"
     assert payload["application_gate"]["decision"] == "do_not_apply_yet"
-    assert payload["signals"]["ci_fixtures"] == 208
+    assert payload["signals"]["ci_fixtures"] == 209
     assert payload["signals"]["upstream_contribution_count"] == 2
     assert payload["signals"]["merged_upstream_contribution_count"] == 1
     assert payload["signals"]["open_upstream_pr_count"] == 1

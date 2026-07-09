@@ -1275,5 +1275,40 @@ class NetworkTransientPrecedence(unittest.TestCase):
         self.assertEqual(result["failure_class"], "network_transient_failure")
 
 
+class SbtScalaBuildClassification(unittest.TestCase):
+    """Real sbt (Scala on the JVM) failures must not fall through to ``unknown``.
+
+    Regression for a real ``scalatest/scalatest`` run (GitHub Actions run
+    28707855835, job ``test-scala-js (25)``): sbt prints none of the
+    Maven/Gradle banners the ``java_build_failure`` rule keyed on, so a genuine
+    ``(project / Test / compileIncremental) Compilation failed`` was classified
+    ``unknown`` at 0.15 confidence before this rule was extended to sbt.
+    """
+
+    def test_sbt_compile_failure_is_java_build_failure(self) -> None:
+        log = (
+            "sbt inventoryService/test\n"
+            "[info] welcome to sbt 1.11.7 (Eclipse Adoptium Java 21.0.4)\n"
+            "[info] compiling 14 Scala sources ...\n"
+            "[error] StockLedger.scala:48:32: not found: value reservedUnits\n"
+            "[error] one error found\n"
+            "[error] (inventoryService / Compile / compileIncremental) "
+            "Compilation failed\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "java_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+        self.assertIn("sbt test", result["reproduction_command"])
+
+    def test_sbt_test_failure_is_java_build_failure(self) -> None:
+        log = (
+            "[info] welcome to sbt 1.11.7\n"
+            "[error] Failed tests:\n"
+            "[error] \tcom.example.StockLedgerSpec\n"
+            "[error] (Test / test) sbt.TestsFailedException: Tests unsuccessful\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "java_build_failure")
+
+
 if __name__ == "__main__":
     unittest.main()
