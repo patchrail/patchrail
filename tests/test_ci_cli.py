@@ -2022,6 +2022,64 @@ class PatchRailCITests(unittest.TestCase):
             self.assertIn("did not create a pull request", markdown)
             self.assertIn("send data to an external service", markdown)
 
+    def test_ci_explain_unknown_result_points_to_fixture_issue_template(self) -> None:
+        fixture_url = (
+            "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md"
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            unknown_log = Path(tmpdir) / "unknown.log"
+            unknown_log.write_text(
+                "some totally unrecognizable output 12345\n"
+                "nothing here matches any known ci failure pattern zzzzz\n",
+                encoding="utf-8",
+            )
+
+            for output_format in ("text", "markdown"):
+                stdout = StringIO()
+                with redirect_stdout(stdout):
+                    exit_code = main(
+                        ["ci", "explain", "--log", str(unknown_log), "--format", output_format]
+                    )
+                report = stdout.getvalue()
+                self.assertEqual(exit_code, 0)
+                self.assertIn("unknown", report)
+                self.assertIn(fixture_url, report)
+                self.assertIn("CI failure fixture issue", report)
+
+            # The funnel is presentation-only: the JSON classifier contract stays clean.
+            stdout = StringIO()
+            with redirect_stdout(stdout):
+                exit_code = main(["ci", "explain", "--log", str(unknown_log), "--format", "json"])
+            payload = json.loads(stdout.getvalue())
+            self.assertEqual(exit_code, 0)
+            self.assertEqual(payload["failure_class"], "unknown")
+            self.assertNotIn(fixture_url, json.dumps(payload))
+
+    def test_ci_explain_confident_result_omits_fixture_issue_pointer(self) -> None:
+        fixture_url = (
+            "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md"
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log = Path(tmpdir) / "failed.log"
+            log.write_text(
+                "python -m pip install -r requirements.txt\n"
+                "ERROR: Could not find a version that satisfies the requirement demo==99\n"
+                "ResolutionImpossible\n",
+                encoding="utf-8",
+            )
+
+            for output_format in ("text", "markdown"):
+                stdout = StringIO()
+                with redirect_stdout(stdout):
+                    exit_code = main(
+                        ["ci", "explain", "--log", str(log), "--format", output_format]
+                    )
+                report = stdout.getvalue()
+                self.assertEqual(exit_code, 0)
+                self.assertIn("python_dependency_resolution", report)
+                self.assertNotIn(fixture_url, report)
+                self.assertNotIn("CI failure fixture issue", report)
+
     def test_module_entrypoint_runs_public_cli(self) -> None:
         proc = subprocess.run(
             [sys.executable, "-m", "patchrail", "ci", "classify"],
