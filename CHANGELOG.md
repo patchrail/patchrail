@@ -40,6 +40,19 @@
   `github-actions-kotlin-compile-excerpt-no-banner` fixture guards this,
   bringing the benchmark zoo to 221 cases.
 
+### Fixed
+
+- `patchrail ci explain`/`classify` now normalize the GitHub Actions log line
+  prefix before classifying, so the common one-liner
+  `gh run view <run-id> --log-failed --repo <owner/repo> | patchrail ci explain`
+  classifies identically to a saved raw log. `gh` prefixes every line with
+  `<job>\t<step>\t<timestamp>` (and a UTF-8 BOM on the first line), which shifted
+  real content off the start of the line and silently defeated the classifier's
+  line-anchored (`^`) patterns — dropping confidence (e.g. `go_lint` and
+  `node_test_failure` fell from `0.95` to `0.89` on sparse logs). The raw
+  Actions log-download form (`<timestamp> <line>`) is normalized too. Regression
+  cases in `tests/test_ci_classify_expansion.py` pin gh-prefixed == raw.
+
 ### Changed
 
 - Extracted the entire `funded-issues` subcommand group (20 argparse handlers,

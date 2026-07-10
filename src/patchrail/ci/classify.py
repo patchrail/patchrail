@@ -1106,6 +1106,29 @@ RULES: list[dict[str, Any]] = [
 ]
 
 
+# GitHub Actions encodes every log line with a leading prefix. ``gh run view
+# --log``/``--log-failed`` emits ``<job>\t<step>\t<timestamp> <line>`` (plus a UTF-8
+# BOM on the very first line); a raw log download from the Actions UI emits
+# ``<timestamp> <line>``. Both push the real content off the start of the line, which
+# silently defeats patterns anchored to the line start (``^``) and lowers — or drops —
+# the classification. Strip the prefix up front so the common one-liner
+# ``gh run view <id> --log-failed | patchrail ci explain`` classifies identically to a
+# saved raw log.
+_CI_LOG_LINE_PREFIX = re.compile(
+    r"\ufeff?"  # optional UTF-8 BOM (gh emits it once, on the first line)
+    r"(?:[^\t\n]*\t[^\t\n]*\t)?"  # optional `gh` job/step columns
+    r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z "  # ISO-8601 timestamp + one space
+)
+
+
+def _strip_ci_log_line_prefixes(text: str) -> str:
+    stripped = []
+    for line in text.splitlines():
+        match = _CI_LOG_LINE_PREFIX.match(line)
+        stripped.append(line[match.end() :] if match else line)
+    return "\n".join(stripped)
+
+
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
     return [
         pattern
@@ -1206,6 +1229,7 @@ def _highest_scoring_rule(
 
 
 def classify_ci_log(text: str) -> dict[str, Any]:
+    text = _strip_ci_log_line_prefixes(text)
     scored = [(rule, _matching_signals(text, list(rule["patterns"]))) for rule in RULES]
     scored = [(rule, signals) for rule, signals in scored if signals]
 
