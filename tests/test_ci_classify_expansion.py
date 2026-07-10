@@ -1350,5 +1350,100 @@ class KotlinAndroidBuildClassification(unittest.TestCase):
         self.assertGreaterEqual(result["confidence"], 0.7)
 
 
+def _gh_prefixed(log: str, *, bom: bool = True) -> str:
+    """Wrap each line the way ``gh run view --log-failed`` does.
+
+    gh emits ``<job>\\t<step>\\t<ISO-8601 timestamp> <line>`` and a UTF-8 BOM on the
+    very first line. This is exactly what a maintainer pipes in with
+    ``gh run view <id> --log-failed | patchrail ci explain``.
+    """
+    lines = log.splitlines()
+    out = []
+    for index, line in enumerate(lines):
+        stamp = f"2026-07-09T17:02:{index % 60:02d}.1234567Z"
+        prefix = "﻿" if (bom and index == 0) else ""
+        out.append(f"{prefix}test (3.12)\tRun tests\t{stamp} {line}")
+    return "\n".join(out) + "\n"
+
+
+def _raw_actions_prefixed(log: str) -> str:
+    """Wrap each line the way a raw Actions log download does: ``<timestamp> <line>``."""
+    lines = log.splitlines()
+    out = []
+    for index, line in enumerate(lines):
+        stamp = f"2026-07-09T17:02:{index % 60:02d}.1234567Z"
+        out.append(f"{stamp} {line}")
+    return "\n".join(out) + "\n"
+
+
+class GitHubActionsLogPrefixNormalization(unittest.TestCase):
+    """`gh run view --log-failed | patchrail ci explain` must match a saved raw log.
+
+    Regression guard: the ``gh``/Actions per-line prefix (job/step columns + ISO-8601
+    timestamp, plus a leading BOM) used to shift real content off the start of the
+    line, silently defeating line-anchored (``^``) patterns and lowering confidence —
+    a worse result for the single most common maintainer gesture (piping a failing
+    run straight in). classify_ci_log strips the prefix up front; these cases pin
+    gh-prefixed == raw.
+    """
+
+    # Sparse logs where a line-anchored pattern is decisive: these regressed
+    # (0.95 -> 0.89) before the prefix strip landed.
+    SPARSE_GO_LINT = (
+        "Running golangci-lint\n"
+        "internal/server/handler.go:42:6: exported function NewHandler should have "
+        "comment or be unexported (revive)\n"
+        "pkg/util/strings.go:17:2: ineffectual assignment to err (ineffassign)\n"
+    )
+    SPARSE_JEST = "$ npm test\nFAIL src/components/Button.test.tsx\n  ● Button > renders label\n"
+    PYTEST = (
+        "=================================== FAILURES "
+        "===================================\n"
+        '>       self.assertEqual(payload["total_cases"], 210)\n'
+        "E       AssertionError: 219 != 210\n"
+        "tests/test_ci_cli.py:1322: AssertionError\n"
+        "FAILED tests/test_ci_cli.py::Bench::test_totals - AssertionError: 219 != 210\n"
+    )
+
+    def _assert_prefix_invariant(self, log: str, expected_class: str) -> None:
+        raw = classify_ci_log(log)
+        self.assertEqual(raw["failure_class"], expected_class)
+        for label, wrapped in (
+            ("gh", _gh_prefixed(log)),
+            ("gh-no-bom", _gh_prefixed(log, bom=False)),
+            ("raw-actions", _raw_actions_prefixed(log)),
+        ):
+            got = classify_ci_log(wrapped)
+            self.assertEqual(
+                got["failure_class"],
+                raw["failure_class"],
+                f"{label} prefix changed the class",
+            )
+            self.assertEqual(
+                got["confidence"],
+                raw["confidence"],
+                f"{label} prefix degraded confidence",
+            )
+
+    def test_go_lint_is_prefix_invariant(self) -> None:
+        self._assert_prefix_invariant(self.SPARSE_GO_LINT, "go_lint")
+
+    def test_node_test_failure_is_prefix_invariant(self) -> None:
+        self._assert_prefix_invariant(self.SPARSE_JEST, "node_test_failure")
+
+    def test_python_test_failure_is_prefix_invariant(self) -> None:
+        self._assert_prefix_invariant(self.PYTEST, "python_test_failure")
+
+    def test_plain_content_starting_with_a_timestamp_is_untouched(self) -> None:
+        # A real log line that itself begins with a bare timestamp must keep its
+        # content after normalization (only the encoding prefix is stripped).
+        log = (
+            "internal/server/handler.go:42:6: exported function NewHandler should "
+            "have comment or be unexported (revive)\n"
+        )
+        stripped = classify_ci_log(_raw_actions_prefixed(log))
+        self.assertEqual(stripped["failure_class"], "go_lint")
+
+
 if __name__ == "__main__":
     unittest.main()

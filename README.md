@@ -81,7 +81,17 @@ Real output:
 - `ResolutionImpossible`
 ```
 
-It also reads from stdin, so you can pipe a log straight in:
+It also reads from stdin, so you can point it straight at the run that just failed.
+With the [GitHub CLI](https://cli.github.com/), pipe the failing job's log in directly —
+no download step:
+
+```bash
+gh run view <run-id> --log-failed --repo <owner/repo> | patchrail ci explain
+```
+
+PatchRail normalizes the `gh`/Actions line prefix (job, step, and timestamp columns),
+so piping the raw `gh` output classifies identically to a saved log file. Any log on
+stdin works the same way:
 
 ```bash
 tail -n 200 failed-ci.log | patchrail ci explain
