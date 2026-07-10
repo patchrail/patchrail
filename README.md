@@ -120,7 +120,7 @@ the artifact shapes of both `@v1` and the richer in-repo composite.
 | CI failure triage (`ci explain`, `ci classify`, `ci classes`) | Beta | 40 failure classes for GitHub Actions-style logs and common toolchains |
 | Secret redaction (`redact`, `ci explain --redact`) | Beta | 23 patterns for tokens, keys, emails, and home paths |
 | Reports | Beta | Markdown, JSON, and plain text |
-| Fixture benchmark (`ci benchmark`) | Beta | Scores the classifier against all 153 public fixtures |
+| Fixture benchmark (`ci benchmark`) | Beta | Scores the classifier against all 221 public fixtures |
 | GitHub Action | Beta | Read-only triage artifact on failed workflows |
 | Local queue / control plane (`queue`) | Experimental | SQLite-backed work items with human approval states |
 | Funded issue discovery (`funded-issues`) | Experimental (read-only) | Safe-only defaults, no claiming or commenting; see [docs/funded-issues-ethics.md](docs/funded-issues-ethics.md) |
