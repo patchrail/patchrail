@@ -4,6 +4,13 @@
 
 ### Added
 
+- `patchrail ci explain`/`classify` now turn an `unknown` result into a
+  contribution on-ramp: the text and markdown reports append one line pointing
+  the maintainer at the `ci_failure_fixture` issue template
+  (`.../issues/new?template=ci_failure_fixture.md`) so an unrecognized log
+  becomes a fixture request instead of a dead-end. The classifier's behavior
+  and JSON output are unchanged — the pointer is presentation-only and appears
+  solely when `failure_class == "unknown"`.
 - `patchrail -V` is now a short alias for `--version`. Both print
   `patchrail <version>` and exit `0`, matching the conventional single-letter
   flag most CLIs expose (handy in bug reports and CI logs).

@@ -19,7 +19,12 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from patchrail import __version__
-from patchrail.ci import classify_ci_log, list_failure_classes, redact_ci_log
+from patchrail.ci import (
+    UNKNOWN_FAILURE_CLASS,
+    classify_ci_log,
+    list_failure_classes,
+    redact_ci_log,
+)
 from patchrail.queue import (
     DEFAULT_QUEUE_PATH,
     add_proposal,
@@ -59,6 +64,12 @@ def _read_log(path: Path | None) -> str:
 _CI_TRIAGE_ACTION_BASE = "https://github.com/patchrail/ci-triage-action"
 _CI_TRIAGE_MARKETPLACE_BASE = "https://github.com/marketplace/actions/patchrail-ci-triage"
 
+# When PatchRail cannot recognize a log it returns ``unknown``. Point the maintainer
+# at the CI failure fixture issue template so the dead-end becomes a contribution.
+_CI_FIXTURE_ISSUE_URL = (
+    "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md"
+)
+
 
 def _render_text(result: dict[str, Any]) -> str:
     lines = [
@@ -72,6 +83,12 @@ def _render_text(result: dict[str, Any]) -> str:
     if isinstance(redaction, dict):
         redactions = redaction.get("redactions") or {}
         lines.append(f"Redaction: {len(redactions)} categories redacted locally")
+    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+        lines.append(
+            "Help improve PatchRail: this log did not match a known failure class. "
+            "Open a CI failure fixture issue with a sanitized log so we can teach the "
+            f"classifier: {_CI_FIXTURE_ISSUE_URL}"
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -118,6 +135,19 @@ def _render_markdown(result: dict[str, Any]) -> str:
         )
         for name, count in sorted(redactions.items()):
             lines.append(f"- `{name}`: `{count}`")
+    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+        lines.extend(
+            [
+                "",
+                "## Help improve PatchRail",
+                "",
+                (
+                    "This log did not match a known failure class. "
+                    f"[Open a CI failure fixture issue]({_CI_FIXTURE_ISSUE_URL}) "
+                    "with a sanitized log so PatchRail can learn to classify it."
+                ),
+            ]
+        )
     return "\n".join(lines) + "\n"
 
 
