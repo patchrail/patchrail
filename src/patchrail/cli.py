@@ -3688,6 +3688,11 @@ def _ci_explain(args: argparse.Namespace) -> int:
             f"patchrail ci {args.ci_command}: log input is empty (checked {source})",
             file=sys.stderr,
         )
+        print(
+            "hint: if you piped `gh run view --log-failed`, the run's logs may have "
+            "expired or the run has not failed — point it at a RECENT failed run.",
+            file=sys.stderr,
+        )
         return 2
     result = classify_ci_log(raw_log)
     if args.redact:

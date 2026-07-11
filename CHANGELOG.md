@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- `patchrail ci explain`/`classify` now print a first-use hint when the log
+  input is empty or whitespace-only. The common cause is the README one-liner
+  `gh run view --log-failed | patchrail ci explain` pointed at a run whose logs
+  GitHub already expired (or a run that has not failed), which pipes in nothing.
+  The error keeps its exit code `2` and clean stdout; it just adds a line
+  telling the user to point it at a *recent* failed run instead of leaving them
+  guessing. Non-empty input is completely unaffected.
+
 ## 0.3.1 - 2026-07-11
 
 ### Added
