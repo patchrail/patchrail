@@ -89,6 +89,10 @@ no download step:
 gh run view <run-id> --log-failed --repo <owner/repo> | patchrail ci explain
 ```
 
+Point it at a *recent* failed run: GitHub expires job logs after a while, and
+`--log-failed` on an expired or still-green run pipes nothing in — PatchRail then
+exits `2` with a hint instead of guessing.
+
 PatchRail normalizes the `gh`/Actions line prefix (job, step, and timestamp columns),
 so piping the raw `gh` output classifies identically to a saved log file. Any log on
 stdin works the same way:

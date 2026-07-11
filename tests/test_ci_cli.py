@@ -2818,6 +2818,29 @@ class PatchRailCITests(unittest.TestCase):
         self.assertIn("stdin", stderr.getvalue())
         self.assertEqual(stdout.getvalue(), "")
 
+    def test_ci_explain_empty_input_hints_at_gh_pipe_cause(self) -> None:
+        # Regression: the README one-liner `gh run view --log-failed | patchrail ci
+        # explain` pipes nothing when the run's logs expired or the run has not
+        # failed. The empty-input error must orient that user, not just report the
+        # empty input. Exit code and clean-stdout contract stay unchanged.
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = StringIO("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        err = stderr.getvalue()
+        self.assertIn("log input is empty", err)
+        self.assertIn("gh run view --log-failed", err)
+        self.assertIn("expired", err)
+        self.assertIn("RECENT failed run", err)
+        self.assertEqual(stdout.getvalue(), "")
+
     def test_ci_explain_non_empty_log_still_classifies(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log_path = Path(tmpdir) / "real.log"
