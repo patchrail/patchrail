@@ -24,7 +24,7 @@ entirely on your machine.
   TypeScript, Go, Rust, Java, .NET, Ruby, PHP, C++, and Swift/Xcode. Run
   `patchrail ci classes` to list them all (add `--format json` to check
   coverage from a script).
-- **169 sanitized CI log fixtures** keep the classifier honest: every rule is
+- **221 sanitized CI log fixtures** keep the classifier honest: every rule is
   benchmarked against the public fixture zoo in `examples/ci-triage/` on every
   test run.
 - **23 secret-redaction patterns** (GitHub/GitLab/npm/PyPI/AWS tokens, private
@@ -46,7 +46,7 @@ Confirm which release you have:
 
 ```bash
 patchrail --version   # or: patchrail -V
-# patchrail 0.3.0
+# patchrail 0.3.1
 ```
 
 Classify any failed CI log:
