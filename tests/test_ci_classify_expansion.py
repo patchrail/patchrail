@@ -1814,5 +1814,105 @@ class ToolNamedButNeverRun(unittest.TestCase):
         self.assertEqual(result["failure_class"], "python_test_failure")
 
 
+class ANameInAPathIsAFilenameNotAFailure(unittest.TestCase):
+    """A tool named inside a path, a config key or a bare noun has not failed.
+
+    Every case here is a real log from a public repo, taken with the documented one-liner
+    (`gh run view --log-failed | patchrail ci explain`). A monorepo's log is mostly
+    filenames, and each of these filenames was, on its own, a confident verdict.
+    """
+
+    def test_formatter_listing_files_it_left_unchanged_is_not_a_lockfile_failure(self) -> None:
+        # oven-sh/bun: prettier printed every file it checked and left UNCHANGED. Two of them
+        # live under a directory called `lockfile/`. That was the whole case for telling a
+        # Zig/JS runtime its pnpm lockfile was out of date -- repro: `corepack pnpm install`.
+        log = (
+            "[prettier] packages/bun-vscode/src/features/lockfile/index.ts 12ms (unchanged)\n"
+            "[prettier] packages/bun-vscode/src/features/lockfile/lockfile.style.ts 5ms (unchanged)\n"
+            "[prettier] test/cli/install/lockfile-only.test.ts 3ms (unchanged)\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_a_test_file_named_after_an_advisory_is_not_a_security_scan(self) -> None:
+        # oven-sh/bun again: a regression test is NAMED after the advisory it covers. No scan
+        # ran, no vulnerability was reported -- the GHSA id sat in a filename, and that alone
+        # was a 0.53 `security_scan_failure`.
+        log = (
+            "Run bun test\n"
+            "test/cli/install/GHSA-pfwx-36v6-832x.test.ts\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_dependabot_echoing_its_config_is_not_a_gradle_build(self) -> None:
+        # istio/istio -- a Go repo. Dependabot echoes its whole job definition as ONE 2929-char
+        # JSON line, so the existing pretty-printed-JSON guard (a `"key":` at line start) never
+        # saw it. `gradle-lockfile-updater` made it a Java build; `lockfile-only` made it a
+        # Node install. The updater dying is the only thing that actually happened.
+        log = (
+            "updater | 2026/07/13 14:55:14 INFO <job_145> Job definition: "
+            '{"job":{"package-manager":"go_modules","experiments":{"gradle-lockfile-updater":true},'
+            '"lockfile-only":false,"vendor-dependencies":false}}\n'
+            "##[error]Dependabot encountered an error performing the update\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+        # ...and the honest answer still hands back the line the runner itself reported.
+        self.assertIn(
+            "Dependabot encountered an error performing the update",
+            " ".join(result["runner_errors"]),
+        )
+
+    def test_the_flag_that_permits_a_lockfile_change_is_not_a_lockfile_failure(self) -> None:
+        # withastro/astro: `--no-frozen-lockfile` EXPLICITLY allows the lockfile to change,
+        # and pnpm's "Issues with peer dependencies found" is a warning it prints while
+        # installing perfectly well.
+        log = (
+            "Run pnpm install --no-frozen-lockfile\n"
+            'Issues with peer dependencies found. Run "pnpm peers check"\n'
+            "##[error]Process completed with exit code 1.\n"
+        )
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "node_dependency_install")
+
+    def test_an_error_that_cites_a_path_still_witnesses_the_failure(self) -> None:
+        # The guard on the guard: discounting a name inside a path must not deafen us to a
+        # real error that happens to cite one -- and CI errors cite paths constantly. The
+        # match STARTS at `error[E0277]`, outside the path token, so it still counts.
+        log = (
+            "error[E0277]: the trait bound `u32: From<String>` is not satisfied\n"
+            " --> src/main.rs:12:5\n"
+            "##[error]Process completed with exit code 101.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertNotEqual(result["failure_class"], "unknown")
+        self.assertTrue(result["failure_class"].startswith("rust_"))
+
+    def test_a_frozen_lockfile_that_really_broke_still_classifies(self) -> None:
+        # The other direction, and the one that pays for the rule: yarn's and bun's lockfile
+        # failures are not `npm ERR!` or `ERR_PNPM`, so once the bare noun stops carrying a
+        # verdict they need a message of their own.
+        for manager, log in {
+            "yarn v1": "error Your lockfile needs to be updated, but yarn was run with --frozen-lockfile.\n",
+            "yarn berry": "Usage Error: The lockfile would have been modified by this install, which is explicitly forbidden.\n",
+            "bun": "error: lockfile had changes, but lockfile is frozen\n",
+        }.items():
+            with self.subTest(manager=manager):
+                self.assertEqual(classify_ci_log(log)["failure_class"], "node_dependency_install")
+
+    def test_the_noun_still_corroborates_a_real_npm_failure(self) -> None:
+        # A mention is not worthless. Next to a real error it is honest corroboration, and it
+        # must keep holding the confidence up -- which is why the noun stays in the rule
+        # instead of being deleted from it.
+        error_only = "npm ERR! code EUSAGE\n"
+        with_the_noun = error_only + "npm ERR! Update your lockfile with `npm install`.\n"
+
+        corroborated = classify_ci_log(with_the_noun)
+        self.assertEqual(corroborated["failure_class"], "node_dependency_install")
+        self.assertGreater(corroborated["confidence"], classify_ci_log(error_only)["confidence"])
+
+
 if __name__ == "__main__":
     unittest.main()

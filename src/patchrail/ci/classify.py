@@ -361,6 +361,12 @@ RULES: list[dict[str, Any]] = [
             r"YN\d{4}",
             r"\blockfile\b",
             r"peer dep",
+            # The lockfile messages that are a FAILURE and not a filename. npm's and pnpm's
+            # already arrive under `npm ERR!` / `ERR_PNPM`; yarn's and bun's do not, and
+            # without them a frozen-lockfile break would rest on the bare noun above.
+            r"[Yy]our lockfile needs to be updated",
+            r"lockfile would have been modified by this install",
+            r"lockfile had changes, but lockfile is frozen",
             r"\bERESOLVE\b",
             r"unable to resolve dependency tree",
             r"could not resolve dependency",
@@ -1239,9 +1245,32 @@ def _line_bounds(text: str, pattern: re.Pattern[str]) -> list[tuple[int, int]]:
     return bounds
 
 
+# A tool's name inside a filesystem path is a filename, not a failure -- and a monorepo's CI
+# log is mostly filenames. Every rule below was carried, on a real log, by a word that only
+# ever appeared inside a path: oven-sh/bun's formatter listed `.../features/lockfile/index.ts`
+# and `test/cli/install/GHSA-pfwx-36v6-832x.test.ts` -- a regression test named after an
+# advisory -- as *unchanged*, and that was enough to diagnose the run as an outdated lockfile
+# and then as a failed security scan. The file was passing. It was never even opened.
+#
+# Errors that happen to cite a path are untouched, because a match is only discounted when it
+# STARTS inside the path token: `src/main.rs:12:5: error[E0277]` still witnesses on
+# `error[E0277]`, and `FAIL tests/foo.test.ts` still witnesses on `FAIL`. What dies is the
+# bare noun with nothing but a directory around it.
+_PATH_TOKEN = re.compile(r"[\w.\-@+~]*(?:/[\w.\-@+]+)+")
+
+
+def _path_token_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the path-shaped tokens in ``text``."""
+    return [match.span() for match in _PATH_TOKEN.finditer(text)]
+
+
 def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
     """Character spans of the lines that only name a command, rather than watch it fail."""
-    return sorted(_line_bounds(text, _INVOCATION_LINE) + _line_bounds(text, _MERE_MENTION_LINE))
+    return sorted(
+        _line_bounds(text, _INVOCATION_LINE)
+        + _line_bounds(text, _MERE_MENTION_LINE)
+        + _path_token_bounds(text)
+    )
 
 
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
@@ -1423,6 +1452,40 @@ INVOCATION_ONLY_PATTERNS = frozenset(
         # "Run actions/upload-artifact@v4" is in the log of every job that uploads
         # anything, passing or failing.
         r"actions/(?:upload|download)-artifact",
+        # The same argument, and the same bug, for every other tool we recognise by name.
+        # A monorepo says these words constantly without any of them failing: oven-sh/bun's
+        # formatter listed `packages/bun-vscode/.../lockfile/index.ts` and
+        # `test/cli/install/*.test.ts` as *unchanged* and passing, and that alone -- the bare
+        # words `prettier`, `jest`, `bundler` -- was four different rules' entire case.
+        # istio/istio, a Go repo, matched `gradle` inside the key `"gradle-lockfile-updater"`
+        # of the JSON config Dependabot echoes. Each of these rules keeps a real error
+        # pattern of its own to stand on (`lint failed`, `Tests: 3 failed`, `Bundler could
+        # not find compatible versions`, `COMPILATION ERROR`, `CVE-2024-...`); the name is
+        # corroboration next to one, never a verdict without one.
+        r"\beslint\b",
+        r"\bbiome\b",
+        r"prettier",
+        r"\bjest\b",
+        r"\bvitest\b",
+        r"\bmocha\b",
+        r"\bjasmine\b",
+        r"jest --",
+        r"vitest run",
+        r"npx (?:jest|vitest|mocha)",
+        r"npm (?:run )?test",
+        r"\bbundler\b",
+        r"\bbundle install\b",
+        r"\bbundle exec\b",
+        r"\bmvn\b",
+        r"\bgradle\b",
+        r"\bnpm audit\b",
+        r"\bpip-audit\b",
+        r"\bcargo audit\b",
+        r"\btrivy\b",
+        r"\bgosec\b",
+        r"\bsnyk\b",
+        r"\bsemgrep\b",
+        r"\bbandit\b",
     }
 )
 
@@ -1447,13 +1510,44 @@ BENIGN_WARNING_PATTERNS = frozenset(
 )
 
 
+# Patterns that NAME a thing without asserting anything about it. A bare noun is not an
+# error, and in a monorepo it is everywhere: `\blockfile\b` matched a path in prettier's
+# list of files it left *unchanged* (`packages/bun-vscode/src/features/lockfile/index.ts`
+# -- oven-sh/bun), a key inside the JSON config Dependabot echoes on one 2929-char line
+# (`"lockfile-only":false` -- istio/istio, a Go repo), and `--no-frozen-lockfile`, the flag
+# that explicitly *permits* the lockfile to change. `peer dep` matched pnpm's "Issues with
+# peer dependencies found", a warning it prints while installing perfectly well; the forms
+# that mean a peer conflict actually failed the install (`ERESOLVE`, `Conflicting peer
+# dependency`) are separate patterns and are unaffected.
+#
+# All three real logs above were `node_dependency_install` at 0.53-0.71 -- two of them in
+# repos with no Node dependency install anywhere in the job -- and each handed its
+# maintainer `corepack pnpm install --frozen-lockfile || npm ci` as the way to reproduce a
+# Go or Zig failure. A wrong ecosystem with a confident number on it costs more than
+# `unknown`, which at least prints the line the runner reported.
+#
+# These still earn their keep as corroboration: every one of the 21 genuine
+# node_dependency_install fixtures also trips a real error signal, so the noun rides along
+# and keeps the confidence up. It just may no longer carry a verdict on its own.
+MENTION_ONLY_PATTERNS = frozenset(
+    {
+        r"\blockfile\b",
+        r"peer dep",
+    }
+)
+
+
 # A rule carried by nothing but these has established that a step ran, or warned -- never
 # that it failed.
-NON_FAILURE_PATTERNS = INVOCATION_ONLY_PATTERNS | BENIGN_WARNING_PATTERNS
+NON_FAILURE_PATTERNS = INVOCATION_ONLY_PATTERNS | BENIGN_WARNING_PATTERNS | MENTION_ONLY_PATTERNS
 
 
 def _is_non_failure_only(signals: list[str]) -> bool:
     return bool(signals) and set(signals) <= NON_FAILURE_PATTERNS
+
+
+def _is_mention_only(signals: list[str]) -> bool:
+    return bool(signals) and set(signals) <= MENTION_ONLY_PATTERNS
 
 
 def _highest_scoring_rule(
@@ -1489,7 +1583,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # ever MENTIONS a tool -- an env export, a CMake probe, a JSON config key -- has not just
     # missed the failure, it has watched a tool that never ran. It cannot stand even as a last
     # resort, the way an invocation can.
-    mentions = _line_bounds(text, _MERE_MENTION_LINE)
+    mentions = _line_bounds(text, _MERE_MENTION_LINE) + _path_token_bounds(text)
     never_invoked = {
         rule["failure_class"]
         for rule, signals in scored
@@ -1544,6 +1638,12 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # a failure to answer here, it is the answer: apache/kafka's `check-pr-labels` job is not a
     # Gradle build because the runner image exports GRADLE_HOME.
     if best_rule is not None and best_rule["failure_class"] in never_invoked:
+        best_rule, best_signals = None, []
+
+    # And a rule left holding nothing but a noun it read off a filename or a config key has
+    # not watched anything fail either -- so, like the above, it cannot stand as a last
+    # resort. An invocation at least proves the tool ran; a mention does not even prove that.
+    if best_rule is not None and _is_mention_only(best_signals):
         best_rule, best_signals = None, []
 
     if best_rule is None or not best_signals:

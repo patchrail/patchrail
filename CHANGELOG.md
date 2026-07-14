@@ -34,6 +34,39 @@
   `unknown` log now either hands back a line worth reading — `hashicorp/terraform` asking
   for a changelog entry — or says nothing at all.
 
+### Fixed
+
+- **A tool named inside a filename is no longer a diagnosis.** A CI log in a monorepo is
+  mostly filenames, and a rule could be carried, start to finish, by a word that only ever
+  appeared inside one. `oven-sh/bun`'s formatter listed every file it checked and left
+  *unchanged*; two of them sit under a directory called `lockfile/`, and that was the entire
+  case for telling a Zig and JavaScript runtime that its pnpm lockfile was out of date, with
+  `corepack pnpm install --frozen-lockfile` offered as the way to reproduce it. In the same
+  log, `test/cli/install/GHSA-pfwx-36v6-832x.test.ts` — a regression test *named after* the
+  advisory it covers — was reported as a failed security scan. No scan ran. The file was
+  passing, and was never opened.
+
+  Three of eight failing runs sampled across `denoland/deno`, `oven-sh/bun`, `istio/istio`,
+  `withastro/astro`, `apache/airflow`, `envoyproxy/envoy`, `astral-sh/ruff` and
+  `pydantic/pydantic` were wrong this way, each pointing at the wrong ecosystem entirely.
+  `istio/istio` — a Go repo — was a Java build *and* a Node install, because Dependabot
+  echoes its configuration as one 2,929-character JSON line and the keys
+  `"gradle-lockfile-updater"` and `"lockfile-only"` are in it. The only thing that actually
+  failed was the Dependabot updater, which said so in as many words.
+
+  A signal now has to match *somewhere other than* inside a path token to carry a verdict,
+  the bare tool names we recognize (`eslint`, `prettier`, `jest`, `bundler`, `gradle`,
+  `trivy`, `snyk`, …) join `docker build` and `clippy` as invocations that corroborate a
+  failure but never constitute one, and `lockfile` and `peer dep` — nouns that name a thing
+  without asserting anything about it, and which also match `--no-frozen-lockfile`, the flag
+  that *permits* the change — cannot stand alone either. An error that cites a path is
+  untouched, because the match has to *start* inside the path to be discounted:
+  `error[E0277]` in `src/main.rs:12:5` still witnesses its failure, and `FAIL tests/foo.ts`
+  still witnesses on `FAIL`. Genuine lockfile breaks keep classifying, and yarn's and bun's
+  — which say neither `npm ERR!` nor `ERR_PNPM` — now do so on a message of their own
+  (`Your lockfile needs to be updated`) rather than on the bare noun. All 221 fixtures
+  classify exactly as before.
+
 ## 0.5.0 - 2026-07-14
 
 ### Fixed
