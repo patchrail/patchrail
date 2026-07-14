@@ -4,6 +4,26 @@
 
 ### Fixed
 
+- **ANSI colour codes no longer hide the failure.** CI tools colour their output and CI
+  keeps the colour on (Airflow runs pytest with `--color=yes`, cargo honours
+  `CARGO_TERM_COLOR=always`, jest and eslint colour by default), and the GitHub log API
+  serves those escapes back with the ESC byte written out as the two literal characters
+  `^[`. The colour reset lands *inside* the failure line — `^[[31mFAILED^[[0m tests/…::…`
+  — so `FAILED .*::` and every other pattern spanning a coloured token silently stopped
+  matching. A real apache/airflow test failure was reported as `artifact_or_cache_failure`
+  because the only signal left uncoloured was the bare `pytest` invocation. Both
+  encodings (real `\x1b` and literalised `^[`) are now stripped before matching; the strip
+  is anchored to the escape introducer, so `error[E0277]`, `[ERROR]` and ordinary
+  indexing are untouched.
+- **Post-failure cleanup noise no longer outranks the real cause.** `actions/upload-artifact`
+  appears in every job that uploads anything, and "No files were found with the provided
+  path" is a *warning* it emits when its glob matches nothing (it says so itself: "No
+  artifacts will be uploaded"). Together they fire on the commonest shape in CI — a test
+  fails, and the `if: failure()` step uploading logs for diagnosis finds nothing — which
+  tied the real cause and beat it on declaration order. A rule carried only by such
+  signals now defers to one that matched an actual error. A genuine artifact or cache
+  failure is unaffected: it trips a terminal signal ("Failed to CreateArtifact",
+  "Unable to download artifact", "Cache service responded with 500").
 - The classifier no longer reads a command that merely *ran* as the failure. Three
   bugs of the same shape, all found by running `ci explain` over real failing runs
   from public repositories rather than over the fixture zoo:

@@ -1136,6 +1136,28 @@ def _strip_ci_log_line_prefixes(text: str) -> str:
     return "\n".join(stripped)
 
 
+# CI tools colour their output and CI keeps the colour on: Airflow runs pytest with
+# ``--color=yes``, cargo honours ``CARGO_TERM_COLOR=always``, jest and eslint colour
+# unless told not to. The GitHub log API then serves those escapes back with the ESC
+# byte written out as the two literal characters ``^`` ``[``, so stripping only
+# ``\x1b``-introduced codes never fires on a downloaded log. The colour reset lands
+# *inside* the failure line, between the token and the space that follows it:
+#
+#     ^[[31mFAILED^[[0m providers/edge3/.../test_worker.py::TestEdgeWorker::test_...
+#     ^[[31m===== ^[[1m1 failed^[[0m, ^[[32m322 passed^[[0m in 15.81s =====
+#
+# which defeats ``FAILED .*::`` and every other pattern spanning a coloured token. A real
+# apache/airflow test failure scored 1 -- on the bare ``pytest`` invocation, the only
+# uncoloured token left -- and lost to post-failure artifact noise. Strip both encodings
+# before matching. Anchoring to the ESC/``^[`` introducer keeps ordinary bracketed text
+# (``error[E0277]``, ``[ERROR]``) untouched.
+_ANSI_ESCAPE = re.compile(r"(?:\x1b|\^\[)\[[0-9;?]*[A-Za-z]")
+
+
+def _strip_ansi_escapes(text: str) -> str:
+    return _ANSI_ESCAPE.sub("", text)
+
+
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
     return [
         pattern
@@ -1242,12 +1264,40 @@ INVOCATION_ONLY_PATTERNS = frozenset(
         r"\bdocker compose\b",
         r"\bcargo test\b",
         r"\bclippy\b",
+        # "Run actions/upload-artifact@v4" is in the log of every job that uploads
+        # anything, passing or failing.
+        r"actions/(?:upload|download)-artifact",
     }
 )
 
 
-def _is_invocation_only(signals: list[str]) -> bool:
-    return bool(signals) and set(signals) <= INVOCATION_ONLY_PATTERNS
+# Patterns that are an explicit *warning*, not a failure. upload-artifact emits "No files
+# were found with the provided path" when its glob matches nothing -- it says as much
+# itself ("No artifacts will be uploaded") and, under the default
+# ``if-no-files-found: warn``, does not fail the step.
+#
+# Together with the invocation above, this is the single most common shape in CI: a test
+# fails, and the ``if: failure()`` step that uploads logs/screenshots/coverage for
+# diagnosis finds nothing to upload and warns. That is noise from the cleanup that runs
+# *after* the failure, not the cause of it -- yet the two signals tie and then win on
+# declaration order. apache/airflow's pytest failure was classified
+# ``artifact_or_cache_failure`` on exactly this pair. A genuine artifact or cache failure
+# is unaffected: it trips a terminal signal ("Failed to CreateArtifact", "Artifact upload
+# failed", "Cache service responded with 500"), none of which are in these sets.
+BENIGN_WARNING_PATTERNS = frozenset(
+    {
+        r"No files were found with the provided path",
+    }
+)
+
+
+# A rule carried by nothing but these has established that a step ran, or warned -- never
+# that it failed.
+NON_FAILURE_PATTERNS = INVOCATION_ONLY_PATTERNS | BENIGN_WARNING_PATTERNS
+
+
+def _is_non_failure_only(signals: list[str]) -> bool:
+    return bool(signals) and set(signals) <= NON_FAILURE_PATTERNS
 
 
 def _highest_scoring_rule(
@@ -1263,7 +1313,9 @@ def _highest_scoring_rule(
 
 
 def classify_ci_log(text: str) -> dict[str, Any]:
-    text = _strip_ci_log_line_prefixes(text)
+    # Colour first: an escape sequence sitting between the job columns and the timestamp
+    # would otherwise defeat the line-prefix match too.
+    text = _strip_ci_log_line_prefixes(_strip_ansi_escapes(text))
     scored = [(rule, _matching_signals(text, list(rule["patterns"]))) for rule in RULES]
     scored = [(rule, signals) for rule, signals in scored if signals]
 
@@ -1292,13 +1344,13 @@ def classify_ci_log(text: str) -> dict[str, Any]:
             best_rule = alternative_rule
             best_signals = alternative_signals
 
-    # Same rule, different noise: a match built ENTIRELY from invocation signals says
-    # a command ran, not that it failed. Defer to the best rule that matched a real
-    # error. If nothing else matched, the invocation stands -- it is the only thing
-    # the log gave us.
-    if best_rule is not None and _is_invocation_only(best_signals):
+    # Same rule, different noise: a match built ENTIRELY from invocation or benign-warning
+    # signals says a step ran or warned, not that it failed. Defer to the best rule that
+    # matched a real error. If nothing else matched, it stands -- it is the only thing the
+    # log gave us.
+    if best_rule is not None and _is_non_failure_only(best_signals):
         alternative_rule, alternative_signals = _highest_scoring_rule(
-            [(rule, signals) for rule, signals in scored if not _is_invocation_only(signals)]
+            [(rule, signals) for rule, signals in scored if not _is_non_failure_only(signals)]
         )
         if alternative_rule is not None:
             best_rule = alternative_rule
