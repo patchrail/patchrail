@@ -1260,6 +1260,45 @@ _MERE_MENTION_LINE = re.compile(
 )
 
 
+# GitHub Actions echoes the SOURCE of a `run:` step -- every line of it -- before running
+# it, wrapped in cyan-bold. Those lines are the step's PROGRAM TEXT, not its output, and a
+# program's text says what it WOULD print, not what happened. astral-sh/ruff's benchmark job
+# (killed by a Rust panic, `exit code: 101`) listed an error-handling branch it never took:
+#
+#     ^[[36;1m    echo "::error title=Failed to install CodSpeed CLI::Installation of ..."^[[0m
+#
+# and `FAILED .*::` -- pytest's short-summary line, matched case-insensitively -- read
+# `Failed to install CodSpeed CLI::` off it and called that Rust panic a `python_test_failure`.
+# No rule is safe from this: seven of ten real failing logs sampled (ruff, airflow, pydantic,
+# tokio, vite, prometheus, httpx) echo a step body, and those bodies say `pnpm run lint`,
+# `bail() {`, `exit 1`. A branch that never executed is not evidence that anything failed.
+#
+# Colour is the only thing marking these lines, and `_strip_ansi_escapes` erases it -- so they
+# have to be found BEFORE the strip. Both normalizations are line-preserving, so a line number
+# taken here still addresses the same content afterwards. What they are, once found, is a
+# command echo like `Run mypy .` or `+ ruff check .`: it corroborates, it cannot carry. A tool
+# that really failed also fails somewhere off the script listing.
+_RUNNER_SCRIPT_ECHO_LINE = re.compile(r"^(?:\x1b|\^\[)\[36;1m")
+
+
+def _runner_script_echo_bounds(raw: str, text: str) -> list[tuple[int, int]]:
+    """Character spans, in the normalized ``text``, of the runner's echo of a step's source."""
+    echoed = {
+        index
+        for index, line in enumerate(_strip_ci_log_line_prefixes(raw).splitlines())
+        if _RUNNER_SCRIPT_ECHO_LINE.match(line)
+    }
+    if not echoed:
+        return []
+    bounds = []
+    offset = 0
+    for index, line in enumerate(text.splitlines(keepends=True)):
+        if index in echoed:
+            bounds.append((offset, offset + len(line)))
+        offset += len(line)
+    return bounds
+
+
 def _line_bounds(text: str, pattern: re.Pattern[str]) -> list[tuple[int, int]]:
     """Character spans of the lines in ``text`` that ``pattern`` matches."""
     bounds = []
@@ -1622,6 +1661,7 @@ def _highest_scoring_rule(
 
 
 def classify_ci_log(text: str) -> dict[str, Any]:
+    raw = text
     # Colour first: an escape sequence sitting between the job columns and the timestamp
     # would otherwise defeat the line-prefix match too.
     text = _strip_ci_log_line_prefixes(_strip_ansi_escapes(text))
@@ -1629,9 +1669,9 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     scored = [(rule, signals) for rule, signals in scored if signals]
 
     # Which rules actually saw a failure, as opposed to seeing a tool named on a `set -x`
-    # echo, an Actions step header, or a pip install line. Scoring is untouched by this;
-    # winning is not.
-    noise = _non_failure_line_bounds(text)
+    # echo, an Actions step header, a pip install line, or the runner's echo of the step's
+    # own source. Scoring is untouched by this; winning is not.
+    noise = _non_failure_line_bounds(text) + _runner_script_echo_bounds(raw, text)
     unwitnessed = {
         rule["failure_class"]
         for rule, signals in scored
