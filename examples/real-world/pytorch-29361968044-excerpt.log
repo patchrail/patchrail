@@ -1,0 +1,22 @@
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8594068Z + find torch -name '*.pyi' -exec git restore --staged -- '{}' +
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8595554Z + jq --raw-output '"::\(if .severity == "advice" or .severity == "disabled" then "warning" else .severity end) file=\(.path),line=\(.line),col=\(.char),title=\(.code) \(.name)::" + (.description | gsub("\\n"; "%0A"))' lint.json
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8596572Z jq: error: Could not open file lint.json: No such file or directory
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8596926Z + true
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8597094Z + exit 1
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8597201Z 
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8598149Z ^[[1m^[[36mYou can reproduce these results locally by using `lintrunner -m origin/main`. (If you don't get the same results, run \'lintrunner init\' to update your local linter)^[[0m
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8599605Z ^[[1m^[[36mSee https://github.com/pytorch/pytorch/wiki/lintrunner for setup instructions. To apply suggested patches automatically, use the -a flag. Before pushing another commit,^[[0m
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:25.8600569Z ^[[1m^[[36mplease verify locally and ensure everything passes.^[[0m
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:26.1255389Z ##[error][OSDC] Step script exited with code 1. This is a script/workflow error, not an infrastructure issue. Check the step logs above for the actual failure.
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:26.1265482Z ##[error]Process completed with exit code 1.
+lintrunner-pyrefly-all / lint	UNKNOWN STEP	2026-07-14T19:33:26.1364859Z ##[error]Executing the custom container implementation failed. Please contact your self hosted runner administrator.
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7507029Z   to work with policies introduced by <max> or earlier.
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7507265Z 
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7507269Z 
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7507481Z CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7508002Z   Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7508520Z   are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7509012Z   the cmake_policy command to set the policy and suppress this warning.
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7509308Z 
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7509503Z This warning is for project developers.  Use -Wno-dev to suppress it.
+lintrunner-clang-all / lint	UNKNOWN STEP	2026-07-14T19:36:30.7509795Z 
