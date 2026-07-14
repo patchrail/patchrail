@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.1 - 2026-07-14
+
+### Fixed
+
+- **A success announced through the error channel is no longer reported as somewhere to
+  "start".** Found dogfooding the 0.6.0 wheel against real failing runs: `oven-sh/bun`'s
+  failing run carries exactly one runner annotation in 4,709 lines, and the workflow emits
+  a success through it — `##[error]✅ Autofix task started.` The `unknown` verdict handed
+  that line straight back under *"the CI runner did annotate these lines as errors — start
+  there"*, pointing the maintainer at a line saying everything went fine.
+
+  The verdict itself was, and stays, correct: `unknown` is honest for that log. Only the
+  evidence changes. An annotation is now dropped when it *opens* with a success mark and
+  names no failure anywhere in the line. The guard is deliberately lopsided towards
+  keeping — `✅ 2 passed, ❌ 1 failed` and `✔ image built, but the upload failed` both
+  survive, and a tick further along a line never counts — because a puzzling line a
+  maintainer dismisses in a second costs far less than a real error swallowed on their
+  behalf. ([#329](https://github.com/patchrail/patchrail/issues/329))
+
 ## 0.6.0 - 2026-07-14
 
 ### Added
