@@ -24,6 +24,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - uses: astral-sh/setup-uv@v8.1.0
+      - name: Lockfile up to date
+        run: uv lock --check
       - name: Install
         run: uv sync --extra dev
       - name: Lint
