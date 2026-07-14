@@ -4,6 +4,28 @@
 
 ### Fixed
 
+- **A failed `npm audit` is now reported as a failed security scan, not a broken dependency
+  install.** When a registry cannot serve audit requests — Artifactory, Verdaccio and GitHub
+  Packages all commonly cannot, which is the ordinary reason this fails in CI — npm exits
+  non-zero through its own audit error channel:
+
+  ```
+  npm ERR! code EAUDIT
+  npm ERR! audit Your configured registry does not support audit requests
+  ```
+
+  None of that says the words `npm audit`, which was the only npm signal the scanner rule
+  knew. So the only rule still matching was the bare `npm ERR!` of `node_dependency_install`,
+  and a maintainer whose audit step failed was told to go fix an install that was never
+  broken. The scanner now knows npm's audit error channel — `EAUDIT*`, `npm ERR! audit …`,
+  and npm 10+'s `npm error audit endpoint returned an error` — and pnpm's
+  (`ERR_PNPM_AUDIT_*`), which the install rule's broad `ERR_PNPM` prefix had been claiming.
+
+  Deliberately narrow: `npm ERR!` on its own still means a broken install, every pnpm code
+  that is not an audit is untouched, and `npm warn audit …` — npm reporting a scan it
+  *skipped* — is still not a failure. All 221 fixtures pass unchanged.
+  ([#335](https://github.com/patchrail/patchrail/issues/335))
+
 - **A tie between two failure classes now goes to the one that watched something fail,
   not to whichever was written first.** Found dogfooding against real failing runs:
   `prometheus/prometheus` — a Go repo, whose Go tests failed — was reported as

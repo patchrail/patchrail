@@ -449,5 +449,115 @@ class AnInstallSummaryIsNotAFailedSecurityScan(unittest.TestCase):
                 self.assertEqual(result["failure_class"], "javascript_lint")
 
 
+class AnAuditThatFailedIsAScanAndNotABrokenInstall(unittest.TestCase):
+    """npm reports a failed audit through its error channel, and never says `npm audit`.
+
+    The mirror image of the tally above. There, a scan that never ran was read as one that
+    failed; here, a scan that really ran and really failed was read as a broken install.
+
+    npm's audit-error path (`lib/utils/audit-error.js`) logs the registry's reply and then
+    dies with `audit endpoint returned an error`. The code comes back as an `EAUDIT*`, the
+    detail as `npm ERR! audit ...` (npm <=9) or `npm error audit ...` (npm >=10). Not one of
+    those lines contains the words `npm audit`, which was the only npm signal
+    `security_scan_failure` knew -- so the only rule left matching was the bare `npm ERR!`
+    of `node_dependency_install`, at 0.53. A private registry that cannot serve audit
+    requests -- Artifactory, Verdaccio, GitHub Packages, the ordinary reason this fails in
+    CI -- was handed back to the maintainer as a dependency install they needed to fix.
+
+    pnpm fails the same way and lost for a different reason: `ERR_PNPM_AUDIT_NO_LOCKFILE`
+    was claimed by the install rule's broad `ERR_PNPM` prefix, which then outscored the
+    scanner two signals to one -- the second being `lockfile`, the bare noun that is already
+    mention-only precisely because it asserts nothing. With the prefix no longer claiming
+    the audit family, the tie falls to the rule that watched something fail.
+
+    The logs below are the tools' own output -- npm 11.12.1 and pnpm 11.0.8, run against a
+    registry with no audit endpoint -- and the npm <=9 wording as reported in #335, wrapped
+    in the runner's wire form (job/step columns and timestamp), because that prefix is
+    exactly what defeats a `^`-anchored pattern.
+    """
+
+    NPM_LEGACY = (
+        "audit\taudit\t2026-07-14T10:31:02.1234567Z ##[group]Run npm audit --audit-level=high\n"
+        "audit\taudit\t2026-07-14T10:31:04.9876543Z npm WARN audit 404 Not Found - POST "
+        "https://npm.pkg.github.com/-/npm/v1/security/advisories/bulk\n"
+        "audit\taudit\t2026-07-14T10:31:04.9976543Z npm ERR! code EAUDIT\n"
+        "audit\taudit\t2026-07-14T10:31:05.0012345Z npm ERR! audit Your configured registry "
+        "does not support audit requests\n"
+        "audit\taudit\t2026-07-14T10:31:05.1122334Z ##[error]Process completed with exit code 1.\n"
+    )
+
+    NPM_CURRENT = (
+        "audit\taudit\t2026-07-14T16:14:02.0020000Z npm warn audit 404 Not Found - POST "
+        "https://registry.npmjs.org/-/no-such-registry/-/npm/v1/security/advisories/bulk\n"
+        "audit\taudit\t2026-07-14T16:14:02.0030000Z npm error audit endpoint returned an error\n"
+        "audit\taudit\t2026-07-14T16:14:02.0040000Z ##[error]Process completed with exit code 1.\n"
+    )
+
+    PNPM = (
+        "audit\taudit\t2026-07-14T10:31:02.1000000Z ##[group]Run pnpm audit --audit-level=high\n"
+        "audit\taudit\t2026-07-14T10:31:04.2000000Z [ERR_PNPM_AUDIT_NO_LOCKFILE] No "
+        "pnpm-lock.yaml found: Cannot audit a project without a lockfile\n"
+        "audit\taudit\t2026-07-14T10:31:04.3000000Z ##[error]Process completed with exit code 1.\n"
+    )
+
+    def test_a_failed_audit_is_a_failed_security_scan(self) -> None:
+        for name, log in (
+            ("npm <=9 (EAUDIT)", self.NPM_LEGACY),
+            ("npm >=10 (audit endpoint returned an error)", self.NPM_CURRENT),
+            ("pnpm (ERR_PNPM_AUDIT_NO_LOCKFILE)", self.PNPM),
+        ):
+            with self.subTest(client=name):
+                result = classify_ci_log(log)
+
+                self.assertEqual(result["failure_class"], "security_scan_failure")
+
+    def test_a_broken_install_is_still_a_broken_install(self) -> None:
+        # The narrowness this fix has to keep: `npm ERR!` on its own means what it has always
+        # meant. Only npm's *audit* channel was taken away from it, and the install codes --
+        # including every pnpm code that is not an audit -- are untouched.
+        for name, log in (
+            (
+                "npm ERESOLVE",
+                "install\tinstall\t2026-07-14T10:00:00.0000000Z npm ERR! code ERESOLVE\n"
+                "install\tinstall\t2026-07-14T10:00:00.1000000Z npm ERR! ERESOLVE unable to "
+                "resolve dependency tree\n",
+            ),
+            (
+                "pnpm frozen lockfile",
+                "install\tinstall\t2026-07-14T10:00:00.0000000Z ERR_PNPM_OUTDATED_LOCKFILE "
+                'Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to '
+                "date\n",
+            ),
+            (
+                "pnpm peer deps",
+                "install\tinstall\t2026-07-14T10:00:00.0000000Z ERR_PNPM_PEER_DEP_ISSUES Unmet "
+                "peer dependencies\n",
+            ),
+        ):
+            with self.subTest(case=name):
+                result = classify_ci_log(log)
+
+                self.assertEqual(result["failure_class"], "node_dependency_install")
+
+    def test_an_install_that_merely_suggests_an_audit_is_not_a_failed_scan(self) -> None:
+        # The #327 guard, restated from the other side: npm's post-install tally suggests
+        # `npm audit fix` on an install that then failed for an unrelated reason. Suggesting a
+        # scan is not running one, and teaching the scanner npm's error channel must not
+        # resurrect the tally -- `npm warn audit` is npm reporting a scan it SKIPPED.
+        log = (
+            "install\tinstall\t2026-07-14T10:00:00.0000000Z npm warn audit 1 high severity "
+            "vulnerability\n"
+            "install\tinstall\t2026-07-14T10:00:00.1000000Z 1 high severity vulnerability\n"
+            "install\tinstall\t2026-07-14T10:00:00.2000000Z To address all issues, run:\n"
+            "install\tinstall\t2026-07-14T10:00:00.3000000Z   npm audit fix --force\n"
+            "install\tinstall\t2026-07-14T10:00:00.4000000Z npm ERR! code ERESOLVE\n"
+            "install\tinstall\t2026-07-14T10:00:00.5000000Z npm ERR! ERESOLVE unable to resolve "
+            "dependency tree\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "node_dependency_install")
+
+
 if __name__ == "__main__":
     unittest.main()
