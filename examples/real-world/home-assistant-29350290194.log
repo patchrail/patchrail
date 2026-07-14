@@ -1,0 +1,226 @@
+Run tests Python 3.14.5 (roborock)	Run pytest	﻿2026-07-14T16:38:40.2683767Z ##[group]Run . venv/bin/activate
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2683932Z ^[[36;1m. venv/bin/activate^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684040Z ^[[36;1mpython --version^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684148Z ^[[36;1mset -o pipefail^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684235Z ^[[36;1m^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684441Z ^[[36;1mif [[ ! -f "tests/components/${TEST_GROUP}/__init__.py" ]]; then^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684676Z ^[[36;1m  echo "::error:: missing file tests/components/${TEST_GROUP}/__init__.py"^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684766Z ^[[36;1m  exit 1^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684852Z ^[[36;1mfi^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2684934Z ^[[36;1m^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685026Z ^[[36;1mcov_params=()^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685158Z ^[[36;1mif [[ "${SKIP_COVERAGE}" != "true" ]]; then^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685361Z ^[[36;1m  cov_params+=(--cov="homeassistant.components.${TEST_GROUP}")^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685473Z ^[[36;1m  cov_params+=(--cov-report=xml)^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685608Z ^[[36;1m  cov_params+=(--cov-report=term-missing)^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685825Z ^[[36;1m  cov_params+=(--junitxml=junit.xml -o junit_family=legacy)^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685911Z ^[[36;1mfi^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2685997Z ^[[36;1m^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686113Z ^[[36;1mpython3 -b -X dev -m pytest \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686201Z ^[[36;1m  -qq \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686305Z ^[[36;1m  --timeout=9 \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686414Z ^[[36;1m  --numprocesses auto \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686519Z ^[[36;1m  --snapshot-details \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686617Z ^[[36;1m  ${cov_params[@]} \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686730Z ^[[36;1m  -o console_output_style=count \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686830Z ^[[36;1m  --durations=0 \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2686929Z ^[[36;1m  --durations-min=1 \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2687025Z ^[[36;1m  -p no:sugar \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2687149Z ^[[36;1m  --exclude-warning-annotations \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2687264Z ^[[36;1m  tests/components/${TEST_GROUP} \^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2687436Z ^[[36;1m    2>&1 | tee pytest-${PYTHON_VERSION}-${TEST_GROUP}.txt^[[0m
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718304Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718398Z env:
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718500Z   CACHE_VERSION: 4
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718602Z   MYPY_CACHE_VERSION: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718703Z   HA_SHORT_VERSION: 2026.8
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2718811Z   ADDITIONAL_PYTHON_VERSIONS: []
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719170Z   MARIADB_VERSIONS: ['mariadb:10.3.32','mariadb:10.6.10','mariadb:10.10.3','mariadb:10.11.2','mariadb:11.4.9','mysql:8.0.32']
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719338Z   POSTGRESQL_VERSIONS: ['postgres:12.14','postgres:15.2']
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719444Z   UV_CACHE_DIR: /tmp/uv-cache
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719543Z   APT_CACHE_VERSION: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719642Z   SQLALCHEMY_WARN_20: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719745Z   PYTHONASYNCIODEBUG: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719830Z   HASS_CI: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2719954Z   CACHE_KEY: 22a3147dd785dad2d35c5a5e68b7c7d9
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720145Z   UV_PYTHON_INSTALL_DIR: /home/runner/work/_temp/uv-python-dir
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720391Z   UV_PYTHON: 3.14.5
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720504Z   PYTHONDONTWRITEBYTECODE: 1
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720597Z   TEST_GROUP: roborock
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720691Z   SKIP_COVERAGE: 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720789Z   PYTHON_VERSION: 3.14.5
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2720883Z ##[endgroup]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:40.2805417Z Python 3.14.5
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:41.9296984Z /home/runner/work/core/core/venv/lib/python3.14/site-packages/rich/segment.py:547: SyntaxWarning: 'return' in a 'finally' block
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:41.9298028Z   return
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:49.9825135Z /home/runner/work/core/core/venv/lib/python3.14/site-packages/rich/segment.py:547: SyntaxWarning: 'return' in a 'finally' block
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:49.9826644Z   return
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:50.2242538Z /home/runner/work/core/core/venv/lib/python3.14/site-packages/rich/segment.py:547: SyntaxWarning: 'return' in a 'finally' block
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:50.2244176Z   return
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:57.5493360Z bringing up nodes...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:57.5494277Z bringing up nodes...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:38:57.5495424Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:01.1396064Z ..................................................................... [ 69/226]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:05.4715027Z ......................................................::error file=tests/components/roborock/test_vacuum.py,line=95::test_vacuum_state%0A%0AAssertionError: assert [+ received] == [- snapshot]%0A    StateSnapshot({%0A      ...%0A        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q7',%0A  -     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 13116>,%0A  +     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 29500>,%0A      }),%0A     ...%0A    })
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:06.2291762Z F.............. [138/226]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:09.4665858Z ..................................................................... [207/226]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5606468Z ...................                                                   [226/226]INFO:pyrate_limiter.limiter:Initializing default bucket(InMemoryBucket) with rates: [limit=1/1000, limit=3/60000, limit=10/3600000, limit=20/86400000]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5611083Z INFO:pyrate_limiter.limiter:Initializing default bucket(InMemoryBucket) with rates: [limit=1/1000, limit=3/60000, limit=5/3600000, limit=40/86400000]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5612553Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5613927Z =================================== FAILURES ===================================
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5614799Z ______________________________ test_vacuum_state _______________________________
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5615635Z [gw1] linux -- Python 3.14.5 /home/runner/work/core/core/venv/bin/python3
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5616185Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5616378Z hass = <HomeAssistant RUNNING>
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5617209Z entity_registry = <homeassistant.helpers.entity_registry.EntityRegistry object at 0x7f0ebce50520>
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5618817Z setup_entry = <ConfigEntry entry_id=01KXGQY4DGQ98R2SBJVAB2MSP7 version=1 domain=roborock title=user@domain.com state=ConfigEntryState.LOADED unique_id=roboborock-userid-abc-123>
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5620102Z snapshot = StateSnapshot({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5620508Z   'attributes': ReadOnlyDict({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5621061Z     <VacuumEntityStateAttribute.FAN_SPEED: 'fan_speed'>: None,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5621645Z     <Vac...uum.roborock_q7',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5622048Z   'last_changed': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5622431Z   'last_reported': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5622795Z   'last_updated': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5623495Z   'state': 'cleaning',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5623839Z })
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5624002Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5624160Z     async def test_vacuum_state(
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5624574Z         hass: HomeAssistant,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5624996Z         entity_registry: er.EntityRegistry,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5625471Z         setup_entry: MockConfigEntry,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5625912Z         snapshot: SnapshotAssertion,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5626368Z     ) -> None:
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5626736Z         """Test state values are correctly set."""
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5627746Z >       await snapshot_platform(hass, entity_registry, snapshot, setup_entry.entry_id)
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5628278Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5628471Z tests/components/roborock/test_vacuum.py:95: 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5629046Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5629436Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5629598Z hass = <HomeAssistant RUNNING>
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5630349Z entity_registry = <homeassistant.helpers.entity_registry.EntityRegistry object at 0x7f0ebce50520>
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5631148Z snapshot = StateSnapshot({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5631536Z   'attributes': ReadOnlyDict({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5632057Z     <VacuumEntityStateAttribute.FAN_SPEED: 'fan_speed'>: None,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5632629Z     <Vac...uum.roborock_q7',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5633404Z   'last_changed': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5633804Z   'last_reported': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5634208Z   'last_updated': <ANY>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5634592Z   'state': 'cleaning',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5635164Z })
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5635525Z config_entry_id = '01KXGQY4DGQ98R2SBJVAB2MSP7'
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5635866Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5636035Z     async def snapshot_platform(
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5636441Z         hass: HomeAssistant,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5636864Z         entity_registry: er.EntityRegistry,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5637321Z         snapshot: SnapshotAssertion,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5637758Z         config_entry_id: str,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5638139Z     ) -> None:
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5638489Z         """Snapshot a platform."""
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5639153Z         entity_entries = er.async_entries_for_config_entry(entity_registry, config_entry_id)
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5639860Z         assert entity_entries
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5640488Z         assert len({entity_entry.domain for entity_entry in entity_entries}) == 1, (
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5641276Z             "Please limit the loaded platforms to 1 platform."
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5641826Z         )
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5642171Z         for entity_entry in entity_entries:
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5642995Z             assert entity_entry == snapshot(name=f"{entity_entry.entity_id}-entry")
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5643845Z             assert entity_entry.disabled_by is None, "Please enable all entities."
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5644547Z             state = hass.states.get(entity_entry.entity_id)
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5645202Z             assert state, f"State not found for {entity_entry.entity_id}"
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5645917Z >           assert state == snapshot(name=f"{entity_entry.entity_id}-state")
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5646602Z E           AssertionError: assert [+ received] == [- snapshot]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5647157Z E               StateSnapshot({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5647540Z E                 ...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5648107Z E                   <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q7',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5649122Z E             -     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 13116>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5650326Z E             +     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 29500>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5651117Z E                 }),
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5651454Z E                ...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5651790Z E               })
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5651981Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5652156Z tests/common.py:1978: AssertionError
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5652756Z ---------------------------- Captured stderr setup -----------------------------
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5653780Z INFO:homeassistant.loader:Loaded roborock from homeassistant.components.roborock
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5654579Z INFO:homeassistant.setup:Setting up roborock
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5655281Z INFO:homeassistant.loader:Loaded vacuum from homeassistant.components.vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5655962Z INFO:homeassistant.setup:Setting up vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5656587Z INFO:homeassistant.components.vacuum:Setting up roborock.vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5657761Z INFO:homeassistant.helpers.entity_registry:Registered new vacuum.roborock entity: vacuum.roborock_s7_maxv
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5658957Z INFO:homeassistant.helpers.entity_registry:Registered new vacuum.roborock entity: vacuum.roborock_s7_2
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5660108Z INFO:homeassistant.helpers.entity_registry:Registered new vacuum.roborock entity: vacuum.roborock_q7
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5661276Z INFO:homeassistant.helpers.entity_registry:Registered new vacuum.roborock entity: vacuum.roborock_q10_s5
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5662219Z ------------------------------ Captured log setup ------------------------------
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5663494Z 2026-07-14 16:39:05.394 INFO     SyncWorker_0 homeassistant.loader:loader.py:792 Loaded roborock from homeassistant.components.roborock
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5664697Z 2026-07-14 16:39:05.394 INFO     MainThread homeassistant.setup:setup.py:393 Setting up roborock
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5665852Z 2026-07-14 16:39:05.406 INFO     SyncWorker_0 homeassistant.loader:loader.py:792 Loaded vacuum from homeassistant.components.vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5667166Z 2026-07-14 16:39:05.406 INFO     MainThread homeassistant.setup:setup.py:393 Setting up vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5668295Z 2026-07-14 16:39:05.409 INFO     MainThread homeassistant.components.vacuum:entity_platform.py:480 Setting up roborock.vacuum
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5669848Z 2026-07-14 16:39:05.410 INFO     MainThread homeassistant.helpers.entity_registry:entity_registry.py:1527 Registered new vacuum.roborock entity: vacuum.roborock_s7_maxv
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5671634Z 2026-07-14 16:39:05.411 INFO     MainThread homeassistant.helpers.entity_registry:entity_registry.py:1527 Registered new vacuum.roborock entity: vacuum.roborock_s7_2
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5673600Z 2026-07-14 16:39:05.412 INFO     MainThread homeassistant.helpers.entity_registry:entity_registry.py:1527 Registered new vacuum.roborock entity: vacuum.roborock_q7
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5675345Z 2026-07-14 16:39:05.413 INFO     MainThread homeassistant.helpers.entity_registry:entity_registry.py:1527 Registered new vacuum.roborock entity: vacuum.roborock_q10_s5
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5676566Z =============================== warnings summary ===============================
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5677119Z homeassistant/runner.py:176
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5677523Z homeassistant/runner.py:176
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5677925Z homeassistant/runner.py:176
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5679012Z   /home/runner/work/core/core/homeassistant/runner.py:176: DeprecationWarning: 'asyncio.DefaultEventLoopPolicy' is deprecated and slated for removal in Python 3.16
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5680311Z     class HassEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5680748Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5680901Z tests/conftest.py:153
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5681263Z tests/conftest.py:153
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5681618Z tests/conftest.py:153
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5682604Z   /home/runner/work/core/core/tests/conftest.py:153: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5684225Z     asyncio.set_event_loop_policy(runner.HassEventLoopPolicy(False))
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5684703Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5684950Z tests/components/roborock/test_diagnostics.py: 1 warning
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5685572Z tests/components/roborock/test_image.py: 12 warnings
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5686155Z tests/components/roborock/test_vacuum.py: 6 warnings
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5687523Z   /home/runner/work/core/core/venv/lib/python3.14/site-packages/aiohttp/web_request.py:192: DeprecationWarning: Setting custom HomeAssistantRequest._transport_sockname attribute is discouraged
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5688866Z     self._transport_sockname = protocol.sockname
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5689216Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5689559Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5690255Z ================================ tests coverage ================================
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5690961Z _______________ coverage: platform linux, python 3.14.5-final-0 ________________
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5691624Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5691875Z Name                                                    Stmts   Miss  Cover   Missing
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5692532Z -------------------------------------------------------------------------------------
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5693677Z homeassistant/components/roborock/__init__.py             120     10    92%   129-131, 222, 277-278, 283-284, 306-307
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5694686Z homeassistant/components/roborock/binary_sensor.py         60      1    98%   231
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5695520Z homeassistant/components/roborock/button.py                93      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5696353Z homeassistant/components/roborock/config_flow.py          149      1    99%   227
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5697186Z homeassistant/components/roborock/const.py                 32      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5698183Z homeassistant/components/roborock/coordinator.py          279     14    95%   91, 169, 220-224, 246-247, 328-329, 335, 357, 676
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5699184Z homeassistant/components/roborock/diagnostics.py           11      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5700184Z homeassistant/components/roborock/entity.py                54      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5701035Z homeassistant/components/roborock/image.py                124      4    97%   146, 220-222
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5701965Z homeassistant/components/roborock/models.py                25      2    92%   59, 75
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5702992Z homeassistant/components/roborock/number.py                78      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5703975Z homeassistant/components/roborock/roborock_storage.py      51     12    76%   24, 66-69, 89-95, 100, 105, 109
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5705038Z homeassistant/components/roborock/select.py               181      6    97%   422-423, 435-436, 565-566
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5706031Z homeassistant/components/roborock/sensor.py               121      4    97%   102, 616, 646, 660
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5706935Z homeassistant/components/roborock/services.py              13      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5707815Z homeassistant/components/roborock/switch.py               148      4    97%   339-340, 401-402
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5708699Z homeassistant/components/roborock/time.py                  51      0   100%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5709727Z homeassistant/components/roborock/vacuum.py               348     17    95%   202, 210, 218, 265, 356-358, 549, 553, 559-561, 563-568, 697, 839-840
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5710730Z -------------------------------------------------------------------------------------
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5711395Z TOTAL                                                    1938     75    96%
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5711934Z Coverage XML written to file coverage.xml
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5712524Z --------------------------- snapshot report summary ----------------------------
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5713428Z 1 snapshot failed. 253 snapshots passed. 2 snapshots unused.
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5713836Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5714620Z Unused test_vacuum_state[vacuum.roborock_q10_s5-entry], test_vacuum_state[vacuum.roborock_q10_s5-state] (tests/components/roborock/snapshots/test_vacuum.ambr)
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5715866Z Re-run pytest with --snapshot-update to delete unused snapshots.
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5723356Z ============================== slowest durations ===============================
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5744771Z ##[error]3.01s call     tests/components/roborock/test_select.py::test_update_success_selected_map[select.roborock_s7_maxv_selected_map-Downstairs]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5754988Z 
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5755208Z (677 durations < 1s hidden.)
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5755731Z =========================== short test summary info ============================
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5756728Z FAILED tests/components/roborock/test_vacuum.py::test_vacuum_state - AssertionError: assert [+ received] == [- snapshot]
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5757605Z     StateSnapshot({
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5757927Z       ...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5758436Z         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q7',
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5759655Z   -     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 13116>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5760792Z   +     <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <VacuumEntityFeature: 29500>,
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5761551Z       }),
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5761848Z      ...
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:12.5762145Z     })
+Run tests Python 3.14.5 (roborock)	Run pytest	2026-07-14T16:39:13.7904983Z ##[error]Process completed with exit code 1.

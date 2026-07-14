@@ -1,0 +1,94 @@
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	﻿2026-07-14T16:15:51.8428337Z ##[group]Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.8428733Z ^[[36;1mmake GO_ONLY=1 SKIP_GOLANGCI_LINT=1^[[0m
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.8430011Z shell: sh -e {0}
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.8430223Z env:
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.8430422Z   GOMEMLIMIT: 13098768KiB
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.8430655Z ##[endgroup]
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:51.9383566Z >> checking code style
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5864086Z gofmt checking failed!
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5864975Z diff tsdb/shard_bucket_postings_test.go.orig tsdb/shard_bucket_postings_test.go
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5865503Z --- tsdb/shard_bucket_postings_test.go.orig
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5865888Z +++ tsdb/shard_bucket_postings_test.go
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5866153Z @@ -545,7 +545,7 @@
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5866392Z  		refs = append(refs, storage.SeriesRef(i))
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5866702Z  	}
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5866901Z  	for i := range dirtyTail {
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5867216Z -		refs = append(refs, storage.SeriesRef(sorted/2 + i*2 + 1))
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5867631Z +		refs = append(refs, storage.SeriesRef(sorted/2+i*2+1))
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5867982Z  	}
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5868180Z  	return refs, sorted
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5868388Z  }
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5868482Z 
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5898462Z Please ensure you are using go version go1.26.5 linux/amd64 for formatting code.
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5901952Z make: *** [Makefile.common:136: common-style] Error 1
+Go tests	Run make GO_ONLY=1 SKIP_GOLANGCI_LINT=1	2026-07-14T16:15:52.5941527Z ##[error]Process completed with exit code 2.
+golangci-lint	Lint	﻿2026-07-14T16:16:02.5248130Z ##[group]Run golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a
+golangci-lint	Lint	2026-07-14T16:16:02.5248594Z with:
+golangci-lint	Lint	2026-07-14T16:16:02.5248799Z   args: --verbose
+golangci-lint	Lint	2026-07-14T16:16:02.5249005Z   version: v2.11.4
+golangci-lint	Lint	2026-07-14T16:16:02.5249206Z   install-mode: binary
+golangci-lint	Lint	2026-07-14T16:16:02.5249413Z   install-only: false
+golangci-lint	Lint	2026-07-14T16:16:02.5252137Z   github-token: ***
+golangci-lint	Lint	2026-07-14T16:16:02.5252341Z   verify: true
+golangci-lint	Lint	2026-07-14T16:16:02.5252749Z   only-new-issues: false
+golangci-lint	Lint	2026-07-14T16:16:02.5252987Z   skip-cache: false
+golangci-lint	Lint	2026-07-14T16:16:02.5253194Z   skip-save-cache: false
+golangci-lint	Lint	2026-07-14T16:16:02.5253434Z   cache-invalidation-interval: 7
+golangci-lint	Lint	2026-07-14T16:16:02.5253698Z   problem-matchers: false
+golangci-lint	Lint	2026-07-14T16:16:02.5253920Z env:
+golangci-lint	Lint	2026-07-14T16:16:02.5254102Z   GOTOOLCHAIN: local
+golangci-lint	Lint	2026-07-14T16:16:02.5254306Z ##[endgroup]
+golangci-lint	Lint	2026-07-14T16:16:02.6735816Z ##[group]Restore cache
+golangci-lint	Lint	2026-07-14T16:16:02.6741011Z Checking for go.mod: go.mod
+golangci-lint	Lint	2026-07-14T16:16:02.9369287Z Cache hit for: golangci-lint.cache-Linux-2949-3f0d590481daaa17890cab24797a2e659a8ee378
+golangci-lint	Lint	2026-07-14T16:16:04.2516818Z Received 0 of 7210116 (0.0%), 0.0 MBs/sec
+golangci-lint	Lint	2026-07-14T16:16:04.8236510Z Received 7210116 of 7210116 (100.0%), 4.4 MBs/sec
+golangci-lint	Lint	2026-07-14T16:16:04.8237172Z Cache Size: ~7 MB (7210116 B)
+golangci-lint	Lint	2026-07-14T16:16:04.8273805Z [command]/usr/bin/tar -xf /home/runner/work/_temp/b8867503-20da-40ba-9240-6a2386a0ad13/cache.tzst -P -C /home/runner/work/prometheus/prometheus --use-compress-program unzstd
+golangci-lint	Lint	2026-07-14T16:16:06.7168479Z Cache restored successfully
+golangci-lint	Lint	2026-07-14T16:16:06.7179893Z Restored cache for golangci-lint from key 'golangci-lint.cache-Linux-2949-3f0d590481daaa17890cab24797a2e659a8ee378' in 4044ms
+golangci-lint	Lint	2026-07-14T16:16:06.7181498Z ##[endgroup]
+golangci-lint	Lint	2026-07-14T16:16:06.7182137Z ##[group]Install
+golangci-lint	Lint	2026-07-14T16:16:06.7183595Z Finding needed golangci-lint version...
+golangci-lint	Lint	2026-07-14T16:16:06.7188054Z Installation mode: binary
+golangci-lint	Lint	2026-07-14T16:16:06.7189593Z Installing golangci-lint binary v2.11.4...
+golangci-lint	Lint	2026-07-14T16:16:06.7191076Z Downloading binary https://github.com/golangci/golangci-lint/releases/download/v2.11.4/golangci-lint-2.11.4-linux-amd64.tar.gz ...
+golangci-lint	Lint	2026-07-14T16:16:07.0398360Z [command]/usr/bin/tar xz --overwrite --warning=no-unknown-keyword --overwrite -C /home/runner -f /home/runner/work/_temp/92c21eba-577f-480f-a904-c0ffe1fbd696
+golangci-lint	Lint	2026-07-14T16:16:07.2997626Z Installed golangci-lint into /home/runner/golangci-lint-2.11.4-linux-amd64/golangci-lint in 581ms
+golangci-lint	Lint	2026-07-14T16:16:07.3002131Z ##[endgroup]
+golangci-lint	Lint	2026-07-14T16:16:07.3007255Z ##[group]run golangci-lint
+golangci-lint	Lint	2026-07-14T16:16:07.3012342Z Running [/home/runner/golangci-lint-2.11.4-linux-amd64/golangci-lint config path] in [/home/runner/work/prometheus/prometheus] ...
+golangci-lint	Lint	2026-07-14T16:16:07.3820947Z Running [/home/runner/golangci-lint-2.11.4-linux-amd64/golangci-lint config verify] in [/home/runner/work/prometheus/prometheus] ...
+golangci-lint	Lint	2026-07-14T16:16:07.6451131Z Running [/home/runner/golangci-lint-2.11.4-linux-amd64/golangci-lint run  --verbose] in [/home/runner/work/prometheus/prometheus] ...
+golangci-lint	Lint	2026-07-14T16:17:09.7391090Z ##[error]tsdb/shard_bucket_postings_test.go:548:1: File is not properly formatted (gci)
+golangci-lint	Lint	2026-07-14T16:17:09.7400623Z 		refs = append(refs, storage.SeriesRef(sorted/2 + i*2 + 1))
+golangci-lint	Lint	2026-07-14T16:17:09.7401089Z ^
+golangci-lint	Lint	2026-07-14T16:17:09.7401234Z 
+golangci-lint	Lint	2026-07-14T16:17:09.7401636Z level=info msg="golangci-lint has version 2.11.4 built with go1.26.1 from 8f3b0c7e on 2026-03-22T17:35:14Z"
+golangci-lint	Lint	2026-07-14T16:17:09.7403050Z level=info msg="[config_reader] Config search paths: [./ /home/runner/work/prometheus/prometheus /home/runner/work/prometheus /home/runner/work /home/runner /home /]"
+golangci-lint	Lint	2026-07-14T16:17:09.7404018Z level=info msg="[config_reader] Used config file .golangci.yml"
+golangci-lint	Lint	2026-07-14T16:17:09.7404615Z level=info msg="[config_reader] Module name \"github.com/prometheus/prometheus\""
+golangci-lint	Lint	2026-07-14T16:17:09.7405474Z level=info msg="[goenv] Read go env for 2.87711ms: map[string]string{\"GOCACHE\":\"/home/runner/.cache/go-build\", \"GOROOT\":\"/opt/hostedtoolcache/go/1.26.4/x64\"}"
+golangci-lint	Lint	2026-07-14T16:17:09.7407122Z level=info msg="[lintersdb] Active 26 linters: [depguard errcheck errorlint exptostd fatcontext gci gocritic godot gofumpt goimports govet ineffassign loggercheck misspell modernize nilnesserr perfsprint predeclared revive sloglint staticcheck testifylint unconvert unused usestdlibvars whitespace]"
+golangci-lint	Lint	2026-07-14T16:17:09.7410773Z level=info msg="[loader] Go packages loading at mode 8767 (deps|files|types_sizes|compiled_files|exports_file|imports|name) took 39.573140016s"
+golangci-lint	Lint	2026-07-14T16:17:09.7411623Z level=info msg="[runner/filename_unadjuster] Pre-built 0 adjustments in 218.711711ms"
+golangci-lint	Lint	2026-07-14T16:17:09.7413362Z level=info msg="[linters_context/goanalysis] analyzers took 5m7.608467747s with top 10 stages: goimports: 37.133577786s, buildir: 35.017961172s, gocritic: 24.931889894s, gci: 23.306493297s, gofumpt: 22.168401381s, revive: 21.054039121s, S1038: 13.245359472s, unused: 12.206714561s, whitespace: 10.938556244s, errorlint: 8.866905093s"
+golangci-lint	Lint	2026-07-14T16:17:09.7414810Z level=info msg="[runner/exclusion_paths] Skipped 543 issues by pattern \"^.*\\\\.(l|pb|y)\\\\.go$\""
+golangci-lint	Lint	2026-07-14T16:17:09.7416094Z level=info msg="[runner/exclusion_rules] Skipped 680 issues by rules: [Text: \"exported (.+) should have comment( \\\\(or a comment on this block\\\\))? or be unexported\", Linters: \"revive\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7417093Z level=info msg="[runner/exclusion_rules] Skipped 288 issues by rules: [Path: \"_test.go\", Linters: \"errcheck\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7417868Z level=info msg="[runner/exclusion_rules] Skipped 2 issues by rules: [Path: \"tsdb/head_wal.go\", Linters: \"errorlint\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7418855Z level=info msg="[runner/exclusion_rules] Skipped 80 issues by rules: [Source: \"^// ===\", Linters: \"godot\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7420780Z level=info msg="[runner/exclusion_rules] Skipped 137 issues by rules: [Text: \"(labels.MetricName|v1\\\\.(Endpoints|EndpointSubset|EndpointPort|EndpointAddress)) is deprecated: .*\", Linters: \"staticcheck\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7424754Z level=info msg="[runner/exclusion_rules] Skipped 373 issues by rules: [Text: \"Error return value of .((os\\\\.)?std(out|err)\\\\..*|.*Close|.*Flush|os\\\\.Remove(All)?|.*print(f|ln)?|os\\\\.(Un)?Setenv). is not checked\", Linters: \"errcheck\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7427201Z level=info msg="[runner/exclusion_rules] Skipped 26 issues by rules: [Text: \"stdmethods: method Seek.* should have signature Seek\", Linters: \"govet\"]"
+golangci-lint	Lint	2026-07-14T16:17:09.7428254Z level=info msg="[runner] Issues before processing: 2245, after processing: 1"
+golangci-lint	Lint	2026-07-14T16:17:09.7431191Z level=info msg="[runner] Processors filtering stat (in/out): path_absoluter: 2245/2245, invalid_issue: 2245/2245, exclusion_paths: 2245/1702, generated_file_filter: 1702/1702, max_same_issues: 1/1, source_code: 1/1, path_shortener: 1/1, cgo: 2245/2245, path_relativity: 2245/2245, exclusion_rules: 1702/116, nolint_filter: 116/3, sort_results: 1/1, diff: 3/3, fixer: 3/3, uniq_by_line: 3/1, path_prettifier: 1/1, filename_unadjuster: 2245/2245, max_per_file_from_linter: 1/1, max_from_linter: 1/1, severity-rules: 1/1"
+golangci-lint	Lint	2026-07-14T16:17:09.7438130Z level=info msg="[runner] processing took 81.198778ms with stages: nolint_filter: 66.205042ms, exclusion_rules: 6.110842ms, generated_file_filter: 5.672052ms, path_relativity: 1.477521ms, exclusion_paths: 1.391481ms, cgo: 129.742µs, invalid_issue: 76.483µs, source_code: 61.966µs, path_absoluter: 43.672µs, filename_unadjuster: 20.869µs, uniq_by_line: 2.385µs, sort_results: 1.443µs, max_same_issues: 1.293µs, max_per_file_from_linter: 1.101µs, path_shortener: 842ns, fixer: 701ns, diff: 531ns, path_prettifier: 361ns, max_from_linter: 340ns, severity-rules: 111ns"
+golangci-lint	Lint	2026-07-14T16:17:09.7441777Z level=info msg="[runner] linters took 22.162024682s with stages: goanalysis_metalinter: 22.080727959s"
+golangci-lint	Lint	2026-07-14T16:17:09.7442957Z level=info msg="File cache stats: 3 entries of total size 147.2KiB"
+golangci-lint	Lint	2026-07-14T16:17:09.7443756Z level=info msg="Memory: 612 samples, avg is 423.9MB, max is 2131.2MB"
+golangci-lint	Lint	2026-07-14T16:17:09.7444410Z level=info msg="Execution took 1m1.961772373s"
+golangci-lint	Lint	2026-07-14T16:17:09.7444757Z 
+golangci-lint	Lint	2026-07-14T16:17:09.7458534Z ##[error]issues found
+golangci-lint	Lint	2026-07-14T16:17:09.7460220Z Ran golangci-lint in 62091ms
+golangci-lint	Lint	2026-07-14T16:17:09.7460949Z ##[endgroup]

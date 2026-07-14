@@ -1,0 +1,21 @@
+ecosystem	Fail on ecosystem errors	﻿2026-07-14T16:37:12.8359715Z ##[group]Run if grep -q "project error" ecosystem-result; then
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8360702Z ^[[36;1mif grep -q "project error" ecosystem-result; then^[[0m
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8361201Z ^[[36;1m  exit 1^[[0m
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8361819Z ^[[36;1mfi^[[0m
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8404525Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8405332Z env:
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8405754Z   CARGO_INCREMENTAL: 0
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8406097Z   CARGO_NET_RETRY: 10
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8406422Z   CARGO_TERM_COLOR: always
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8406763Z   RUSTUP_MAX_RETRIES: 10
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8407105Z   PACKAGE_NAME: ruff
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8407444Z   PYTHON_VERSION: 3.14
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8407758Z   NEXTEST_PROFILE: ci
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8408024Z   MDTEST_EXTERNAL: 1
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8408330Z   CARGO_PROFILE_DEV_DEBUG: line-tables-only
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8408919Z   UV_PYTHON_INSTALL_DIR: /home/runner/.local/share/uv/python
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8409335Z   UV_PYTHON: 3.14
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8409818Z   VIRTUAL_ENV: /home/runner/work/ruff/ruff/.venv
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8410281Z   CACHE_ON_FAILURE: false
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8410582Z ##[endgroup]
+ecosystem	Fail on ecosystem errors	2026-07-14T16:37:12.8501062Z ##[error]Process completed with exit code 1.

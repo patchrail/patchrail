@@ -1,0 +1,400 @@
+lint-go	UNKNOWN STEP	﻿2026-06-16T17:16:57.7302942Z Current runner version: '2.335.1'
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7308003Z Runner name: 'ubuntu-x64-xlarge_i-01b5aae2a59ee3dc9'
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7308737Z Runner group name: 'self-hosted-prod'
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7309510Z Machine name: 'ip-172-16-192-46'
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7324296Z ##[group]Operating System
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7324923Z Distribution: Ubuntu 24.04.4 LTS
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7325552Z Architecture: x86_64
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7326025Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7326463Z ##[group]Runner Image
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7326931Z AMI id: ami-0a34bd499f7319fe6
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7327396Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7327818Z ##[group]EC2
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7328271Z Instance type: m7i-flex.4xlarge
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7328795Z Availability zone: us-east-2c
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7329268Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7330068Z ##[group]GITHUB_TOKEN Permissions
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7332039Z Contents: read
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7332491Z Metadata: read
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7333070Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7334788Z Secret source: Actions
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7335391Z Prepare workflow directory
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7599030Z Prepare all required actions
+lint-go	UNKNOWN STEP	2026-06-16T17:16:57.7630750Z Getting action download info
+lint-go	UNKNOWN STEP	2026-06-16T17:16:58.0367509Z Download action repository 'actions/checkout@v5' (SHA:93cb6efe18208431cddfb8368fd83d5badbf9bfd)
+lint-go	UNKNOWN STEP	2026-06-16T17:16:59.7593983Z Download action repository 'golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20' (SHA:1e7e51e771db61008b38414a730f564565cf7c20)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.2263763Z Complete job name: lint-go
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.2745985Z A job started hook has been configured by the self-hosted runner administrator
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.3800481Z ##[group]Run '/opt/actions-runner/hook_job_started.sh'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.3831346Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.3832297Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.3968428Z Running hook job started scripts
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.3969194Z Done
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4196902Z ##[group]Run actions/checkout@v5
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4197573Z with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4198040Z   persist-credentials: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4198546Z   repository: grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4203018Z   token: ***
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4203458Z   ssh-strict: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4203902Z   ssh-user: git
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4204343Z   clean: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4204759Z   sparse-checkout-cone-mode: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4205576Z   fetch-depth: 1
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4205982Z   fetch-tags: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4206394Z   show-progress: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4206856Z   lfs: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4207247Z   submodules: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4207670Z   set-safe-directory: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4208126Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4990844Z Syncing repository: grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4992777Z ##[group]Getting Git version info
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4993478Z Working directory is '/opt/actions-runner/_work/grafana/grafana'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.4994545Z [command]/usr/bin/git version
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7300012Z git version 2.54.0
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7313079Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7330817Z Temporarily overriding HOME='/opt/actions-runner/_work/_temp/b79a0ee7-4fc8-461d-9aa1-21d9adf108a7' before making global git config changes
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7333715Z Adding repository directory to the temporary git global config as a safe directory
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7335746Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-runner/_work/grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7744051Z Deleting the contents of '/opt/actions-runner/_work/grafana/grafana'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7748256Z ##[group]Initializing the repository
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.7753277Z [command]/usr/bin/git init /opt/actions-runner/_work/grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8238064Z hint: Using 'master' as the name for the initial branch. This default branch name
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8240294Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8242353Z hint: to use in all of your new repositories, which will suppress this warning,
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8244312Z hint: call:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8245069Z hint:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8246021Z hint: 	git config --global init.defaultBranch <name>
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8247460Z hint:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8248887Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8251138Z hint: 'development'. The just-created branch can be renamed via this command:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8253022Z hint:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8254066Z hint: 	git branch -m <name>
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8255298Z hint:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8256805Z hint: Disable this message with "git config set advice.defaultBranchName false"
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8259295Z Initialized empty Git repository in /opt/actions-runner/_work/grafana/grafana/.git/
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8263307Z [command]/usr/bin/git remote add origin https://github.com/grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8311097Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8313189Z ##[group]Disabling automatic garbage collection
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8461882Z [command]/usr/bin/git config --local gc.auto 0
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8465525Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8467268Z ##[group]Setting up auth
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8468855Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+lint-go	UNKNOWN STEP	2026-06-16T17:17:00.8473778Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0481690Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0510032Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0729549Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0758197Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0963934Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0997380Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.0998836Z ##[group]Fetching the repository
+lint-go	UNKNOWN STEP	2026-06-16T17:17:01.1005358Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d730f05a9ae23c20ffc2365a549f63b30adf98f9:refs/remotes/pull/126574/merge
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1036383Z From https://github.com/grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1036958Z  * [new ref]           d730f05a9ae23c20ffc2365a549f63b30adf98f9 -> pull/126574/merge
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1078256Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1078623Z ##[group]Determining the checkout info
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1078962Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1083467Z [command]/usr/bin/git sparse-checkout disable
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1147550Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1173030Z ##[group]Checking out the ref
+lint-go	UNKNOWN STEP	2026-06-16T17:17:10.1178225Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/126574/merge
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.1765389Z Updating files:  98% (21594/21889)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2022400Z Updating files:  99% (21671/21889)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2024138Z Updating files: 100% (21889/21889)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2024389Z Updating files: 100% (21889/21889), done.
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2225886Z Note: switching to 'refs/remotes/pull/126574/merge'.
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2226330Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2226649Z You are in 'detached HEAD' state. You can look around, make experimental
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2227030Z changes and commit them, and you can discard any commits you make in this
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2227507Z state without impacting any branches by switching back to a branch.
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2227781Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2228125Z If you want to create a new branch to retain commits you create, you may
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2228781Z do so (now or later) by using -c with the switch command. Example:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2229051Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2229547Z   git switch -c <new-branch-name>
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2229817Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2229952Z Or undo this operation with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2230130Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2230235Z   git switch -
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2230368Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2230555Z Turn off this advice by setting config variable advice.detachedHead to false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2230813Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2231088Z HEAD is now at d730f05a Merge e7a1e153b2624bcd94a09df343cabc67f971d398 into 4e56273b0d433106237c4a4fce5e099681e89909
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2248847Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2300165Z [command]/usr/bin/git log -1 --format=%H
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2323017Z d730f05a9ae23c20ffc2365a549f63b30adf98f9
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2335180Z ##[group]Removing auth
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2336586Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2365135Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2607172Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2630989Z http.https://github.com/.extraheader
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2635129Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2658213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2888865Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.2916208Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.3146150Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.3374263Z Prepare all required actions
+lint-go	UNKNOWN STEP	2026-06-16T17:17:11.3374657Z Getting action download info
+lint-go	UNKNOWN STEP	2026-06-16T17:17:13.3114696Z Download action repository 'actions/setup-go@v6.0.0' (SHA:44694675825211faa026b3c33043df3e48a5fa00)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:13.6970596Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0332447Z ##[group]Run ./.github/actions/setup-go
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0332677Z with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0332844Z   cache-build: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0333029Z   go-version-file: go.mod
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0333210Z   cache: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0333370Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0446058Z ##[group]Run actions/setup-go@v6.0.0
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0446305Z with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0446481Z   go-version-file: go.mod
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0446675Z   cache: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0446845Z   check-latest: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0449227Z   token: ***
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.0449420Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.1732649Z Setup go version spec 1.26.4
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.1742089Z Attempting to download 1.26.4...
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.6662603Z matching 1.26.4...
+lint-go	UNKNOWN STEP	2026-06-16T17:17:14.6679112Z Acquiring 1.26.4 from https://github.com/actions/go-versions/releases/download/1.26.4-26891772857/go-1.26.4-linux-x64.tar.gz
+lint-go	UNKNOWN STEP	2026-06-16T17:17:15.6510853Z Extracting Go...
+lint-go	UNKNOWN STEP	2026-06-16T17:17:15.6625721Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /opt/actions-runner/_work/_temp/b474cb5c-f0fd-4f50-b96e-81b0df01476e -f /opt/actions-runner/_work/_temp/c229c0be-df31-422f-83d0-1a902c7d0cb0
+lint-go	UNKNOWN STEP	2026-06-16T17:17:17.0227058Z Successfully extracted go to /opt/actions-runner/_work/_temp/b474cb5c-f0fd-4f50-b96e-81b0df01476e
+lint-go	UNKNOWN STEP	2026-06-16T17:17:17.0227745Z Adding to the cache ...
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7766065Z Successfully cached go to /opt/hostedtoolcache/go/1.26.4/x64
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7766472Z Added go to the path
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7766676Z Successfully set up Go version 1.26.4
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7956554Z go version go1.26.4 linux/amd64
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7956727Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:29.7956995Z ##[group]go env
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1995122Z AR='ar'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1995448Z CC='gcc'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1995768Z CGO_CFLAGS='-O2 -g'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1995966Z CGO_CPPFLAGS=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1996146Z CGO_CXXFLAGS='-O2 -g'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1996336Z CGO_ENABLED='1'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1996504Z CGO_FFLAGS='-O2 -g'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1996692Z CGO_LDFLAGS='-O2 -g'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1996863Z CXX='g++'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997023Z GCCGO='gccgo'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997188Z GO111MODULE=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997347Z GOAMD64='v1'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997506Z GOARCH='amd64'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997665Z GOAUTH='netrc'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1997852Z GOBIN=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998075Z GOCACHE='/home/ubuntu/.cache/go-build'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998295Z GOCACHEPROG=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998455Z GODEBUG=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998607Z GOENV=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998790Z GOEXE=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1998943Z GOEXPERIMENT=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1999121Z GOFIPS140='off'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1999281Z GOFLAGS=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.1999814Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2555478289=/tmp/go-build -gno-record-gcc-switches'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2000300Z GOHOSTARCH='amd64'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2000475Z GOHOSTOS='linux'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2000641Z GOINSECURE=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2000870Z GOMOD='/opt/actions-runner/_work/grafana/grafana/go.mod'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2001140Z GOMODCACHE='/home/ubuntu/go/pkg/mod'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2001483Z GONOPROXY=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2001646Z GONOSUMDB=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2001808Z GOOS='linux'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2001989Z GOPATH='/home/ubuntu/go'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2002361Z GOPRIVATE=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2002673Z GOPROXY='https://proxy.golang.org,direct'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2002932Z GOROOT='/opt/hostedtoolcache/go/1.26.4/x64'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2003164Z GOSUMDB='sum.golang.org'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2003359Z GOTELEMETRY='off'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2003791Z GOTELEMETRYDIR=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2003961Z GOTMPDIR=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2004124Z GOTOOLCHAIN='local'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2004381Z GOTOOLDIR='/opt/hostedtoolcache/go/1.26.4/x64/pkg/tool/linux_amd64'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2004651Z GOVCS=''
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2004814Z GOVERSION='go1.26.4'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2005058Z GOWORK='/opt/actions-runner/_work/grafana/grafana/go.work'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2005323Z PKG_CONFIG='pkg-config'
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2005439Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:17:31.2005753Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8041958Z ##[group]Run actions/cache@v4
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8042172Z with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8042339Z   path: ~/go/pkg/mod
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8042659Z   key: gomod-Linux-X64-d788f30a40385a9c4d9d3acf1cc9e2f3ba3de3b059887d83aa8043d7ceae7f22
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043016Z   restore-keys: gomod-Linux-X64-
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043228Z   enableCrossOsArchive: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043428Z   fail-on-cache-miss: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043637Z   lookup-only: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043819Z   save-always: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8043982Z env:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8044135Z   GOTOOLCHAIN: local
+lint-go	UNKNOWN STEP	2026-06-16T17:17:36.8044300Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:37.1663026Z Cache hit for: gomod-Linux-X64-d788f30a40385a9c4d9d3acf1cc9e2f3ba3de3b059887d83aa8043d7ceae7f22
+lint-go	UNKNOWN STEP	2026-06-16T17:17:38.2684470Z Received 130023424 of 1779466770 (7.3%), 124.0 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:39.2682981Z Received 264241152 of 1779466770 (14.8%), 126.0 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:40.2684257Z Received 432013312 of 1779466770 (24.3%), 137.3 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:41.2682238Z Received 654311424 of 1779466770 (36.8%), 156.0 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:42.2679478Z Received 864026624 of 1779466770 (48.6%), 164.8 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:43.2682207Z Received 1073741824 of 1779466770 (60.3%), 170.7 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:44.2680570Z Received 1283457024 of 1779466770 (72.1%), 174.9 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:45.2683561Z Received 1476395008 of 1779466770 (83.0%), 176.0 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:46.2690873Z Received 1702887424 of 1779466770 (95.7%), 180.4 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:46.6578220Z Received 1779466770 of 1779466770 (100.0%), 180.7 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:46.6580436Z Cache Size: ~1697 MB (1779466770 B)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:46.6649969Z [command]/usr/bin/tar -xf /opt/actions-runner/_work/_temp/a0cadc5a-9276-4392-88e8-3592734e6e75/cache.tzst -P -C /opt/actions-runner/_work/grafana/grafana --use-compress-program unzstd
+lint-go	UNKNOWN STEP	2026-06-16T17:17:54.8946117Z Cache restored successfully
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.1274492Z Cache restored from key: gomod-Linux-X64-d788f30a40385a9c4d9d3acf1cc9e2f3ba3de3b059887d83aa8043d7ceae7f22
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.1408703Z ##[group]Run ./.github/actions/report-go-cache-sizes
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.1408964Z env:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.1409136Z   GOTOOLCHAIN: local
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.1409320Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9662065Z GOMODCACHE: 5.3G (/home/ubuntu/go/pkg/mod)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9723595Z GOCACHE:    1.1M (/home/ubuntu/.cache/go-build)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9815692Z ##[group]Run golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9816032Z with:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9816201Z   version: v2.12.2
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9816532Z   args: --verbose $(go list -m -f '{{.Dir}}' | xargs -I{} sh -c 'test ! -f {}/.nolint && echo {}/...')
+lint-go	UNKNOWN STEP	
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9816860Z   install-mode: binary
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9817055Z   install-only: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9819304Z   github-token: ***
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9819496Z   verify: true
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9819741Z   only-new-issues: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9819987Z   skip-cache: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9820234Z   skip-save-cache: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9820535Z   cache-invalidation-interval: 7
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9820824Z   problem-matchers: false
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9821019Z env:
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9821175Z   GOTOOLCHAIN: local
+lint-go	UNKNOWN STEP	2026-06-16T17:17:55.9821478Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.1057902Z ##[group]Restore cache
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.1065360Z Checking for go.mod: go.mod
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.1073910Z (node:4520) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.1074520Z (Use `node --trace-deprecation ...` to show where the warning was created)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.2305180Z Cache hit for: golangci-lint.cache-Linux-2945-ef22d35ffdb71feb588be681ff7a1bd63d7bce20
+lint-go	UNKNOWN STEP	2026-06-16T17:17:56.2376271Z (node:4520) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+lint-go	UNKNOWN STEP	2026-06-16T17:17:57.3653846Z Received 85501442 of 85501442 (100.0%), 82.3 MBs/sec
+lint-go	UNKNOWN STEP	2026-06-16T17:17:57.3658674Z Cache Size: ~82 MB (85501442 B)
+lint-go	UNKNOWN STEP	2026-06-16T17:17:57.3744648Z [command]/usr/bin/tar -xf /opt/actions-runner/_work/_temp/2fc0e385-92cf-4f13-b838-a48f6363caed/cache.tzst -P -C /opt/actions-runner/_work/grafana/grafana --use-compress-program unzstd
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2139606Z Cache restored successfully
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2178451Z Restored cache for golangci-lint from key 'golangci-lint.cache-Linux-2945-ef22d35ffdb71feb588be681ff7a1bd63d7bce20' in 19112ms
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2179257Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2179827Z ##[group]Install
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2181930Z Finding needed golangci-lint version...
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2184450Z Installation mode: binary
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2184825Z Installing golangci-lint binary v2.12.2...
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.2185490Z Downloading binary https://github.com/golangci/golangci-lint/releases/download/v2.12.2/golangci-lint-2.12.2-linux-amd64.tar.gz ...
+lint-go	UNKNOWN STEP	2026-06-16T17:18:15.4368240Z [command]/usr/bin/tar xz --overwrite --warning=no-unknown-keyword --overwrite -C /home/ubuntu -f /opt/actions-runner/_work/_temp/90889129-50ef-4ac2-b74a-ab89db83d6d5
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.2213504Z Installed golangci-lint into /home/ubuntu/golangci-lint-2.12.2-linux-amd64/golangci-lint in 1002ms
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.2215002Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.2220927Z ##[group]run golangci-lint
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.2221920Z Running [/home/ubuntu/golangci-lint-2.12.2-linux-amd64/golangci-lint config path] in [/opt/actions-runner/_work/grafana/grafana] ...
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.3631974Z Running [/home/ubuntu/golangci-lint-2.12.2-linux-amd64/golangci-lint config verify] in [/opt/actions-runner/_work/grafana/grafana] ...
+lint-go	UNKNOWN STEP	2026-06-16T17:18:16.5798670Z Running [/home/ubuntu/golangci-lint-2.12.2-linux-amd64/golangci-lint run  --verbose $(go list -m -f '{{.Dir}}' | xargs -I{} sh -c 'test ! -f {}/.nolint && echo {}/...')] in [/opt/actions-runner/_work/grafana/grafana] ...
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4445337Z pkg/services/frontend/context_middleware.go:1: : # github.com/grafana/grafana/pkg/services/frontend [github.com/grafana/grafana/pkg/services/frontend.test]
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4471548Z ##[error]pkg/services/frontend/request_config_test.go:22:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4477823Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4478350Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4479304Z ##[error]pkg/services/frontend/request_config_test.go:46:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4480216Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4480672Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4481537Z ##[error]pkg/services/frontend/request_config_test.go:72:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4482431Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4482873Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4483544Z ##[error]pkg/services/frontend/request_config_test.go:87:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4484324Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4484755Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4485380Z ##[error]pkg/services/frontend/request_config_test.go:101:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4486209Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4486634Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4487255Z ##[error]pkg/services/frontend/request_config_test.go:115:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4488017Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4488457Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4489118Z ##[error]pkg/services/frontend/request_config_test.go:129:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4489902Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4490329Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4490956Z ##[error]pkg/services/frontend/request_config_test.go:141:34: not enough arguments in call to config.ApplyOverrides
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4491897Z 	have (*"gopkg.in/ini.v1".File, *"github.com/grafana/grafana/pkg/infra/log".ConcreteLogger)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4492367Z 	want (*"gopkg.in/ini.v1".File, "github.com/grafana/grafana/pkg/infra/log".Logger, bool) (typecheck)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4492717Z package frontend
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4492915Z 1 issues:
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4493083Z * typecheck: 1
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4493193Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4493445Z level=info msg="golangci-lint has version 2.12.2 built with go1.26.2 from c0d3ddc9 on 2026-05-06T11:07:58Z"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4494343Z level=info msg="[config_reader] Config search paths: [./ /opt/actions-runner/_work/grafana/grafana /opt/actions-runner/_work/grafana /opt/actions-runner/_work /opt/actions-runner /opt / /home/ubuntu]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4494986Z level=info msg="[config_reader] Used config file .golangci.yml"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4495530Z level=info msg="[config_reader] Module name \"github.com/grafana/grafana\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4496186Z level=info msg="[goenv] Read go env for 2.680855ms: map[string]string{\"GOCACHE\":\"/home/ubuntu/.cache/go-build\", \"GOROOT\":\"/opt/hostedtoolcache/go/1.26.4/x64\"}"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4497258Z level=info msg="[lintersdb] Active 21 linters: [asciicheck bodyclose depguard dogsled errcheck errorlint exhaustive gocyclo goimports goprintffuncname gosec govet ineffassign misspell nakedret prealloc revive staticcheck unconvert unused whitespace]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4498477Z level=info msg="[loader] Go packages loading at mode 8767 (deps|exports_file|types_sizes|files|imports|name|compiled_files) took 2m14.901748272s"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4499113Z level=info msg="[runner/filename_unadjuster] Pre-built 0 adjustments in 242.394719ms"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4500240Z level=info msg="[linters_context/goanalysis] analyzers took 10m39.446368117s with top 10 stages: buildir: 2m4.434992155s, gosec: 52.425122327s, goimports: 43.221095002s, revive: 20.803361626s, unconvert: 17.642841969s, exhaustive: 12.769778061s, unused: 9.480877472s, printf: 9.114920981s, ctrlflow: 8.885775314s, fact_deprecated: 8.430904582s"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4501378Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"examples$\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4501927Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"pkg/util/xorm\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4502461Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"devenv\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4502960Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"scripts\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4503475Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"third_party$\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4503970Z level=info msg="[runner/exclusion_paths] Skipped 0 issues by pattern \"builtin$\""
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4504639Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G202\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4505216Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"401\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4505953Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Path: \"builtin$\", Linters: \"goimports\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4506622Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"ST1020\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4507249Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Path: \"scripts\", Linters: \"goimports\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4507940Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G118\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4508573Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"ST1000\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4509275Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Path: \"examples$\", Linters: \"goimports\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4510022Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"non-wrapping format verb for fmt.Errorf\", Linters: \"errorlint\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4510807Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"ST1021\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4511613Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G601\", Path: \"(.+)_test\\\\.go\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4512353Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G124\", Path: \"(.+)_test\\\\.go\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4513076Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G101\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4513762Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"402\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4514433Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"501\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4515065Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Path: \"devenv\", Linters: \"goimports\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4515760Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"SA1019: http.CloseNotifier\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4516573Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"use fake service and real access control evaluator instead\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4517436Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"ST1001\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4518175Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"SA1019: strings.Title\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4518914Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"SA1019: \\\"go.opentelemetry.io/otel/exporters/jaeger\\\"\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4519656Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"QF1012\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4520321Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G201\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4520965Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Path: \"third_party$\", Linters: \"goimports\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4521651Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G108\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4522233Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G115\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4522813Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G306\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4523384Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"404\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4523996Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"ST1003\", Linters: \"staticcheck\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4524562Z level=info msg="[runner/exclusion_rules] Skipped 0 issues by rules: [Text: \"G110\", Linters: \"gosec\"]"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4525099Z level=info msg="[runner] Issues before processing: 4676, after processing: 1"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4526484Z level=info msg="[runner] Processors filtering stat (in/out): invalid_issue: 4676/1, fixer: 1/1, max_same_issues: 1/1, sort_results: 1/1, path_absoluter: 4676/4676, filename_unadjuster: 4676/4676, exclusion_rules: 1/1, diff: 1/1, exclusion_paths: 1/1, nolint_filter: 1/1, uniq_by_line: 1/1, path_prettifier: 1/1, path_relativity: 1/1, generated_file_filter: 1/1, max_per_file_from_linter: 1/1, max_from_linter: 1/1, source_code: 1/1, path_shortener: 1/1, severity-rules: 1/1, cgo: 4676/4676"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4529472Z level=info msg="[runner] processing took 47.048649ms with stages: cgo: 46.629868ms, exclusion_rules: 98.582µs, path_absoluter: 88.748µs, source_code: 71.282µs, exclusion_paths: 64.272µs, filename_unadjuster: 43.58µs, invalid_issue: 32.432µs, path_relativity: 4.39µs, path_shortener: 4.026µs, uniq_by_line: 2.697µs, sort_results: 1.994µs, nolint_filter: 1.508µs, max_same_issues: 1.432µs, max_from_linter: 1.333µs, generated_file_filter: 600ns, fixer: 574ns, diff: 433ns, path_prettifier: 378ns, max_per_file_from_linter: 301ns, severity-rules: 219ns"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4530986Z level=info msg="[runner] linters took 24.974627334s with stages: goanalysis_metalinter: 24.927512474s"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4531579Z level=info msg="File cache stats: 1 entries of total size 3.2KiB"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4532066Z level=info msg="Memory: 1598 samples, avg is 553.8MB, max is 7749.3MB"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4532533Z level=info msg="Execution took 2m40.189953204s"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4532743Z 
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4788805Z ##[error]issues found
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4790151Z Ran golangci-lint in 160898ms
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4790702Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.4946987Z Post job cleanup.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.8728388Z Cache hit occurred on the primary key golangci-lint.cache-Linux-2945-ef22d35ffdb71feb588be681ff7a1bd63d7bce20, not saving cache.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.8729436Z (node:73829) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.8734529Z (Use `node --trace-deprecation ...` to show where the warning was created)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.8860510Z Post job cleanup.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:57.8885578Z Post job cleanup.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.4040057Z GOMODCACHE: 5.3G (/home/ubuntu/go/pkg/mod)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.4644049Z GOCACHE:    7.7G (/home/ubuntu/.cache/go-build)
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.4752169Z Post job cleanup.
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5444910Z [command]/usr/bin/git version
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5477378Z git version 2.54.0
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5505516Z Temporarily overriding HOME='/opt/actions-runner/_work/_temp/bd130a4b-a3b4-4d0a-9c9a-c7866d960329' before making global git config changes
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5506216Z Adding repository directory to the temporary git global config as a safe directory
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5509571Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-runner/_work/grafana/grafana
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5575835Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5604166Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5858728Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.5886453Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6123924Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6154399Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6462241Z A job completed hook has been configured by the self-hosted runner administrator
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6500029Z ##[group]Run '/opt/actions-runner/hook_job_completed.sh'
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6524476Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6524932Z ##[endgroup]
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6569225Z Running hook job completed scripts
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6569823Z Done
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6621688Z Cleaning up orphan processes
+lint-go	UNKNOWN STEP	2026-06-16T17:20:58.6980456Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: ./.github/actions/report-go-cache-sizes, actions/cache@v4, actions/setup-go@v6.0.0. Actions will be forced to run with Node.js 24 by default starting June 16th, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

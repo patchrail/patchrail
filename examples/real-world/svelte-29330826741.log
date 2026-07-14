@@ -1,0 +1,1109 @@
+Dependabot	UNKNOWN STEP	﻿2026-07-14T11:59:23.4463381Z Current runner version: '2.335.1'
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4483722Z ##[group]Runner Image Provisioner
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4484512Z Hosted Compute Agent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4485067Z Version: 20260624.560
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4485606Z Commit: 925d229a51159bc391ae97e54a2dd1fe20af789d
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4486526Z Build Date: 2026-06-24T18:26:47Z
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4487120Z Worker ID: {e0876a1a-f588-4879-9115-79f46a176175}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4487776Z Azure Region: centralus
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4488374Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4489997Z ##[group]Operating System
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4490690Z Ubuntu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4491185Z 24.04.4
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4491829Z LTS
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4492306Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4492798Z ##[group]Runner Image
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4493316Z Image: ubuntu-24.04
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4493876Z Version: 20260705.232.1
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4494937Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260705.232/images/ubuntu/Ubuntu2404-Readme.md
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4496854Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260705.232
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4497633Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4498768Z ##[group]GITHUB_TOKEN Permissions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4500998Z Contents: read
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4501503Z Metadata: read
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4501966Z Packages: read
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4502469Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4504310Z Secret source: None
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4504907Z Prepare workflow directory
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4768704Z Prepare all required actions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.4804364Z Getting action download info
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:23.7140204Z Download action repository 'github/dependabot-action@main' (SHA:53d991c60486b78c079da7e63dc55270eb6f217f)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.4075492Z Complete job name: Dependabot
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.4574714Z ##[group]Run mkdir -p  ./dependabot-job-1460286594-1784030358
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.4575547Z ^[[36;1mmkdir -p  ./dependabot-job-1460286594-1784030358^[[0m
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.4851364Z shell: /usr/bin/bash -e {0}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.4852337Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5093967Z ##[group]Run github/dependabot-action@main
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5094591Z env:
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5095150Z   DEPENDABOT_DISABLE_CLEANUP: 1
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5095688Z   DEPENDABOT_ENABLE_CONNECTIVITY_CHECK: 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5099461Z   GITHUB_TOKEN: ***
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5100234Z   GITHUB_DEPENDABOT_JOB_TOKEN: ***
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5101039Z   GITHUB_DEPENDABOT_CRED_TOKEN: ***
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5101635Z   GITHUB_REGISTRIES_PROXY: ***
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.5102106Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.6505925Z 🤖 ~ starting update ~
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:24.6524035Z Fetching job details
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:25.1181524Z ##[group]Pulling updater images
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:25.1213994Z Pulling image ghcr.io/dependabot/dependabot-updater-npm:272a80aabaa51bc8e602bf01de95b456e73340ca (attempt 1)...
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:25.2329252Z Successfully sent metric (dependabot.action.ghcr_image_pull) to remote API endpoint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:46.2298198Z Pulled image ghcr.io/dependabot/dependabot-updater-npm:272a80aabaa51bc8e602bf01de95b456e73340ca
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:46.2309816Z Pulling image ghcr.io/dependabot/proxy:v2.0.20260616220547@sha256:b3c9cac5831fdef22330282f54c7067d4df9844385daf8f1a66c880a670a9daa (attempt 1)...
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:46.3395725Z Successfully sent metric (dependabot.action.ghcr_image_pull) to remote API endpoint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.4200682Z Pulled image ghcr.io/dependabot/proxy:v2.0.20260616220547@sha256:b3c9cac5831fdef22330282f54c7067d4df9844385daf8f1a66c880a670a9daa
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.4202947Z ##[endgroup]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.4217446Z Starting update process
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.5720535Z Created proxy container: 5877db3f15a09dd524487bfb396fe6e1a7f41cbef1475e0083e69ed3720c4487
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.7318763Z Created container: 31bb0bf0ba17509cb01910ba7ff58a05db1bc6e3e82cab80629efa485625a11d
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.7857954Z   proxy | 2026/07/14 11:59:47 proxy starting, commit: 0852f73f46a5e0426c4f34291a9892ad18cf7ba0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.7859365Z   proxy | 2026/07/14 11:59:47 Listening (:1080)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.8147257Z Started container 31bb0bf0ba17509cb01910ba7ff58a05db1bc6e3e82cab80629efa485625a11d
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:47.8530945Z updater | Updating certificates in /etc/ssl/certs...
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:48.3208996Z updater | rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:48.3263785Z updater | 1 added, 0 removed; done.
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:48.3264648Z updater | Running hooks in /etc/ca-certificates/update.d...
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:48.3280659Z updater | done.
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:48.6016869Z updater | fetch_files command is no longer used directly
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:49.9162117Z updater | 2026/07/14 11:59:49 INFO <job_1460286594> Starting job processing
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:49.9174780Z updater | 2026/07/14 11:59:49 INFO <job_1460286594> Job definition: {"job":{"command":"security","allowed-updates":[{"dependency-type":"direct","update-type":"all"},{"dependency-type":"indirect","update-type":"security"}],"commit-message-options":{"prefix":null,"prefix-development":null,"include-scope":null},"credentials-metadata":[{"type":"git_source","host":"github.com"}],"debug":null,"dependencies":["postcss"],"dependency-groups":[],"dependency-group-to-refresh":null,"existing-pull-requests":[{"pr-number":13530,"dependencies":[{"dependency-name":"cookie","dependency-version":"0.7.0","directory":"/"}]},{"pr-number":15084,"dependencies":[{"dependency-name":"vite","dependency-version":"5.4.12","directory":"/"}]},{"pr-number":15278,"dependencies":[{"dependency-name":"esbuild","dependency-version":"0.25.0","directory":"/"}]},{"pr-number":16988,"dependencies":[{"dependency-name":"playwright","dependency-version":"1.55.1","directory":"/"}]},{"pr-number":17594,"dependencies":[{"dependency-name":"eslint","dependency-version":"9.26.0","directory":"/"}]},{"pr-number":18354,"dependencies":[{"dependency-name":"vitest","dependency-version":"4.1.0","directory":"/"}]},{"pr-number":18444,"dependencies":[{"dependency-name":"vite","dependency-version":"7.3.5","directory":"/"}]}],"existing-group-pull-requests":[],"experiments":{"record-ecosystem-versions":true,"record-update-job-unknown-error":true,"proxy-cached":true,"enable-corepack-for-npm-and-yarn":true,"enable-private-registry-for-corepack":true,"allow-refresh-for-existing-pr-dependencies":true,"allow-refresh-group-with-all-dependencies":true,"azure-registry-backup":true,"enable-enhanced-error-details-for-updater":true,"gradle-lockfile-updater":true,"enable-exclude-paths-subdirectory-manifest-files":true,"blocked-versions":true,"workflow-job-summary":true,"async-retry":true,"enable-npmrc-credential-generation":true},"ignore-conditions":[],"lockfile-only":false,"max-updater-run-time":2700,"package-manager":"npm_and_yarn","requirements-update-strategy":null,"reject-external-code":false,"security-advisories":[{"dependency-name":"postcss","patched-versions":[],"unaffected-versions":[],"affected-versions":["< 8.5.10"]},{"dependency-name":"postcss","patched-versions":[],"unaffected-versions":[],"affected-versions":["< 8.4.31"]},{"dependency-name":"postcss","patched-versions":[],"unaffected-versions":[],"affected-versions":[">= 8.0.0 < 8.2.13","< 7.0.36"]},{"dependency-name":"postcss","patched-versions":[],"unaffected-versions":[],"affected-versions":[">= 7.0.0 < 7.0.36",">= 8.0.0 < 8.2.10"]}],"security-updates-only":true,"source":{"provider":"github","repo":"sveltejs/svelte","branch":null,"api-endpoint":"https://api.github.com/","hostname":"github.com","directories":["/."]},"updating-a-pull-request":false,"update-subdependencies":false,"vendor-dependencies":false,"enable-beta-ecosystems":false,"repo-private":true,"multi-ecosystem-update":false,"exclude-paths":null}}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.0107362Z   proxy | 2026/07/14 11:59:50 [002] GET https://github.com:443/sveltejs/svelte.git/info/refs?service=git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.0111463Z 2026/07/14 11:59:50 [002] * authenticating git server request (host: github.com)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.1398138Z   proxy | 2026/07/14 11:59:50 [002] 200 https://github.com:443/sveltejs/svelte.git/info/refs?service=git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.4905473Z updater | 2026/07/14 11:59:50 INFO <job_1460286594> Started process PID: 999 with command: {} git clone --no-tags --depth 1 --recurse-submodules --shallow-submodules https://github.com/sveltejs/svelte /home/dependabot/dependabot-updater/repo {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.5538948Z   proxy | 2026/07/14 11:59:50 [004] GET https://github.com:443/sveltejs/svelte/info/refs?service=git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.5540033Z 2026/07/14 11:59:50 [004] * authenticating git server request (host: github.com)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.6187827Z   proxy | 2026/07/14 11:59:50 [004] 200 https://github.com:443/sveltejs/svelte/info/refs?service=git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.6366439Z   proxy | 2026/07/14 11:59:50 [006] POST https://github.com:443/sveltejs/svelte/git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.6367545Z   proxy | 2026/07/14 11:59:50 [006] * authenticating git server request (host: github.com)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.7054820Z   proxy | 2026/07/14 11:59:50 [006] 200 https://github.com:443/sveltejs/svelte/git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.7274448Z   proxy | 2026/07/14 11:59:50 [008] POST https://github.com:443/sveltejs/svelte/git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:50.7275429Z   proxy | 2026/07/14 11:59:50 [008] * authenticating git server request (host: github.com)
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.0206579Z   proxy | 2026/07/14 11:59:51 [008] 200 https://github.com:443/sveltejs/svelte/git-upload-pack
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.5990337Z updater | 2026/07/14 11:59:51 INFO <job_1460286594> Process PID: 999 completed with status: pid 999 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.5991348Z 2026/07/14 11:59:51 INFO <job_1460286594> Total execution time: 1.11 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.6010599Z updater | 2026/07/14 11:59:51 INFO <job_1460286594> Started process PID: 1041 with command: {} git -C /home/dependabot/dependabot-updater/repo ls-files --stage {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.7877475Z updater | 2026/07/14 11:59:51 INFO <job_1460286594> Process PID: 1041 completed with status: pid 1041 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.7878695Z 2026/07/14 11:59:51 INFO <job_1460286594> Total execution time: 0.19 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:51.8320459Z updater | 2026/07/14 11:59:51 INFO <job_1460286594> Started process PID: 1136 with command: {} git lfs pull --include .yarn,./yarn/cache {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.0684543Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Process PID: 1136 completed with status: pid 1136 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.0685512Z 2026/07/14 11:59:52 INFO <job_1460286594> Total execution time: 0.24 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.1144453Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Started process PID: 1256 with command: {} git rev-parse HEAD {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.1169390Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Process PID: 1256 completed with status: pid 1256 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.1170238Z 2026/07/14 11:59:52 INFO <job_1460286594> Total execution time: 0.0 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.1878342Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Started process PID: 1436 with command: {} git lfs pull --include .yarn,./yarn/cache {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2250785Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Process PID: 1436 completed with status: pid 1436 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2251360Z 2026/07/14 11:59:52 INFO <job_1460286594> Total execution time: 0.04 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2275732Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Detected package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2276648Z 2026/07/14 11:59:52 INFO <job_1460286594> Resolving package manager for: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2297293Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Fetching version for package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.2298322Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Started process PID: 1468 with command: {} corepack pnpm -v {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5625179Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Process PID: 1468 completed with status: pid 1468 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5625997Z 2026/07/14 11:59:52 INFO <job_1460286594> Total execution time: 0.33 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5627717Z 2026/07/14 11:59:52 INFO <job_1460286594> Installed version of pnpm: 10.16.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5628317Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Installed version for pnpm: 10.16.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5628968Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Processing engine constraints for pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5647199Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Parsed constraints for pnpm: >=9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5647932Z 2026/07/14 11:59:52 INFO <job_1460286594> Version requirement for pnpm: >= 9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5648636Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Detected package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5649369Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Resolving package manager for: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5649974Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Installed version for pnpm: 10.16.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5650731Z 2026/07/14 11:59:52 INFO <job_1460286594> Processing engine constraints for pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5651512Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Parsed constraints for pnpm: >=9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5652391Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Version requirement for pnpm: >= 9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5654618Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Found "packageManager" : "pnpm@10.4.0". Skipped checking "engines".
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5655345Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Requested version 10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5656336Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Installing "pnpm@10.4.0"
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.5716279Z updater | 2026/07/14 11:59:52 INFO <job_1460286594> Started process PID: 1481 with command: {} corepack prepare pnpm@10.4.0 --activate {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.8045218Z   proxy | 2026/07/14 11:59:52 [010] GET https://registry.npmjs.org:443/pnpm/-/pnpm-10.4.0.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:52.8601128Z   proxy | 2026/07/14 11:59:52 [010] 200 https://registry.npmjs.org:443/pnpm/-/pnpm-10.4.0.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.5439815Z   proxy | 2026/07/14 11:59:53 [012] GET https://registry.npmjs.org:443/pnpm/10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7497522Z   proxy | 2026/07/14 11:59:53 [012] 200 https://registry.npmjs.org:443/pnpm/10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7679899Z updater | 2026/07/14 11:59:53 INFO <job_1460286594> Process PID: 1481 completed with status: pid 1481 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7680659Z 2026/07/14 11:59:53 INFO <job_1460286594> Total execution time: 1.2 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7681538Z updater | 2026/07/14 11:59:53 INFO <job_1460286594> pnpm@10.4.0 successfully installed.
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7682036Z 2026/07/14 11:59:53 INFO <job_1460286594> Activating currently installed version of pnpm: 10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7682496Z 2026/07/14 11:59:53 INFO <job_1460286594> Fetching version for package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:53.7691892Z updater | 2026/07/14 11:59:53 INFO <job_1460286594> Started process PID: 1494 with command: {} corepack pnpm -v {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1109364Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Process PID: 1494 completed with status: pid 1494 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1110206Z 2026/07/14 11:59:54 INFO <job_1460286594> Total execution time: 0.34 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1111095Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Installed version of pnpm: 10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1143148Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> DEBUG filter_excluded: entries=1, exclude_paths=[]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1147127Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> DEBUG filter_excluded: entries=1, exclude_paths=[]
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.1990118Z   proxy | 2026/07/14 11:59:54 [014] POST /update_jobs/1460286594/record_ecosystem_versions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.3250854Z   proxy | 2026/07/14 11:59:54 [014] 204 /update_jobs/1460286594/record_ecosystem_versions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.3315458Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Base commit SHA: 602a873b6b82bba4e6edc91b039e2f6defbe3fc4
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.3316662Z 2026/07/14 11:59:54 INFO <job_1460286594> Finished job processing
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.3327676Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Starting job processing
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4094734Z   proxy | 2026/07/14 11:59:54 [016] GET /update_jobs/1460286594/blocked_versions?package-manager=npm_and_yarn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4649911Z   proxy | 2026/07/14 11:59:54 [016] 200 /update_jobs/1460286594/blocked_versions?package-manager=npm_and_yarn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4776119Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Detected package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4776626Z 2026/07/14 11:59:54 INFO <job_1460286594> Resolving package manager for: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4777298Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Fetching version for package manager: pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.4782716Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Started process PID: 1507 with command: {} corepack pnpm -v {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8265455Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Process PID: 1507 completed with status: pid 1507 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8266737Z 2026/07/14 11:59:54 INFO <job_1460286594> Total execution time: 0.35 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8267387Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Installed version of pnpm: 10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8273414Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Installed version for pnpm: 10.4.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8273995Z 2026/07/14 11:59:54 INFO <job_1460286594> Processing engine constraints for pnpm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8274544Z 2026/07/14 11:59:54 INFO <job_1460286594> Parsed constraints for pnpm: >=9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8275109Z 2026/07/14 11:59:54 INFO <job_1460286594> Version requirement for pnpm: >= 9.0.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8275646Z 2026/07/14 11:59:54 INFO <job_1460286594> Running node command: node -v
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8281126Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Started process PID: 1520 with command: {} node -v {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8310132Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Process PID: 1520 completed with status: pid 1520 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8311309Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Total execution time: 0.0 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8311985Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Command executed successfully: node -v
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8312583Z 2026/07/14 11:59:54 INFO <job_1460286594> Using node version: 24.18.0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8313106Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Processing engine constraints for node
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:54.8338098Z updater | 2026/07/14 11:59:54 INFO <job_1460286594> Started process PID: 1522 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.3525333Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> Process PID: 1522 completed with status: pid 1522 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.3526034Z 2026/07/14 11:59:55 INFO <job_1460286594> Total execution time: 0.52 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.4318159Z   proxy | 2026/07/14 11:59:55 [018] POST /update_jobs/1460286594/update_dependency_list
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.5132869Z   proxy | 2026/07/14 11:59:55 [018] 204 /update_jobs/1460286594/update_dependency_list
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.5965040Z   proxy | 2026/07/14 11:59:55 [020] POST /update_jobs/1460286594/increment_metric
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.6411479Z   proxy | 2026/07/14 11:59:55 [020] 204 /update_jobs/1460286594/increment_metric
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.6534720Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> Starting security update job for sveltejs/svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.6558086Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> Checking if postcss 8.5.9 needs updating
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.7332060Z   proxy | 2026/07/14 11:59:55 [022] GET https://registry.npmjs.org:443/postcss
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.7714769Z   proxy | 2026/07/14 11:59:55 [022] 200 https://registry.npmjs.org:443/postcss
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.9343192Z   proxy | 2026/07/14 11:59:55 [024] HEAD https://registry.npmjs.org:443/postcss/-/postcss-8.5.19.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.9766697Z   proxy | 2026/07/14 11:59:55 [024] 200 https://registry.npmjs.org:443/postcss/-/postcss-8.5.19.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.9849336Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> Latest version is 8.5.19
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.9881199Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> VulnerabilityAuditor: starting audit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:55.9908073Z updater | 2026/07/14 11:59:55 INFO <job_1460286594> VulnerabilityAuditor: missing lockfile
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.0673124Z   proxy | 2026/07/14 11:59:56 [026] HEAD https://registry.npmjs.org:443/postcss/-/postcss-8.5.10.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.0967910Z   proxy | 2026/07/14 11:59:56 [026] 200 https://registry.npmjs.org:443/postcss/-/postcss-8.5.10.tgz
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.1173183Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Started process PID: 1535 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.5590678Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Process PID: 1535 completed with status: pid 1535 exit 1
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.5591221Z 2026/07/14 11:59:56 INFO <job_1460286594> Total execution time: 0.44 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.5611169Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Started process PID: 1544 with command: {} git reset HEAD --hard {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.7615184Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Process PID: 1544 completed with status: pid 1544 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.7615686Z 2026/07/14 11:59:56 INFO <job_1460286594> Total execution time: 0.2 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.7645566Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Started process PID: 1551 with command: {} git clean -fx {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.8042646Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Process PID: 1551 completed with status: pid 1551 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.8043185Z 2026/07/14 11:59:56 INFO <job_1460286594> Total execution time: 0.04 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:56.8069355Z updater | 2026/07/14 11:59:56 INFO <job_1460286594> Started process PID: 1558 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.2890597Z updater | 2026/07/14 11:59:57 INFO <job_1460286594> Process PID: 1558 completed with status: pid 1558 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.2891724Z 2026/07/14 11:59:57 INFO <job_1460286594> Total execution time: 0.48 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.3531152Z updater | 2026/07/14 11:59:57 INFO <job_1460286594> Started process PID: 1657 with command: {} corepack pnpm update postcss@8.5.19 --lockfile-only --no-save -r {}
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8210898Z   proxy | 2026/07/14 11:59:57 [043] GET https://registry.npmjs.org:443/@jridgewell%2Ftrace-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8331807Z   proxy | 2026/07/14 11:59:57 [044] GET https://registry.npmjs.org:443/vitest
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8338390Z   proxy | 2026/07/14 11:59:57 [045] GET https://registry.npmjs.org:443/@rollup%2Fplugin-terser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8339495Z 2026/07/14 11:59:57 [046] GET https://registry.npmjs.org:443/@rollup%2Fplugin-node-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8342980Z 2026/07/14 11:59:57 [047] GET https://registry.npmjs.org:443/tinyglobby
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8343755Z   proxy | 2026/07/14 11:59:57 [048] GET https://registry.npmjs.org:443/source-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8356787Z   proxy | 2026/07/14 11:59:57 [049] GET https://registry.npmjs.org:443/rollup
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8357310Z   proxy | 2026/07/14 11:59:57 [050] GET https://registry.npmjs.org:443/esbuild
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8373654Z   proxy | 2026/07/14 11:59:57 [051] GET https://registry.npmjs.org:443/baseline-browser-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8374649Z   proxy | 2026/07/14 11:59:57 [052] GET https://registry.npmjs.org:443/@playwright%2Ftest
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8379599Z   proxy | 2026/07/14 11:59:57 [053] GET https://registry.npmjs.org:443/@rollup%2Fplugin-virtual
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8385538Z   proxy | 2026/07/14 11:59:57 [054] GET https://registry.npmjs.org:443/@rollup%2Fplugin-commonjs
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8396552Z   proxy | 2026/07/14 11:59:57 [055] GET https://registry.npmjs.org:443/@types%2Faria-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8400162Z   proxy | 2026/07/14 11:59:57 [056] GET https://registry.npmjs.org:443/@types%2Fnode
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8407465Z   proxy | 2026/07/14 11:59:57 [057] GET https://registry.npmjs.org:443/typescript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8415961Z   proxy | 2026/07/14 11:59:57 [058] GET https://registry.npmjs.org:443/dts-buddy
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8656840Z   proxy | 2026/07/14 11:59:57 [043] 200 https://registry.npmjs.org:443/@jridgewell%2Ftrace-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8835711Z   proxy | 2026/07/14 11:59:57 [060] GET https://registry.npmjs.org:443/web-features
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8886599Z   proxy | 2026/07/14 11:59:57 [047] 200 https://registry.npmjs.org:443/tinyglobby
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8949042Z   proxy | 2026/07/14 11:59:57 [062] GET https://registry.npmjs.org:443/@jridgewell%2Fremapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8996890Z   proxy | 2026/07/14 11:59:57 [051] 200 https://registry.npmjs.org:443/baseline-browser-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.8997991Z 2026/07/14 11:59:57 [044] 200 https://registry.npmjs.org:443/vitest
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9056562Z   proxy | 2026/07/14 11:59:57 [064] GET https://registry.npmjs.org:443/@jridgewell%2Fsourcemap-codec
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9100074Z   proxy | 2026/07/14 11:59:57 [046] 200 https://registry.npmjs.org:443/@rollup%2Fplugin-node-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9116669Z   proxy | 2026/07/14 11:59:57 [045] 200 https://registry.npmjs.org:443/@rollup%2Fplugin-terser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9201641Z   proxy | 2026/07/14 11:59:57 [055] 200 https://registry.npmjs.org:443/@types%2Faria-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9210003Z   proxy | 2026/07/14 11:59:57 [067] GET https://registry.npmjs.org:443/@sveltejs%2Facorn-typescript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9238456Z   proxy | 2026/07/14 11:59:57 [053] 200 https://registry.npmjs.org:443/@rollup%2Fplugin-virtual
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9252377Z   proxy | 2026/07/14 11:59:57 [068] GET https://registry.npmjs.org:443/@types%2Festree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9366820Z   proxy | 2026/07/14 11:59:57 [071] GET https://registry.npmjs.org:443/@types%2Ftrusted-types
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9400074Z   proxy | 2026/07/14 11:59:57 [072] GET https://registry.npmjs.org:443/acorn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9406210Z   proxy | 2026/07/14 11:59:57 [050] 200 https://registry.npmjs.org:443/esbuild
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9416765Z   proxy | 2026/07/14 11:59:57 [048] 200 https://registry.npmjs.org:443/source-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9516379Z   proxy | 2026/07/14 11:59:57 [064] 200 https://registry.npmjs.org:443/@jridgewell%2Fsourcemap-codec
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9547777Z   proxy | 2026/07/14 11:59:57 [068] 200 https://registry.npmjs.org:443/@types%2Festree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9561960Z   proxy | 2026/07/14 11:59:57 [052] 200 https://registry.npmjs.org:443/@playwright%2Ftest
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9568296Z   proxy | 2026/07/14 11:59:57 [074] GET https://registry.npmjs.org:443/aria-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9598496Z   proxy | 2026/07/14 11:59:57 [057] 200 https://registry.npmjs.org:443/typescript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9600611Z 2026/07/14 11:59:57 [049] 200 https://registry.npmjs.org:443/rollup
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9642872Z   proxy | 2026/07/14 11:59:57 [056] 200 https://registry.npmjs.org:443/@types%2Fnode
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9648388Z   proxy | 2026/07/14 11:59:57 [062] 200 https://registry.npmjs.org:443/@jridgewell%2Fremapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9712553Z   proxy | 2026/07/14 11:59:57 [071] 200 https://registry.npmjs.org:443/@types%2Ftrusted-types
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9754595Z   proxy | 2026/07/14 11:59:57 [060] 200 https://registry.npmjs.org:443/web-features
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9764334Z   proxy | 2026/07/14 11:59:57 [067] 200 https://registry.npmjs.org:443/@sveltejs%2Facorn-typescript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9767189Z   proxy | 2026/07/14 11:59:57 [058] 200 https://registry.npmjs.org:443/dts-buddy
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9817860Z   proxy | 2026/07/14 11:59:57 [074] 200 https://registry.npmjs.org:443/aria-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:57.9878751Z   proxy | 2026/07/14 11:59:57 [054] 200 https://registry.npmjs.org:443/@rollup%2Fplugin-commonjs
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.0173001Z   proxy | 2026/07/14 11:59:58 [072] 200 https://registry.npmjs.org:443/acorn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.0728029Z   proxy | 2026/07/14 11:59:58 [083] GET https://registry.npmjs.org:443/axobject-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.0921528Z   proxy | 2026/07/14 11:59:58 [084] GET https://registry.npmjs.org:443/devalue
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1189943Z   proxy | 2026/07/14 11:59:58 [086] GET https://registry.npmjs.org:443/clsx
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1271328Z   proxy | 2026/07/14 11:59:58 [087] GET https://registry.npmjs.org:443/magic-string
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1292247Z   proxy | 2026/07/14 11:59:58 [084] 200 https://registry.npmjs.org:443/devalue
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1562464Z   proxy | 2026/07/14 11:59:58 [086] 200 https://registry.npmjs.org:443/clsx
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1649169Z   proxy | 2026/07/14 11:59:58 [083] 200 https://registry.npmjs.org:443/axobject-query
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1684004Z   proxy | 2026/07/14 11:59:58 [087] 200 https://registry.npmjs.org:443/magic-string
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1694627Z   proxy | 2026/07/14 11:59:58 [089] GET https://registry.npmjs.org:443/is-reference
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1703251Z   proxy | 2026/07/14 11:59:58 [090] GET https://registry.npmjs.org:443/locate-character
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1728291Z   proxy | 2026/07/14 11:59:58 [093] GET https://registry.npmjs.org:443/esrap
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1731312Z   proxy | 2026/07/14 11:59:58 [096] GET https://registry.npmjs.org:443/esm-env
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1784687Z   proxy | 2026/07/14 11:59:58 [097] GET https://registry.npmjs.org:443/zimmerframe
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.1990970Z   proxy | 2026/07/14 11:59:58 [089] 200 https://registry.npmjs.org:443/is-reference
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2067719Z   proxy | 2026/07/14 11:59:58 [090] 200 https://registry.npmjs.org:443/locate-character
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2202543Z   proxy | 2026/07/14 11:59:58 [093] 200 https://registry.npmjs.org:443/esrap
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2292145Z   proxy | 2026/07/14 11:59:58 [097] 200 https://registry.npmjs.org:443/zimmerframe
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2341417Z   proxy | 2026/07/14 11:59:58 [096] 200 https://registry.npmjs.org:443/esm-env
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2552493Z   proxy | 2026/07/14 11:59:58 [098] GET https://registry.npmjs.org:443/vite-plugin-devtools-json
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2555248Z   proxy | 2026/07/14 11:59:58 [099] GET https://registry.npmjs.org:443/vite-plugin-inspect
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2563060Z   proxy | 2026/07/14 11:59:58 [100] GET https://registry.npmjs.org:443/@sveltejs%2Fvite-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2759979Z   proxy | 2026/07/14 11:59:58 [105] GET https://registry.npmjs.org:443/vite
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2777457Z   proxy | 2026/07/14 11:59:58 [108] GET https://registry.npmjs.org:443/polka
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2812834Z   proxy | 2026/07/14 11:59:58 [114] GET https://registry.npmjs.org:443/@svitejs%2Fchangesets-changelog-github-compact
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2823310Z   proxy | 2026/07/14 11:59:58 [115] GET https://registry.npmjs.org:443/@changesets%2Fcli
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2843122Z   proxy | 2026/07/14 11:59:58 [116] GET https://registry.npmjs.org:443/@sveltejs%2Feslint-config
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2852552Z   proxy | 2026/07/14 11:59:58 [117] GET https://registry.npmjs.org:443/eslint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2861486Z   proxy | 2026/07/14 11:59:58 [118] GET https://registry.npmjs.org:443/eslint-plugin-lube
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2870151Z   proxy | 2026/07/14 11:59:58 [119] GET https://registry.npmjs.org:443/eslint-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2897704Z   proxy | 2026/07/14 11:59:58 [120] GET https://registry.npmjs.org:443/@eslint%2Fjs
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2902674Z   proxy | 2026/07/14 11:59:58 [121] GET https://registry.npmjs.org:443/@vitest%2Fcoverage-v8
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2912084Z   proxy | 2026/07/14 11:59:58 [122] GET https://registry.npmjs.org:443/@types%2Fpicomatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2921237Z   proxy | 2026/07/14 11:59:58 [123] GET https://registry.npmjs.org:443/playwright
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2930078Z   proxy | 2026/07/14 11:59:58 [124] GET https://registry.npmjs.org:443/jsdom
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.2946281Z   proxy | 2026/07/14 11:59:58 [099] 200 https://registry.npmjs.org:443/vite-plugin-inspect
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3159206Z   proxy | 2026/07/14 11:59:58 [098] 200 https://registry.npmjs.org:443/vite-plugin-devtools-json
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3323497Z   proxy | 2026/07/14 11:59:58 [100] 200 https://registry.npmjs.org:443/@sveltejs%2Fvite-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3491481Z   proxy | 2026/07/14 11:59:58 [108] 200 https://registry.npmjs.org:443/polka
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3547387Z   proxy | 2026/07/14 11:59:58 [119] 200 https://registry.npmjs.org:443/eslint-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3587054Z   proxy | 2026/07/14 11:59:58 [123] 200 https://registry.npmjs.org:443/playwright
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3633599Z   proxy | 2026/07/14 11:59:58 [127] GET https://registry.npmjs.org:443/prettier
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3722025Z   proxy | 2026/07/14 11:59:58 [115] 200 https://registry.npmjs.org:443/@changesets%2Fcli
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3732678Z   proxy | 2026/07/14 11:59:58 [131] GET https://registry.npmjs.org:443/typescript-eslint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3739685Z   proxy | 2026/07/14 11:59:58 [130] GET https://registry.npmjs.org:443/prettier-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3745230Z   proxy | 2026/07/14 11:59:58 [117] 200 https://registry.npmjs.org:443/eslint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3759746Z   proxy | 2026/07/14 11:59:58 [124] 200 https://registry.npmjs.org:443/jsdom
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3771140Z   proxy | 2026/07/14 11:59:58 [132] GET https://registry.npmjs.org:443/v8-natives
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3772141Z 2026/07/14 11:59:58 [121] 200 https://registry.npmjs.org:443/@vitest%2Fcoverage-v8
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.3862710Z   proxy | 2026/07/14 11:59:58 [105] 200 https://registry.npmjs.org:443/vite
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4049439Z   proxy | 2026/07/14 11:59:58 [127] 200 https://registry.npmjs.org:443/prettier
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4071380Z   proxy | 2026/07/14 11:59:58 [130] 200 https://registry.npmjs.org:443/prettier-plugin-svelte
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4197714Z   proxy | 2026/07/14 11:59:58 [120] 200 https://registry.npmjs.org:443/@eslint%2Fjs
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4259569Z   proxy | 2026/07/14 11:59:58 [118] 200 https://registry.npmjs.org:443/eslint-plugin-lube
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4617807Z   proxy | 2026/07/14 11:59:58 [131] 200 https://registry.npmjs.org:443/typescript-eslint
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4767330Z   proxy | 2026/07/14 11:59:58 [122] 200 https://registry.npmjs.org:443/@types%2Fpicomatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.4868706Z   proxy | 2026/07/14 11:59:58 [132] 200 https://registry.npmjs.org:443/v8-natives
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.5464941Z   proxy | 2026/07/14 11:59:58 [116] 200 https://registry.npmjs.org:443/@sveltejs%2Feslint-config
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.6079796Z   proxy | 2026/07/14 11:59:58 [114] 200 https://registry.npmjs.org:443/@svitejs%2Fchangesets-changelog-github-compact
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8317573Z   proxy | 2026/07/14 11:59:58 [148] GET https://registry.npmjs.org:443/serialize-javascript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8318647Z 2026/07/14 11:59:58 [149] GET https://registry.npmjs.org:443/@rollup%2Fpluginutils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8319378Z   proxy | 2026/07/14 11:59:58 [150] GET https://registry.npmjs.org:443/@types%2Fresolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8320114Z   proxy | 2026/07/14 11:59:58 [151] GET https://registry.npmjs.org:443/picomatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8333703Z   proxy | 2026/07/14 11:59:58 [152] GET https://registry.npmjs.org:443/@jridgewell%2Fresolve-uri
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8334659Z 2026/07/14 11:59:58 [153] GET https://registry.npmjs.org:443/resolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8335569Z 2026/07/14 11:59:58 [154] GET https://registry.npmjs.org:443/estree-walker
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8336408Z 2026/07/14 11:59:58 [155] GET https://registry.npmjs.org:443/commondir
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8336950Z 2026/07/14 11:59:58 [156] GET https://registry.npmjs.org:443/is-module
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8337475Z 2026/07/14 11:59:58 [157] GET https://registry.npmjs.org:443/smob
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8337968Z 2026/07/14 11:59:58 [158] GET https://registry.npmjs.org:443/fdir
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8338443Z 2026/07/14 11:59:58 [159] GET https://registry.npmjs.org:443/terser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8339001Z 2026/07/14 11:59:58 [160] GET https://registry.npmjs.org:443/sade
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8339598Z   proxy | 2026/07/14 11:59:58 [161] GET https://registry.npmjs.org:443/undici-types
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8343809Z   proxy | 2026/07/14 11:59:58 [162] GET https://registry.npmjs.org:443/deepmerge
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8736901Z   proxy | 2026/07/14 11:59:58 [150] 200 https://registry.npmjs.org:443/@types%2Fresolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8790016Z   proxy | 2026/07/14 11:59:58 [149] 200 https://registry.npmjs.org:443/@rollup%2Fpluginutils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8796958Z   proxy | 2026/07/14 11:59:58 [164] GET https://registry.npmjs.org:443/kleur
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8870208Z   proxy | 2026/07/14 11:59:58 [161] 200 https://registry.npmjs.org:443/undici-types
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8870962Z 2026/07/14 11:59:58 [167] GET https://registry.npmjs.org:443/ts-api-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8893115Z   proxy | 2026/07/14 11:59:58 [160] 200 https://registry.npmjs.org:443/sade
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8895388Z   proxy | 2026/07/14 11:59:58 [156] 200 https://registry.npmjs.org:443/is-module
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8900577Z   proxy | 2026/07/14 11:59:58 [168] GET https://registry.npmjs.org:443/@jridgewell%2Fsource-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8930840Z   proxy | 2026/07/14 11:59:58 [158] 200 https://registry.npmjs.org:443/fdir
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8935103Z   proxy | 2026/07/14 11:59:58 [155] 200 https://registry.npmjs.org:443/commondir
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8950820Z   proxy | 2026/07/14 11:59:58 [151] 200 https://registry.npmjs.org:443/picomatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.8991203Z   proxy | 2026/07/14 11:59:58 [148] 200 https://registry.npmjs.org:443/serialize-javascript
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9003340Z   proxy | 2026/07/14 11:59:58 [154] 200 https://registry.npmjs.org:443/estree-walker
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9008777Z   proxy | 2026/07/14 11:59:58 [171] GET https://registry.npmjs.org:443/@esbuild%2Faix-ppc64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9009841Z 2026/07/14 11:59:58 [153] 200 https://registry.npmjs.org:443/resolve
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9025500Z   proxy | 2026/07/14 11:59:58 [152] 200 https://registry.npmjs.org:443/@jridgewell%2Fresolve-uri
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9040944Z   proxy | 2026/07/14 11:59:58 [162] 200 https://registry.npmjs.org:443/deepmerge
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9053376Z   proxy | 2026/07/14 11:59:58 [173] GET https://registry.npmjs.org:443/@esbuild%2Fandroid-arm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9065964Z   proxy | 2026/07/14 11:59:58 [159] 200 https://registry.npmjs.org:443/terser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9067262Z   proxy | 2026/07/14 11:59:58 [164] 200 https://registry.npmjs.org:443/kleur
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9087571Z   proxy | 2026/07/14 11:59:58 [167] 200 https://registry.npmjs.org:443/ts-api-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9177706Z   proxy | 2026/07/14 11:59:58 [157] 200 https://registry.npmjs.org:443/smob
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9204137Z   proxy | 2026/07/14 11:59:58 [177] GET https://registry.npmjs.org:443/@esbuild%2Fandroid-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9216034Z   proxy | 2026/07/14 11:59:58 [178] GET https://registry.npmjs.org:443/@esbuild%2Fandroid-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9340766Z   proxy | 2026/07/14 11:59:58 [168] 200 https://registry.npmjs.org:443/@jridgewell%2Fsource-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9349827Z   proxy | 2026/07/14 11:59:58 [184] GET https://registry.npmjs.org:443/@esbuild%2Fdarwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9364714Z   proxy | 2026/07/14 11:59:58 [186] GET https://registry.npmjs.org:443/@esbuild%2Fdarwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9382732Z   proxy | 2026/07/14 11:59:58 [190] GET https://registry.npmjs.org:443/@esbuild%2Flinux-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9418257Z   proxy | 2026/07/14 11:59:58 [191] GET https://registry.npmjs.org:443/@esbuild%2Ffreebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9449298Z   proxy | 2026/07/14 11:59:58 [192] GET https://registry.npmjs.org:443/@esbuild%2Flinux-ia32
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9461575Z   proxy | 2026/07/14 11:59:58 [193] GET https://registry.npmjs.org:443/@esbuild%2Ffreebsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9462609Z   proxy | 2026/07/14 11:59:58 [194] GET https://registry.npmjs.org:443/@esbuild%2Flinux-arm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9470054Z   proxy | 2026/07/14 11:59:58 [195] GET https://registry.npmjs.org:443/@esbuild%2Flinux-riscv64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9478350Z   proxy | 2026/07/14 11:59:58 [196] GET https://registry.npmjs.org:443/@esbuild%2Flinux-ppc64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9488633Z   proxy | 2026/07/14 11:59:58 [197] GET https://registry.npmjs.org:443/@esbuild%2Flinux-loong64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9500872Z   proxy | 2026/07/14 11:59:58 [199] GET https://registry.npmjs.org:443/@esbuild%2Flinux-mips64el
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9523956Z   proxy | 2026/07/14 11:59:58 [200] GET https://registry.npmjs.org:443/@esbuild%2Flinux-s390x
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9699912Z   proxy | 2026/07/14 11:59:58 [177] 200 https://registry.npmjs.org:443/@esbuild%2Fandroid-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9725164Z   proxy | 2026/07/14 11:59:58 [173] 200 https://registry.npmjs.org:443/@esbuild%2Fandroid-arm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9726204Z 2026/07/14 11:59:58 [178] 200 https://registry.npmjs.org:443/@esbuild%2Fandroid-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9758787Z   proxy | 2026/07/14 11:59:58 [184] 200 https://registry.npmjs.org:443/@esbuild%2Fdarwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9862463Z   proxy | 2026/07/14 11:59:58 [205] GET https://registry.npmjs.org:443/@esbuild%2Flinux-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9863409Z 2026/07/14 11:59:58 [171] 200 https://registry.npmjs.org:443/@esbuild%2Faix-ppc64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9871611Z   proxy | 2026/07/14 11:59:58 [206] GET https://registry.npmjs.org:443/@esbuild%2Fnetbsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9907513Z   proxy | 2026/07/14 11:59:58 [207] GET https://registry.npmjs.org:443/@esbuild%2Fnetbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9920027Z   proxy | 2026/07/14 11:59:58 [208] GET https://registry.npmjs.org:443/@esbuild%2Fopenbsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:58.9959525Z   proxy | 2026/07/14 11:59:58 [210] GET https://registry.npmjs.org:443/@esbuild%2Fopenbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0124565Z   proxy | 2026/07/14 11:59:59 [195] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-riscv64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0182961Z   proxy | 2026/07/14 11:59:59 [192] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-ia32
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0185324Z   proxy | 2026/07/14 11:59:59 [199] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-mips64el
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0187321Z 2026/07/14 11:59:59 [190] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0195584Z   proxy | 2026/07/14 11:59:59 [212] GET https://registry.npmjs.org:443/@esbuild%2Fopenharmony-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0230777Z   proxy | 2026/07/14 11:59:59 [200] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-s390x
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0251877Z   proxy | 2026/07/14 11:59:59 [193] 200 https://registry.npmjs.org:443/@esbuild%2Ffreebsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0306231Z   proxy | 2026/07/14 11:59:59 [210] 200 https://registry.npmjs.org:443/@esbuild%2Fopenbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0314017Z   proxy | 2026/07/14 11:59:59 [186] 200 https://registry.npmjs.org:443/@esbuild%2Fdarwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0354826Z   proxy | 2026/07/14 11:59:59 [208] 200 https://registry.npmjs.org:443/@esbuild%2Fopenbsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0364754Z   proxy | 2026/07/14 11:59:59 [197] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-loong64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0366457Z   proxy | 2026/07/14 11:59:59 [207] 200 https://registry.npmjs.org:443/@esbuild%2Fnetbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0406993Z   proxy | 2026/07/14 11:59:59 [216] GET https://registry.npmjs.org:443/@esbuild%2Fsunos-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0412989Z   proxy | 2026/07/14 11:59:59 [196] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-ppc64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0429549Z   proxy | 2026/07/14 11:59:59 [206] 200 https://registry.npmjs.org:443/@esbuild%2Fnetbsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0444686Z   proxy | 2026/07/14 11:59:59 [191] 200 https://registry.npmjs.org:443/@esbuild%2Ffreebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0477400Z   proxy | 2026/07/14 11:59:59 [194] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-arm
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0539688Z   proxy | 2026/07/14 11:59:59 [219] GET https://registry.npmjs.org:443/@esbuild%2Fwin32-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0568003Z   proxy | 2026/07/14 11:59:59 [220] GET https://registry.npmjs.org:443/@esbuild%2Fwin32-ia32
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0611951Z   proxy | 2026/07/14 11:59:59 [221] GET https://registry.npmjs.org:443/fsevents
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0620193Z   proxy | 2026/07/14 11:59:59 [222] GET https://registry.npmjs.org:443/@esbuild%2Fwin32-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0636675Z   proxy | 2026/07/14 11:59:59 [212] 200 https://registry.npmjs.org:443/@esbuild%2Fopenharmony-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0747077Z   proxy | 2026/07/14 11:59:59 [231] GET https://registry.npmjs.org:443/@rollup%2Frollup-darwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0780450Z   proxy | 2026/07/14 11:59:59 [234] GET https://registry.npmjs.org:443/@rollup%2Frollup-freebsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0787101Z   proxy | 2026/07/14 11:59:59 [235] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0792265Z   proxy | 2026/07/14 11:59:59 [236] GET https://registry.npmjs.org:443/@rollup%2Frollup-android-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0819697Z   proxy | 2026/07/14 11:59:59 [237] GET https://registry.npmjs.org:443/@rollup%2Frollup-freebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0847951Z   proxy | 2026/07/14 11:59:59 [238] GET https://registry.npmjs.org:443/@rollup%2Frollup-win32-x64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0854206Z   proxy | 2026/07/14 11:59:59 [239] GET https://registry.npmjs.org:443/@rollup%2Frollup-openbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0871585Z   proxy | 2026/07/14 11:59:59 [240] GET https://registry.npmjs.org:443/@rollup%2Frollup-win32-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0881302Z   proxy | 2026/07/14 11:59:59 [241] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-x64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0883805Z   proxy | 2026/07/14 11:59:59 [242] GET https://registry.npmjs.org:443/@rollup%2Frollup-darwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0885711Z   proxy | 2026/07/14 11:59:59 [216] 200 https://registry.npmjs.org:443/@esbuild%2Fsunos-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0916642Z   proxy | 2026/07/14 11:59:59 [221] 200 https://registry.npmjs.org:443/fsevents
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.0991455Z   proxy | 2026/07/14 11:59:59 [245] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1004667Z   proxy | 2026/07/14 11:59:59 [246] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-ppc64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1053624Z   proxy | 2026/07/14 11:59:59 [222] 200 https://registry.npmjs.org:443/@esbuild%2Fwin32-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1177794Z   proxy | 2026/07/14 11:59:59 [248] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-s390x-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1346596Z   proxy | 2026/07/14 11:59:59 [219] 200 https://registry.npmjs.org:443/@esbuild%2Fwin32-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1468011Z   proxy | 2026/07/14 11:59:59 [220] 200 https://registry.npmjs.org:443/@esbuild%2Fwin32-ia32
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1480521Z   proxy | 2026/07/14 11:59:59 [235] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1503036Z   proxy | 2026/07/14 11:59:59 [236] 200 https://registry.npmjs.org:443/@rollup%2Frollup-android-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1521574Z   proxy | 2026/07/14 11:59:59 [250] GET https://registry.npmjs.org:443/@rollup%2Frollup-win32-ia32-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1546646Z   proxy | 2026/07/14 11:59:59 [239] 200 https://registry.npmjs.org:443/@rollup%2Frollup-openbsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1551193Z   proxy | 2026/07/14 11:59:59 [234] 200 https://registry.npmjs.org:443/@rollup%2Frollup-freebsd-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1616698Z   proxy | 2026/07/14 11:59:59 [240] 200 https://registry.npmjs.org:443/@rollup%2Frollup-win32-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1628331Z   proxy | 2026/07/14 11:59:59 [253] GET https://registry.npmjs.org:443/@rollup%2Frollup-android-arm-eabi
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1654850Z   proxy | 2026/07/14 11:59:59 [248] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-s390x-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1657966Z   proxy | 2026/07/14 11:59:59 [231] 200 https://registry.npmjs.org:443/@rollup%2Frollup-darwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1658996Z   proxy | 2026/07/14 11:59:59 [238] 200 https://registry.npmjs.org:443/@rollup%2Frollup-win32-x64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1676929Z   proxy | 2026/07/14 11:59:59 [257] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1723338Z   proxy | 2026/07/14 11:59:59 [246] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-ppc64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1746733Z   proxy | 2026/07/14 11:59:59 [245] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1769007Z   proxy | 2026/07/14 11:59:59 [259] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-loong64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1771472Z   proxy | 2026/07/14 11:59:59 [242] 200 https://registry.npmjs.org:443/@rollup%2Frollup-darwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1804177Z   proxy | 2026/07/14 11:59:59 [241] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-x64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1821434Z   proxy | 2026/07/14 11:59:59 [260] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-ppc64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1824310Z   proxy | 2026/07/14 11:59:59 [261] GET https://registry.npmjs.org:443/@rollup%2Frollup-win32-arm64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1943207Z   proxy | 2026/07/14 11:59:59 [265] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-riscv64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1965217Z   proxy | 2026/07/14 11:59:59 [266] GET https://registry.npmjs.org:443/@rollup%2Frollup-openharmony-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.1991877Z   proxy | 2026/07/14 11:59:59 [250] 200 https://registry.npmjs.org:443/@rollup%2Frollup-win32-ia32-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2003501Z   proxy | 2026/07/14 11:59:59 [269] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-loong64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2028851Z   proxy | 2026/07/14 11:59:59 [272] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-riscv64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2043936Z   proxy | 2026/07/14 11:59:59 [273] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm-musleabihf
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2063628Z   proxy | 2026/07/14 11:59:59 [274] GET https://registry.npmjs.org:443/obug
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2076750Z   proxy | 2026/07/14 11:59:59 [257] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2077821Z   proxy | 2026/07/14 11:59:59 [275] GET https://registry.npmjs.org:443/pathe
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2078658Z   proxy | 2026/07/14 11:59:59 [276] GET https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm-gnueabihf
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2128331Z   proxy | 2026/07/14 11:59:59 [278] GET https://registry.npmjs.org:443/std-env
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2166776Z   proxy | 2026/07/14 11:59:59 [280] GET https://registry.npmjs.org:443/tinyexec
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2174500Z   proxy | 2026/07/14 11:59:59 [253] 200 https://registry.npmjs.org:443/@rollup%2Frollup-android-arm-eabi
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2180394Z   proxy | 2026/07/14 11:59:59 [259] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-loong64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2187914Z   proxy | 2026/07/14 11:59:59 [260] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-ppc64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2310363Z   proxy | 2026/07/14 11:59:59 [284] GET https://registry.npmjs.org:443/tinybench
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2324825Z   proxy | 2026/07/14 11:59:59 [285] GET https://registry.npmjs.org:443/expect-type
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2348384Z   proxy | 2026/07/14 11:59:59 [261] 200 https://registry.npmjs.org:443/@rollup%2Frollup-win32-arm64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2349243Z 2026/07/14 11:59:59 [286] GET https://registry.npmjs.org:443/@vitest%2Fspy
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2387314Z   proxy | 2026/07/14 11:59:59 [265] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-riscv64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2421874Z   proxy | 2026/07/14 11:59:59 [269] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-loong64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2428988Z   proxy | 2026/07/14 11:59:59 [274] 200 https://registry.npmjs.org:443/obug
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2506529Z   proxy | 2026/07/14 11:59:59 [272] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-riscv64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2526798Z   proxy | 2026/07/14 11:59:59 [291] GET https://registry.npmjs.org:443/tinyrainbow
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2527623Z   proxy | 2026/07/14 11:59:59 [275] 200 https://registry.npmjs.org:443/pathe
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2536684Z   proxy | 2026/07/14 11:59:59 [292] GET https://registry.npmjs.org:443/@vitest%2Futils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2559461Z   proxy | 2026/07/14 11:59:59 [293] GET https://registry.npmjs.org:443/@vitest%2Fexpect
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2582876Z   proxy | 2026/07/14 11:59:59 [295] GET https://registry.npmjs.org:443/@vitest%2Fmocker
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2608527Z   proxy | 2026/07/14 11:59:59 [297] GET https://registry.npmjs.org:443/@vitest%2Frunner
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2634511Z   proxy | 2026/07/14 11:59:59 [237] 200 https://registry.npmjs.org:443/@rollup%2Frollup-freebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2638642Z   proxy | 2026/07/14 11:59:59 [278] 200 https://registry.npmjs.org:443/std-env
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2645587Z   proxy | 2026/07/14 11:59:59 [298] GET https://registry.npmjs.org:443/es-module-lexer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2665429Z   proxy | 2026/07/14 11:59:59 [284] 200 https://registry.npmjs.org:443/tinybench
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2670107Z   proxy | 2026/07/14 11:59:59 [280] 200 https://registry.npmjs.org:443/tinyexec
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2737537Z   proxy | 2026/07/14 11:59:59 [285] 200 https://registry.npmjs.org:443/expect-type
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2780108Z   proxy | 2026/07/14 11:59:59 [291] 200 https://registry.npmjs.org:443/tinyrainbow
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2804231Z   proxy | 2026/07/14 11:59:59 [303] GET https://registry.npmjs.org:443/@vitest%2Fsnapshot
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2810950Z   proxy | 2026/07/14 11:59:59 [266] 200 https://registry.npmjs.org:443/@rollup%2Frollup-openharmony-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2822574Z   proxy | 2026/07/14 11:59:59 [304] GET https://registry.npmjs.org:443/why-is-node-running
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2849925Z   proxy | 2026/07/14 11:59:59 [305] GET https://registry.npmjs.org:443/@jridgewell%2Fgen-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2858115Z   proxy | 2026/07/14 11:59:59 [306] GET https://registry.npmjs.org:443/@vitest%2Fpretty-format
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2902838Z   proxy | 2026/07/14 11:59:59 [273] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm-musleabihf
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2913120Z   proxy | 2026/07/14 11:59:59 [310] GET https://registry.npmjs.org:443/debug
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2948255Z   proxy | 2026/07/14 11:59:59 [298] 200 https://registry.npmjs.org:443/es-module-lexer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2969121Z   proxy | 2026/07/14 11:59:59 [311] GET https://registry.npmjs.org:443/@sveltejs%2Fvite-plugin-svelte-inspector
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2988766Z   proxy | 2026/07/14 11:59:59 [312] GET https://registry.npmjs.org:443/vitefu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.2997327Z   proxy | 2026/07/14 11:59:59 [276] 200 https://registry.npmjs.org:443/@rollup%2Frollup-linux-arm-gnueabihf
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3035972Z   proxy | 2026/07/14 11:59:59 [286] 200 https://registry.npmjs.org:443/@vitest%2Fspy
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3047239Z   proxy | 2026/07/14 11:59:59 [315] GET https://registry.npmjs.org:443/trouter
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3084051Z   proxy | 2026/07/14 11:59:59 [304] 200 https://registry.npmjs.org:443/why-is-node-running
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3101725Z   proxy | 2026/07/14 11:59:59 [292] 200 https://registry.npmjs.org:443/@vitest%2Futils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3102442Z 2026/07/14 11:59:59 [316] GET https://registry.npmjs.org:443/@polka%2Furl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3103183Z   proxy | 2026/07/14 11:59:59 [295] 200 https://registry.npmjs.org:443/@vitest%2Fmocker
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3117777Z   proxy | 2026/07/14 11:59:59 [293] 200 https://registry.npmjs.org:443/@vitest%2Fexpect
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3255498Z   proxy | 2026/07/14 11:59:59 [310] 200 https://registry.npmjs.org:443/debug
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3330245Z   proxy | 2026/07/14 11:59:59 [322] GET https://registry.npmjs.org:443/postcss
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3334529Z   proxy | 2026/07/14 11:59:59 [312] 200 https://registry.npmjs.org:443/vitefu
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3367271Z   proxy | 2026/07/14 11:59:59 [323] GET https://registry.npmjs.org:443/uuid
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3418621Z   proxy | 2026/07/14 11:59:59 [326] GET https://registry.npmjs.org:443/ansis
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3423412Z   proxy | 2026/07/14 11:59:59 [303] 200 https://registry.npmjs.org:443/@vitest%2Fsnapshot
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3428019Z   proxy | 2026/07/14 11:59:59 [305] 200 https://registry.npmjs.org:443/@jridgewell%2Fgen-mapping
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3435494Z   proxy | 2026/07/14 11:59:59 [327] GET https://registry.npmjs.org:443/sirv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3448764Z   proxy | 2026/07/14 11:59:59 [315] 200 https://registry.npmjs.org:443/trouter
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3453580Z   proxy | 2026/07/14 11:59:59 [329] GET https://registry.npmjs.org:443/open
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3465742Z   proxy | 2026/07/14 11:59:59 [306] 200 https://registry.npmjs.org:443/@vitest%2Fpretty-format
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3470974Z   proxy | 2026/07/14 11:59:59 [330] GET https://registry.npmjs.org:443/vite-dev-rpc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3500594Z   proxy | 2026/07/14 11:59:59 [331] GET https://registry.npmjs.org:443/ohash
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3536807Z   proxy | 2026/07/14 11:59:59 [332] GET https://registry.npmjs.org:443/unplugin-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3558498Z   proxy | 2026/07/14 11:59:59 [316] 200 https://registry.npmjs.org:443/@polka%2Furl
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3626723Z   proxy | 2026/07/14 11:59:59 [337] GET https://registry.npmjs.org:443/perfect-debounce
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3642192Z   proxy | 2026/07/14 11:59:59 [338] GET https://registry.npmjs.org:443/error-stack-parser-es
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3650253Z   proxy | 2026/07/14 11:59:59 [340] GET https://registry.npmjs.org:443/semver
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3803644Z   proxy | 2026/07/14 11:59:59 [327] 200 https://registry.npmjs.org:443/sirv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3804539Z   proxy | 2026/07/14 11:59:59 [329] 200 https://registry.npmjs.org:443/open
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3805305Z 2026/07/14 11:59:59 [326] 200 https://registry.npmjs.org:443/ansis
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3806095Z 2026/07/14 11:59:59 [341] GET https://registry.npmjs.org:443/ci-info
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3806697Z 2026/07/14 11:59:59 [323] 200 https://registry.npmjs.org:443/uuid
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3807321Z 2026/07/14 11:59:59 [342] GET https://registry.npmjs.org:443/mri
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3807929Z   proxy | 2026/07/14 11:59:59 [322] 200 https://registry.npmjs.org:443/postcss
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3808611Z   proxy | 2026/07/14 11:59:59 [330] 200 https://registry.npmjs.org:443/vite-dev-rpc
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3879607Z   proxy | 2026/07/14 11:59:59 [331] 200 https://registry.npmjs.org:443/ohash
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.3885928Z   proxy | 2026/07/14 11:59:59 [332] 200 https://registry.npmjs.org:443/unplugin-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4015280Z   proxy | 2026/07/14 11:59:59 [337] 200 https://registry.npmjs.org:443/perfect-debounce
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4022609Z   proxy | 2026/07/14 11:59:59 [347] GET https://registry.npmjs.org:443/fs-extra
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4099594Z   proxy | 2026/07/14 11:59:59 [352] GET https://registry.npmjs.org:443/term-size
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4100572Z   proxy | 2026/07/14 11:59:59 [342] 200 https://registry.npmjs.org:443/mri
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4101314Z   proxy | 2026/07/14 11:59:59 [297] 200 https://registry.npmjs.org:443/@vitest%2Frunner
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4110548Z   proxy | 2026/07/14 11:59:59 [353] GET https://registry.npmjs.org:443/enquirer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4111266Z   proxy | 2026/07/14 11:59:59 [354] GET https://registry.npmjs.org:443/p-limit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4117190Z   proxy | 2026/07/14 11:59:59 [340] 200 https://registry.npmjs.org:443/semver
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4121377Z   proxy | 2026/07/14 11:59:59 [311] 200 https://registry.npmjs.org:443/@sveltejs%2Fvite-plugin-svelte-inspector
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4136872Z   proxy | 2026/07/14 11:59:59 [341] 200 https://registry.npmjs.org:443/ci-info
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4143744Z   proxy | 2026/07/14 11:59:59 [356] GET https://registry.npmjs.org:443/picocolors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4154372Z   proxy | 2026/07/14 11:59:59 [357] GET https://registry.npmjs.org:443/ansi-colors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4248250Z   proxy | 2026/07/14 11:59:59 [358] GET https://registry.npmjs.org:443/spawndamnit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4250124Z   proxy | 2026/07/14 11:59:59 [359] GET https://registry.npmjs.org:443/resolve-from
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4314963Z   proxy | 2026/07/14 11:59:59 [338] 200 https://registry.npmjs.org:443/error-stack-parser-es
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4346683Z   proxy | 2026/07/14 11:59:59 [362] GET https://registry.npmjs.org:443/@changesets%2Fgit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4363500Z   proxy | 2026/07/14 11:59:59 [354] 200 https://registry.npmjs.org:443/p-limit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4375544Z   proxy | 2026/07/14 11:59:59 [366] GET https://registry.npmjs.org:443/@changesets%2Fpre
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4440954Z   proxy | 2026/07/14 11:59:59 [352] 200 https://registry.npmjs.org:443/term-size
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4469314Z   proxy | 2026/07/14 11:59:59 [357] 200 https://registry.npmjs.org:443/ansi-colors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4482271Z   proxy | 2026/07/14 11:59:59 [347] 200 https://registry.npmjs.org:443/fs-extra
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4497326Z   proxy | 2026/07/14 11:59:59 [358] 200 https://registry.npmjs.org:443/spawndamnit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4508369Z   proxy | 2026/07/14 11:59:59 [353] 200 https://registry.npmjs.org:443/enquirer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4520223Z   proxy | 2026/07/14 11:59:59 [368] GET https://registry.npmjs.org:443/@changesets%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4540468Z   proxy | 2026/07/14 11:59:59 [369] GET https://registry.npmjs.org:443/@changesets%2Fread
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4557368Z   proxy | 2026/07/14 11:59:59 [359] 200 https://registry.npmjs.org:443/resolve-from
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4686959Z   proxy | 2026/07/14 11:59:59 [356] 200 https://registry.npmjs.org:443/picocolors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4734973Z   proxy | 2026/07/14 11:59:59 [371] GET https://registry.npmjs.org:443/@changesets%2Fwrite
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4749684Z   proxy | 2026/07/14 11:59:59 [372] GET https://registry.npmjs.org:443/@changesets%2Fconfig
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4781692Z   proxy | 2026/07/14 11:59:59 [374] GET https://registry.npmjs.org:443/@changesets%2Flogger
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4804872Z   proxy | 2026/07/14 11:59:59 [375] GET https://registry.npmjs.org:443/@changesets%2Ferrors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4822096Z   proxy | 2026/07/14 11:59:59 [377] GET https://registry.npmjs.org:443/@manypkg%2Fget-packages
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4876112Z   proxy | 2026/07/14 11:59:59 [383] GET https://registry.npmjs.org:443/package-manager-detector
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4878727Z   proxy | 2026/07/14 11:59:59 [384] GET https://registry.npmjs.org:443/@inquirer%2Fexternal-editor
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4892131Z   proxy | 2026/07/14 11:59:59 [385] GET https://registry.npmjs.org:443/@changesets%2Fapply-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4910683Z   proxy | 2026/07/14 11:59:59 [386] GET https://registry.npmjs.org:443/@changesets%2Fchangelog-git
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4918496Z   proxy | 2026/07/14 11:59:59 [387] GET https://registry.npmjs.org:443/@changesets%2Fget-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4929348Z   proxy | 2026/07/14 11:59:59 [388] GET https://registry.npmjs.org:443/@changesets%2Fshould-skip-package
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.4997438Z   proxy | 2026/07/14 11:59:59 [368] 200 https://registry.npmjs.org:443/@changesets%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5016987Z   proxy | 2026/07/14 11:59:59 [362] 200 https://registry.npmjs.org:443/@changesets%2Fgit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5119096Z   proxy | 2026/07/14 11:59:59 [391] GET https://registry.npmjs.org:443/@changesets%2Fassemble-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5124046Z   proxy | 2026/07/14 11:59:59 [392] GET https://registry.npmjs.org:443/@changesets%2Fget-dependents-graph
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5163822Z   proxy | 2026/07/14 11:59:59 [369] 200 https://registry.npmjs.org:443/@changesets%2Fread
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5252225Z   proxy | 2026/07/14 11:59:59 [394] GET https://registry.npmjs.org:443/globals
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5372860Z   proxy | 2026/07/14 11:59:59 [371] 200 https://registry.npmjs.org:443/@changesets%2Fwrite
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5419793Z   proxy | 2026/07/14 11:59:59 [396] GET https://registry.npmjs.org:443/dotenv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5431281Z   proxy | 2026/07/14 11:59:59 [366] 200 https://registry.npmjs.org:443/@changesets%2Fpre
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5432212Z 2026/07/14 11:59:59 [374] 200 https://registry.npmjs.org:443/@changesets%2Flogger
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5530609Z   proxy | 2026/07/14 11:59:59 [399] GET https://registry.npmjs.org:443/@changesets%2Fget-github-info
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5535989Z   proxy | 2026/07/14 11:59:59 [383] 200 https://registry.npmjs.org:443/package-manager-detector
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5540530Z   proxy | 2026/07/14 11:59:59 [400] GET https://registry.npmjs.org:443/magicast
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5569549Z   proxy | 2026/07/14 11:59:59 [384] 200 https://registry.npmjs.org:443/@inquirer%2Fexternal-editor
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5600504Z   proxy | 2026/07/14 11:59:59 [402] GET https://registry.npmjs.org:443/istanbul-reports
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5630241Z   proxy | 2026/07/14 11:59:59 [377] 200 https://registry.npmjs.org:443/@manypkg%2Fget-packages
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5639217Z   proxy | 2026/07/14 11:59:59 [404] GET https://registry.npmjs.org:443/@bcoe%2Fv8-coverage
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5680901Z   proxy | 2026/07/14 11:59:59 [386] 200 https://registry.npmjs.org:443/@changesets%2Fchangelog-git
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5691944Z   proxy | 2026/07/14 11:59:59 [406] GET https://registry.npmjs.org:443/ast-v8-to-istanbul
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5707598Z   proxy | 2026/07/14 11:59:59 [387] 200 https://registry.npmjs.org:443/@changesets%2Fget-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5713665Z   proxy | 2026/07/14 11:59:59 [391] 200 https://registry.npmjs.org:443/@changesets%2Fassemble-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5725463Z   proxy | 2026/07/14 11:59:59 [375] 200 https://registry.npmjs.org:443/@changesets%2Ferrors
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5746957Z   proxy | 2026/07/14 11:59:59 [372] 200 https://registry.npmjs.org:443/@changesets%2Fconfig
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5760982Z   proxy | 2026/07/14 11:59:59 [392] 200 https://registry.npmjs.org:443/@changesets%2Fget-dependents-graph
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5789061Z   proxy | 2026/07/14 11:59:59 [400] 200 https://registry.npmjs.org:443/magicast
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5790237Z 2026/07/14 11:59:59 [408] GET https://registry.npmjs.org:443/istanbul-lib-report
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5790971Z 2026/07/14 11:59:59 [396] 200 https://registry.npmjs.org:443/dotenv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5888496Z   proxy | 2026/07/14 11:59:59 [411] GET https://registry.npmjs.org:443/istanbul-lib-coverage
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5894768Z   proxy | 2026/07/14 11:59:59 [412] GET https://registry.npmjs.org:443/ajv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5910125Z   proxy | 2026/07/14 11:59:59 [402] 200 https://registry.npmjs.org:443/istanbul-reports
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5947177Z   proxy | 2026/07/14 11:59:59 [417] GET https://registry.npmjs.org:443/espree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5951404Z   proxy | 2026/07/14 11:59:59 [399] 200 https://registry.npmjs.org:443/@changesets%2Fget-github-info
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5972143Z   proxy | 2026/07/14 11:59:59 [385] 200 https://registry.npmjs.org:443/@changesets%2Fapply-release-plan
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.5985174Z   proxy | 2026/07/14 11:59:59 [406] 200 https://registry.npmjs.org:443/ast-v8-to-istanbul
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6031959Z   proxy | 2026/07/14 11:59:59 [388] 200 https://registry.npmjs.org:443/@changesets%2Fshould-skip-package
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6033159Z   proxy | 2026/07/14 11:59:59 [419] GET https://registry.npmjs.org:443/esquery
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6034100Z   proxy | 2026/07/14 11:59:59 [420] GET https://registry.npmjs.org:443/ignore
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6040177Z   proxy | 2026/07/14 11:59:59 [421] GET https://registry.npmjs.org:443/esutils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6081891Z   proxy | 2026/07/14 11:59:59 [423] GET https://registry.npmjs.org:443/find-up
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6163972Z   proxy | 2026/07/14 11:59:59 [411] 200 https://registry.npmjs.org:443/istanbul-lib-coverage
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6171416Z   proxy | 2026/07/14 11:59:59 [428] GET https://registry.npmjs.org:443/is-glob
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6220667Z   proxy | 2026/07/14 11:59:59 [429] GET https://registry.npmjs.org:443/cross-spawn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6222628Z 2026/07/14 11:59:59 [412] 200 https://registry.npmjs.org:443/ajv
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6223881Z   proxy | 2026/07/14 11:59:59 [430] GET https://registry.npmjs.org:443/optionator
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6239604Z   proxy | 2026/07/14 11:59:59 [431] GET https://registry.npmjs.org:443/glob-parent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6251062Z   proxy | 2026/07/14 11:59:59 [433] GET https://registry.npmjs.org:443/minimatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6274551Z   proxy | 2026/07/14 11:59:59 [434] GET https://registry.npmjs.org:443/imurmurhash
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6282898Z   proxy | 2026/07/14 11:59:59 [417] 200 https://registry.npmjs.org:443/espree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6300812Z   proxy | 2026/07/14 11:59:59 [421] 200 https://registry.npmjs.org:443/esutils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6329086Z   proxy | 2026/07/14 11:59:59 [404] 200 https://registry.npmjs.org:443/@bcoe%2Fv8-coverage
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6330146Z   proxy | 2026/07/14 11:59:59 [394] 200 https://registry.npmjs.org:443/globals
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6351486Z   proxy | 2026/07/14 11:59:59 [419] 200 https://registry.npmjs.org:443/esquery
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6423089Z   proxy | 2026/07/14 11:59:59 [423] 200 https://registry.npmjs.org:443/find-up
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6494205Z   proxy | 2026/07/14 11:59:59 [420] 200 https://registry.npmjs.org:443/ignore
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6538970Z   proxy | 2026/07/14 11:59:59 [428] 200 https://registry.npmjs.org:443/is-glob
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6608432Z   proxy | 2026/07/14 11:59:59 [439] GET https://registry.npmjs.org:443/eslint-scope
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6609402Z   proxy | 2026/07/14 11:59:59 [429] 200 https://registry.npmjs.org:443/cross-spawn
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6617911Z   proxy | 2026/07/14 11:59:59 [440] GET https://registry.npmjs.org:443/@eslint%2Fcore
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6635071Z   proxy | 2026/07/14 11:59:59 [434] 200 https://registry.npmjs.org:443/imurmurhash
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6642751Z   proxy | 2026/07/14 11:59:59 [431] 200 https://registry.npmjs.org:443/glob-parent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6656954Z   proxy | 2026/07/14 11:59:59 [444] GET https://registry.npmjs.org:443/fast-deep-equal
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6664562Z   proxy | 2026/07/14 11:59:59 [445] GET https://registry.npmjs.org:443/@humanfs%2Fnode
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6715007Z   proxy | 2026/07/14 11:59:59 [408] 200 https://registry.npmjs.org:443/istanbul-lib-report
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6737384Z   proxy | 2026/07/14 11:59:59 [433] 200 https://registry.npmjs.org:443/minimatch
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6743517Z   proxy | 2026/07/14 11:59:59 [430] 200 https://registry.npmjs.org:443/optionator
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6750307Z   proxy | 2026/07/14 11:59:59 [446] GET https://registry.npmjs.org:443/natural-compare
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6771239Z   proxy | 2026/07/14 11:59:59 [447] GET https://registry.npmjs.org:443/file-entry-cache
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6824163Z   proxy | 2026/07/14 11:59:59 [449] GET https://registry.npmjs.org:443/@eslint%2Fplugin-kit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6860809Z   proxy | 2026/07/14 11:59:59 [439] 200 https://registry.npmjs.org:443/eslint-scope
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6922704Z   proxy | 2026/07/14 11:59:59 [444] 200 https://registry.npmjs.org:443/fast-deep-equal
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6941623Z   proxy | 2026/07/14 11:59:59 [454] GET https://registry.npmjs.org:443/@eslint%2Fconfig-array
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.6993713Z   proxy | 2026/07/14 11:59:59 [456] GET https://registry.npmjs.org:443/@humanwhocodes%2Fretry
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7000965Z   proxy | 2026/07/14 11:59:59 [440] 200 https://registry.npmjs.org:443/@eslint%2Fcore
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7030785Z   proxy | 2026/07/14 11:59:59 [457] GET https://registry.npmjs.org:443/eslint-visitor-keys
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7040615Z   proxy | 2026/07/14 11:59:59 [447] 200 https://registry.npmjs.org:443/file-entry-cache
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7064326Z   proxy | 2026/07/14 11:59:59 [459] GET https://registry.npmjs.org:443/@eslint-community%2Fregexpp
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7073184Z   proxy | 2026/07/14 11:59:59 [446] 200 https://registry.npmjs.org:443/natural-compare
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7078148Z   proxy | 2026/07/14 11:59:59 [460] GET https://registry.npmjs.org:443/escape-string-regexp
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7080200Z   proxy | 2026/07/14 11:59:59 [461] GET https://registry.npmjs.org:443/@eslint%2Fconfig-helpers
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7091484Z   proxy | 2026/07/14 11:59:59 [445] 200 https://registry.npmjs.org:443/@humanfs%2Fnode
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7137936Z   proxy | 2026/07/14 11:59:59 [464] GET https://registry.npmjs.org:443/@eslint-community%2Feslint-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7190630Z   proxy | 2026/07/14 11:59:59 [466] GET https://registry.npmjs.org:443/@humanwhocodes%2Fmodule-importer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7210589Z   proxy | 2026/07/14 11:59:59 [468] GET https://registry.npmjs.org:443/json-stable-stringify-without-jsonify
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7216540Z   proxy | 2026/07/14 11:59:59 [471] GET https://registry.npmjs.org:443/postcss-load-config
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7256968Z   proxy | 2026/07/14 11:59:59 [472] GET https://registry.npmjs.org:443/svelte-eslint-parser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7258031Z   proxy | 2026/07/14 11:59:59 [473] GET https://registry.npmjs.org:443/known-css-properties
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7269236Z   proxy | 2026/07/14 11:59:59 [474] GET https://registry.npmjs.org:443/postcss-safe-parser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7325384Z   proxy | 2026/07/14 11:59:59 [457] 200 https://registry.npmjs.org:443/eslint-visitor-keys
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7332305Z   proxy | 2026/07/14 11:59:59 [454] 200 https://registry.npmjs.org:443/@eslint%2Fconfig-array
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7415074Z   proxy | 2026/07/14 11:59:59 [477] GET https://registry.npmjs.org:443/ws
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7416269Z   proxy | 2026/07/14 11:59:59 [460] 200 https://registry.npmjs.org:443/escape-string-regexp
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7427906Z   proxy | 2026/07/14 11:59:59 [449] 200 https://registry.npmjs.org:443/@eslint%2Fplugin-kit
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7454515Z   proxy | 2026/07/14 11:59:59 [479] GET https://registry.npmjs.org:443/saxes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7485162Z   proxy | 2026/07/14 11:59:59 [459] 200 https://registry.npmjs.org:443/@eslint-community%2Fregexpp
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7521297Z   proxy | 2026/07/14 11:59:59 [461] 200 https://registry.npmjs.org:443/@eslint%2Fconfig-helpers
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7542267Z   proxy | 2026/07/14 11:59:59 [481] GET https://registry.npmjs.org:443/nwsapi
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7600281Z   proxy | 2026/07/14 11:59:59 [483] GET https://registry.npmjs.org:443/parse5
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7601430Z   proxy | 2026/07/14 11:59:59 [468] 200 https://registry.npmjs.org:443/json-stable-stringify-without-jsonify
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7610590Z   proxy | 2026/07/14 11:59:59 [485] GET https://registry.npmjs.org:443/cssstyle
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7647075Z   proxy | 2026/07/14 11:59:59 [486] GET https://registry.npmjs.org:443/data-urls
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7662620Z   proxy | 2026/07/14 11:59:59 [464] 200 https://registry.npmjs.org:443/@eslint-community%2Feslint-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7687262Z   proxy | 2026/07/14 11:59:59 [488] GET https://registry.npmjs.org:443/form-data
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7705046Z   proxy | 2026/07/14 11:59:59 [456] 200 https://registry.npmjs.org:443/@humanwhocodes%2Fretry
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7710011Z   proxy | 2026/07/14 11:59:59 [473] 200 https://registry.npmjs.org:443/known-css-properties
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7788899Z   proxy | 2026/07/14 11:59:59 [474] 200 https://registry.npmjs.org:443/postcss-safe-parser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7790361Z 2026/07/14 11:59:59 [479] 200 https://registry.npmjs.org:443/saxes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7792004Z 2026/07/14 11:59:59 [471] 200 https://registry.npmjs.org:443/postcss-load-config
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7795191Z   proxy | 2026/07/14 11:59:59 [493] GET https://registry.npmjs.org:443/decimal.js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7813180Z   proxy | 2026/07/14 11:59:59 [477] 200 https://registry.npmjs.org:443/ws
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7820804Z   proxy | 2026/07/14 11:59:59 [466] 200 https://registry.npmjs.org:443/@humanwhocodes%2Fmodule-importer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7842286Z   proxy | 2026/07/14 11:59:59 [481] 200 https://registry.npmjs.org:443/nwsapi
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7868777Z   proxy | 2026/07/14 11:59:59 [494] GET https://registry.npmjs.org:443/whatwg-url
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7872707Z   proxy | 2026/07/14 11:59:59 [485] 200 https://registry.npmjs.org:443/cssstyle
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7934057Z   proxy | 2026/07/14 11:59:59 [486] 200 https://registry.npmjs.org:443/data-urls
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7941212Z   proxy | 2026/07/14 11:59:59 [472] 200 https://registry.npmjs.org:443/svelte-eslint-parser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7947706Z   proxy | 2026/07/14 11:59:59 [495] GET https://registry.npmjs.org:443/symbol-tree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7962729Z   proxy | 2026/07/14 11:59:59 [483] 200 https://registry.npmjs.org:443/parse5
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.7966898Z   proxy | 2026/07/14 11:59:59 [496] GET https://registry.npmjs.org:443/rrweb-cssom
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8049735Z   proxy | 2026/07/14 11:59:59 [488] 200 https://registry.npmjs.org:443/form-data
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8093277Z   proxy | 2026/07/14 11:59:59 [501] GET https://registry.npmjs.org:443/tough-cookie
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8153114Z   proxy | 2026/07/14 11:59:59 [493] 200 https://registry.npmjs.org:443/decimal.js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8163249Z   proxy | 2026/07/14 11:59:59 [494] 200 https://registry.npmjs.org:443/whatwg-url
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8191548Z   proxy | 2026/07/14 11:59:59 [503] GET https://registry.npmjs.org:443/whatwg-encoding
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8237010Z   proxy | 2026/07/14 11:59:59 [496] 200 https://registry.npmjs.org:443/rrweb-cssom
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8237797Z 2026/07/14 11:59:59 [495] 200 https://registry.npmjs.org:443/symbol-tree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8238498Z 2026/07/14 11:59:59 [508] GET https://registry.npmjs.org:443/http-proxy-agent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8289078Z   proxy | 2026/07/14 11:59:59 [510] GET https://registry.npmjs.org:443/https-proxy-agent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8345018Z   proxy | 2026/07/14 11:59:59 [512] GET https://registry.npmjs.org:443/is-potential-custom-element-name
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8350752Z   proxy | 2026/07/14 11:59:59 [513] GET https://registry.npmjs.org:443/xml-name-validator
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8356946Z   proxy | 2026/07/14 11:59:59 [514] GET https://registry.npmjs.org:443/w3c-xmlserializer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8381777Z   proxy | 2026/07/14 11:59:59 [516] GET https://registry.npmjs.org:443/html-encoding-sniffer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8384157Z   proxy | 2026/07/14 11:59:59 [517] GET https://registry.npmjs.org:443/webidl-conversions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8387428Z   proxy | 2026/07/14 11:59:59 [518] GET https://registry.npmjs.org:443/whatwg-mimetype
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8399667Z   proxy | 2026/07/14 11:59:59 [519] GET https://registry.npmjs.org:443/playwright-core
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8429395Z   proxy | 2026/07/14 11:59:59 [523] GET https://registry.npmjs.org:443/@typescript-eslint%2Futils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8441554Z   proxy | 2026/07/14 11:59:59 [501] 200 https://registry.npmjs.org:443/tough-cookie
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8465560Z   proxy | 2026/07/14 11:59:59 [524] GET https://registry.npmjs.org:443/@typescript-eslint%2Feslint-plugin
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8466704Z   proxy | 2026/07/14 11:59:59 [525] GET https://registry.npmjs.org:443/@typescript-eslint%2Fparser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8467413Z   proxy | 2026/07/14 11:59:59 [508] 200 https://registry.npmjs.org:443/http-proxy-agent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8468432Z   proxy | 2026/07/14 11:59:59 [526] GET https://registry.npmjs.org:443/@typescript-eslint%2Ftypescript-estree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8508991Z   proxy | 2026/07/14 11:59:59 [503] 200 https://registry.npmjs.org:443/whatwg-encoding
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8627047Z   proxy | 2026/07/14 11:59:59 [510] 200 https://registry.npmjs.org:443/https-proxy-agent
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8717750Z   proxy | 2026/07/14 11:59:59 [513] 200 https://registry.npmjs.org:443/xml-name-validator
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8724402Z   proxy | 2026/07/14 11:59:59 [205] 200 https://registry.npmjs.org:443/@esbuild%2Flinux-x64
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8781942Z   proxy | 2026/07/14 11:59:59 [512] 200 https://registry.npmjs.org:443/is-potential-custom-element-name
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8886161Z   proxy | 2026/07/14 11:59:59 [517] 200 https://registry.npmjs.org:443/webidl-conversions
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8891821Z   proxy | 2026/07/14 11:59:59 [529] GET https://registry.npmjs.org:443/path-parse
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8902819Z   proxy | 2026/07/14 11:59:59 [533] GET https://registry.npmjs.org:443/is-core-module
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.8936782Z   proxy | 2026/07/14 11:59:59 [518] 200 https://registry.npmjs.org:443/whatwg-mimetype
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9013185Z   proxy | 2026/07/14 11:59:59 [514] 200 https://registry.npmjs.org:443/w3c-xmlserializer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9013979Z 2026/07/14 11:59:59 [516] 200 https://registry.npmjs.org:443/html-encoding-sniffer
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9051618Z   proxy | 2026/07/14 11:59:59 [536] GET https://registry.npmjs.org:443/@jridgewell%2Fset-array
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9058407Z   proxy | 2026/07/14 11:59:59 [537] GET https://registry.npmjs.org:443/source-map-support
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9084900Z   proxy | 2026/07/14 11:59:59 [538] GET https://registry.npmjs.org:443/commander
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9092469Z   proxy | 2026/07/14 11:59:59 [539] GET https://registry.npmjs.org:443/supports-preserve-symlinks-flag
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9100024Z   proxy | 2026/07/14 11:59:59 [540] GET https://registry.npmjs.org:443/randombytes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9136768Z   proxy | 2026/07/14 11:59:59 [529] 200 https://registry.npmjs.org:443/path-parse
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9140689Z   proxy | 2026/07/14 11:59:59 [545] GET https://registry.npmjs.org:443/regexparam
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9183029Z   proxy | 2026/07/14 11:59:59 [546] GET https://registry.npmjs.org:443/siginfo
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9193883Z   proxy | 2026/07/14 11:59:59 [548] GET https://registry.npmjs.org:443/source-map-js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9222933Z   proxy | 2026/07/14 11:59:59 [533] 200 https://registry.npmjs.org:443/is-core-module
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9229281Z   proxy | 2026/07/14 11:59:59 [549] GET https://registry.npmjs.org:443/stackback
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9233369Z   proxy | 2026/07/14 11:59:59 [550] GET https://registry.npmjs.org:443/nanoid
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9282490Z   proxy | 2026/07/14 11:59:59 [523] 200 https://registry.npmjs.org:443/@typescript-eslint%2Futils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9311308Z   proxy | 2026/07/14 11:59:59 [537] 200 https://registry.npmjs.org:443/source-map-support
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9327713Z   proxy | 2026/07/14 11:59:59 [552] GET https://registry.npmjs.org:443/convert-source-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9400579Z   proxy | 2026/07/14 11:59:59 [554] GET https://registry.npmjs.org:443/chai
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9457384Z   proxy | 2026/07/14 11:59:59 [524] 200 https://registry.npmjs.org:443/@typescript-eslint%2Feslint-plugin
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9467676Z   proxy | 2026/07/14 11:59:59 [519] 200 https://registry.npmjs.org:443/playwright-core
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9529670Z   proxy | 2026/07/14 11:59:59 [538] 200 https://registry.npmjs.org:443/commander
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9537258Z   proxy | 2026/07/14 11:59:59 [539] 200 https://registry.npmjs.org:443/supports-preserve-symlinks-flag
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9558158Z   proxy | 2026/07/14 11:59:59 [526] 200 https://registry.npmjs.org:443/@typescript-eslint%2Ftypescript-estree
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9581251Z   proxy | 2026/07/14 11:59:59 [540] 200 https://registry.npmjs.org:443/randombytes
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9631266Z   proxy | 2026/07/14 11:59:59 [548] 200 https://registry.npmjs.org:443/source-map-js
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9667963Z   proxy | 2026/07/14 11:59:59 [549] 200 https://registry.npmjs.org:443/stackback
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9668798Z   proxy | 2026/07/14 11:59:59 [557] GET https://registry.npmjs.org:443/@types%2Fchai
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9683655Z   proxy | 2026/07/14 11:59:59 [545] 200 https://registry.npmjs.org:443/regexparam
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9703310Z   proxy | 2026/07/14 11:59:59 [525] 200 https://registry.npmjs.org:443/@typescript-eslint%2Fparser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9724218Z   proxy | 2026/07/14 11:59:59 [546] 200 https://registry.npmjs.org:443/siginfo
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9735443Z   proxy | 2026/07/14 11:59:59 [559] GET https://registry.npmjs.org:443/@standard-schema%2Fspec
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9788393Z   proxy | 2026/07/14 11:59:59 [561] GET https://registry.npmjs.org:443/ms
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9794407Z   proxy | 2026/07/14 11:59:59 [554] 200 https://registry.npmjs.org:443/chai
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9824491Z   proxy | 2026/07/14 11:59:59 [536] 200 https://registry.npmjs.org:443/@jridgewell%2Fset-array
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9857153Z   proxy | 2026/07/14 11:59:59 [552] 200 https://registry.npmjs.org:443/convert-source-map
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9909446Z   proxy | 2026/07/14 11:59:59 [565] GET https://registry.npmjs.org:443/wsl-utils
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9919887Z   proxy | 2026/07/14 11:59:59 [566] GET https://registry.npmjs.org:443/default-browser
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9962877Z   proxy | 2026/07/14 11:59:59 [569] GET https://registry.npmjs.org:443/define-lazy-prop
+Dependabot	UNKNOWN STEP	2026-07-14T11:59:59.9975378Z   proxy | 2026/07/14 11:59:59 [570] GET https://registry.npmjs.org:443/is-inside-container
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0010907Z   proxy | 2026/07/14 12:00:00 [572] GET https://registry.npmjs.org:443/totalist
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0012867Z   proxy | 2026/07/14 12:00:00 [550] 200 https://registry.npmjs.org:443/nanoid
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0075943Z   proxy | 2026/07/14 12:00:00 [573] GET https://registry.npmjs.org:443/mrmime
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0109950Z   proxy | 2026/07/14 12:00:00 [574] GET https://registry.npmjs.org:443/birpc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0179553Z   proxy | 2026/07/14 12:00:00 [576] GET https://registry.npmjs.org:443/vite-hot-client
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0190538Z   proxy | 2026/07/14 12:00:00 [561] 200 https://registry.npmjs.org:443/ms
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0224391Z   proxy | 2026/07/14 12:00:00 [566] 200 https://registry.npmjs.org:443/default-browser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0238593Z   proxy | 2026/07/14 12:00:00 [565] 200 https://registry.npmjs.org:443/wsl-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0281936Z   proxy | 2026/07/14 12:00:00 [557] 200 https://registry.npmjs.org:443/@types%2Fchai
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0334920Z   proxy | 2026/07/14 12:00:00 [559] 200 https://registry.npmjs.org:443/@standard-schema%2Fspec
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0457398Z   proxy | 2026/07/14 12:00:00 [569] 200 https://registry.npmjs.org:443/define-lazy-prop
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0460225Z   proxy | 2026/07/14 12:00:00 [573] 200 https://registry.npmjs.org:443/mrmime
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0508022Z   proxy | 2026/07/14 12:00:00 [572] 200 https://registry.npmjs.org:443/totalist
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0552201Z   proxy | 2026/07/14 12:00:00 [582] GET https://registry.npmjs.org:443/p-try
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0573731Z   proxy | 2026/07/14 12:00:00 [570] 200 https://registry.npmjs.org:443/is-inside-container
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0612906Z   proxy | 2026/07/14 12:00:00 [583] GET https://registry.npmjs.org:443/dataloader
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0613762Z   proxy | 2026/07/14 12:00:00 [576] 200 https://registry.npmjs.org:443/vite-hot-client
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0621016Z   proxy | 2026/07/14 12:00:00 [584] GET https://registry.npmjs.org:443/node-fetch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0644220Z   proxy | 2026/07/14 12:00:00 [574] 200 https://registry.npmjs.org:443/birpc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0645275Z   proxy | 2026/07/14 12:00:00 [587] GET https://registry.npmjs.org:443/graceful-fs
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0670737Z   proxy | 2026/07/14 12:00:00 [588] GET https://registry.npmjs.org:443/jsonfile
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0770402Z   proxy | 2026/07/14 12:00:00 [591] GET https://registry.npmjs.org:443/signal-exit
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0771763Z   proxy | 2026/07/14 12:00:00 [592] GET https://registry.npmjs.org:443/strip-ansi
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0785129Z   proxy | 2026/07/14 12:00:00 [594] GET https://registry.npmjs.org:443/universalify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0853520Z   proxy | 2026/07/14 12:00:00 [582] 200 https://registry.npmjs.org:443/p-try
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0860963Z   proxy | 2026/07/14 12:00:00 [596] GET https://registry.npmjs.org:443/is-subdir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0878354Z   proxy | 2026/07/14 12:00:00 [597] GET https://registry.npmjs.org:443/micromatch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0928795Z   proxy | 2026/07/14 12:00:00 [599] GET https://registry.npmjs.org:443/p-filter
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0935522Z   proxy | 2026/07/14 12:00:00 [588] 200 https://registry.npmjs.org:443/jsonfile
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0956426Z   proxy | 2026/07/14 12:00:00 [584] 200 https://registry.npmjs.org:443/node-fetch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0957858Z   proxy | 2026/07/14 12:00:00 [600] GET https://registry.npmjs.org:443/@changesets%2Fparse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.0967942Z   proxy | 2026/07/14 12:00:00 [583] 200 https://registry.npmjs.org:443/dataloader
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1061657Z   proxy | 2026/07/14 12:00:00 [587] 200 https://registry.npmjs.org:443/graceful-fs
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1166574Z   proxy | 2026/07/14 12:00:00 [591] 200 https://registry.npmjs.org:443/signal-exit
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1198464Z   proxy | 2026/07/14 12:00:00 [603] GET https://registry.npmjs.org:443/human-id
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1199330Z 2026/07/14 12:00:00 [604] GET https://registry.npmjs.org:443/quansync
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1224547Z   proxy | 2026/07/14 12:00:00 [607] GET https://registry.npmjs.org:443/iconv-lite
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1236717Z   proxy | 2026/07/14 12:00:00 [608] GET https://registry.npmjs.org:443/chardet
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1256137Z   proxy | 2026/07/14 12:00:00 [592] 200 https://registry.npmjs.org:443/strip-ansi
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1263970Z   proxy | 2026/07/14 12:00:00 [610] GET https://registry.npmjs.org:443/globby
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1347898Z   proxy | 2026/07/14 12:00:00 [594] 200 https://registry.npmjs.org:443/universalify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1397766Z   proxy | 2026/07/14 12:00:00 [613] GET https://registry.npmjs.org:443/@babel%2Fruntime
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1403833Z   proxy | 2026/07/14 12:00:00 [599] 200 https://registry.npmjs.org:443/p-filter
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1414203Z   proxy | 2026/07/14 12:00:00 [603] 200 https://registry.npmjs.org:443/human-id
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1448268Z   proxy | 2026/07/14 12:00:00 [597] 200 https://registry.npmjs.org:443/micromatch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1540508Z   proxy | 2026/07/14 12:00:00 [615] GET https://registry.npmjs.org:443/read-yaml-file
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1549431Z   proxy | 2026/07/14 12:00:00 [608] 200 https://registry.npmjs.org:443/chardet
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1561627Z   proxy | 2026/07/14 12:00:00 [604] 200 https://registry.npmjs.org:443/quansync
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1572926Z   proxy | 2026/07/14 12:00:00 [607] 200 https://registry.npmjs.org:443/iconv-lite
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1588271Z   proxy | 2026/07/14 12:00:00 [596] 200 https://registry.npmjs.org:443/is-subdir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1596670Z   proxy | 2026/07/14 12:00:00 [610] 200 https://registry.npmjs.org:443/globby
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1604822Z   proxy | 2026/07/14 12:00:00 [618] GET https://registry.npmjs.org:443/@manypkg%2Ffind-root
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1797528Z   proxy | 2026/07/14 12:00:00 [600] 200 https://registry.npmjs.org:443/@changesets%2Fparse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.1829502Z   proxy | 2026/07/14 12:00:00 [615] 200 https://registry.npmjs.org:443/read-yaml-file
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.2107565Z   proxy | 2026/07/14 12:00:00 [613] 200 https://registry.npmjs.org:443/@babel%2Fruntime
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.2218450Z   proxy | 2026/07/14 12:00:00 [618] 200 https://registry.npmjs.org:443/@manypkg%2Ffind-root
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3035221Z   proxy | 2026/07/14 12:00:00 [620] GET https://registry.npmjs.org:443/extendable-error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3228295Z   proxy | 2026/07/14 12:00:00 [621] GET https://registry.npmjs.org:443/detect-indent
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3232908Z   proxy | 2026/07/14 12:00:00 [622] GET https://registry.npmjs.org:443/outdent
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3447094Z   proxy | 2026/07/14 12:00:00 [620] 200 https://registry.npmjs.org:443/extendable-error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3551282Z   proxy | 2026/07/14 12:00:00 [621] 200 https://registry.npmjs.org:443/detect-indent
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.3660644Z   proxy | 2026/07/14 12:00:00 [622] 200 https://registry.npmjs.org:443/outdent
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.4863839Z   proxy | 2026/07/14 12:00:00 [632] GET https://registry.npmjs.org:443/lodash.startcase
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5063855Z   proxy | 2026/07/14 12:00:00 [634] GET https://registry.npmjs.org:443/html-escaper
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5068162Z   proxy | 2026/07/14 12:00:00 [635] GET https://registry.npmjs.org:443/supports-color
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5073907Z   proxy | 2026/07/14 12:00:00 [636] GET https://registry.npmjs.org:443/acorn-jsx
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5121209Z   proxy | 2026/07/14 12:00:00 [638] GET https://registry.npmjs.org:443/@babel%2Fparser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5125076Z   proxy | 2026/07/14 12:00:00 [639] GET https://registry.npmjs.org:443/@changesets%2Fget-version-range-type
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5128030Z   proxy | 2026/07/14 12:00:00 [640] GET https://registry.npmjs.org:443/estraverse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5147180Z   proxy | 2026/07/14 12:00:00 [645] GET https://registry.npmjs.org:443/js-tokens
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5223940Z   proxy | 2026/07/14 12:00:00 [646] GET https://registry.npmjs.org:443/make-dir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5224990Z 2026/07/14 12:00:00 [647] GET https://registry.npmjs.org:443/@babel%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5280990Z   proxy | 2026/07/14 12:00:00 [632] 200 https://registry.npmjs.org:443/lodash.startcase
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5527657Z   proxy | 2026/07/14 12:00:00 [634] 200 https://registry.npmjs.org:443/html-escaper
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5583324Z   proxy | 2026/07/14 12:00:00 [635] 200 https://registry.npmjs.org:443/supports-color
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5666212Z   proxy | 2026/07/14 12:00:00 [648] GET https://registry.npmjs.org:443/fast-json-stable-stringify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5671433Z   proxy | 2026/07/14 12:00:00 [649] GET https://registry.npmjs.org:443/json-schema-traverse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5682089Z   proxy | 2026/07/14 12:00:00 [650] GET https://registry.npmjs.org:443/locate-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5687143Z   proxy | 2026/07/14 12:00:00 [651] GET https://registry.npmjs.org:443/uri-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5693527Z   proxy | 2026/07/14 12:00:00 [652] GET https://registry.npmjs.org:443/path-exists
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5746997Z   proxy | 2026/07/14 12:00:00 [646] 200 https://registry.npmjs.org:443/make-dir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5777648Z   proxy | 2026/07/14 12:00:00 [636] 200 https://registry.npmjs.org:443/acorn-jsx
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5832810Z   proxy | 2026/07/14 12:00:00 [657] GET https://registry.npmjs.org:443/is-extglob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5853513Z   proxy | 2026/07/14 12:00:00 [659] GET https://registry.npmjs.org:443/which
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5859809Z   proxy | 2026/07/14 12:00:00 [660] GET https://registry.npmjs.org:443/path-key
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5893353Z   proxy | 2026/07/14 12:00:00 [662] GET https://registry.npmjs.org:443/shebang-command
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5895351Z   proxy | 2026/07/14 12:00:00 [645] 200 https://registry.npmjs.org:443/js-tokens
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5901178Z   proxy | 2026/07/14 12:00:00 [663] GET https://registry.npmjs.org:443/prelude-ls
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5942289Z   proxy | 2026/07/14 12:00:00 [664] GET https://registry.npmjs.org:443/deep-is
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.5970645Z   proxy | 2026/07/14 12:00:00 [666] GET https://registry.npmjs.org:443/@aashutoshrathi%2Fword-wrap
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6000056Z   proxy | 2026/07/14 12:00:00 [639] 200 https://registry.npmjs.org:443/@changesets%2Fget-version-range-type
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6058518Z   proxy | 2026/07/14 12:00:00 [668] GET https://registry.npmjs.org:443/type-check
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6149562Z   proxy | 2026/07/14 12:00:00 [650] 200 https://registry.npmjs.org:443/locate-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6170671Z   proxy | 2026/07/14 12:00:00 [640] 200 https://registry.npmjs.org:443/estraverse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6178486Z   proxy | 2026/07/14 12:00:00 [648] 200 https://registry.npmjs.org:443/fast-json-stable-stringify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6199237Z   proxy | 2026/07/14 12:00:00 [649] 200 https://registry.npmjs.org:443/json-schema-traverse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6225326Z   proxy | 2026/07/14 12:00:00 [657] 200 https://registry.npmjs.org:443/is-extglob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6242021Z   proxy | 2026/07/14 12:00:00 [670] GET https://registry.npmjs.org:443/levn
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6323885Z   proxy | 2026/07/14 12:00:00 [651] 200 https://registry.npmjs.org:443/uri-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6358391Z   proxy | 2026/07/14 12:00:00 [660] 200 https://registry.npmjs.org:443/path-key
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6361470Z 2026/07/14 12:00:00 [659] 200 https://registry.npmjs.org:443/which
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6362764Z   proxy | 2026/07/14 12:00:00 [638] 200 https://registry.npmjs.org:443/@babel%2Fparser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6376539Z   proxy | 2026/07/14 12:00:00 [675] GET https://registry.npmjs.org:443/fast-levenshtein
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6377638Z 2026/07/14 12:00:00 [676] GET https://registry.npmjs.org:443/@types%2Fesrecurse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6378522Z 2026/07/14 12:00:00 [652] 200 https://registry.npmjs.org:443/path-exists
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6400200Z   proxy | 2026/07/14 12:00:00 [677] GET https://registry.npmjs.org:443/@isaacs%2Fbrace-expansion
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6424623Z   proxy | 2026/07/14 12:00:00 [678] GET https://registry.npmjs.org:443/esrecurse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6495303Z   proxy | 2026/07/14 12:00:00 [683] GET https://registry.npmjs.org:443/@types%2Fjson-schema
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6497975Z   proxy | 2026/07/14 12:00:00 [663] 200 https://registry.npmjs.org:443/prelude-ls
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6552054Z   proxy | 2026/07/14 12:00:00 [684] GET https://registry.npmjs.org:443/flat-cache
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6554170Z 2026/07/14 12:00:00 [664] 200 https://registry.npmjs.org:443/deep-is
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6556185Z 2026/07/14 12:00:00 [685] GET https://registry.npmjs.org:443/@humanfs%2Fcore
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6570638Z   proxy | 2026/07/14 12:00:00 [686] GET https://registry.npmjs.org:443/@eslint%2Fobject-schema
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6620476Z   proxy | 2026/07/14 12:00:00 [689] GET https://registry.npmjs.org:443/yaml
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6646868Z   proxy | 2026/07/14 12:00:00 [690] GET https://registry.npmjs.org:443/lilconfig
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6745899Z   proxy | 2026/07/14 12:00:00 [668] 200 https://registry.npmjs.org:443/type-check
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6746756Z   proxy | 2026/07/14 12:00:00 [675] 200 https://registry.npmjs.org:443/fast-levenshtein
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6764353Z   proxy | 2026/07/14 12:00:00 [676] 200 https://registry.npmjs.org:443/@types%2Fesrecurse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6789012Z   proxy | 2026/07/14 12:00:00 [666] 200 https://registry.npmjs.org:443/@aashutoshrathi%2Fword-wrap
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6852895Z   proxy | 2026/07/14 12:00:00 [662] 200 https://registry.npmjs.org:443/shebang-command
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6884144Z   proxy | 2026/07/14 12:00:00 [695] GET https://registry.npmjs.org:443/postcss-selector-parser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6885146Z   proxy | 2026/07/14 12:00:00 [696] GET https://registry.npmjs.org:443/postcss-scss
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6905180Z   proxy | 2026/07/14 12:00:00 [697] GET https://registry.npmjs.org:443/entities
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6918832Z   proxy | 2026/07/14 12:00:00 [698] GET https://registry.npmjs.org:443/xmlchars
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6945249Z   proxy | 2026/07/14 12:00:00 [683] 200 https://registry.npmjs.org:443/@types%2Fjson-schema
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6953985Z   proxy | 2026/07/14 12:00:00 [700] GET https://registry.npmjs.org:443/asynckit
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.6981151Z   proxy | 2026/07/14 12:00:00 [684] 200 https://registry.npmjs.org:443/flat-cache
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7025989Z   proxy | 2026/07/14 12:00:00 [702] GET https://registry.npmjs.org:443/mime-types
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7053980Z   proxy | 2026/07/14 12:00:00 [704] GET https://registry.npmjs.org:443/combined-stream
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7061879Z   proxy | 2026/07/14 12:00:00 [690] 200 https://registry.npmjs.org:443/lilconfig
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7113389Z   proxy | 2026/07/14 12:00:00 [706] GET https://registry.npmjs.org:443/tr46
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7116806Z   proxy | 2026/07/14 12:00:00 [685] 200 https://registry.npmjs.org:443/@humanfs%2Fcore
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7138678Z   proxy | 2026/07/14 12:00:00 [689] 200 https://registry.npmjs.org:443/yaml
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7173598Z   proxy | 2026/07/14 12:00:00 [708] GET https://registry.npmjs.org:443/tldts
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7209600Z   proxy | 2026/07/14 12:00:00 [698] 200 https://registry.npmjs.org:443/xmlchars
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7217189Z   proxy | 2026/07/14 12:00:00 [697] 200 https://registry.npmjs.org:443/entities
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7315467Z   proxy | 2026/07/14 12:00:00 [704] 200 https://registry.npmjs.org:443/combined-stream
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7316570Z 2026/07/14 12:00:00 [670] 200 https://registry.npmjs.org:443/levn
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7317606Z 2026/07/14 12:00:00 [700] 200 https://registry.npmjs.org:443/asynckit
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7321540Z   proxy | 2026/07/14 12:00:00 [677] 200 https://registry.npmjs.org:443/@isaacs%2Fbrace-expansion
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7326205Z   proxy | 2026/07/14 12:00:00 [711] GET https://registry.npmjs.org:443/agent-base
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7336947Z   proxy | 2026/07/14 12:00:00 [712] GET https://registry.npmjs.org:443/@typescript-eslint%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7404039Z   proxy | 2026/07/14 12:00:00 [695] 200 https://registry.npmjs.org:443/postcss-selector-parser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7414460Z   proxy | 2026/07/14 12:00:00 [706] 200 https://registry.npmjs.org:443/tr46
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7428397Z   proxy | 2026/07/14 12:00:00 [702] 200 https://registry.npmjs.org:443/mime-types
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7464648Z   proxy | 2026/07/14 12:00:00 [717] GET https://registry.npmjs.org:443/@typescript-eslint%2Fvisitor-keys
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7469100Z   proxy | 2026/07/14 12:00:00 [696] 200 https://registry.npmjs.org:443/postcss-scss
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7486501Z   proxy | 2026/07/14 12:00:00 [686] 200 https://registry.npmjs.org:443/@eslint%2Fobject-schema
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7549408Z   proxy | 2026/07/14 12:00:00 [718] GET https://registry.npmjs.org:443/@typescript-eslint%2Fscope-manager
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7554527Z   proxy | 2026/07/14 12:00:00 [719] GET https://registry.npmjs.org:443/@typescript-eslint%2Fproject-service
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7593547Z   proxy | 2026/07/14 12:00:00 [720] GET https://registry.npmjs.org:443/@typescript-eslint%2Ftsconfig-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7619564Z   proxy | 2026/07/14 12:00:00 [722] GET https://registry.npmjs.org:443/@typescript-eslint%2Ftype-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7687187Z   proxy | 2026/07/14 12:00:00 [711] 200 https://registry.npmjs.org:443/agent-base
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.7750340Z   proxy | 2026/07/14 12:00:00 [724] GET https://registry.npmjs.org:443/hasown
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8033095Z   proxy | 2026/07/14 12:00:00 [708] 200 https://registry.npmjs.org:443/tldts
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8174167Z   proxy | 2026/07/14 12:00:00 [712] 200 https://registry.npmjs.org:443/@typescript-eslint%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8190100Z   proxy | 2026/07/14 12:00:00 [724] 200 https://registry.npmjs.org:443/hasown
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8273723Z   proxy | 2026/07/14 12:00:00 [726] GET https://registry.npmjs.org:443/buffer-from
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8461037Z   proxy | 2026/07/14 12:00:00 [728] GET https://registry.npmjs.org:443/safe-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8462275Z   proxy | 2026/07/14 12:00:00 [718] 200 https://registry.npmjs.org:443/@typescript-eslint%2Fscope-manager
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8534880Z   proxy | 2026/07/14 12:00:00 [720] 200 https://registry.npmjs.org:443/@typescript-eslint%2Ftsconfig-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8677329Z   proxy | 2026/07/14 12:00:00 [726] 200 https://registry.npmjs.org:443/buffer-from
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8685032Z   proxy | 2026/07/14 12:00:00 [730] GET https://registry.npmjs.org:443/@types%2Fdeep-eql
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8731119Z   proxy | 2026/07/14 12:00:00 [732] GET https://registry.npmjs.org:443/assertion-error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8765901Z   proxy | 2026/07/14 12:00:00 [717] 200 https://registry.npmjs.org:443/@typescript-eslint%2Fvisitor-keys
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8793723Z   proxy | 2026/07/14 12:00:00 [728] 200 https://registry.npmjs.org:443/safe-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8849686Z   proxy | 2026/07/14 12:00:00 [722] 200 https://registry.npmjs.org:443/@typescript-eslint%2Ftype-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.8862034Z   proxy | 2026/07/14 12:00:00 [734] GET https://registry.npmjs.org:443/bundle-name
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9046881Z   proxy | 2026/07/14 12:00:00 [732] 200 https://registry.npmjs.org:443/assertion-error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9146161Z   proxy | 2026/07/14 12:00:00 [736] GET https://registry.npmjs.org:443/default-browser-id
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9158391Z   proxy | 2026/07/14 12:00:00 [734] 200 https://registry.npmjs.org:443/bundle-name
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9252226Z   proxy | 2026/07/14 12:00:00 [738] GET https://registry.npmjs.org:443/is-wsl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9422961Z   proxy | 2026/07/14 12:00:00 [730] 200 https://registry.npmjs.org:443/@types%2Fdeep-eql
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9492512Z   proxy | 2026/07/14 12:00:00 [736] 200 https://registry.npmjs.org:443/default-browser-id
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9500668Z   proxy | 2026/07/14 12:00:00 [740] GET https://registry.npmjs.org:443/is-docker
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9544784Z   proxy | 2026/07/14 12:00:00 [738] 200 https://registry.npmjs.org:443/is-wsl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9597770Z   proxy | 2026/07/14 12:00:00 [743] GET https://registry.npmjs.org:443/ansi-regex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9612917Z   proxy | 2026/07/14 12:00:00 [744] GET https://registry.npmjs.org:443/safer-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9830145Z   proxy | 2026/07/14 12:00:00 [740] 200 https://registry.npmjs.org:443/is-docker
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9894560Z   proxy | 2026/07/14 12:00:00 [746] GET https://registry.npmjs.org:443/braces
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9898925Z   proxy | 2026/07/14 12:00:00 [743] 200 https://registry.npmjs.org:443/ansi-regex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:00.9959443Z   proxy | 2026/07/14 12:00:00 [748] GET https://registry.npmjs.org:443/better-path-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.0369468Z   proxy | 2026/07/14 12:00:01 [746] 200 https://registry.npmjs.org:443/braces
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.0387230Z 2026/07/14 12:00:01 [748] 200 https://registry.npmjs.org:443/better-path-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.0737849Z   proxy | 2026/07/14 12:00:01 [647] 200 https://registry.npmjs.org:443/@babel%2Ftypes
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.2027737Z   proxy | 2026/07/14 12:00:01 [719] 200 https://registry.npmjs.org:443/@typescript-eslint%2Fproject-service
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.2421254Z   proxy | 2026/07/14 12:00:01 [678] 200 https://registry.npmjs.org:443/esrecurse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3124831Z   proxy | 2026/07/14 12:00:01 [758] GET https://registry.npmjs.org:443/p-map
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3319305Z   proxy | 2026/07/14 12:00:01 [762] GET https://registry.npmjs.org:443/array-union
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3327442Z   proxy | 2026/07/14 12:00:01 [763] GET https://registry.npmjs.org:443/pify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3367047Z   proxy | 2026/07/14 12:00:01 [764] GET https://registry.npmjs.org:443/strip-bom
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3379432Z   proxy | 2026/07/14 12:00:01 [765] GET https://registry.npmjs.org:443/fast-glob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3460077Z   proxy | 2026/07/14 12:00:01 [758] 200 https://registry.npmjs.org:443/p-map
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3504127Z   proxy | 2026/07/14 12:00:01 [768] GET https://registry.npmjs.org:443/dir-glob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3558659Z   proxy | 2026/07/14 12:00:01 [769] GET https://registry.npmjs.org:443/js-yaml
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3563857Z   proxy | 2026/07/14 12:00:01 [770] GET https://registry.npmjs.org:443/merge2
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3722443Z   proxy | 2026/07/14 12:00:01 [771] GET https://registry.npmjs.org:443/slash
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3723410Z   proxy | 2026/07/14 12:00:01 [744] 200 https://registry.npmjs.org:443/safer-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3749706Z   proxy | 2026/07/14 12:00:01 [772] GET https://registry.npmjs.org:443/p-locate
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3759634Z   proxy | 2026/07/14 12:00:01 [773] GET https://registry.npmjs.org:443/has-flag
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.3791933Z   proxy | 2026/07/14 12:00:01 [763] 200 https://registry.npmjs.org:443/pify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4034555Z   proxy | 2026/07/14 12:00:01 [762] 200 https://registry.npmjs.org:443/array-union
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4048157Z   proxy | 2026/07/14 12:00:01 [774] GET https://registry.npmjs.org:443/shebang-regex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4056186Z   proxy | 2026/07/14 12:00:01 [775] GET https://registry.npmjs.org:443/punycode
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4082766Z   proxy | 2026/07/14 12:00:01 [764] 200 https://registry.npmjs.org:443/strip-bom
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4105713Z   proxy | 2026/07/14 12:00:01 [771] 200 https://registry.npmjs.org:443/slash
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4172514Z   proxy | 2026/07/14 12:00:01 [770] 200 https://registry.npmjs.org:443/merge2
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4218784Z   proxy | 2026/07/14 12:00:01 [773] 200 https://registry.npmjs.org:443/has-flag
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4228995Z   proxy | 2026/07/14 12:00:01 [776] GET https://registry.npmjs.org:443/isexe
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4234715Z   proxy | 2026/07/14 12:00:01 [768] 200 https://registry.npmjs.org:443/dir-glob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4290047Z   proxy | 2026/07/14 12:00:01 [772] 200 https://registry.npmjs.org:443/p-locate
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4291456Z   proxy | 2026/07/14 12:00:01 [769] 200 https://registry.npmjs.org:443/js-yaml
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4386975Z   proxy | 2026/07/14 12:00:01 [780] GET https://registry.npmjs.org:443/keyv
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4418386Z   proxy | 2026/07/14 12:00:01 [775] 200 https://registry.npmjs.org:443/punycode
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4440067Z   proxy | 2026/07/14 12:00:01 [783] GET https://registry.npmjs.org:443/flatted
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4558685Z   proxy | 2026/07/14 12:00:01 [787] GET https://registry.npmjs.org:443/delayed-stream
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4564318Z   proxy | 2026/07/14 12:00:01 [788] GET https://registry.npmjs.org:443/mime-db
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4592905Z   proxy | 2026/07/14 12:00:01 [789] GET https://registry.npmjs.org:443/@isaacs%2Fbalanced-match
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4605615Z   proxy | 2026/07/14 12:00:01 [791] GET https://registry.npmjs.org:443/cssesc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4654663Z   proxy | 2026/07/14 12:00:01 [774] 200 https://registry.npmjs.org:443/shebang-regex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4657209Z   proxy | 2026/07/14 12:00:01 [796] GET https://registry.npmjs.org:443/tldts-core
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4661965Z   proxy | 2026/07/14 12:00:01 [797] GET https://registry.npmjs.org:443/util-deprecate
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4684838Z   proxy | 2026/07/14 12:00:01 [798] GET https://registry.npmjs.org:443/@babel%2Fhelper-validator-identifier
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4689390Z   proxy | 2026/07/14 12:00:01 [799] GET https://registry.npmjs.org:443/brace-expansion
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4697428Z   proxy | 2026/07/14 12:00:01 [800] GET https://registry.npmjs.org:443/run-applescript
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4729998Z   proxy | 2026/07/14 12:00:01 [801] GET https://registry.npmjs.org:443/function-bind
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4751805Z   proxy | 2026/07/14 12:00:01 [802] GET https://registry.npmjs.org:443/@babel%2Fhelper-string-parser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4782231Z   proxy | 2026/07/14 12:00:01 [804] GET https://registry.npmjs.org:443/fill-range
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4788841Z   proxy | 2026/07/14 12:00:01 [783] 200 https://registry.npmjs.org:443/flatted
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4798236Z   proxy | 2026/07/14 12:00:01 [780] 200 https://registry.npmjs.org:443/keyv
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4906910Z   proxy | 2026/07/14 12:00:01 [776] 200 https://registry.npmjs.org:443/isexe
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4912435Z   proxy | 2026/07/14 12:00:01 [807] GET https://registry.npmjs.org:443/is-windows
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4954838Z   proxy | 2026/07/14 12:00:01 [808] GET https://registry.npmjs.org:443/argparse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4958624Z   proxy | 2026/07/14 12:00:01 [787] 200 https://registry.npmjs.org:443/delayed-stream
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.4999986Z   proxy | 2026/07/14 12:00:01 [810] GET https://registry.npmjs.org:443/esprima
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5082276Z   proxy | 2026/07/14 12:00:01 [788] 200 https://registry.npmjs.org:443/mime-db
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5193662Z   proxy | 2026/07/14 12:00:01 [812] GET https://registry.npmjs.org:443/json-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5226346Z   proxy | 2026/07/14 12:00:01 [791] 200 https://registry.npmjs.org:443/cssesc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5237330Z   proxy | 2026/07/14 12:00:01 [765] 200 https://registry.npmjs.org:443/fast-glob
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5285628Z   proxy | 2026/07/14 12:00:01 [814] GET https://registry.npmjs.org:443/yocto-queue
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5351930Z   proxy | 2026/07/14 12:00:01 [807] 200 https://registry.npmjs.org:443/is-windows
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5358532Z   proxy | 2026/07/14 12:00:01 [816] GET https://registry.npmjs.org:443/path-type
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5365875Z   proxy | 2026/07/14 12:00:01 [801] 200 https://registry.npmjs.org:443/function-bind
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5424799Z   proxy | 2026/07/14 12:00:01 [799] 200 https://registry.npmjs.org:443/brace-expansion
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5427639Z   proxy | 2026/07/14 12:00:01 [810] 200 https://registry.npmjs.org:443/esprima
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5431541Z   proxy | 2026/07/14 12:00:01 [819] GET https://registry.npmjs.org:443/@nodelib%2Ffs.stat
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5463880Z   proxy | 2026/07/14 12:00:01 [820] GET https://registry.npmjs.org:443/@nodelib%2Ffs.walk
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5481524Z   proxy | 2026/07/14 12:00:01 [804] 200 https://registry.npmjs.org:443/fill-range
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5524837Z   proxy | 2026/07/14 12:00:01 [822] GET https://registry.npmjs.org:443/balanced-match
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5558063Z   proxy | 2026/07/14 12:00:01 [800] 200 https://registry.npmjs.org:443/run-applescript
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5562789Z   proxy | 2026/07/14 12:00:01 [797] 200 https://registry.npmjs.org:443/util-deprecate
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5564893Z   proxy | 2026/07/14 12:00:01 [798] 200 https://registry.npmjs.org:443/@babel%2Fhelper-validator-identifier
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5592950Z   proxy | 2026/07/14 12:00:01 [789] 200 https://registry.npmjs.org:443/@isaacs%2Fbalanced-match
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5596201Z   proxy | 2026/07/14 12:00:01 [814] 200 https://registry.npmjs.org:443/yocto-queue
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5607734Z   proxy | 2026/07/14 12:00:01 [824] GET https://registry.npmjs.org:443/to-regex-range
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5723537Z   proxy | 2026/07/14 12:00:01 [802] 200 https://registry.npmjs.org:443/@babel%2Fhelper-string-parser
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5726564Z   proxy | 2026/07/14 12:00:01 [808] 200 https://registry.npmjs.org:443/argparse
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5781380Z   proxy | 2026/07/14 12:00:01 [796] 200 https://registry.npmjs.org:443/tldts-core
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5792070Z   proxy | 2026/07/14 12:00:01 [826] GET https://registry.npmjs.org:443/sprintf-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5963443Z   proxy | 2026/07/14 12:00:01 [816] 200 https://registry.npmjs.org:443/path-type
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5977568Z   proxy | 2026/07/14 12:00:01 [824] 200 https://registry.npmjs.org:443/to-regex-range
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.5995629Z   proxy | 2026/07/14 12:00:01 [819] 200 https://registry.npmjs.org:443/@nodelib%2Ffs.stat
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6159920Z   proxy | 2026/07/14 12:00:01 [812] 200 https://registry.npmjs.org:443/json-buffer
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6164511Z   proxy | 2026/07/14 12:00:01 [828] GET https://registry.npmjs.org:443/is-number
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6210306Z   proxy | 2026/07/14 12:00:01 [826] 200 https://registry.npmjs.org:443/sprintf-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6266774Z   proxy | 2026/07/14 12:00:01 [820] 200 https://registry.npmjs.org:443/@nodelib%2Ffs.walk
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6330265Z   proxy | 2026/07/14 12:00:01 [831] GET https://registry.npmjs.org:443/fastq
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6337793Z   proxy | 2026/07/14 12:00:01 [832] GET https://registry.npmjs.org:443/@nodelib%2Ffs.scandir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6403407Z   proxy | 2026/07/14 12:00:01 [822] 200 https://registry.npmjs.org:443/balanced-match
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6738706Z   proxy | 2026/07/14 12:00:01 [832] 200 https://registry.npmjs.org:443/@nodelib%2Ffs.scandir
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.6754984Z   proxy | 2026/07/14 12:00:01 [828] 200 https://registry.npmjs.org:443/is-number
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7155296Z   proxy | 2026/07/14 12:00:01 [831] 200 https://registry.npmjs.org:443/fastq
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7245677Z   proxy | 2026/07/14 12:00:01 [835] GET https://registry.npmjs.org:443/run-parallel
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7252712Z   proxy | 2026/07/14 12:00:01 [836] GET https://registry.npmjs.org:443/reusify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7500684Z   proxy | 2026/07/14 12:00:01 [836] 200 https://registry.npmjs.org:443/reusify
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7514908Z   proxy | 2026/07/14 12:00:01 [835] 200 https://registry.npmjs.org:443/run-parallel
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7565345Z   proxy | 2026/07/14 12:00:01 [838] GET https://registry.npmjs.org:443/queue-microtask
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7837589Z   proxy | 2026/07/14 12:00:01 [838] 200 https://registry.npmjs.org:443/queue-microtask
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7940587Z   proxy | 2026/07/14 12:00:01 [842] GET https://registry.npmjs.org:443/eslint-plugin-n
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7952083Z   proxy | 2026/07/14 12:00:01 [843] GET https://registry.npmjs.org:443/eslint-config-prettier
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.7959386Z   proxy | 2026/07/14 12:00:01 [844] GET https://registry.npmjs.org:443/@stylistic%2Feslint-plugin-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.8244653Z   proxy | 2026/07/14 12:00:01 [842] 200 https://registry.npmjs.org:443/eslint-plugin-n
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:01.8557891Z   proxy | 2026/07/14 12:00:01 [843] 200 https://registry.npmjs.org:443/eslint-config-prettier
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0053361Z   proxy | 2026/07/14 12:00:02 [844] 200 https://registry.npmjs.org:443/@stylistic%2Feslint-plugin-js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0179843Z   proxy | 2026/07/14 12:00:02 [851] GET https://registry.npmjs.org:443/globrex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0192877Z   proxy | 2026/07/14 12:00:02 [852] GET https://registry.npmjs.org:443/eslint-plugin-es-x
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0198348Z   proxy | 2026/07/14 12:00:02 [853] GET https://registry.npmjs.org:443/@types%2Feslint
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0200776Z   proxy | 2026/07/14 12:00:02 [854] GET https://registry.npmjs.org:443/get-tsconfig
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0210499Z   proxy | 2026/07/14 12:00:02 [855] GET https://registry.npmjs.org:443/enhanced-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0231740Z   proxy | 2026/07/14 12:00:02 [856] GET https://registry.npmjs.org:443/ts-declaration-location
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0596189Z   proxy | 2026/07/14 12:00:02 [852] 200 https://registry.npmjs.org:443/eslint-plugin-es-x
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.0677361Z   proxy | 2026/07/14 12:00:02 [851] 200 https://registry.npmjs.org:443/globrex
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1025735Z   proxy | 2026/07/14 12:00:02 [854] 200 https://registry.npmjs.org:443/get-tsconfig
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1137427Z   proxy | 2026/07/14 12:00:02 [855] 200 https://registry.npmjs.org:443/enhanced-resolve
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1140161Z 2026/07/14 12:00:02 [853] 200 https://registry.npmjs.org:443/@types%2Feslint
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1143030Z   proxy | 2026/07/14 12:00:02 [856] 200 https://registry.npmjs.org:443/ts-declaration-location
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1497297Z   proxy | 2026/07/14 12:00:02 [860] GET https://registry.npmjs.org:443/eslint-compat-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1508420Z   proxy | 2026/07/14 12:00:02 [861] GET https://registry.npmjs.org:443/tapable
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1515486Z   proxy | 2026/07/14 12:00:02 [862] GET https://registry.npmjs.org:443/resolve-pkg-maps
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.1891830Z   proxy | 2026/07/14 12:00:02 [861] 200 https://registry.npmjs.org:443/tapable
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2003252Z   proxy | 2026/07/14 12:00:02 [860] 200 https://registry.npmjs.org:443/eslint-compat-utils
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2033501Z   proxy | 2026/07/14 12:00:02 [862] 200 https://registry.npmjs.org:443/resolve-pkg-maps
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2133648Z   proxy | 2026/07/14 12:00:02 [865] GET https://registry.npmjs.org:443/sass
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2140117Z   proxy | 2026/07/14 12:00:02 [866] GET https://registry.npmjs.org:443/lightningcss
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2647208Z   proxy | 2026/07/14 12:00:02 [866] 200 https://registry.npmjs.org:443/lightningcss
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.2694998Z   proxy | 2026/07/14 12:00:02 [865] 200 https://registry.npmjs.org:443/sass
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3351701Z   proxy | 2026/07/14 12:00:02 [879] GET https://registry.npmjs.org:443/detect-libc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3357142Z   proxy | 2026/07/14 12:00:02 [880] GET https://registry.npmjs.org:443/immutable
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3439232Z   proxy | 2026/07/14 12:00:02 [881] GET https://registry.npmjs.org:443/chokidar
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3442024Z   proxy | 2026/07/14 12:00:02 [882] GET https://registry.npmjs.org:443/lightningcss-win32-x64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3443797Z   proxy | 2026/07/14 12:00:02 [883] GET https://registry.npmjs.org:443/lightningcss-linux-arm-gnueabihf
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3444900Z   proxy | 2026/07/14 12:00:02 [884] GET https://registry.npmjs.org:443/lightningcss-linux-x64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3450835Z   proxy | 2026/07/14 12:00:02 [885] GET https://registry.npmjs.org:443/lightningcss-linux-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3455254Z   proxy | 2026/07/14 12:00:02 [886] GET https://registry.npmjs.org:443/lightningcss-darwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3459703Z   proxy | 2026/07/14 12:00:02 [887] GET https://registry.npmjs.org:443/lightningcss-darwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3467370Z   proxy | 2026/07/14 12:00:02 [888] GET https://registry.npmjs.org:443/lightningcss-linux-arm64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3473968Z   proxy | 2026/07/14 12:00:02 [889] GET https://registry.npmjs.org:443/lightningcss-linux-arm64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3484525Z   proxy | 2026/07/14 12:00:02 [890] GET https://registry.npmjs.org:443/lightningcss-freebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3767932Z   proxy | 2026/07/14 12:00:02 [879] 200 https://registry.npmjs.org:443/detect-libc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3921654Z   proxy | 2026/07/14 12:00:02 [880] 200 https://registry.npmjs.org:443/immutable
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.3990939Z   proxy | 2026/07/14 12:00:02 [884] 200 https://registry.npmjs.org:443/lightningcss-linux-x64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4016564Z   proxy | 2026/07/14 12:00:02 [890] 200 https://registry.npmjs.org:443/lightningcss-freebsd-x64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4037522Z   proxy | 2026/07/14 12:00:02 [881] 200 https://registry.npmjs.org:443/chokidar
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4095197Z   proxy | 2026/07/14 12:00:02 [882] 200 https://registry.npmjs.org:443/lightningcss-win32-x64-msvc
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4098437Z   proxy | 2026/07/14 12:00:02 [883] 200 https://registry.npmjs.org:443/lightningcss-linux-arm-gnueabihf
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4106287Z   proxy | 2026/07/14 12:00:02 [888] 200 https://registry.npmjs.org:443/lightningcss-linux-arm64-musl
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4154311Z   proxy | 2026/07/14 12:00:02 [885] 200 https://registry.npmjs.org:443/lightningcss-linux-x64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4224905Z   proxy | 2026/07/14 12:00:02 [895] GET https://registry.npmjs.org:443/anymatch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4231689Z   proxy | 2026/07/14 12:00:02 [896] GET https://registry.npmjs.org:443/readdirp
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4240012Z   proxy | 2026/07/14 12:00:02 [897] GET https://registry.npmjs.org:443/is-binary-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4249231Z   proxy | 2026/07/14 12:00:02 [898] GET https://registry.npmjs.org:443/normalize-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4250901Z   proxy | 2026/07/14 12:00:02 [889] 200 https://registry.npmjs.org:443/lightningcss-linux-arm64-gnu
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4295190Z   proxy | 2026/07/14 12:00:02 [886] 200 https://registry.npmjs.org:443/lightningcss-darwin-x64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4664481Z   proxy | 2026/07/14 12:00:02 [887] 200 https://registry.npmjs.org:443/lightningcss-darwin-arm64
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4666515Z   proxy | 2026/07/14 12:00:02 [895] 200 https://registry.npmjs.org:443/anymatch
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4676979Z   proxy | 2026/07/14 12:00:02 [897] 200 https://registry.npmjs.org:443/is-binary-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.4806968Z   proxy | 2026/07/14 12:00:02 [896] 200 https://registry.npmjs.org:443/readdirp
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.5089560Z   proxy | 2026/07/14 12:00:02 [898] 200 https://registry.npmjs.org:443/normalize-path
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.5147602Z   proxy | 2026/07/14 12:00:02 [900] GET https://registry.npmjs.org:443/binary-extensions
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.5939218Z   proxy | 2026/07/14 12:00:02 [900] 200 https://registry.npmjs.org:443/binary-extensions
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.7398744Z updater | 2026/07/14 12:00:02 INFO <job_1460286594> Process PID: 1657 completed with status: pid 1657 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.7399556Z 2026/07/14 12:00:02 INFO <job_1460286594> Total execution time: 5.39 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:02.7437114Z updater | 2026/07/14 12:00:02 INFO <job_1460286594> Started process PID: 1671 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.2272029Z updater | 2026/07/14 12:00:03 INFO <job_1460286594> Process PID: 1671 completed with status: pid 1671 exit 0
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.2272854Z 2026/07/14 12:00:03 INFO <job_1460286594> Total execution time: 0.49 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.2714542Z updater | 2026/07/14 12:00:03 INFO <job_1460286594> Requirements to unlock update_not_possible
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.2715369Z 2026/07/14 12:00:03 INFO <job_1460286594> Requirements update strategy bump_versions
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.2745063Z updater | 2026/07/14 12:00:03 INFO <job_1460286594> Started process PID: 1684 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.7240039Z updater | 2026/07/14 12:00:03 INFO <job_1460286594> Process PID: 1684 completed with status: pid 1684 exit 1
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.7240734Z 2026/07/14 12:00:03 INFO <job_1460286594> Total execution time: 0.45 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:03.7279370Z updater | 2026/07/14 12:00:03 INFO <job_1460286594> Started process PID: 1693 with command: node /opt/npm_and_yarn/dist/run.js
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.1865437Z updater | 2026/07/14 12:00:04 INFO <job_1460286594> Process PID: 1693 completed with status: pid 1693 exit 1
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.1866632Z 2026/07/14 12:00:04 INFO <job_1460286594> Total execution time: 0.46 seconds
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.1871852Z updater | 2026/07/14 12:00:04 INFO <job_1460286594> The latest possible version of postcss that can be installed is 8.5.9
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.1872769Z updater | 2026/07/14 12:00:04 INFO <job_1460286594> The earliest fixed version is 8.5.10.
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.2653059Z   proxy | 2026/07/14 12:00:04 [902] POST /update_jobs/1460286594/record_update_job_error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.3266458Z   proxy | 2026/07/14 12:00:04 [902] 204 /update_jobs/1460286594/record_update_job_error
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.4094844Z   proxy | 2026/07/14 12:00:04 [904] POST /update_jobs/1460286594/record_ecosystem_meta
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.4574051Z   proxy | 2026/07/14 12:00:04 [904] 204 /update_jobs/1460286594/record_ecosystem_meta
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.5452812Z   proxy | 2026/07/14 12:00:04 [906] PATCH /update_jobs/1460286594/mark_as_processed
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6414566Z   proxy | 2026/07/14 12:00:04 [906] 204 /update_jobs/1460286594/mark_as_processed
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6481344Z updater | 2026/07/14 12:00:04 INFO <job_1460286594> Finished job processing
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6491737Z updater | 2026/07/14 12:00:04 INFO Results:
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6492421Z Dependabot encountered '1' error(s) during execution, please check the logs for more details.
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6493072Z +-----------------------------------------------------------------------------+
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6493715Z |                                   Errors                                    |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6494261Z +------------------------------+----------------------------------------------+
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6494775Z | Type                         | Details                                      |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6495199Z +------------------------------+----------------------------------------------+
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6495656Z | security_update_not_possible | {                                            |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6496285Z |                              |   "dependency-name": "postcss",              |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6496666Z |                              |   "latest-resolvable-version": "8.5.9",      |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6497070Z |                              |   "lowest-non-vulnerable-version": "8.5.10", |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6497496Z |                              |   "conflicting-dependencies": []             |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6498025Z |                              | }                                            |
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.6498414Z +------------------------------+----------------------------------------------+
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:04.7743801Z Failure running container 31bb0bf0ba17509cb01910ba7ff58a05db1bc6e3e82cab80629efa485625a11d: Error: Command failed with exit code 1: /bin/sh -c $DEPENDABOT_HOME/dependabot-updater/bin/run update_files
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:06.6959242Z Cleaned up container 31bb0bf0ba17509cb01910ba7ff58a05db1bc6e3e82cab80629efa485625a11d
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:06.7217290Z   proxy | 2026/07/14 12:00:06 0/453 calls cached (0%)
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:06.7218699Z   proxy | 2026/07/14 12:00:06 Posting metrics to remote API endpoint
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:07.2301415Z ##[error]Dependabot encountered an error performing the update
+Dependabot	UNKNOWN STEP	
+Dependabot	UNKNOWN STEP	Error: The updater encountered one or more errors.
+Dependabot	UNKNOWN STEP	
+Dependabot	UNKNOWN STEP	For more information see: https://github.com/sveltejs/svelte/network/updates/1460286594 (write access to the repository is required to view the log)
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:07.2309831Z 🤖 ~ finished: error reported to Dependabot ~
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:07.2419112Z Post job cleanup.
+Dependabot	UNKNOWN STEP	2026-07-14T12:00:07.3578118Z Cleaning up orphan processes

@@ -1,0 +1,43 @@
+Run cargo test --locked --lib --bins --tests
+test specs::check::check_deno_not_found ... fail (1399ms)
+
+failures:
+
+---- specs::check::check_deno_not_found ----
+command /home/runner/work/deno/deno/target/debug/deno check --quiet deno_not_found/main.ts
+command cwd /home/runner/work/deno/deno/tests/specs/check/check_deno_not_found
+output path /home/runner/work/deno/deno/tests/specs/check/check_deno_not_found/deno_not_found/main.out
+-- OUTPUT START --
+
+-- OUTPUT END --
+-- EXPECTED START --
+TS2304 [ERROR]: Cannot find name 'Deno'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'deno.ns'.
+Deno;
+~~~~
+    at file:///[WILDCARD]/deno_not_found/main.ts:4:1
+
+error: Type checking failed.
+-- EXPECTED END --
+-- DEBUG START --
+==== COULD NOT FIND SEARCH TEXT ====
+TS2304·[ERROR]:·Cannot·find·name·'Deno'.
+-- DEBUG END --
+
+---- specs::check::compiler_options_paths ----
+command /home/runner/work/deno/deno/target/debug/deno check --quiet main.ts
+
+panicked at tests/specs/mod.rs:676:12:
+assertion failed: `(left == right)`
+
+Diff < left / right > :
+<TS2307 [ERROR]: Cannot find module './src/qux.ts' or its corresponding type declarations.
+<import type {} from "./src/qux.ts";
+<                    ~~~~~~~~~~~~~~
+<    at file:///home/runner/work/deno/deno/tests/specs/check/main.ts:1:22
+<
+<error: Type checking failed.
+<
+
+thread 'main' panicked at tests/specs/mod.rs:669:14:
+1 test failed
+##[error]Process completed with exit code 101.

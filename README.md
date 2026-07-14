@@ -27,6 +27,10 @@ entirely on your machine.
 - **221 sanitized CI log fixtures** keep the classifier honest: every rule is
   benchmarked against the public fixture zoo in `examples/ci-triage/` on every
   test run.
+- **Benchmarked on real failed CI runs, misses included**: seven public logs from
+  pandas, deno, svelte, Home Assistant, Prometheus, Grafana and ruff, committed
+  unmodified so you can run them yourself — including the two PatchRail still
+  gets wrong. See [docs/real-world-benchmark.md](docs/real-world-benchmark.md).
 - **24 secret-redaction patterns** (GitHub/GitLab/npm/PyPI/AWS tokens, private
   keys, JWTs, emails, home paths) so logs can be shared safely.
 - **Local-first by design**: no network access, no billing, no external model,
@@ -183,6 +187,7 @@ Details in [docs/roadmap.md](docs/roadmap.md).
 ## Documentation
 
 - [Quickstart](docs/quickstart.md)
+- [Real-world benchmark: seven public CI logs, misses included](docs/real-world-benchmark.md)
 - [jq cookbook for the JSON classifier output](docs/json-cookbook.md)
 - [Fix guides per failure class](docs/fix/README.md)
 - [CI Failure Zoo](docs/ci-failure-zoo.md)
