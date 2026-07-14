@@ -355,7 +355,11 @@ RULES: list[dict[str, Any]] = [
         "patterns": [
             r"npm ERR!",
             r"npm error\b",
-            r"ERR_PNPM",
+            # Every pnpm error code EXCEPT the audit family: `ERR_PNPM_AUDIT_*` is a scan
+            # that failed, not an install that failed, and this prefix was claiming it.
+            # The install codes (OUTDATED_LOCKFILE, PEER_DEP_ISSUES, NO_MATCHING_VERSION,
+            # WORKSPACE_PKG_NOT_FOUND, ...) are untouched.
+            r"ERR_PNPM(?!_AUDIT)",
             r"ERR_PNPM_NO_MATCHING_VERSION",
             r"ERR_PNPM_MINIMUM_RELEASE_AGE",
             r"YN\d{4}",
@@ -616,6 +620,19 @@ RULES: list[dict[str, Any]] = [
         "likely_subsystem": "Security scanner or dependency audit",
         "patterns": [
             r"\bnpm audit\b",
+            # npm and pnpm report a scan that RAN and FAILED through their own audit error
+            # channel, and never through the words `npm audit`. npm's own audit-error path
+            # (`lib/utils/audit-error.js`) logs the registry's reply and then dies with
+            # `audit endpoint returned an error`; the code arrives as an `EAUDIT*` and the
+            # detail line as `npm ERR! audit ...` (npm <=9) or `npm error audit ...` (>=10).
+            # None of that says `npm audit`, so the only thing left to match was the bare
+            # `npm ERR!` of `node_dependency_install` -- and a private registry that cannot
+            # audit was handed back as a broken install. Matched on the ERROR channel only:
+            # `npm warn audit ...` is npm reporting a scan it SKIPPED, which is not a failure.
+            r"audit endpoint returned an error",
+            r"\bEAUDIT[A-Z]*\b",
+            r"npm (?:ERR!|error) audit\b",
+            r"\bERR_PNPM_AUDIT[A-Z_]*\b",
             r"\bpip-audit\b",
             r"\bcargo audit\b",
             r"\btrivy\b",
