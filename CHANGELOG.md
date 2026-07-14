@@ -4,6 +4,18 @@
 
 ### Fixed
 
+- **A dependency Dependabot merely listed is no longer mistaken for a tool that ran and failed.**
+  Dependabot opens every update by echoing its *job definition* — one line of JSON naming every
+  dependency it may touch and every pull request already open. sveltejs/svelte's security update
+  died inside the updater, and the runner said so (`##[error]Dependabot encountered an error
+  performing the update`), but PatchRail told the Svelte maintainers their linter had failed, at
+  **0.71 confidence**, and sent them off to run `pnpm lint`. No linter ran: `eslint` matched 59
+  times in that log, 58 of them registry URLs the sandbox proxy fetched, and the 59th was the
+  entry `{"pr-number":17594,"dependencies":[{"dependency-name":"eslint",…}]}` inside that JSON.
+  A record the updater files under its own job id is bookkeeping, not a diagnostic, so the answer
+  is now `unknown` and it hands back the line the runner flagged. Anything the updater *forwards*
+  from the package manager it drives (`npm ERR! ERESOLVE`) carries no job id and still classifies
+  at full confidence, as does an error the updater files itself.
 - **Output a test quoted back at you is no longer read as the job's own diagnostic.** When a
   test suite asserts on the output of a tool, that tool's diagnostics become the test's *data* —
   and a failing assertion prints them right back, actual against expected. denoland/deno's spec
