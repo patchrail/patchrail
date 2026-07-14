@@ -1,6 +1,27 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 - 2026-07-14
+
+Nine misreadings, all of one kind. Every fix below started as a real failing run at a real
+project — pandas, deno, svelte, istio, astro, ruff, prometheus, pytorch — where PatchRail
+answered confidently and answered wrong, and every one of them was wrong the same way: it
+mistook a line that merely *named* a tool for a line proving that tool had *failed*. An
+install listing, an echoed script, a suppressible warning, a cache cleaning up after a job
+that was already dead, a test quoting a compiler back at itself. A verdict that no signal
+ever witnessed failing now yields to what the runner actually flagged — and when nothing is
+left, the honest answer is `unknown` and the failing line handed back.
+
+### Added
+
+- **[`docs/real-world-benchmark.md`](docs/real-world-benchmark.md) — the classifier measured
+  against seven real CI logs, misses included.** For each one: what actually broke, what
+  PatchRail said before, what it says now, and the command that reproduces it. The logs
+  themselves are committed verbatim under `examples/real-world/`, so every number can be
+  checked rather than taken on trust. The misses are in the table, not in a footnote — pandas
+  still lands on `python_test_failure` at 0.53 rather than naming the crash, and grafana calls
+  a compile error `go_lint`. Four of the seven verdicts are identical before and after, which
+  is the point: these fixes are narrow.
+  ([#348](https://github.com/patchrail/patchrail/pull/348))
 
 ### Fixed
 
@@ -115,6 +136,22 @@
   that wins on signal count outright still wins, so no genuine verdict moves, and all 221
   fixtures keep top-1 accuracy of 1.0.
   ([#338](https://github.com/patchrail/patchrail/issues/338))
+
+- **The source of a step, echoed before it runs, is no longer read as the step's output.**
+  GitHub Actions prints every line of a `run:` step's script — in cyan-bold — before executing
+  it. Those lines are the step's *program text*: they say what it *would* print, not what
+  happened. PatchRail was reading them as output. `astral-sh/ruff`'s benchmark job died on a
+  Rust panic (`exit code: 101`) and came out **`python_test_failure`**, carried by a single
+  line: an error branch, belonging to a CodSpeed installer download that had *succeeded*, in
+  which `FAILED .*::` matched pytest's short-summary format off the text
+  `Failed to install CodSpeed CLI::`. That panic is now reported as `rust_test_failure`.
+
+  No rule was safe from this: of ten real failing logs sampled, seven echo a step body, and
+  those bodies say `pnpm run lint`, `bail() {`, `exit 1`. An echoed line now corroborates but
+  can never carry a verdict — the same standing as `Run mypy .`. A tool that genuinely failed
+  also fails somewhere off the listing, so a real pytest failure still wins at full confidence
+  even when the script that ran it is echoed above.
+  ([#336](https://github.com/patchrail/patchrail/issues/336))
 
 - **npm's post-install audit tally is no longer read as a failed security scan.** Found
   dogfooding against real failing runs: `withastro/astro`'s Windows smoke job was reported
