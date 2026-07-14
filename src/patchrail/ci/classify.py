@@ -1211,6 +1211,32 @@ _INVOCATION_LINE = re.compile(
         | \[command\]                  # Actions command echo: `[command]/usr/bin/git ...`
         | \#\#\[(?:group|command)\]    # Actions group header, which echoes the command
         | Run\ +\S                     # Actions step header: `Run mypy .`
+        | \$\ +\S                      # pnpm/turbo script echo: `$ tsc -b`
+    )""",
+    re.VERBOSE | re.IGNORECASE,
+)
+
+
+# npm and pnpm close a SUCCESSFUL install with an audit summary: a count of advisories in
+# the dependency tree, and the command that would fix them. No scanner ran, nothing failed
+# -- `npm audit` is only ever *suggested* here. withastro/astro's Windows smoke job died in
+# a build script (`##[error]Process completed with exit code 127`) and we called it a failed
+# security scan at 0.71, on this block and nothing else:
+#     1 high severity vulnerability
+#     To address all issues, run:
+#       npm audit fix --force
+# A scan that really ran and really failed says so away from this block -- `npm ERR! code
+# EAUDIT`, `Found known vulnerabilities`, trivy's `Severity: HIGH`, a bare `CVE-2026-1234`
+# in a report -- and still wins at full confidence. The count line is matched only when the
+# count is the WHOLE line, so a scanner's own finding (`High severity vulnerability found in
+# openssl (CVE-...)`) is never mistaken for npm's tally.
+_AUDIT_SUMMARY_LINE = re.compile(
+    r"""^\s*(?:
+          \d+\ (?:low|moderate|high|critical)\ severity\ vulnerabilit(?:y|ies)\s*$
+        | found\ \d+\ vulnerabilit(?:y|ies)\b
+        | to\ address\ (?:all\ )?(?:these\ )?issues\b
+        | (?:npm|pnpm|yarn)\ audit\ fix\b
+        | run\ `?(?:npm|pnpm|yarn)\ audit`?\ for\ details
     )""",
     re.VERBOSE | re.IGNORECASE,
 )
@@ -1264,13 +1290,18 @@ def _path_token_bounds(text: str) -> list[tuple[int, int]]:
     return [match.span() for match in _PATH_TOKEN.finditer(text)]
 
 
-def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
-    """Character spans of the lines that only name a command, rather than watch it fail."""
-    return sorted(
-        _line_bounds(text, _INVOCATION_LINE)
-        + _line_bounds(text, _MERE_MENTION_LINE)
+def _mention_only_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the lines where a tool is named but never actually run."""
+    return (
+        _line_bounds(text, _MERE_MENTION_LINE)
+        + _line_bounds(text, _AUDIT_SUMMARY_LINE)
         + _path_token_bounds(text)
     )
+
+
+def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the lines that only name a command, rather than watch it fail."""
+    return sorted(_line_bounds(text, _INVOCATION_LINE) + _mention_only_bounds(text))
 
 
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
@@ -1608,10 +1639,10 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     }
 
     # Stricter than unwitnessed: a rule every one of whose signals landed on a line that only
-    # ever MENTIONS a tool -- an env export, a CMake probe, a JSON config key -- has not just
-    # missed the failure, it has watched a tool that never ran. It cannot stand even as a last
-    # resort, the way an invocation can.
-    mentions = _line_bounds(text, _MERE_MENTION_LINE) + _path_token_bounds(text)
+    # ever MENTIONS a tool -- an env export, a CMake probe, a JSON config key, an installer's
+    # advice to go run something -- has not just missed the failure, it has watched a tool
+    # that never ran. It cannot stand even as a last resort, the way an invocation can.
+    mentions = _mention_only_bounds(text)
     never_invoked = {
         rule["failure_class"]
         for rule, signals in scored
@@ -1691,6 +1722,23 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         best_rule is not None
         and best_rule["failure_class"] == "network_transient_failure"
         and set(best_signals) <= AMBIGUOUS_NETWORK_PATTERNS
+        and _runner_error_annotations(text)
+    ):
+        best_rule, best_signals = None, []
+
+    # The same last word, for the same reason, on any verdict left standing as a LAST RESORT:
+    # a rule none of whose signals ever witnessed a failure won only because its tool got
+    # named -- on a step header, a `set -x` echo, a package script. Naming is a defensible
+    # guess when the log offers nothing else. It is not a guess worth making when the runner
+    # has already said what broke. withastro/astro's Windows smoke job dies in a build script
+    # (`##[error]@benchmark/timer#build: command ... exited (-1073741502)`); the only lint
+    # evidence is `eslint`, `biome` and `prettier` echoed in turbo's `##[group]` headers as
+    # the build walks the monorepo, and that alone was enough to call it `javascript_lint` at
+    # 0.89. A rule that actually watched something fail is untouched -- it witnesses off these
+    # lines and never reaches here -- so every genuine verdict keeps its confidence.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] in unwitnessed
         and _runner_error_annotations(text)
     ):
         best_rule, best_signals = None, []
