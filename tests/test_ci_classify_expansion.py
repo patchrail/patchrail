@@ -1445,5 +1445,85 @@ class GitHubActionsLogPrefixNormalization(unittest.TestCase):
         self.assertEqual(stripped["failure_class"], "go_lint")
 
 
+# The `flags :` line of /proc/cpuinfo, which perf-sensitive projects dump into the
+# log preamble, advertises the x86 time stamp counter as `tsc` -- the same token as
+# the TypeScript compiler. Matching it is enough to outscore the real cause.
+_CPUINFO_PREAMBLE = (
+    "Current runner version: '2.335.1'\n"
+    "##[group]Runner Image\n"
+    "Image: ubuntu-24.04\n"
+    "processor\t: 0\n"
+    "model name\t: AMD EPYC 7763 64-Core Processor\n"
+    "flags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat\n"
+    "##[endgroup]\n"
+)
+
+
+class CpuFlagsAreNotATypeScriptCompiler(unittest.TestCase):
+    def test_rust_compile_error_survives_a_real_runner_preamble(self) -> None:
+        # Shaped after a real failing rust-lang/rust run. It scored as
+        # typescript_typecheck: the CPU flag was the only signal that rule had, and
+        # a one-signal tie is settled by declaration order. The job also builds its
+        # container and mentions clippy, so `docker buildx build` and `clippy` tie
+        # at one signal too -- none of the three is evidence of anything, and the
+        # rule that matched the actual rustc error has to win.
+        log = _CPUINFO_PREAMBLE + (
+            "+ docker buildx build --rm -t rust-ci -f src/ci/docker/Dockerfile .\n"
+            "##[group]Building rustc with clippy enabled\n"
+            "error[E0277]: the trait bound `Binder<TyCtxt<'_>, "
+            "&RawList<(), GenericArg<'tcx>>>: SliceLike` is not satisfied\n"
+            "   --> compiler/rustc_middle/src/ty/sty.rs:812:9\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+        self.assertIn(r"error\[E\d{4}\]", result["signals"])
+
+    def test_container_build_that_merely_ran_does_not_mask_the_real_cause(self) -> None:
+        # `docker build` as a setup step is not a docker failure.
+        log = (
+            "Run docker build -t app .\n"
+            "Successfully built 0e1f2a3b4c5d\n"
+            "Run pytest\n"
+            "E   assert 4 == 5\n"
+            "FAILED tests/test_math.py::test_add - assert 4 == 5\n"
+            "=== 1 failed, 12 passed in 1.20s ===\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+
+    def test_a_genuine_docker_failure_still_wins_at_full_confidence(self) -> None:
+        # The invocation is corroboration, not noise, when a real docker error is
+        # present: it must keep counting toward confidence.
+        log = (
+            "Run docker compose up -d\n"
+            "Container api-1  Error\n"
+            "dependency failed to start: service api-1 is unhealthy\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "docker_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_cpuinfo_preamble_alone_classifies_as_unknown(self) -> None:
+        # No failure of any kind in the log: the honest answer is `unknown`, not a
+        # confident guess drawn from boilerplate every hosted runner prints.
+        result = classify_ci_log(_CPUINFO_PREAMBLE)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_typescript_compiler_still_matches_in_command_position(self) -> None:
+        for invocation in (
+            "pnpm tsc --noEmit",
+            "> tsc --noEmit",
+            "+ npx tsc --noEmit",
+            "+ vue-tsc --noEmit -p tsconfig.json",
+            "tsc -p tsconfig.json",
+            "tsc exited with code 2",
+            "tsc failed",
+        ):
+            with self.subTest(invocation=invocation):
+                log = f"Run typecheck\n{invocation}\nsrc/app.ts(4,3): error TS2322\n"
+                result = classify_ci_log(log)
+                self.assertEqual(result["failure_class"], "typescript_typecheck")
+
+
 if __name__ == "__main__":
     unittest.main()
