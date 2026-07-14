@@ -1978,5 +1978,95 @@ class AStepsSourceIsNotItsOutput(unittest.TestCase):
         self.assertGreaterEqual(result["confidence"], 0.7)
 
 
+class ATieGoesToTheRuleThatWatchedSomethingFail(unittest.TestCase):
+    """Equal signal counts used to be settled by declaration order in `RULES`. A coin flip.
+
+    prometheus/prometheus -- a Go repo, whose Go tests failed -- lost that flip to
+    `javascript_lint` and was handed `pnpm lint` as the way to reproduce a Go test failure.
+    Three signals each, and `javascript_lint` happens to be declared first.
+
+    Witnessing is what separates them, and it was already computed: only one of
+    `javascript_lint`'s three ever saw a failure, while all three of `go_test_failure`'s did.
+    Scoring itself is unchanged -- an invocation beside a real error still counts, and still
+    keeps a genuine verdict's confidence up.
+    """
+
+    # Real lines from prometheus/prometheus CI run 29325808243: pnpm's listing of the web
+    # UI's installed packages, eslint's WARNINGS from a react-scripts build that exited 0,
+    # and, in the same job, the Go test that actually failed.
+    PROMETHEUS_LOG = (
+        "+ eslint 8.57.1\n"
+        "+ eslint-config-prettier 10.1.8\n"
+        "+ prettier 3.8.4\n"
+        "[eslint] \n"
+        "src/pages/graph/SeriesName.tsx\n"
+        "  Line 1:21:  'useContext' is defined but never used  @typescript-eslint/no-unused-vars\n"
+        "\n"
+        "Search for the keywords to learn more about each warning.\n"
+        "To ignore, add // eslint-disable-next-line to the line before.\n"
+        "go test   ./...\n"
+        "--- FAIL: TestPreprocessAndWrapWithStepInvariantExpr (0.00s)\n"
+        "FAIL\tgithub.com/prometheus/prometheus/promql\t12.403s\n"
+        "##[error]Process completed with exit code 2.\n"
+    )
+
+    def test_a_go_test_failure_outranks_lint_warnings_from_a_build_that_passed(self) -> None:
+        result = classify_ci_log(self.PROMETHEUS_LOG)
+        self.assertNotEqual(result["failure_class"], "javascript_lint")
+        self.assertEqual(result["failure_class"], "go_test_failure")
+
+    def test_the_reproduction_command_names_the_language_that_actually_failed(self) -> None:
+        # The damage the tie did, in the field: a Go maintainer told to run `pnpm lint`.
+        result = classify_ci_log(self.PROMETHEUS_LOG)
+        self.assertIn("go test", result["reproduction_command"])
+        self.assertNotIn("lint", result["reproduction_command"])
+
+    def test_a_real_lint_failure_still_wins_at_full_confidence(self) -> None:
+        # The guard against overreach: eslint that really ran and really failed witnesses off
+        # its own error line and its own summary, so it keeps the verdict and the confidence.
+        log = (
+            "$ eslint .\n"
+            "/home/runner/work/app/src/index.ts\n"
+            "  1:1  error  'foo' is defined but never used  no-unused-vars\n"
+            "\n"
+            "✖ 1 problem (1 error, 0 warnings)\n"
+            "ESLint found problems. lint failed\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "javascript_lint")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_a_bare_tool_name_does_not_win_a_tie(self) -> None:
+        # The tiebreak's own guard. oven-sh/bun's formatter listed files it left `(unchanged)`,
+        # so `prettier` witnesses off `[prettier]` -- away from any echo or install line, yet
+        # evidence of nothing. It is a bare name in NON_FAILURE_PATTERNS, so it cannot carry
+        # the tie any more than it can carry a verdict, and the log stays `unknown`.
+        log = (
+            "[prettier] packages/bun-vscode/src/features/lockfile/index.ts 12ms (unchanged)\n"
+            "[prettier] test/cli/install/lockfile-only.test.ts 3ms (unchanged)\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "unknown")
+
+    def test_a_rule_winning_on_signal_count_is_untouched_by_the_tiebreak(self) -> None:
+        # The fix's boundary, stated: only a TIE consults witnessing. A rule that wins on
+        # count outright still wins, whatever the witness counts are -- scoring is not
+        # reordered, so no genuine verdict moves.
+        log = (
+            "+ eslint 8.57.1\n"
+            "+ prettier 3.8.4\n"
+            "  Line 1:21:  'useContext' is defined but never used  @typescript-eslint/"
+            "no-unused-vars\n"
+            "[eslint] \n"
+            "biome check failed\n"
+            "lint failed\n"
+            "--- FAIL: TestThing (0.00s)\n"
+            "FAIL\tgithub.com/org/repo/pkg\t1.2s\n"
+        )
+        # javascript_lint: 5 matched; go_test_failure: 2 matched. No tie, so no tiebreak.
+        self.assertEqual(classify_ci_log(log)["failure_class"], "javascript_lint")
+
+
 if __name__ == "__main__":
     unittest.main()
