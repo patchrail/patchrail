@@ -1318,6 +1318,20 @@ _RUNNER_ERROR_ANNOTATION = re.compile(
 _MAX_RUNNER_ERRORS = 5
 _MAX_RUNNER_ERROR_CHARS = 300
 
+# Not every annotation is evidence. The runner marks up each failing step the same way
+# whatever went wrong -- "Process completed with exit code 1." appears in every failing log
+# there is, and the workflow-level "Workflow failed because one or more jobs failed" only
+# restates that something, somewhere, failed. Handing those back under "Errors the runner
+# reported" dresses an empty answer up as a finding, which is the one thing an `unknown`
+# verdict must never do. They also crowd out real evidence: each exit code is a distinct
+# string, so a matrix build's worth of them survives de-duplication and fills the cap ahead
+# of the annotation that names the failure. Dropped, an `unknown` log either carries a line
+# worth reading or says nothing at all.
+_RUNNER_ERROR_BOILERPLATE = (
+    re.compile(r"process completed with exit code \d+\.?", re.IGNORECASE),
+    re.compile(r"workflow failed because one or more jobs failed\.?", re.IGNORECASE),
+)
+
 
 def _runner_error_annotations(text: str) -> list[str]:
     """Error lines the CI runner annotated itself, redacted and de-duplicated."""
@@ -1327,6 +1341,8 @@ def _runner_error_annotations(text: str) -> list[str]:
         # `redact` command applies: a log saved to disk can still carry the token that
         # Actions would have masked on the way out.
         message = redact_ci_log(message)["text"].strip()
+        if any(pattern.fullmatch(message) for pattern in _RUNNER_ERROR_BOILERPLATE):
+            continue
         if len(message) > _MAX_RUNNER_ERROR_CHARS:
             message = message[: _MAX_RUNNER_ERROR_CHARS - 1].rstrip() + "…"
         if message and message not in found:

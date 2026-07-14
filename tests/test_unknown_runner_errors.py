@@ -125,5 +125,76 @@ class UnknownCarriesTheRunnersOwnError(unittest.TestCase):
         self.assertNotIn("runner_errors", result)
 
 
+class BoilerplateAnnotationsAreNotEvidence(unittest.TestCase):
+    """The runner's stock annotations say nothing, so they are not handed back.
+
+    Found by piping real failing runs through `ci explain`: `Process completed with exit
+    code N.` is in all twelve logs sampled, because the runner emits it for every failing
+    step whatever the cause. Reported under "Errors the runner reported" it makes an empty
+    answer look like a finding -- the dead end, wearing a suit.
+    """
+
+    def test_a_real_log_whose_only_annotations_are_boilerplate_says_nothing(self) -> None:
+        # `cilium/cilium` run 29327782563, the job that exists to fail the workflow. Its
+        # two `##[error]` lines are the whole of what the runner had to say, and neither
+        # says anything. Kept in `gh` wire form, ANSI and all, as it arrives from the pipe.
+        log = (
+            "Merge Upload and Status / Fail job\tUNKNOWN STEP\t2026-07-14T11:13:20.8486558Z "
+            '##[group]Run echo "::error::Workflow failed because one or more jobs failed"\n'
+            "Merge Upload and Status / Fail job\tUNKNOWN STEP\t2026-07-14T11:13:20.8488444Z "
+            '\x1b[36;1mecho "::error::Workflow failed because one or more jobs failed"\x1b[0m\n'
+            "Merge Upload and Status / Fail job\tUNKNOWN STEP\t2026-07-14T11:13:20.9337749Z "
+            "##[error]Workflow failed because one or more jobs failed\n"
+            "Merge Upload and Status / Fail job\tUNKNOWN STEP\t2026-07-14T11:13:20.9354800Z "
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertNotIn("runner_errors", result)
+
+    def test_any_exit_code_is_boilerplate_not_just_one(self) -> None:
+        # `rails/rails` run 29326292505 died on exit code 125, not 1. The number carries no
+        # more diagnosis than the word does.
+        log = (
+            "rails-new-docker\tBuild image\t2026-07-14T10:44:02.8267862Z "
+            "##[error]Process completed with exit code 125.\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertNotIn("runner_errors", result)
+
+    def test_boilerplate_does_not_crowd_out_the_line_that_names_the_failure(self) -> None:
+        # The cap is five and de-duplication is by exact string, so a matrix of jobs each
+        # exiting on a different code would fill it with noise and push the one useful
+        # annotation out. The real annotation is `hashicorp/terraform` run 29324807060.
+        real = (
+            "Currently this PR would target a v1.16 release. Please add a changelog entry "
+            "for in the .changes/v1.16 folder."
+        )
+        log = "".join(f"##[error]Process completed with exit code {code}.\n" for code in range(9))
+        log += "##[error]Workflow failed because one or more jobs failed\n"
+        log += f"##[error]{real}\n"
+
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["runner_errors"], [real])
+
+    def test_an_annotation_that_merely_mentions_an_exit_code_is_still_evidence(self) -> None:
+        # The filter is for the runner's stock line, not for any line with a number in it.
+        # This one is real -- an `elastic/elasticsearch` runner reporting *which* step died
+        # and how -- and a maintainer would want it back.
+        real = (
+            "failed to run script step: command terminated with non-zero exit code: "
+            "error executing command [sh -e /__w/_temp/85eed260.sh], exit code 2"
+        )
+        result = classify_ci_log(f"##[error]{real}\n")
+
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["runner_errors"], [real])
+
+
 if __name__ == "__main__":
     unittest.main()

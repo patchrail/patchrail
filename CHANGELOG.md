@@ -24,6 +24,16 @@
   pretend to recognize a log it does not recognize. A log that *does* classify is
   unchanged — its `signals` already explain it, and its payload does not shift.
 
+  Only annotations that *say* something are reported. The runner marks up every failing
+  step alike — `Process completed with exit code 1.` is in all twelve failing runs sampled
+  across `cilium`, `rails`, `dotnet/runtime` and others, because it is emitted whatever the
+  cause — and the workflow-level `Workflow failed because one or more jobs failed` merely
+  restates that something failed. Reported back, those lines would dress an empty answer up
+  as a finding, and, each exit code being a distinct string, a matrix build's worth of them
+  would fill the cap ahead of the annotation that names the failure. They are dropped: an
+  `unknown` log now either hands back a line worth reading — `hashicorp/terraform` asking
+  for a changelog entry — or says nothing at all.
+
 ## 0.5.0 - 2026-07-14
 
 ### Fixed
