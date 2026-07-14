@@ -83,6 +83,8 @@ def _render_text(result: dict[str, Any]) -> str:
     if isinstance(redaction, dict):
         redactions = redaction.get("redactions") or {}
         lines.append(f"Redaction: {len(redactions)} categories redacted locally")
+    for message in result.get("runner_errors") or []:
+        lines.append(f"Runner reported: {message}")
     if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
         lines.append(
             "Help improve PatchRail: this log did not match a known failure class. "
@@ -110,6 +112,21 @@ def _render_markdown(result: dict[str, Any]) -> str:
         lines.extend(f"- `{signal}`" for signal in signals)
     else:
         lines.append("- No high-confidence local signal found.")
+    runner_errors = list(result.get("runner_errors") or [])
+    if runner_errors:
+        lines.extend(
+            [
+                "",
+                "## Errors the runner reported",
+                "",
+                (
+                    "No rule matched this log, so PatchRail did not classify it. The CI "
+                    "runner did annotate these lines as errors — start there:"
+                ),
+                "",
+            ]
+        )
+        lines.extend(f"- `{message}`" for message in runner_errors)
     lines.extend(
         [
             "",

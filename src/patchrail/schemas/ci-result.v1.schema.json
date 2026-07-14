@@ -88,6 +88,15 @@
         "minLength": 1
       }
     },
+    "runner_errors": {
+      "description": "Error lines the CI runner annotated itself (GitHub Actions ##[error] / ::error::), redacted and de-duplicated. Present only on an unknown result that carried at least one: evidence of where the job died, not a classification of why.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "maxItems": 5
+    },
     "requirements": {
       "type": "object",
       "required": [

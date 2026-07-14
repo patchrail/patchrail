@@ -1,5 +1,29 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **An `unknown` verdict now hands back the line the runner itself flagged.** Found the
+  same way as the 0.5.0 fixes — running `ci explain` over real failing runs from public
+  repositories. psf/requests run 29295524780 failed on a single, self-explanatory line,
+  `##[error]"github-token" length must be less than or equal to 100 characters long`, and
+  PatchRail answered `unknown`, no signals, "No high-confidence local signal found." The
+  maintainer who piped that log in learned nothing they would not have learned by never
+  running PatchRail at all.
+
+  A log no rule matches usually still names its own failure: the Actions runner annotates
+  the failing line for the web UI (`##[error]…`), and a step can emit the `::error::`
+  workflow command itself. Those annotations are now reported on an `unknown` result — in
+  `runner_errors` (JSON), under "Errors the runner reported" (Markdown), and as
+  `Runner reported:` (text) — redacted with the same patterns `patchrail redact` applies,
+  de-duplicated, and capped.
+
+  It stays evidence and nothing more. An annotation says *where* the job died, not *why*,
+  so the class stays `unknown` and the confidence stays at 0.15: PatchRail still does not
+  pretend to recognize a log it does not recognize. A log that *does* classify is
+  unchanged — its `signals` already explain it, and its payload does not shift.
+
 ## 0.5.0 - 2026-07-14
 
 ### Fixed

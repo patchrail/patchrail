@@ -1304,6 +1304,38 @@ UNKNOWN_LIKELY_SUBSYSTEM = "unknown"
 UNKNOWN_REPRODUCTION_COMMAND = "inspect CI log and run the failing job locally"
 
 
+# A log no rule matches usually still names its own failure: the Actions runner annotates
+# the failing line for the web UI (``##[error]…``), and a step can emit the ``::error::``
+# workflow command itself. That annotation is the runner's verdict, not a guess of ours, so
+# an `unknown` answer can hand back the line the maintainer would have scrolled to instead
+# of a shrug. It stays evidence and nothing more -- an annotation says where the job died,
+# not why -- so the class stays `unknown` and the confidence stays put.
+_RUNNER_ERROR_ANNOTATION = re.compile(
+    r"^(?:##\[error\]|::error(?:\s.*?)?::)\s*(.+?)\s*$",
+    re.MULTILINE,
+)
+
+_MAX_RUNNER_ERRORS = 5
+_MAX_RUNNER_ERROR_CHARS = 300
+
+
+def _runner_error_annotations(text: str) -> list[str]:
+    """Error lines the CI runner annotated itself, redacted and de-duplicated."""
+    found: list[str] = []
+    for message in _RUNNER_ERROR_ANNOTATION.findall(text):
+        # This gets echoed back to the user, so it goes through the same redaction the
+        # `redact` command applies: a log saved to disk can still carry the token that
+        # Actions would have masked on the way out.
+        message = redact_ci_log(message)["text"].strip()
+        if len(message) > _MAX_RUNNER_ERROR_CHARS:
+            message = message[: _MAX_RUNNER_ERROR_CHARS - 1].rstrip() + "…"
+        if message and message not in found:
+            found.append(message)
+        if len(found) == _MAX_RUNNER_ERRORS:
+            break
+    return found
+
+
 def list_failure_classes() -> dict[str, Any]:
     """List every supported failure class in stable rule order.
 
@@ -1499,7 +1531,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         best_rule, best_signals = None, []
 
     if best_rule is None or not best_signals:
-        return {
+        result = {
             "schema_version": "patchrail.ci_result.v1",
             "failure_class": UNKNOWN_FAILURE_CLASS,
             "likely_subsystem": UNKNOWN_LIKELY_SUBSYSTEM,
@@ -1511,6 +1543,10 @@ def classify_ci_log(text: str) -> dict[str, Any]:
             "signals": [],
             "requirements": _requirements(),
         }
+        runner_errors = _runner_error_annotations(text)
+        if runner_errors:
+            result["runner_errors"] = runner_errors
+        return result
 
     confidence = min(0.95, 0.35 + 0.18 * len(best_signals))
     return {

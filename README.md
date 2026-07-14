@@ -105,6 +105,11 @@ stdin works the same way:
 tail -n 200 failed-ci.log | patchrail ci explain
 ```
 
+When no rule matches, PatchRail says `unknown` rather than guessing — but it still reports
+any line the CI runner itself annotated as an error (`##[error]`, `::error::`), so you get
+the line you would have scrolled to instead of a shrug. The class stays `unknown`: an
+annotation says *where* the job died, not *why*.
+
 Every failure class has a step-by-step remediation write-up in
 [docs/fix/](docs/fix/README.md).
 
