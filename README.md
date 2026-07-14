@@ -27,7 +27,7 @@ entirely on your machine.
 - **221 sanitized CI log fixtures** keep the classifier honest: every rule is
   benchmarked against the public fixture zoo in `examples/ci-triage/` on every
   test run.
-- **23 secret-redaction patterns** (GitHub/GitLab/npm/PyPI/AWS tokens, private
+- **24 secret-redaction patterns** (GitHub/GitLab/npm/PyPI/AWS tokens, private
   keys, JWTs, emails, home paths) so logs can be shared safely.
 - **Local-first by design**: no network access, no billing, no external model,
   no telemetry. Nothing leaves the machine.

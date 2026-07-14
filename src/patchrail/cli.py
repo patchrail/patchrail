@@ -3643,6 +3643,13 @@ def _render_classes_text(payload: dict[str, Any]) -> str:
             f"- {entry['failure_class']}: {entry['likely_subsystem']} "
             f"— reproduce: {entry['reproduction_command']}"
         )
+    fallback = payload.get("fallback")
+    if fallback:
+        lines.append("")
+        lines.append(
+            f"Plus `{fallback['failure_class']}` — what you get back when no rule matches "
+            "the log. It is not one of the classes above."
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -3657,6 +3664,13 @@ def _render_classes_markdown(payload: dict[str, Any]) -> str:
     for entry in classes:
         lines.append(f"- `{entry['failure_class']}` — {entry['likely_subsystem']}")
         lines.append(f"  - reproduce: `{entry['reproduction_command']}`")
+    fallback = payload.get("fallback")
+    if fallback:
+        lines.append("")
+        lines.append(
+            f"`{fallback['failure_class']}` is the result when no rule matches the log, "
+            "not a class the classifier can diagnose."
+        )
     return "\n".join(lines) + "\n"
 
 

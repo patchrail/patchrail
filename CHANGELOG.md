@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+### Fixed
+
+- `patchrail ci classes` no longer counts `unknown` as a supported failure
+  class. It reported "41 supported failure classes" and listed `unknown` — with
+  a reproduction command — alongside the 40 real ones, contradicting the README,
+  the docs and the fixture benchmark, all of which say 40. `unknown` is what
+  `ci explain` returns when *no* rule matches, so a coverage script following the
+  README (`ci classes --format json`) was dividing by a denominator containing an
+  entry it could never cover. The sentinel is still reported, under a new
+  `fallback` key, and named in the text and markdown output; it is just out of
+  `classes` and `count`. JSON consumers: `schema_version` is now
+  `patchrail.ci_classes.v2`.
+- README: the redaction bullet advertised 23 secret-redaction patterns; the
+  shipped table has 24. The class, fixture and redaction counts the README
+  advertises are now derived from the code by `tests/test_readme_claims.py`, so
+  they fail the build instead of going stale (the fixture count was already
+  pinned by tests, and it was the only one of the three that had stayed correct).
+
 ### Changed
 
 - `patchrail ci explain`/`classify` now print a first-use hint when the log
