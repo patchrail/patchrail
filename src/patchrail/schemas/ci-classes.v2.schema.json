@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://patchrail.dev/schemas/ci-classes.v2.schema.json",
+  "title": "PatchRail CI Classes",
+  "description": "Machine-readable inventory of the failure classes PatchRail can diagnose locally, emitted by patchrail ci classes --format json. The documented use is coverage checking from a script, so `unknown` — the result ci explain returns when no rule matches — is reported under `fallback` and kept out of `classes`/`count`: every entry of the denominator is a class the classifier can actually reach.",
+  "type": "object",
+  "required": ["schema_version", "classes", "count", "fallback"],
+  "properties": {
+    "schema_version": {
+      "const": "patchrail.ci_classes.v2"
+    },
+    "classes": {
+      "description": "Every failure class the classifier can return from a matching rule, in stable rule order. `unknown` is not one of them.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/failureClass"
+          },
+          {
+            "properties": {
+              "failure_class": {
+                "not": {
+                  "const": "unknown"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "count": {
+      "description": "Number of entries in `classes`. Always equal to its length.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "fallback": {
+      "description": "The sentinel ci explain returns when no rule matches. Not a diagnosable class: never counted in `classes`/`count`.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/failureClass"
+        },
+        {
+          "properties": {
+            "failure_class": {
+              "const": "unknown"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "failureClass": {
+      "type": "object",
+      "required": ["failure_class", "likely_subsystem", "reproduction_command"],
+      "properties": {
+        "failure_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "likely_subsystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reproduction_command": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -75,6 +75,7 @@ CI Janitor, benchmark, and consent-only pilot outputs are versioned too:
 ```bash
 patchrail schema ci-result
 patchrail schema ci-benchmark
+patchrail schema ci-classes
 patchrail schema ci-fixture-check
 patchrail schema ci-pilot-summary
 patchrail schema ci-pilot-metrics
@@ -87,6 +88,7 @@ consumers:
 
 - `src/patchrail/schemas/ci-result.v1.schema.json`
 - `src/patchrail/schemas/ci-benchmark.v1.schema.json`
+- `src/patchrail/schemas/ci-classes.v2.schema.json`
 - `src/patchrail/schemas/ci-fixture-check.v1.schema.json`
 - `src/patchrail/schemas/ci-pilot-summary.v1.schema.json`
 - `src/patchrail/schemas/ci-pilot-metrics.v1.schema.json`
