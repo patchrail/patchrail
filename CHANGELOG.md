@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 - 2026-07-14
+
+Minor bump rather than a patch: `ci classes --format json` changes its contract.
+`schema_version` is now `patchrail.ci_classes.v2` and `unknown` left `classes`
+and `count` (see Fixed). Scripts pinned to the v1 shape need a one-line update.
 
 ### Fixed
 
