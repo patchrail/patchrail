@@ -373,7 +373,14 @@ RULES: list[dict[str, Any]] = [
         "likely_subsystem": "TypeScript type checking",
         "patterns": [
             r"\bTS\d{4}\b",
-            r"\btsc\b",
+            # `tsc` only counts in command position (line start, a shell/npm echo
+            # marker, or a package-manager invocation) or when a flag/verb follows
+            # it. A bare \btsc\b also matches the x86 *time stamp counter* CPU
+            # feature in the `flags :` line of /proc/cpuinfo, which jobs on
+            # perf-sensitive projects dump into the log preamble -- enough on its
+            # own to score a Rust or C++ build failure as a TypeScript typecheck.
+            r"(?:^\s*|[>$+]\s+|\b(?:npx|pnpm|yarn|bunx|npm run)\s+)(?:vue-)?tsc\b"
+            r"|\b(?:vue-)?tsc\b(?=\s+(?:-{1,2}\w|failed\b|exited\b))",
             r"tsc --noEmit",
             r"vue-tsc --noEmit",
             r"TSError: .* Unable to compile TypeScript",
@@ -1219,6 +1226,30 @@ AMBIGUOUS_NETWORK_PATTERNS = frozenset(
 )
 
 
+# Patterns that prove a tool RAN, not that it failed. `docker build` shows up in
+# every job that builds a container as a setup step; `cargo test` and `clippy` show
+# up in the command line of every Rust CI job, passing or not. They are useful
+# corroboration next to a real error -- they keep a genuine docker or clippy failure
+# at full confidence -- but a rule carried by nothing else has only established that
+# a command was executed. Scoring is by matched-pattern count, so such a rule can tie
+# and, on declaration order alone, outrank the rule that matched the actual error:
+# a real rust-lang/rust build failure (`error[E0277]`) scored as docker_build_failure
+# purely because the job happened to run `docker buildx build` first.
+INVOCATION_ONLY_PATTERNS = frozenset(
+    {
+        r"\bdocker build\b",
+        r"\bdocker buildx build\b",
+        r"\bdocker compose\b",
+        r"\bcargo test\b",
+        r"\bclippy\b",
+    }
+)
+
+
+def _is_invocation_only(signals: list[str]) -> bool:
+    return bool(signals) and set(signals) <= INVOCATION_ONLY_PATTERNS
+
+
 def _highest_scoring_rule(
     scored: list[tuple[dict[str, Any], list[str]]],
 ) -> tuple[dict[str, Any] | None, list[str]]:
@@ -1256,6 +1287,18 @@ def classify_ci_log(text: str) -> dict[str, Any]:
                 for rule, signals in scored
                 if rule["failure_class"] != "network_transient_failure"
             ]
+        )
+        if alternative_rule is not None:
+            best_rule = alternative_rule
+            best_signals = alternative_signals
+
+    # Same rule, different noise: a match built ENTIRELY from invocation signals says
+    # a command ran, not that it failed. Defer to the best rule that matched a real
+    # error. If nothing else matched, the invocation stands -- it is the only thing
+    # the log gave us.
+    if best_rule is not None and _is_invocation_only(best_signals):
+        alternative_rule, alternative_signals = _highest_scoring_rule(
+            [(rule, signals) for rule, signals in scored if not _is_invocation_only(signals)]
         )
         if alternative_rule is not None:
             best_rule = alternative_rule

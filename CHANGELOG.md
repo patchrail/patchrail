@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+### Fixed
+
+- The classifier no longer reads a command that merely *ran* as the failure. Three
+  bugs of the same shape, all found by running `ci explain` over real failing runs
+  from public repositories rather than over the fixture zoo:
+  - `\btsc\b` matched the x86 **time stamp counter** in the `flags :` line of
+    `/proc/cpuinfo`, which perf-sensitive projects dump into their log preamble.
+    A real rust-lang/rust build failure came back as `typescript_typecheck` on the
+    strength of a CPU feature name. `tsc` now only counts in command position
+    (`pnpm tsc`, `> tsc --noEmit`, `npx tsc`, `tsc -p …`) or before a flag/verb.
+  - `docker build` / `docker buildx build` / `docker compose` appear in every job
+    that builds a container as a setup step, and `cargo test` / `clippy` appear in
+    the command line of every Rust CI job, passing or not. A rule matching *only*
+    such signals now defers to a rule that matched an actual error, reusing the
+    deferral already in place for ambiguous network signals. They still count
+    toward confidence when a real error sits beside them, so a genuine docker or
+    clippy failure is unchanged.
+  - Because scoring is by matched-pattern count, one bogus signal was enough to tie
+    the rule that matched the real error and beat it on declaration order alone.
+    The zoo missed all of this: its fixtures are clean, and a real log is not — the
+    same `error[E0277]` that a fixture classifies correctly was misread in the wild
+    because the job also happened to run `docker buildx build`.
+  No fixture changes classification or confidence (221 fixtures, top-1 1.0).
+
 ### Added
 
 - `patchrail schema ci-classes` now serves a published schema for
