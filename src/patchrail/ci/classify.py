@@ -588,7 +588,25 @@ RULES: list[dict[str, Any]] = [
             r"Resource not accessible by integration",
             r"Error: Input required and not supplied",
             r"Input required and not supplied",
-            r"\b(?-i:[A-Z][A-Z0-9_]{2,})\s+is not set\b",
+            # `SCREAMING_CASE is not set` is how a job reports a missing secret -- and how CMake
+            # reports a POLICY it wants acknowledged. `CMP0148` is shaped exactly like an env var,
+            # so the bare rule read one as the other.
+            #
+            # pytorch/pytorch's lint run 29361968044 failed on `jq: error: Could not open file
+            # lint.json` -- lintrunner never wrote its report. Its one witness for a SECRETS
+            # failure, at 0.53, was a line CMake prints for developers to ignore:
+            #
+            #     CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
+            #       Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+            #       are removed.  Run "cmake --help-policy CMP0148" for policy details.
+            #     This warning is for project developers.  Use -Wno-dev to suppress it.
+            #
+            # We would have sent a maintainer to audit their repository secrets over a
+            # suppressible warning in a vendored third-party CMakeLists. A policy CMake names is
+            # never a credential, so the subject may not be one CMake introduced; a token that
+            # really is unset (`GITHUB_TOKEN is not set`) is untouched, because nothing precedes
+            # it. Left with no witness, the log answers `unknown` and hands the failure back.
+            r"\b(?<!Policy )(?-i:[A-Z][A-Z0-9_]{2,})\s+is not set\b",
             r"secret .* (?:is )?(?:not set|missing|empty|required)",
             r"\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}",
             r"context access might be invalid",

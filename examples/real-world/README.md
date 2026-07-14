@@ -14,6 +14,7 @@ against the version PyPI serves and against `main`.
 | `prometheus-29348880303.log` | prometheus/prometheus | [29348880303](https://github.com/prometheus/prometheus/actions/runs/29348880303) |
 | `grafana-27635190952.log` | grafana/grafana | [27635190952](https://github.com/grafana/grafana/actions/runs/27635190952) |
 | `ruff-29349828924.log` | astral-sh/ruff | [29349828924](https://github.com/astral-sh/ruff/actions/runs/29349828924) |
+| `pytorch-29361968044-excerpt.log` | pytorch/pytorch | [29361968044](https://github.com/pytorch/pytorch/actions/runs/29361968044) (excerpt: the log is 3.5MB; the failing `jq` step and the CMake warning block are kept verbatim, and pinned by `tests/test_cmake_policy_notice.py`) |
 
 These are **not** fixtures. They carry no expected-class labels and are not scored by
 `patchrail ci benchmark`, which runs against the sanitized zoo in `examples/ci-triage/`. They exist

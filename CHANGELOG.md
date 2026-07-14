@@ -4,6 +4,18 @@
 
 ### Fixed
 
+- **A CMake policy that is not set is no longer read as a repository secret that is not set.**
+  `SCREAMING_CASE is not set` is how a job announces a missing credential, so PatchRail watched
+  for it — but CMake announces its *policies* the same way, and a policy id (`CMP0148`) is shaped
+  exactly like an environment variable. pytorch/pytorch's lint job failed because lintrunner never
+  wrote its report (`jq: error: Could not open file lint.json`), and PatchRail answered
+  **`secrets_or_permissions_failure` at 0.53 confidence** — on a single witness: a
+  `CMake Warning (dev)` raised inside a vendored `third_party/NNPACK/CMakeLists.txt`, whose own
+  closing line reads *"This warning is for project developers. Use -Wno-dev to suppress it."* A
+  maintainer would have gone to audit their repository secrets over a suppressible warning. A
+  policy CMake names is never a credential, so it no longer witnesses; the log now answers
+  `unknown` and hands the failure back. A token that really is unset (`GITHUB_TOKEN is not set`,
+  `AWS_SECRET_ACCESS_KEY is not set`) still classifies at full confidence.
 - **A dependency Dependabot merely listed is no longer mistaken for a tool that ran and failed.**
   Dependabot opens every update by echoing its *job definition* — one line of JSON naming every
   dependency it may touch and every pull request already open. sveltejs/svelte's security update
