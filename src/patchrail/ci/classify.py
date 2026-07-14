@@ -1416,11 +1416,48 @@ def _assertion_report_bounds(text: str) -> list[tuple[int, int]]:
     ]
 
 
+# Dependabot runs its updater as a container and streams it back into the job log, docker-compose
+# style: `updater | `, then a record from its own logger. Those records are Dependabot's
+# bookkeeping, not the repository's job -- and the updater opens by echoing its JOB DEFINITION,
+# one line of JSON naming every dependency it may touch and every PR already open. It names half
+# the dependency tree without running any of it.
+#
+# sveltejs/svelte's security update (run 29330826741) died inside the updater, and the runner said
+# so: `##[error]Dependabot encountered an error performing the update`. We told the Svelte
+# maintainers their linter had failed, at 0.71 -- on ONE line, the job definition:
+#
+#     updater | 2026/07/14 11:59:49 INFO <job_1460286594> Job definition: {"job":{...
+#       "existing-pull-requests":[...,{"pr-number":17594,"dependencies":[{"dependency-name":
+#       "eslint","dependency-version":"9.26.0"}]},...
+#
+# No linter ran. 58 of that log's 59 `eslint` hits were already discounted as registry URLs the
+# proxy fetched; this was the 59th, and one witness is all it takes to carry a verdict. It is the
+# same blob #333 found `lockfile` inside (the config key `"gradle-lockfile-updater"`) and treated
+# one failure class at a time -- so the cure belongs here instead, where the evidence is read.
+# `never_invoked` then answers `unknown`, which hands the annotation back.
+#
+# What marks a record as the updater's OWN is the job id it files under, `<job_1460286594>` --
+# Dependabot's, not the repository's. Output the updater forwards from a subprocess arrives on the
+# same stream without one (`updater | rehash: warning: ...`), so a package manager that really
+# failed under Dependabot -- `npm ERR! ERESOLVE` -- still witnesses on its own line. So does a
+# record the updater files at an error level. The clock is optional because both renderings are
+# in the wild: istio's updater logs `updater | INFO <job_1458843111>`, svelte's stamps the time.
+_DEPENDABOT_UPDATER_RECORD = re.compile(
+    r"""^[ \t]*updater[ \t]\|[ \t]+              # the updater container's stream prefix
+        (?:\d{4}/\d{2}/\d{2}[ \t]+[\d:]+[ \t]+)?  # its clock, in the rendering that carries one
+        (?!(?:ERROR|FATAL|PANIC)\b)             # an error it FILES is still an error
+        [A-Z]+[ \t]+<job_\d+>                   # ... its level, and its own job id
+    """,
+    re.VERBOSE,
+)
+
+
 def _mention_only_bounds(text: str) -> list[tuple[int, int]]:
     """Character spans of the lines where a tool is named but never actually run."""
     return (
         _line_bounds(text, _MERE_MENTION_LINE)
         + _line_bounds(text, _AUDIT_SUMMARY_LINE)
+        + _line_bounds(text, _DEPENDABOT_UPDATER_RECORD)
         + _path_token_bounds(text)
     )
 

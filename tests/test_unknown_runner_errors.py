@@ -559,5 +559,129 @@ class AnAuditThatFailedIsAScanAndNotABrokenInstall(unittest.TestCase):
         self.assertEqual(result["failure_class"], "node_dependency_install")
 
 
+class ADependencyNamedInDependabotsJobDefinitionWasNeverRun(unittest.TestCase):
+    """The updater's own bookkeeping names half the dependency tree. None of it ran.
+
+    `sveltejs/svelte` run 29330826741 is a Dependabot security update. It died inside the
+    updater, and the runner named the error outright: `##[error]Dependabot encountered an
+    error performing the update`. PatchRail answered `javascript_lint` at 0.71 and told the
+    Svelte maintainers to go run `pnpm lint`.
+
+    No linter ran. `eslint` matched 59 times in that log and 58 were already discounted --
+    registry URLs the MITM proxy fetched, which read as path tokens. The 59th was the
+    updater's JOB DEFINITION: one line of JSON, echoed at startup, listing every dependency
+    the updater may touch and every PR already open (`{"pr-number":17594,"dependencies":
+    [{"dependency-name":"eslint",...}]}`). One witness is all it takes to carry a verdict.
+
+    It is the same blob #333 found `lockfile` inside, which it treated one failure class at a
+    time -- so this is treated where the evidence is read instead: a record the updater files
+    under its own job id is bookkeeping, and `never_invoked` answers `unknown`, which hands
+    the runner's line back.
+
+    The guards below are the reason this is not a filter for the word `updater`: what the
+    updater FORWARDS from a subprocess (`npm ERR! ERESOLVE`) carries no job id, and a record
+    it files at an error level is an error it is reporting. Both still witness.
+    """
+
+    # Trimmed from the real `gh run view 29330826741 --repo sveltejs/svelte --log-failed`, kept
+    # in `gh` wire form (job/step columns and timestamp): the job definition, two of the proxy's
+    # registry fetches, and the way the updater actually died.
+    SVELTE_DEPENDABOT_LOG = (
+        "Dependabot\tUNKNOWN STEP\t﻿2026-07-14T11:59:23.4463381Z Current runner version: "
+        "'2.335.1'\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:49.9174780Z updater | 2026/07/14 11:59:49 "
+        'INFO <job_1460286594> Job definition: {"job":{"command":"security","allowed-updates":'
+        '[{"dependency-type":"direct","update-type":"all"}],"dependencies":["postcss"],'
+        '"existing-pull-requests":[{"pr-number":16988,"dependencies":[{"dependency-name":'
+        '"playwright","dependency-version":"1.55.1","directory":"/"}]},{"pr-number":17594,'
+        '"dependencies":[{"dependency-name":"eslint","dependency-version":"9.26.0","directory":'
+        '"/"}]}],"experiments":{"gradle-lockfile-updater":true},"package-manager":'
+        '"npm_and_yarn","security-updates-only":true}}\n'
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:49.9201110Z updater | 2026/07/14 11:59:49 "
+        "INFO <job_1460286594> Detected package manager: pnpm\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:58.2852552Z   proxy | 2026/07/14 11:59:58 "
+        "[117] GET https://registry.npmjs.org:443/eslint\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:58.3633599Z   proxy | 2026/07/14 11:59:58 "
+        "[127] GET https://registry.npmjs.org:443/prettier\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:04.6492421Z Dependabot encountered '1' "
+        "error(s) during execution, please check the logs for more details.\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:07.2301415Z ##[error]Dependabot encountered "
+        "an error performing the update\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:07.2419112Z Post job cleanup.\n"
+    )
+
+    # The same rendering istio's updater uses -- a level and a job id, no clock (#333).
+    ISTIO_STYLE_RECORD = (
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:14.7172758Z updater | INFO "
+        '<job_1458843111> Job definition: {"dependency-name":"eslint","experiments":'
+        '{"gradle-lockfile-updater":true}}\n'
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:21.0246300Z ##[error]Dependabot encountered "
+        "an error performing the update\n"
+    )
+
+    # What the updater FORWARDS from the package manager it drives: no job id, so it stands.
+    FORWARDED_SUBPROCESS_FAILURE = (
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:49.9174780Z updater | 2026/07/14 11:59:49 "
+        "INFO <job_1460286594> Starting job processing\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:01.1000000Z updater | npm ERR! code "
+        "ERESOLVE\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:01.2000000Z updater | npm ERR! ERESOLVE "
+        "unable to resolve dependency tree\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:07.2301415Z ##[error]Dependabot encountered "
+        "an error performing the update\n"
+    )
+
+    # A failure the updater files ITSELF, at an error level. Reporting, not enumerating.
+    UPDATER_FILES_AN_ERROR = (
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T11:59:49.9174780Z updater | 2026/07/14 11:59:49 "
+        'INFO <job_1460286594> Job definition: {"dependency-name":"eslint"}\n'
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:04.6000000Z updater | 2026/07/14 12:00:04 "
+        "ERROR <job_1460286594> eslint reported errors: no-unused-vars\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-14T12:00:07.2301415Z ##[error]Dependabot encountered "
+        "an error performing the update\n"
+    )
+
+    # A linter that really failed, in an ordinary job. Nothing here changes for it.
+    GENUINE_LINT_FAILURE = (
+        "lint\tlint\t2026-07-14T09:00:00.0000000Z ##[group]Run pnpm lint\n"
+        "lint\tlint\t2026-07-14T09:00:04.0000000Z /home/runner/work/app/src/main.ts\n"
+        "lint\tlint\t2026-07-14T09:00:04.1000000Z   12:5  error  'x' is assigned a value but "
+        "never used  no-unused-vars\n"
+        "lint\tlint\t2026-07-14T09:00:04.2000000Z eslint found 1 error\n"
+        "lint\tlint\t2026-07-14T09:00:04.3000000Z ##[error]Process completed with exit code 1.\n"
+    )
+
+    def test_the_job_definition_does_not_carry_a_lint_verdict(self) -> None:
+        result = classify_ci_log(self.SVELTE_DEPENDABOT_LOG)
+        jsonschema.validate(instance=result, schema=_SCHEMA)
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["signals"], [])
+
+    def test_the_runners_own_error_is_handed_back_instead(self) -> None:
+        result = classify_ci_log(self.SVELTE_DEPENDABOT_LOG)
+        self.assertEqual(
+            result["runner_errors"],
+            ["Dependabot encountered an error performing the update"],
+        )
+
+    def test_the_clockless_rendering_is_bookkeeping_too(self) -> None:
+        result = classify_ci_log(self.ISTIO_STYLE_RECORD)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_a_subprocess_the_updater_forwards_still_witnesses(self) -> None:
+        result = classify_ci_log(self.FORWARDED_SUBPROCESS_FAILURE)
+        self.assertEqual(result["failure_class"], "node_dependency_install")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_an_error_the_updater_files_still_witnesses(self) -> None:
+        result = classify_ci_log(self.UPDATER_FILES_AN_ERROR)
+        self.assertEqual(result["failure_class"], "javascript_lint")
+
+    def test_a_linter_that_really_failed_is_untouched(self) -> None:
+        result = classify_ci_log(self.GENUINE_LINT_FAILURE)
+        self.assertEqual(result["failure_class"], "javascript_lint")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+
 if __name__ == "__main__":
     unittest.main()
