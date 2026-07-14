@@ -246,5 +246,86 @@ class SuccessAnnouncedThroughTheErrorChannelIsNotEvidence(unittest.TestCase):
         self.assertEqual(result["runner_errors"], [real])
 
 
+class AProxyLoggingItsOwnClientDisconnectsIsNotAnOutage(unittest.TestCase):
+    """A last-resort "the network flaked" must not outrank the runner naming the error.
+
+    `istio/istio` run 29259965783 is a Dependabot job. It died because the updater errored,
+    and the runner says so: `##[error]Dependabot encountered an error performing the update`.
+    PatchRail answered `network_transient_failure` at 0.53 on one signal -- `connection reset
+    by peer` -- logged thirteen times by the MITM proxy Dependabot runs *by design*, at its
+    own client. Sandbox chatter, not the job's network failing.
+
+    `AMBIGUOUS_NETWORK_PATTERNS` alone cannot catch it. The deferral finds an alternative and
+    takes it: `node_dependency_install`, matched by the bare word `lockfile` inside the JSON
+    config key `"gradle-lockfile-updater"` that Dependabot echoes. The noise guard then
+    rejects that mention-only rule and bounces the verdict straight back to the network one,
+    which stands. So the check runs last, on the settled verdict.
+    """
+
+    # Trimmed from the real `gh run view 29259965783 --repo istio/istio --log-failed`, kept in
+    # `gh` wire form: the proxy's resets, the config key the deferral trips over, the ##[error].
+    ISTIO_DEPENDABOT_LOG = (
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:08.6869343Z Pulling image "
+        "ghcr.io/dependabot/proxy:v2.0.20260616220547\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:14.7172758Z updater | INFO <job_1458843111> "
+        'Job definition: {"job":{"package-manager":"gradle-lockfile-updater"}}\n'
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:21.0246300Z   proxy | WARN: Cannot write TLS "
+        "chunked EOF from mitm'd client: write tcp 172.19.0.2:1080->172.19.0.3:47950: write: "
+        "connection reset by peer\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:25.2981138Z   proxy | WARN: Cannot write TLS "
+        "response body from mitm'd client: write tcp 172.19.0.2:1080->172.19.0.3:36296: write: "
+        "connection reset by peer\n"
+        "Dependabot\tUNKNOWN STEP\t2026-07-13T14:55:49.7351339Z ##[error]Dependabot encountered "
+        "an error performing the update\n"
+    )
+
+    def test_the_real_istio_log_reports_the_error_the_runner_named(self) -> None:
+        result = classify_ci_log(self.ISTIO_DEPENDABOT_LOG)
+
+        # Not a network outage: the only network evidence is the proxy talking to itself.
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["signals"], [])
+
+        # The line the maintainer would have scrolled to, handed back instead.
+        self.assertEqual(
+            result["runner_errors"],
+            ["Dependabot encountered an error performing the update"],
+        )
+
+    def test_a_genuine_outage_is_not_downgraded_by_an_annotation(self) -> None:
+        # The guard keys on signals that *cannot* prove an outage on their own. A real one
+        # trips a terminal signal outside that set -- DNS here -- and keeps its verdict at
+        # full confidence even though the runner annotated the failure too.
+        log = (
+            "##[error]The job failed\n"
+            "curl: (6) Could not resolve host: proxy.golang.org\n"
+            "Temporary failure in name resolution\n"
+            "write: connection reset by peer\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "network_transient_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_ambiguous_signals_still_stand_when_the_runner_named_nothing(self) -> None:
+        # Without an annotation to defer to, the transient verdict remains the best reading
+        # of the log -- it is the only thing the log gave us. Boilerplate is not an
+        # annotation for this purpose: it names no error, so it cannot displace one.
+        for tail in ("", "##[error]Process completed with exit code 1.\n"):
+            with self.subTest(tail=tail or "no annotation"):
+                log = "connection reset by peer\ndial tcp 10.0.0.1:443: i/o timeout\n" + tail
+                result = classify_ci_log(log)
+
+                self.assertEqual(result["failure_class"], "network_transient_failure")
+
+    def test_an_annotation_announcing_success_does_not_displace_the_verdict(self) -> None:
+        # Composes with the guard above: `✅ Autofix task started.` is not the runner naming
+        # an error, so it cannot turn a standing verdict into `unknown` either.
+        log = "connection reset by peer\n##[error]✅ Autofix task started.\n"
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "network_transient_failure")
+
+
 if __name__ == "__main__":
     unittest.main()
