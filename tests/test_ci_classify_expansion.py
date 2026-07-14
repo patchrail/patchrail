@@ -1645,5 +1645,75 @@ class PostFailureArtifactNoiseIsNotTheCause(unittest.TestCase):
         self.assertEqual(result["failure_class"], "artifact_or_cache_failure")
 
 
+class ToolsNamedButNotFailedTests(unittest.TestCase):
+    """A tool named on a `set -x` echo, a step header or a pip install line never failed.
+
+    Found by running `ci explain` over real failing runs from public repos: encode/httpx,
+    prefecthq/prefect and home-assistant/core were all decided by the job's cast list
+    rather than its cause of death.
+    """
+
+    def test_set_x_echo_of_a_linter_that_passed_does_not_beat_the_failing_tests(
+        self,
+    ) -> None:
+        # encode/httpx, verbatim in shape: `scripts/check` runs under `set -x`, so the
+        # linter that PASSED is echoed into the log, and ruff's non-fatal warning about a
+        # malformed noqa directive quotes a rule code. Those two scored `python_lint`
+        # (0.71) over the pytest run that actually failed.
+        log = (
+            "+ ruff check httpx tests\n"
+            "warning: Invalid `# noqa` directive on httpx/_transports/asgi.py:171:"
+            " expected a comma-separated list of codes (e.g. `F401, F841`).\n"
+            "+ pytest\n"
+            "=========================== short test summary info ============================\n"
+            "================== 1 failed, 1416 passed, 1 skipped in 18.37s ==================\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_a_tool_named_only_by_pip_installing_it_does_not_win(self) -> None:
+        # prefecthq/prefect: pip announces every dev dependency it resolves, so `mypy`
+        # is in the log of a job that never type-checked anything. It took the
+        # classification (`python_type_check`) off the pytest collection error.
+        log = (
+            "Collecting mypy==1.17.1 (from -r requirements.txt (line 23))\n"
+            "  Downloading mypy-1.17.1-cp312-manylinux_2_17_x86_64.whl.metadata (2.2 kB)\n"
+            "E   ValueError: No Prefect API URL provided.\n"
+            "=========================== short test summary info ============================\n"
+            "ERROR tests/test_listener.py - ValueError: No Prefect API URL provided.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+
+    def test_pytest_reporting_only_a_count_is_a_test_failure(self) -> None:
+        # A run that reports the count and not the names (`-q`, or a plugin that rewrites
+        # the summary) used to leave the rule carried by its bare `pytest` invocation.
+        log = "==================== 3 failed, 120 passed in 4.10s ====================\n"
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+
+    def test_an_invocation_still_corroborates_a_real_failure(self) -> None:
+        # The guard must not cost an honest failure its confidence: the echoed command
+        # sits next to a real error here, and both signals count. Judging the pattern
+        # instead of the line it landed on dropped this from 0.95 to 0.71.
+        log = (
+            "Run dotnet build --configuration Release\n"
+            "Program.cs(42,17): error CS1002: ; expected"
+            " [/home/runner/work/app/app/App.csproj]\n"
+            "Build FAILED.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "dotnet_build_failure")
+        self.assertGreaterEqual(result["confidence"], 0.85)
+
+    def test_a_rule_with_nowhere_to_defer_still_stands(self) -> None:
+        # If the echo is genuinely all there is, keep the lead rather than dropping to
+        # `unknown`: the log offered nothing better.
+        log = "+ cargo clippy -- -D warnings\n"
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_lint")
+
+
 if __name__ == "__main__":
     unittest.main()

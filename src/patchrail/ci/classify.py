@@ -307,6 +307,19 @@ RULES: list[dict[str, Any]] = [
             r"ModuleNotFoundError",
             r"ImportError while loading conftest",
             r"\berrors? during collection\b",
+            # pytest's own verdict. Without these the rule could only match a *named*
+            # failing test (`FAILED x::y`) or a bare `pytest` invocation, so a run that
+            # reports the count and not the names -- `-q`, `-p no:randomly`, a plugin
+            # that rewrites the summary -- was carried by its invocation alone and lost
+            # to whatever tool the job had merely *mentioned*. encode/httpx
+            # (`1 failed, 1416 passed`) scored `python_lint`. The `=` run and the `in
+            # 12.3s` tail are pytest's summary line, not jest's (`Tests: 1 failed, 5
+            # passed` on its own line, timing separately), so node stays out of it.
+            r"^=+ .*\b\d+ failed\b",
+            r"\b\d+ failed\b.*\bin \d+(?:\.\d+)?s\b",
+            r"short test summary info",
+            # A collection error names the file, never a test: `ERROR tests/x.py - ValueError`.
+            r"^ERROR \S+\.py\b",
         ],
         "reproduction_command": "python -m pytest -q",
         "minimal_repair_strategy": (
@@ -1158,12 +1171,73 @@ def _strip_ansi_escapes(text: str) -> str:
     return _ANSI_ESCAPE.sub("", text)
 
 
+# Lines that only ever ECHO a command or INSTALL a tool. `set -x` (which every
+# `scripts/check`-style CI shell turns on) echoes `+ ruff check httpx tests`; the Actions
+# step header echoes the whole command back as `Run mypy .`; pip's resolver announces
+# `Collecting mypy==1.17.1` and `Downloading ruff-0.12.11-...whl` for every dev
+# dependency in the project. Every one of those names a tool in a job that may well have
+# passed -- they are the job's cast list, not its cause of death.
+#
+# INVOCATION_ONLY_PATTERNS below says the same thing one pattern at a time, and cannot
+# keep up: it needs `ruff check`, `pytest`, `mypy`, `eslint` and every other tool a rule
+# ever names, and it only defends a rule whose signals are *entirely* in the list -- so a
+# single contaminated signal switches the whole defence off. encode/httpx (a plain
+# `1 failed, 1416 passed` pytest failure) came out as `python_lint` on exactly that: one
+# `set -x` echo of `ruff check` -- a run that passed -- plus `F401` quoted inside a
+# non-fatal `warning:` about an invalid noqa directive, which is not in the list. Judge
+# the LINE a signal lands on instead: found nowhere but here, it never witnessed a failure.
+_NON_FAILURE_LINE = re.compile(
+    r"""^(?:
+          \++\ +                       # bash `set -x` command echo: `+ ruff check .`
+        | \[command\]                  # Actions command echo: `[command]/usr/bin/git ...`
+        | \#\#\[(?:group|command)\]    # Actions group header, which echoes the command
+        | Run\ +\S                     # Actions step header: `Run mypy .`
+        | (?:Collecting|Downloading|Using\ cached|Requirement\ already\ satisfied
+           |Installing\ collected\ packages|Successfully\ installed)\b   # pip resolver
+    )""",
+    re.VERBOSE | re.IGNORECASE,
+)
+
+
+def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the lines in ``text`` that only echo or install a command."""
+    bounds = []
+    offset = 0
+    for line in text.splitlines(keepends=True):
+        if _NON_FAILURE_LINE.match(line):
+            bounds.append((offset, offset + len(line)))
+        offset += len(line)
+    return bounds
+
+
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
     return [
         pattern
         for pattern in patterns
         if re.search(pattern, text, flags=re.IGNORECASE | re.MULTILINE)
     ]
+
+
+def _signals_witnessing_failure(
+    text: str, patterns: list[str], noise: list[tuple[int, int]]
+) -> list[str]:
+    """The signals in ``patterns`` that matched somewhere other than an echo/install line.
+
+    Deliberately *not* used for scoring. An invocation next to a real error is honest
+    corroboration -- it is what keeps a genuine dotnet or helm failure at full confidence
+    -- so every matched signal still counts. What it must not do is carry a rule on its
+    own: a rule with none of these has watched a tool get named, never fail.
+    """
+    witnessing = []
+    for pattern in patterns:
+        # Match against the whole text, not line by line: three patterns deliberately
+        # span a newline (`Failed\n - hook id`, terraform's `╷\n │ Error:`). A match is
+        # noise when it STARTS on an echo/install line.
+        for match in re.finditer(pattern, text, flags=re.IGNORECASE | re.MULTILINE):
+            if not any(start <= match.start() < end for start, end in noise):
+                witnessing.append(pattern)
+                break
+    return witnessing
 
 
 def _requirements() -> dict[str, Any]:
@@ -1319,6 +1393,19 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     scored = [(rule, _matching_signals(text, list(rule["patterns"]))) for rule in RULES]
     scored = [(rule, signals) for rule, signals in scored if signals]
 
+    # Which rules actually saw a failure, as opposed to seeing a tool named on a `set -x`
+    # echo, an Actions step header, or a pip install line. Scoring is untouched by this;
+    # winning is not.
+    noise = _non_failure_line_bounds(text)
+    unwitnessed = {
+        rule["failure_class"]
+        for rule, signals in scored
+        if not _signals_witnessing_failure(text, signals, noise)
+    }
+
+    def carried_by_noise_alone(rule: dict[str, Any], signals: list[str]) -> bool:
+        return _is_non_failure_only(signals) or rule["failure_class"] in unwitnessed
+
     best_rule, best_signals = _highest_scoring_rule(scored)
 
     # A broad "transient network" match built ENTIRELY from ambiguous signals
@@ -1348,9 +1435,13 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # signals says a step ran or warned, not that it failed. Defer to the best rule that
     # matched a real error. If nothing else matched, it stands -- it is the only thing the
     # log gave us.
-    if best_rule is not None and _is_non_failure_only(best_signals):
+    if best_rule is not None and carried_by_noise_alone(best_rule, best_signals):
         alternative_rule, alternative_signals = _highest_scoring_rule(
-            [(rule, signals) for rule, signals in scored if not _is_non_failure_only(signals)]
+            [
+                (rule, signals)
+                for rule, signals in scored
+                if not carried_by_noise_alone(rule, signals)
+            ]
         )
         if alternative_rule is not None:
             best_rule = alternative_rule

@@ -4,6 +4,34 @@
 
 ### Fixed
 
+- **A tool the job merely *named* can no longer outrank the one that failed.** Found by
+  running `ci explain` over real failing runs from public repositories. Three of nine —
+  encode/httpx, prefecthq/prefect and home-assistant/core — were decided by the job's cast
+  list rather than its cause of death:
+  - `scripts/check`-style CI shells run under `set -x`, so every command is echoed into
+    the log, passing or not. httpx's echo of `ruff check` (a run that *passed*), plus
+    `F401` quoted inside ruff's non-fatal warning about a malformed noqa directive, made a
+    plain `1 failed, 1416 passed` pytest failure come out as `python_lint` at 0.71.
+  - pip announces every dev dependency it resolves, so `Collecting mypy==1.17.1` puts
+    `mypy` in the log of a job that never type-checked anything. Prefect's pytest
+    collection error came out as `python_type_check`.
+
+  Signals are now judged by the *line* they land on: a rule whose every signal appears
+  only on a `set -x` echo, an Actions step header (`Run …`) or a pip install line has
+  watched a tool get named, never fail, and defers to a rule that matched a real error.
+  Scoring itself is unchanged, so an invocation sitting next to a genuine error still
+  corroborates it and keeps it at full confidence — a real dotnet, helm or php failure
+  scores exactly as before. This generalises `INVOCATION_ONLY_PATTERNS`, which had to name
+  every tool one pattern at a time and switched itself off entirely as soon as a single
+  signal fell outside the list.
+- **`python_test_failure` now recognises pytest's own verdict.** The rule could match a
+  *named* failing test (`FAILED x::y`) or a bare `pytest` invocation, but not
+  `===== 1 failed, 1416 passed in 18.37s =====`, `short test summary info`, or a
+  collection error (`ERROR tests/x.py - ValueError`). A run that reported the count and
+  not the names — `-q`, or any plugin that rewrites the summary — was therefore carried by
+  its invocation alone and lost to whatever tool the job had merely mentioned. The `=`
+  run and the `in 12.3s` tail are pytest's summary line and not jest's, so node test
+  failures are unaffected.
 - **ANSI colour codes no longer hide the failure.** CI tools colour their output and CI
   keeps the colour on (Airflow runs pytest with `--color=yes`, cargo honours
   `CARGO_TERM_COLOR=always`, jest and eslint colour by default), and the GitHub log API
