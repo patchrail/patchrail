@@ -146,7 +146,20 @@ RULES: list[dict[str, Any]] = [
             r"\(exceeded \d+m\d*s?\)",
             r"exceeded the maximum time limit for jobs",
             r"ran longer than the maximum time of \d+ minutes",
-            r"\btimeout-minutes\b",
+            # Every pattern above is a timeout that HAPPENED. `timeout-minutes: 180` is a limit a
+            # job DECLARES -- Actions echoes it from the workflow when it prints the step config,
+            # on the happy path too. It is the knob you raise afterwards (docs/fix/ci-job-timeout.md),
+            # never evidence that anything ran long.
+            #
+            # envoyproxy/envoy's coverage run 29363920524 failed a coverage gate:
+            #
+            #     FAILED: Directories not meeting coverage thresholds:
+            #
+            # Its one and only witness for a TIMEOUT, at 0.53, was the config line the runner
+            # echoed 16 minutes before the job died -- so we told a maintainer whose coverage had
+            # slipped to go raise a limit their job never came near. A mention in prose still
+            # counts; the `key:` form does not.
+            r"\btimeout-minutes\b(?!\s*:)",
         ],
         "reproduction_command": (
             "re-run the job and compare step durations against the configured job/step "

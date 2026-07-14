@@ -1,0 +1,25 @@
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	sudo systemctl restart docker
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T19:59:44.8931887Z   timeout-minutes: 180
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T19:59:44.8932240Z   trusted: false
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1027151Z   ⬆  source/extensions/load_balancing_policies/maglev: 98.2% (current threshold: 95.2%)
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1027711Z   ⬆  source/extensions/stat_sinks/graphite_statsd: 83.3% (current threshold: 82.8%)
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1028234Z   ⬆  source/extensions/stat_sinks/statsd: 88.9% (current threshold: 85.2%)
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1028746Z   ⬆  source/server/config_validation: 93.5% (current threshold: 93.4%)
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1029002Z 
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1029145Z FAILED: Directories not meeting coverage thresholds:
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1029532Z   ✗ source/common/quic: 93.2% (threshold: 93.5%)
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1029734Z 
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1029863Z ==================================================================
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1030162Z Overall Coverage: 96.7%
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1030423Z Source directories checked: 430,
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1030679Z Failed: 1,
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1030894Z Low coverage (configured): 62,
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1031155Z Excellent coverage: 367
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1031394Z Can be adjusted up: 28
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1031648Z ==================================================================
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:15:43.1031850Z 
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:16:00.0079740Z ##[endgroup]
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:16:00.0150949Z Run failed
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:16:00.0153862Z ##[error]Process completed with exit code 1.
+Check (pr/45851/main@fa77139) / Coverage / ./ci/do_ci.sh coverage	UNKNOWN STEP	2026-07-14T20:16:00.0496274Z Post job cleanup.
