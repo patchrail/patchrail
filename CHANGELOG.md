@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `patchrail schema ci-classes` now serves a published schema for
+  `ci classes --format json`, and the suite validates real output against it.
+  It was the one JSON command with no schema, no conformance test and no
+  cookbook entry — which is why 0.4.0 could move it from
+  `patchrail.ci_classes.v1` to `.v2` in a minor bump without anything going
+  red, and why the break reached consumers (this project's own GitHub Action
+  among them) silently. Changing the contract now means shipping the schema
+  that describes it: `test_schema_conformance.py` compares the `schema_version`
+  the CLI emits against the `const` in the schema a user can fetch, so the two
+  cannot drift apart again. The schema also encodes the v2 rule itself —
+  `unknown` is valid under `fallback` and rejected inside `classes` — so
+  putting the sentinel back into the denominator fails validation.
+- `docs/json-cookbook.md` documents the `ci classes` payload with a coverage
+  recipe (which supported classes has a log corpus never exercised?), and its
+  sample output is pinned to the code by `test_readme_claims.py` in both
+  directions, like the README's counts.
+
 ## 0.4.0 - 2026-07-14
 
 Minor bump rather than a patch: `ci classes --format json` changes its contract.

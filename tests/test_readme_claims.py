@@ -8,6 +8,10 @@ The fixture count was already pinned elsewhere in the suite and stayed honest.
 The class and redaction counts were pinned nowhere, and both drifted. So derive
 all three from the source of truth and fail in *both* directions: a stale README
 is a bug, and so is a README nobody updated after adding a rule.
+
+The same applies to the sample output in the jq cookbook: it is the page JSON
+consumers copy from, so a count or a schema version that has moved on is a
+script that breaks in their CI, not ours.
 """
 
 from __future__ import annotations
@@ -17,11 +21,12 @@ from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
 
-from patchrail.ci.classify import REDACTION_PATTERNS, RULES
+from patchrail.ci.classify import REDACTION_PATTERNS, RULES, list_failure_classes
 from patchrail.cli import main
 
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
+JSON_COOKBOOK = (ROOT / "docs" / "json-cookbook.md").read_text(encoding="utf-8")
 
 FAILURE_CLASSES_RE = re.compile(r"\*\*(\d+) failure classes\*\*")
 FIXTURES_RE = re.compile(r"\*\*(\d+) sanitized CI log fixtures\*\*")
@@ -29,11 +34,21 @@ REDACTION_RE = re.compile(r"\*\*(\d+) secret-redaction patterns\*\*")
 SUPPORT_TABLE_RE = re.compile(r"\|\s*(\d+) failure classes for GitHub Actions-style logs")
 QUICKSTART_OUTPUT_RE = re.compile(r"Real output:\n\n```markdown\n(.*?)\n```", re.DOTALL)
 QUICKSTART_LOG = ROOT / "examples" / "ci-triage" / "dependency-failure.log"
+COOKBOOK_COUNT_RE = re.compile(r'"count":\s*(\d+)')
+COOKBOOK_CLASSES_RE = re.compile(r'"classes":\s*(\d+)')
 
 
 def _claim(pattern: re.Pattern[str]) -> int:
     match = pattern.search(README)
     assert match is not None, f"README no longer states the claim matched by {pattern.pattern!r}"
+    return int(match.group(1))
+
+
+def _cookbook_claim(pattern: re.Pattern[str]) -> int:
+    match = pattern.search(JSON_COOKBOOK)
+    assert match is not None, (
+        f"docs/json-cookbook.md no longer shows the output matched by {pattern.pattern!r}"
+    )
     return int(match.group(1))
 
 
@@ -53,6 +68,18 @@ def test_readme_fixture_count_matches_the_zoo_on_disk() -> None:
 
 def test_readme_redaction_pattern_count_matches_the_redaction_table() -> None:
     assert _claim(REDACTION_RE) == len(REDACTION_PATTERNS)
+
+
+def test_json_cookbook_sample_output_matches_what_ci_classes_emits() -> None:
+    payload = list_failure_classes()
+    assert _cookbook_claim(COOKBOOK_COUNT_RE) == payload["count"] == len(RULES)
+    assert _cookbook_claim(COOKBOOK_CLASSES_RE) == len(payload["classes"])
+
+
+def test_json_cookbook_names_the_ci_classes_schema_version_actually_emitted() -> None:
+    # The page tells consumers which version to branch on. If it names a version
+    # the CLI no longer emits, following the page is what breaks them.
+    assert list_failure_classes()["schema_version"] in JSON_COOKBOOK
 
 
 def test_readme_quickstart_shows_the_output_the_cli_actually_prints() -> None:

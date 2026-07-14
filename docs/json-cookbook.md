@@ -97,6 +97,43 @@ For a log containing, say, a GitHub token and an email address:
 
 See `docs/redaction.md` for the full list of redaction categories.
 
+## Check coverage against the supported classes
+
+`patchrail ci classes --format json` is a different payload with its own
+version, `patchrail.ci_classes.v2` — it is the inventory of what the classifier
+can diagnose, not the result of classifying anything. Fetch it with
+`patchrail schema ci-classes`.
+
+`unknown` is deliberately **not** in `classes`/`count`. It is what `ci explain`
+returns when no rule matches, so counting it would put an entry in your
+denominator that no log can ever be classified as. It is still reported, under
+`fallback`:
+
+```bash
+patchrail ci classes --format json | jq '{count, classes: (.classes | length), fallback: .fallback.failure_class}'
+```
+
+```json
+{
+  "count": 40,
+  "classes": 40,
+  "fallback": "unknown"
+}
+```
+
+Which classes did a directory of logs actually exercise?
+
+```bash
+supported=$(patchrail ci classes --format json | jq -r '.classes[].failure_class' | sort)
+seen=$(for log in ci-logs/*.log; do
+  patchrail ci explain --log "$log" --format json | jq -r 'select(.failure_class != "unknown") | .failure_class'
+done | sort -u)
+comm -23 <(echo "$supported") <(echo "$seen")   # supported classes with no log in the corpus
+```
+
+Filtering `unknown` out of `seen` is what keeps the two sides comparable: a log
+that matched no rule is a gap in the corpus, not a class.
+
 ## Related
 
 - [Quickstart](quickstart.md) for install and first-run commands.
