@@ -1186,28 +1186,62 @@ def _strip_ansi_escapes(text: str) -> str:
 # `set -x` echo of `ruff check` -- a run that passed -- plus `F401` quoted inside a
 # non-fatal `warning:` about an invalid noqa directive, which is not in the list. Judge
 # the LINE a signal lands on instead: found nowhere but here, it never witnessed a failure.
-_NON_FAILURE_LINE = re.compile(
+#
+# A runner's env dump and a CMake probe name tools the same way. The hosted images ship a
+# whole toolchain, so every Windows job that prints its environment advertises Gradle and
+# Maven it will never run: moby/moby (Go, `build-windows`) and apache/kafka (whose failing
+# job was `check-pr-labels`) both came out `java_build_failure` on `GRADLE_HOME=/usr/share/
+# gradle-9.6.1` and `MAVEN_OPTS   -Xms256m` -- the ONLY lines in either log to say gradle or
+# maven. CMake announces optional tools it merely found (`-- Found Pylint: /usr/bin/pylint`,
+# `-- Registered 'check_pylint' target`) and prints `- Failed` for capability probes that are
+# SUPPOSED to fail (`-- Performing Test HAVE_C_WSIGN_PROMO - Failed`); that made opencv/opencv
+# -- C++, and killed by a CodeQL `commit not found` -- a 0.71-confidence `python_lint`.
+# A real gradle or pylint failure still wins: it also fails somewhere off these lines.
+# A tool that was INVOKED here. The job ran it and the job died, so as a last resort -- when
+# the log offers nothing else at all -- naming it is a defensible guess.
+_INVOCATION_LINE = re.compile(
     r"""^(?:
           \++\ +                       # bash `set -x` command echo: `+ ruff check .`
         | \[command\]                  # Actions command echo: `[command]/usr/bin/git ...`
         | \#\#\[(?:group|command)\]    # Actions group header, which echoes the command
         | Run\ +\S                     # Actions step header: `Run mypy .`
-        | (?:Collecting|Downloading|Using\ cached|Requirement\ already\ satisfied
-           |Installing\ collected\ packages|Successfully\ installed)\b   # pip resolver
+    )""",
+    re.VERBOSE | re.IGNORECASE,
+)
+
+# A tool that was never even RUN here -- only installed, exported, probed for, or quoted in a
+# config blob. It cannot be the cause of anything, so it must never be the answer (see
+# `never_invoked` in classify_ci_log).
+_MERE_MENTION_LINE = re.compile(
+    r"""^(?:
+          (?:Collecting|Downloading|Using\ cached|Requirement\ already\ satisfied
+           |Installing\ collected\ packages|Successfully\ installed)\b  # pip resolver
+        | Download\ action\ repository\b   # runner pre-loading every action the job declares
+        | (?-i:                            # env dump -- case-sensitive, and never a severity
+            (?!(?:ERROR|ERR|FAIL|FAILED|FAILURE|FATAL|PANIC|WARN|WARNING|CRITICAL)\b)
+            [A-Z][A-Z0-9_]+ (?: = | \ {2,} ) \S      # `GRADLE_HOME=/usr/...`, `M2   C:\...`
+          )
+        | --\ +\S                          # CMake status line / capability probe
+        | \s* " [^"]+ " \s* :              # a key in a pretty-printed JSON config blob
     )""",
     re.VERBOSE | re.IGNORECASE,
 )
 
 
-def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
-    """Character spans of the lines in ``text`` that only echo or install a command."""
+def _line_bounds(text: str, pattern: re.Pattern[str]) -> list[tuple[int, int]]:
+    """Character spans of the lines in ``text`` that ``pattern`` matches."""
     bounds = []
     offset = 0
     for line in text.splitlines(keepends=True):
-        if _NON_FAILURE_LINE.match(line):
+        if pattern.match(line):
             bounds.append((offset, offset + len(line)))
         offset += len(line)
     return bounds
+
+
+def _non_failure_line_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the lines that only name a command, rather than watch it fail."""
+    return sorted(_line_bounds(text, _INVOCATION_LINE) + _line_bounds(text, _MERE_MENTION_LINE))
 
 
 def _matching_signals(text: str, patterns: list[str]) -> list[str]:
@@ -1403,6 +1437,17 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         if not _signals_witnessing_failure(text, signals, noise)
     }
 
+    # Stricter than unwitnessed: a rule every one of whose signals landed on a line that only
+    # ever MENTIONS a tool -- an env export, a CMake probe, a JSON config key -- has not just
+    # missed the failure, it has watched a tool that never ran. It cannot stand even as a last
+    # resort, the way an invocation can.
+    mentions = _line_bounds(text, _MERE_MENTION_LINE)
+    never_invoked = {
+        rule["failure_class"]
+        for rule, signals in scored
+        if not _signals_witnessing_failure(text, signals, mentions)
+    }
+
     def carried_by_noise_alone(rule: dict[str, Any], signals: list[str]) -> bool:
         return _is_non_failure_only(signals) or rule["failure_class"] in unwitnessed
 
@@ -1446,6 +1491,12 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         if alternative_rule is not None:
             best_rule = alternative_rule
             best_signals = alternative_signals
+
+    # Nothing else matched, and the one rule that did never saw its tool run. `unknown` is not
+    # a failure to answer here, it is the answer: apache/kafka's `check-pr-labels` job is not a
+    # Gradle build because the runner image exports GRADLE_HOME.
+    if best_rule is not None and best_rule["failure_class"] in never_invoked:
+        best_rule, best_signals = None, []
 
     if best_rule is None or not best_signals:
         return {
