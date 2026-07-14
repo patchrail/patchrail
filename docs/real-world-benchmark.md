@@ -39,8 +39,9 @@ serves 0.7.0 today, which ships every fix below except the grafana and Envoy one
 | [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_test_failure` 0.53 | ✅ fixed |
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
 | [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
+| [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
 
-Three of the eight were classified identically before and after. That is the point of showing them:
+Three of the nine were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
@@ -182,6 +183,32 @@ first.
 
 A job that really does run long is untouched: the runner says so in words, and those words are still
 `ci_job_timeout` at full confidence.
+
+### containerd — `runner_resource_exhaustion` → `go_test_failure` ([#357](https://github.com/patchrail/patchrail/issues/357))
+
+A container killed for memory is not the *runner* running out of it.
+
+containerd's integration job failed a Go test — `--- FAIL: TestContainerCgroupWritable` — and
+`make: *** [Makefile:230: cri-integration] Error 1` ended the job. PatchRail answered
+`runner_resource_exhaustion` at 0.89 and told the maintainer to `rerun the failing job while watching
+runner memory and disk`. Its three witnesses were all things the suite does *on purpose*:
+
+```
+    oom_linux_test.go:93: Creating 8 running container and wait for them OOMKilled
+    ... level=debug msg="Exec process ... exits with exit code 137 and error <nil>"
+[Tue Jul 14 19:05:42 2026] Memory cgroup out of memory: Killed process 197353 (dd)
+```
+
+A test that provokes the OOM killer, an exec that exits 137 by design (logged at `level=debug`, with
+`error <nil>`), and a *cgroup* hitting its configured limit — the opposite of the host running dry.
+`OOMKilled`, `Out of memory` and `exit code 137` describe a process killed for memory but never say
+whose. Nudging the verdict off the resource rule alone would only trade it for
+`network_transient_failure`: the same suite logs `connection refused` from an upgrade test, and that
+is ambiguous noise too. So a resource match built *entirely* from those symptom signals now defers to
+the concrete cause the log recorded — the Go test — skipping the equally-ambiguous network rule on
+the way. A real runner exhaustion is untouched: it trips a terminal signal (the runner's own
+`Process completed with exit code 137`, `No space left on device`, a build's `JavaScript heap out of
+memory`) outside the ambiguous set, and keeps its verdict.
 
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 

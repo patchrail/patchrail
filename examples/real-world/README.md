@@ -16,6 +16,7 @@ against the version PyPI serves and against `main`.
 | `ruff-29349828924.log` | astral-sh/ruff | [29349828924](https://github.com/astral-sh/ruff/actions/runs/29349828924) |
 | `pytorch-29361968044-excerpt.log` | pytorch/pytorch | [29361968044](https://github.com/pytorch/pytorch/actions/runs/29361968044) (excerpt: the log is 3.5MB; the failing `jq` step and the CMake warning block are kept verbatim, and pinned by `tests/test_cmake_policy_notice.py`) |
 | `envoy-29363920524-excerpt.log` | envoyproxy/envoy | [29363920524](https://github.com/envoyproxy/envoy/actions/runs/29363920524) (excerpt: the log is 590KB; the echoed `timeout-minutes` config and the coverage gate that actually failed are kept verbatim, and pinned by `tests/test_timeout_minutes_declaration.py`) |
+| `containerd-29358848438-excerpt.log` | containerd/containerd | [29358848438](https://github.com/containerd/containerd/actions/runs/29358848438) (excerpt: the log is 9MB; the Go test that failed, the three provoked container-OOM/exit-137/cgroup lines, and the `make` error that ended the job are kept verbatim, and pinned by `tests/test_container_runtime_oom_noise.py`) |
 
 These are **not** fixtures. They carry no expected-class labels and are not scored by
 `patchrail ci benchmark`, which runs against the sanitized zoo in `examples/ci-triage/`. They exist

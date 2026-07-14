@@ -1714,6 +1714,26 @@ AMBIGUOUS_NETWORK_PATTERNS = frozenset(
 )
 
 
+# Patterns in ``runner_resource_exhaustion`` that describe a process killed for
+# memory but never say WHOSE: a container under test hitting its own cgroup limit,
+# a Go test's exec being reaped, an `OOMKilled` status line an integration suite
+# prints because it provokes the kill on purpose. A container runtime's tests
+# (containerd, runc, k8s) trip every one of these by design while a Go test two
+# lines up is the thing that actually failed. A genuine runner exhaustion also
+# trips a terminal signal -- the runner's OWN `Process completed with exit code
+# 137`, a disk `No space left on device`/`ENOSPC`, a build `JavaScript heap out of
+# memory`/`runtime: out of memory` -- none of which are in this set, so it keeps
+# winning.
+AMBIGUOUS_RESOURCE_PATTERNS = frozenset(
+    {
+        r"OOMKilled",
+        r"Out of memory",
+        r"signal: killed",
+        r"\bexit code 137\b",
+    }
+)
+
+
 # Patterns that prove a tool RAN, not that it failed. `docker build` shows up in
 # every job that builds a container as a setup step; `cargo test` and `clippy` show
 # up in the command line of every Rust CI job, passing or not. They are useful
@@ -1851,6 +1871,24 @@ def _is_mention_only(signals: list[str]) -> bool:
     return bool(signals) and set(signals) <= MENTION_ONLY_PATTERNS
 
 
+def _is_ambiguous_noise_match(rule: dict[str, Any], signals: list[str]) -> bool:
+    """A broad rule carried only by signals that name a *symptom*, not a culprit.
+
+    ``network_transient_failure`` off nothing but `connection refused`/`context
+    deadline exceeded`, or ``runner_resource_exhaustion`` off nothing but
+    `OOMKilled`/`Out of memory`, is the kind of network- or memory-shaped noise a
+    deterministic failure throws off. When one such rule defers, the concrete cause
+    it hands to must not be the *other* one -- a container runtime's suite trips both
+    at once -- so both are excluded from the handoff together.
+    """
+    failure_class = rule["failure_class"]
+    if failure_class == "network_transient_failure":
+        return bool(signals) and set(signals) <= AMBIGUOUS_NETWORK_PATTERNS
+    if failure_class == "runner_resource_exhaustion":
+        return bool(signals) and set(signals) <= AMBIGUOUS_RESOURCE_PATTERNS
+    return False
+
+
 def _highest_scoring_rule(
     scored: list[tuple[dict[str, Any], list[str]]],
     carrying: dict[str, list[str]] | None = None,
@@ -1959,6 +1997,35 @@ def classify_ci_log(text: str) -> dict[str, Any]:
                 (rule, signals)
                 for rule, signals in scored
                 if rule["failure_class"] != "network_transient_failure"
+            ],
+            carrying,
+        )
+        if alternative_rule is not None:
+            best_rule = alternative_rule
+            best_signals = alternative_signals
+
+    # A broad "the runner ran out of memory/disk" match built ENTIRELY from ambiguous
+    # kill signals (OOMKilled / Out of memory / signal: killed / exit code 137) usually
+    # means a container or process UNDER the job was killed -- a container runtime's
+    # integration suite provokes exactly these -- not that the CI runner hit a host
+    # limit. Don't let it mask the concrete cause the maintainer must fix: defer to the
+    # best rule that is NOT itself an ambiguous-noise match. The same container-runtime
+    # suite also logs `connection refused` from an upgrade test, so a plain
+    # non-resource handoff would just trade one ambiguous verdict for another; the
+    # concrete cause (the Go test that actually failed) is the honest answer. A real
+    # runner exhaustion keeps winning because it also trips a terminal signal (the
+    # runner's own exit-137 annotation, No space left on device, a build heap OOM)
+    # outside the ambiguous set.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] == "runner_resource_exhaustion"
+        and set(best_signals) <= AMBIGUOUS_RESOURCE_PATTERNS
+    ):
+        alternative_rule, alternative_signals = _highest_scoring_rule(
+            [
+                (rule, signals)
+                for rule, signals in scored
+                if not _is_ambiguous_noise_match(rule, signals)
             ],
             carrying,
         )
