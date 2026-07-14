@@ -79,6 +79,10 @@ Real output:
 - `Could not find a version that satisfies the requirement`
 - `Cannot install .*because these package versions have conflicting dependencies`
 - `ResolutionImpossible`
+
+## Safety
+
+PatchRail classified this log locally. It did not create a pull request, post a comment, claim funding, or send data to an external service.
 ```
 
 It also reads from stdin, so you can point it straight at the run that just failed.
