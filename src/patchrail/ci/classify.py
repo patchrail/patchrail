@@ -1361,6 +1361,32 @@ _RUNNER_ERROR_BOILERPLATE = (
     re.compile(r"workflow failed because one or more jobs failed\.?", re.IGNORECASE),
 )
 
+# The error channel carries whatever a step writes to it, and some steps write a *success*
+# through it: `oven-sh/bun` annotates its run with `##[error]✅ Autofix task started.`, the
+# only annotation in 4,700 lines. Handed back under "start there", a line reporting that a
+# task started fine is the same dead end the boilerplate above exists to prevent -- arriving
+# through content rather than through the runner's own template.
+#
+# Reading content is a heuristic, so this one is deliberately lopsided towards keeping: an
+# annotation is dropped only when it *opens* with a success mark AND names no failure
+# anywhere in the line. `✅ Autofix task started.` goes; `✅ 2 passed, ❌ 1 failed` and
+# `✔ image built, but the upload failed` both stay, because the failure is right there in
+# them, and a tick further along the line never counts. A puzzling line a maintainer
+# dismisses in a second costs far less than a real error we swallowed on their behalf.
+_RUNNER_ERROR_SUCCESS_MARK = re.compile(r"^[✅✔✓☑🎉🟢]")
+_RUNNER_ERROR_FAILURE_HINT = re.compile(
+    r"error|fail|abort|fatal|panic|cannot|can not|can't|unable|denied|refus|reject"
+    r"|invalid|missing|not found|timed out|timeout|exit code|❌|✗|✖|🔴",
+    re.IGNORECASE,
+)
+
+
+def _announces_success(message: str) -> bool:
+    """True for an annotation that opens with a success mark and reports no failure."""
+    return bool(
+        _RUNNER_ERROR_SUCCESS_MARK.match(message) and not _RUNNER_ERROR_FAILURE_HINT.search(message)
+    )
+
 
 def _runner_error_annotations(text: str) -> list[str]:
     """Error lines the CI runner annotated itself, redacted and de-duplicated."""
@@ -1371,6 +1397,8 @@ def _runner_error_annotations(text: str) -> list[str]:
         # Actions would have masked on the way out.
         message = redact_ci_log(message)["text"].strip()
         if any(pattern.fullmatch(message) for pattern in _RUNNER_ERROR_BOILERPLATE):
+            continue
+        if _announces_success(message):
             continue
         if len(message) > _MAX_RUNNER_ERROR_CHARS:
             message = message[: _MAX_RUNNER_ERROR_CHARS - 1].rstrip() + "…"
