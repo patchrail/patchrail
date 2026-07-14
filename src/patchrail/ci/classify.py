@@ -1171,9 +1171,14 @@ def list_failure_classes() -> dict[str, Any]:
     """List every supported failure class in stable rule order.
 
     Emits ``failure_class``, ``likely_subsystem`` and ``reproduction_command``
-    for each rule, plus the ``unknown`` fallback classifier returns when no
-    rule matches. This is the machine-readable inventory of what PatchRail can
+    for each rule. This is the machine-readable inventory of what PatchRail can
     diagnose locally, without having to read the source ``RULES`` table.
+
+    ``unknown`` is reported separately under ``fallback``: it is the result
+    ``ci explain`` returns when no rule matches, not something the classifier
+    can diagnose. Keeping it out of ``classes``/``count`` means the README
+    documented use — ``ci classes --format json`` to check coverage from a
+    script — measures against a denominator every entry of which is reachable.
     """
     classes = [
         {
@@ -1183,17 +1188,15 @@ def list_failure_classes() -> dict[str, Any]:
         }
         for rule in RULES
     ]
-    classes.append(
-        {
+    return {
+        "schema_version": "patchrail.ci_classes.v2",
+        "count": len(classes),
+        "classes": classes,
+        "fallback": {
             "failure_class": UNKNOWN_FAILURE_CLASS,
             "likely_subsystem": UNKNOWN_LIKELY_SUBSYSTEM,
             "reproduction_command": UNKNOWN_REPRODUCTION_COMMAND,
-        }
-    )
-    return {
-        "schema_version": "patchrail.ci_classes.v1",
-        "count": len(classes),
-        "classes": classes,
+        },
     }
 
 

@@ -2652,17 +2652,22 @@ class PatchRailCITests(unittest.TestCase):
 
         self.assertEqual(exit_code, 0)
         payload = json.loads(stdout.getvalue())
-        self.assertEqual(payload["schema_version"], "patchrail.ci_classes.v1")
+        self.assertEqual(payload["schema_version"], "patchrail.ci_classes.v2")
 
         classes = payload["classes"]
         self.assertEqual(payload["count"], len(classes))
         names = [entry["failure_class"] for entry in classes]
 
-        # A known rule and the unknown fallback are both listed, once each.
+        # A known rule is listed exactly once.
         self.assertIn("python_test_failure", names)
         self.assertEqual(names.count("python_test_failure"), 1)
-        self.assertEqual(names[-1], "unknown")
         self.assertEqual(len(names), len(set(names)))
+
+        # `unknown` is the no-rule-matched result, not a class the classifier can
+        # diagnose: it is reported under `fallback` and must stay out of the
+        # `classes`/`count` denominator that coverage scripts divide by.
+        self.assertNotIn("unknown", names)
+        self.assertEqual(payload["fallback"]["failure_class"], "unknown")
 
         # Every entry is machine-readable with the three documented fields.
         for entry in classes:
