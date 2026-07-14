@@ -1715,5 +1715,104 @@ class ToolsNamedButNotFailedTests(unittest.TestCase):
         self.assertEqual(result["failure_class"], "rust_lint")
 
 
+class ToolNamedButNeverRun(unittest.TestCase):
+    """A tool the runner merely installed, exported or probed for cannot be the cause.
+
+    Every case here is a real log from a public repo, taken with the documented one-liner
+    (`gh run view --log-failed | patchrail ci explain`).
+    """
+
+    def test_linux_runner_env_dump_is_not_a_gradle_build(self) -> None:
+        # apache/kafka: the failing job was `check-pr-labels`. The ONLY line in the whole
+        # log to say "gradle" was the hosted image exporting GRADLE_HOME -- and we called
+        # it a Java build.
+        log = "GRADLE_HOME=/usr/share/gradle-9.6.1\n##[error]Process completed with exit code 1.\n"
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_windows_runner_env_dump_is_not_a_gradle_build(self) -> None:
+        # moby/moby: a Go project. The Windows image ships Gradle and Maven, and prints
+        # them in the padded `NAME    value` env table that every windows job dumps.
+        log = (
+            "GRADLE_HOME                    C:\\ProgramData\\chocolatey\\lib\\gradle\n"
+            "M2                             C:\\ProgramData\\chocolatey\\lib\\maven\\bin\n"
+            "MAVEN_OPTS                     -Xms256m\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_cmake_probing_for_a_linter_is_not_a_lint_failure(self) -> None:
+        # opencv/opencv: C++, killed by a CodeQL `commit not found`. CMake announces the
+        # optional tools it found and prints `- Failed` for probes that are SUPPOSED to
+        # fail; that was a 0.71-confidence `python_lint`.
+        log = (
+            "-- Performing Test HAVE_C_WSIGN_PROMO - Failed\n"
+            '-- Found Pylint: /usr/bin/pylint (found version "3.0.3")\n'
+            "-- Could NOT find Flake8 (missing: FLAKE8_EXECUTABLE)\n"
+            "-- Registered 'check_pylint' target: using /usr/bin/pylint\n"
+            "##[error]commit not found - https://docs.github.com/rest\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_the_runner_preloading_an_action_is_not_an_artifact_failure(self) -> None:
+        # Every job that so much as declares upload-artifact prints this line at startup,
+        # long before the action does anything.
+        log = (
+            "Download action repository 'actions/upload-artifact@043fb46d1a93c77aae'\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_a_tool_quoted_in_a_json_config_blob_is_not_a_test_failure(self) -> None:
+        # opencv again, after the CMake noise was handled: CodeQL dumps its config schema,
+        # and `go test` appears inside an English sentence in a JSON string.
+        log = (
+            '    "title" : "Whether to include Go test files in the CodeQL database.",\n'
+            "##[error]commit not found - https://docs.github.com/rest\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "unknown")
+
+    def test_a_real_gradle_failure_still_wins_beside_the_env_dump(self) -> None:
+        # The other direction, and the one that matters: GRADLE_HOME is exported in EVERY
+        # JVM job, including the ones that really do fail. Discounting the export must not
+        # cost a genuine Gradle build its verdict -- it fails off that line too, and here
+        # it does so twice.
+        log = (
+            "GRADLE_HOME=/usr/share/gradle-9.6.1\n"
+            "> Task :compileJava FAILED\n"
+            "FAILURE: Build failed with an exception.\n"
+            "* What went wrong:\n"
+            "Execution failed for task ':compileJava'.\n"
+            "BUILD FAILED in 1m 4s\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "java_build_failure")
+
+    def test_a_real_pylint_failure_still_wins_beside_the_cmake_probe(self) -> None:
+        log = (
+            '-- Found Pylint: /usr/bin/pylint (found version "3.0.3")\n'
+            "src/app.py:12:0: C0114: Missing module docstring (missing-module-docstring)\n"
+            "pylint exited with 16\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_lint")
+
+    def test_the_env_dump_guard_does_not_swallow_a_pytest_assertion(self) -> None:
+        # pytest indents its failure body under a bare `E`, which is one uppercase word
+        # followed by whitespace -- the exact shape of an env-table row. Requiring two
+        # characters is what keeps `E   AssertionError` readable as evidence.
+        log = (
+            "    def test_totals():\n"
+            ">       assert total == 2\n"
+            "E       AssertionError: assert 1 == 2\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+
+
 if __name__ == "__main__":
     unittest.main()
