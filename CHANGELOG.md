@@ -4,6 +4,16 @@
 
 ### Fixed
 
+- **A failed `yarn` script — `prettier`, `lint`, `test` — is no longer reported as a dependency
+  install.** yarn classic ends *every* command with `info Visit https://yarnpkg.com/en/docs/cli/<cmd>
+  for documentation about this command.`, and `node_dependency_install` was matching the bare host —
+  so a `yarn run prettier` that failed on a formatting diff was sent back to reconcile a lockfile. On
+  facebook/react's "Run prettier" step (run 29335289512) the footer was `/cli/run`, not `/cli/install`;
+  the log's real witness was `prettier`. The footer is now pinned to the two subcommands that *are* a
+  dependency operation (`install`, `add`), so that log answers `javascript_lint` — the class its
+  evidence supported. A real `yarn install` failure is unaffected: it keeps the `/cli/install` footer
+  and its other signals (`yarn install v1.x`, `error An unexpected error occurred`, lockfile and
+  registry messages).
 - **A container killed for memory is no longer reported as the *runner* running out of it.**
   `runner_resource_exhaustion` is about the CI machine hitting a host limit — free disk, raise the
   runner class. But `OOMKilled`, `Out of memory` and `exit code 137` describe a process killed for

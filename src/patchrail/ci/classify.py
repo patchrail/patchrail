@@ -394,7 +394,12 @@ RULES: list[dict[str, Any]] = [
             r"is not in this registry",
             r"yarn install v\d",
             r"error An unexpected error occurred",
-            r"info Visit https://yarnpkg\.com",
+            # yarn classic closes EVERY failed command with `info Visit
+            # https://yarnpkg.com/en/docs/cli/<cmd>`, so the bare host scored a failed
+            # `yarn run prettier` / `yarn lint` / `yarn test` as a dependency install.
+            # Pin the footer to the two subcommands that ARE a dependency operation
+            # (`install`, `add`); a formatting or test failure now falls to its own class.
+            r"info Visit https://yarnpkg\.com/[\w/]*docs/cli/(?:install|add)\b",
         ],
         "reproduction_command": "corepack pnpm install --frozen-lockfile || npm ci",
         "minimal_repair_strategy": (
