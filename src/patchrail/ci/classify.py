@@ -1370,6 +1370,52 @@ def _path_token_bounds(text: str) -> list[tuple[int, int]]:
     return [match.span() for match in _PATH_TOKEN.finditer(text)]
 
 
+# When a test suite asserts on the output of a tool, that tool's diagnostics become the test's
+# DATA. A harness that reports a failing assertion prints them back -- the output it got, the
+# output it expected -- and every one of those lines reads exactly like a compiler talking,
+# because a compiler is what produced them. They are quotations, not diagnostics.
+#
+# denoland/deno's spec suite (`test specs`, run 29349357779) is 30MB of this: 1553 failing
+# specs, each dumped as an actual/expected/debug triplet, carrying 4899 TypeScript diagnostics
+# between them -- `TS2304 [ERROR]: Cannot find name 'Deno'`, `error: Type checking failed.` --
+# nearly all of which are the CONTENTS OF A FIXTURE FILE the spec asserts against, named on the
+# preceding `output path .../main.out` line. Deno's own tests deliberately typecheck broken
+# programs. PatchRail read the fixtures and told the maintainer their types were broken, at 0.95
+# confidence, when what had actually happened was that the spec suite panicked
+# (`panicked at tests/specs/mod.rs:669`, exit code 101 -- Rust's).
+#
+# Two renderings, both machine-emitted and both delimited, so both can be excised exactly:
+#
+#   * deno's spec harness frames each side in `-- OUTPUT START --` / `-- EXPECTED START --` /
+#     `-- DEBUG START --` blocks (the last block may be cut off when the log is truncated);
+#   * `pretty_assertions`, which the harness uses for `assertion failed: `(left == right)``,
+#     prints `Diff < left / right > :` and then the compared text itself, one line per line,
+#     prefixed `<` (left), `>` (right) or a space (common). A blank line ends it.
+#
+# Errors the job itself emitted are untouched: they are outside these blocks by construction.
+# A real `tsc` failure in a job that also runs deno's specs still witnesses on its own line, and
+# a suite whose ONLY evidence is quoted output still stands as a last resort -- it defers to a
+# rule that saw a real error, and here one did: the Rust tests that actually failed.
+_ASSERTION_REPORT_BLOCK = re.compile(
+    r"^[ \t]*--[ \t]*(OUTPUT|EXPECTED|DEBUG)[ \t]+START[ \t]*--[ \t]*$"
+    r".*?"
+    r"(?=^[ \t]*--[ \t]*\1[ \t]+END[ \t]*--[ \t]*$|\Z)",
+    re.MULTILINE | re.DOTALL,
+)
+_ASSERTION_DIFF_BODY = re.compile(
+    r"^[ \t]*Diff[ \t]*<[ \t]*left[ \t]*/[ \t]*right[ \t]*>[ \t]*:[ \t]*$"
+    r"(?:\n(?:[<>].*| .*))*",
+    re.MULTILINE,
+)
+
+
+def _assertion_report_bounds(text: str) -> list[tuple[int, int]]:
+    """Character spans of the output a test harness quotes back when an assertion fails."""
+    return [match.span() for match in _ASSERTION_REPORT_BLOCK.finditer(text)] + [
+        match.span() for match in _ASSERTION_DIFF_BODY.finditer(text)
+    ]
+
+
 def _mention_only_bounds(text: str) -> list[tuple[int, int]]:
     """Character spans of the lines where a tool is named but never actually run."""
     return (
@@ -1777,9 +1823,14 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     scored = [(rule, signals) for rule, signals in scored if signals]
 
     # Which rules actually saw a failure, as opposed to seeing a tool named on a `set -x`
-    # echo, an Actions step header, a pip install line, or the runner's echo of the step's
-    # own source. Scoring is untouched by this; winning is not.
-    noise = _non_failure_line_bounds(text) + _runner_script_echo_bounds(raw, text)
+    # echo, an Actions step header, a pip install line, the runner's echo of the step's
+    # own source, or a test harness quoting back the output it compared. Scoring is untouched
+    # by this; winning is not.
+    noise = (
+        _non_failure_line_bounds(text)
+        + _runner_script_echo_bounds(raw, text)
+        + _assertion_report_bounds(text)
+    )
     witnessing = {
         rule["failure_class"]: _signals_witnessing_failure(text, signals, noise)
         for rule, signals in scored

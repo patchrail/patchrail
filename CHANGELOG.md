@@ -4,6 +4,19 @@
 
 ### Fixed
 
+- **Output a test quoted back at you is no longer read as the job's own diagnostic.** When a
+  test suite asserts on the output of a tool, that tool's diagnostics become the test's *data* —
+  and a failing assertion prints them right back, actual against expected. denoland/deno's spec
+  suite (30MB, 1553 failing specs) carried 4899 TypeScript diagnostics of exactly this kind, and
+  PatchRail told the maintainers of a TypeScript runtime that their TypeScript was broken, at
+  **0.95 confidence**. It was not: deno's specs typecheck deliberately-broken programs and assert
+  the errors come out right, so every one of those diagnostics was the contents of a fixture file
+  (`-- EXPECTED START --`, named on the `output path` line above it) or a `pretty_assertions`
+  diff of one. What had actually failed said so plainly — `panicked at tests/specs/mod.rs:669`,
+  exit code 101 — and now that is the answer: `rust_test_failure`, pointing at the spec that
+  asserted a type error and got an empty string back. A diagnostic the job itself emitted sits
+  outside those blocks by construction and still carries the verdict as before, including a real
+  `tsc` failure in a job that also runs specs.
 - **A cache that could not save, and a tool the job merely installed, no longer decide the
   verdict.** pandas-dev/pandas's doc build died on a Sphinx crash and PatchRail called it an
   `artifact_or_cache_failure` at **0.89 confidence**, sending a maintainer to debug a cache
