@@ -196,5 +196,55 @@ class BoilerplateAnnotationsAreNotEvidence(unittest.TestCase):
         self.assertEqual(result["runner_errors"], [real])
 
 
+class SuccessAnnouncedThroughTheErrorChannelIsNotEvidence(unittest.TestCase):
+    """A step is free to route a *success* through the error channel, and some do.
+
+    `oven-sh/bun` run 29324834075 fails with exactly one `##[error]` in 4,709 lines, and
+    that line says `✅ Autofix task started.` Reported back as somewhere to "start", it is
+    the boilerplate dead end again, reached through content instead of the runner's own
+    template. The verdict itself is right and stays put: `unknown` is honest for this log.
+    """
+
+    def test_the_real_bun_annotation_is_not_handed_back(self) -> None:
+        # In `gh` wire form -- job/step columns and timestamp -- as it arrives from the pipe.
+        log = (
+            "Format\tUNKNOWN STEP\t2026-07-14T10:19:45.5693633Z ##[error]✅ Autofix task started.\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertNotIn("runner_errors", result)
+
+    def test_a_success_mark_does_not_silence_an_annotation_that_names_a_failure(self) -> None:
+        # The guard must not become a checkmark-shaped hole. An annotation that opens with a
+        # tick but reports a failure anyway is precisely the line the maintainer needs, so
+        # any hint of failure in the line keeps it.
+        for real in (
+            "✅ 2 passed, ❌ 1 failed",
+            "✔ image built, but the upload failed",
+            "✅ cache restored — the registry refused the push",
+        ):
+            with self.subTest(real):
+                result = classify_ci_log(f"##[error]{real}\n")
+                self.assertEqual(result["runner_errors"], [real])
+
+    def test_a_tick_further_along_the_line_is_not_a_success_announcement(self) -> None:
+        # Only a *leading* mark reads as "this line announces a success". A tick reporting
+        # one green step inside a line about a red one is not the line announcing itself.
+        real = "deploy ✅ staging, production rollout never became ready"
+        result = classify_ci_log(f"##[error]{real}\n")
+
+        self.assertEqual(result["runner_errors"], [real])
+
+    def test_a_success_line_does_not_crowd_out_the_annotation_that_names_the_failure(
+        self,
+    ) -> None:
+        real = "config.json is not valid JSON"
+        log = f"##[error]✅ Autofix task started.\n##[error]{real}\n"
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["runner_errors"], [real])
+
+
 if __name__ == "__main__":
     unittest.main()
