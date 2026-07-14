@@ -1914,5 +1914,69 @@ class ANameInAPathIsAFilenameNotAFailure(unittest.TestCase):
         self.assertGreater(corroborated["confidence"], classify_ci_log(error_only)["confidence"])
 
 
+class AStepsSourceIsNotItsOutput(unittest.TestCase):
+    """The runner echoes a `run:` step's source before executing it. That is program text.
+
+    GitHub Actions prints every line of a step's script in cyan-bold before running it, so a
+    log carries the step's error-handling branches whether or not they were ever taken. Seven
+    of ten real failing logs sampled (ruff, airflow, pydantic, tokio, vite, prometheus, httpx)
+    echo a step body, and those bodies say `pnpm run lint`, `bail() {`, `exit 1`.
+    """
+
+    def test_an_error_branch_that_never_ran_is_not_a_pytest_failure(self) -> None:
+        # astral-sh/ruff: a Rust repo, whose benchmark job died on a panic (`exit code: 101`).
+        # The step's installer script carries an error branch for a download that SUCCEEDED --
+        # and `FAILED .*::`, matched case-insensitively, read pytest's short-summary line off
+        # `Failed to install CodSpeed CLI::`. A Rust panic came out `python_test_failure`.
+        log = (
+            '^[[36;1m  if ! HTTP_CODE=$(curl -sSL -o "$INSTALLER_TMP" "$INSTALLER_URL"); then^[[0m\n'
+            '^[[36;1m    echo "::error title=Failed to install CodSpeed CLI::Installation of '
+            'CodSpeed CLI with version $RUNNER_VERSION failed."^[[0m\n'
+            "^[[36;1m    exit 1^[[0m\n"
+            "thread 'main' (2574) panicked at crates/ruff_benchmark/benches/ty_walltime.rs:238:13:\n"
+            "Expected between 1 and 3 diagnostics on project 'altair' but got 4\n"
+            "failed to execute the benchmark process, exit code: 101\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertNotEqual(result["failure_class"], "python_test_failure")
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+
+    def test_the_api_serving_a_real_escape_byte_is_handled_too(self) -> None:
+        # The same log, with the ESC written as the byte itself rather than the two literal
+        # characters `^` `[`. Both encodings reach `patchrail ci explain` in the wild.
+        log = (
+            '\x1b[36;1m    echo "::error title=Failed to install CodSpeed CLI::Installation '
+            'failed."\x1b[0m\n'
+            "thread 'main' (2574) panicked at crates/ruff_benchmark/benches/ty_walltime.rs:238:13:\n"
+            "failed to execute the benchmark process, exit code: 101\n"
+        )
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "python_test_failure")
+
+    def test_an_echoed_lint_command_alone_is_not_a_lint_failure(self) -> None:
+        # vitejs/vite echoes its whole CI script, `pnpm run lint` included, in every job --
+        # including the jobs where lint passes and something else kills the run.
+        log = (
+            "^[[36;1mpnpm install^[[0m\n"
+            "^[[36;1mpnpm run lint^[[0m\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        self.assertEqual(classify_ci_log(log)["failure_class"], "unknown")
+
+    def test_a_tool_that_really_fails_still_wins_from_off_the_listing(self) -> None:
+        # The guard against overreach, on the very signal the ruff fix touched: pytest is named
+        # in the echoed script AND fails in the output. The script listing is discounted, the
+        # output is not, so a real pytest failure still wins at full confidence.
+        log = (
+            "^[[36;1m  pytest -q --color=yes^[[0m\n"
+            "FAILED tests/test_app.py::test_login - AssertionError: assert 401 == 200\n"
+            "===== 1 failed, 322 passed in 15.81s =====\n"
+            "##[error]Process completed with exit code 1.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+
 if __name__ == "__main__":
     unittest.main()
