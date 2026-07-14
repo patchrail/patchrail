@@ -4,6 +4,27 @@
 
 ### Fixed
 
+- **A tie between two failure classes now goes to the one that watched something fail,
+  not to whichever was written first.** Found dogfooding against real failing runs:
+  `prometheus/prometheus` — a Go repo, whose Go tests failed — was reported as
+  `javascript_lint` at 0.89, and its maintainers were handed `pnpm lint` as the way to
+  reproduce a Go test failure.
+
+  Both classes matched exactly three signals, so the verdict came down to declaration order
+  in the rule list, and `javascript_lint` happens to be written first. That is a coin flip,
+  and the log had already settled the question: `javascript_lint`'s three were `eslint` and
+  `prettier`, read off pnpm's listing of the web UI's *installed packages*, plus
+  `no-unused-vars`, read off an eslint **warning** printed by a build that exited 0.
+  `go_test_failure`'s three were `--- FAIL:`, `FAIL <pkg>` and `go test` — the test that
+  actually died.
+
+  So a tie is now broken by the signals that *carry*: the ones that matched away from an
+  echo or install line, and that are not just a tool's bare name (a name is corroboration
+  next to a real error, never a verdict on its own). Scoring itself is unchanged — a rule
+  that wins on signal count outright still wins, so no genuine verdict moves, and all 221
+  fixtures keep top-1 accuracy of 1.0.
+  ([#338](https://github.com/patchrail/patchrail/issues/338))
+
 - **npm's post-install audit tally is no longer read as a failed security scan.** Found
   dogfooding against real failing runs: `withastro/astro`'s Windows smoke job was reported
   as `security_scan_failure` at 0.71. The whole of the evidence was the block npm prints at

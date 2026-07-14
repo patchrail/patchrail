@@ -1650,13 +1650,45 @@ def _is_mention_only(signals: list[str]) -> bool:
 
 def _highest_scoring_rule(
     scored: list[tuple[dict[str, Any], list[str]]],
+    carrying: dict[str, list[str]] | None = None,
 ) -> tuple[dict[str, Any] | None, list[str]]:
+    """The rule matching the most signals. A TIE goes to the one that saw the most fail.
+
+    Scoring stays most-matching-patterns-wins. The tie is what changes. A tie used to be
+    settled by declaration order in ``RULES`` -- a coin flip, and one the comment above
+    ``BENIGN_WARNING_PATTERNS`` already names as the mechanism behind a misdiagnosis.
+    prometheus/prometheus -- a Go repo, whose Go tests failed -- lost that flip:
+    `javascript_lint` matched three signals, `go_test_failure` matched three, and
+    `javascript_lint` is declared first. A Go maintainer was handed `pnpm lint` as the way to
+    reproduce a Go test failure.
+
+    Not all three signals are equal, though, and the log says so. `javascript_lint`'s three
+    were `eslint` and `prettier`, read off pnpm's listing of the web UI's *installed
+    packages*, and `no-unused-vars`, read off an eslint WARNING from a build that exited 0.
+    `go_test_failure`'s three were `--- FAIL:`, `FAIL\\t` and `go test`, off the Go test that
+    actually died.
+
+    So a tie is broken by the signals that CARRY: matched away from an echo/install line
+    (they witnessed something) and not one of the bare tool names in
+    ``NON_FAILURE_PATTERNS`` (a name is corroboration, never a verdict on its own -- the same
+    rule the deferrals below already enforce). Both facts are already computed; only the
+    tiebreak reads them. Counting a bare name here would resurrect exactly what those
+    deferrals exist to bury: oven-sh/bun's formatter listing files it left `(unchanged)`
+    witnesses `prettier` off `[prettier]`, and would take the tie on nothing at all.
+
+    A rule that wins on signal count outright is untouched, so no genuine verdict moves, and
+    a tie that carrying signals cannot separate still falls back to declaration order.
+    """
     best_rule: dict[str, Any] | None = None
     best_signals: list[str] = []
+    best_rank = (0, 0)
     for rule, signals in scored:
-        if len(signals) > len(best_signals):
+        carried = len(carrying.get(rule["failure_class"], ())) if carrying else 0
+        rank = (len(signals), carried)
+        if rank > best_rank:
             best_rule = rule
             best_signals = signals
+            best_rank = rank
     return best_rule, best_signals
 
 
@@ -1672,10 +1704,18 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # echo, an Actions step header, a pip install line, or the runner's echo of the step's
     # own source. Scoring is untouched by this; winning is not.
     noise = _non_failure_line_bounds(text) + _runner_script_echo_bounds(raw, text)
-    unwitnessed = {
-        rule["failure_class"]
+    witnessing = {
+        rule["failure_class"]: _signals_witnessing_failure(text, signals, noise)
         for rule, signals in scored
-        if not _signals_witnessing_failure(text, signals, noise)
+    }
+    unwitnessed = {failure_class for failure_class, seen in witnessing.items() if not seen}
+
+    # Of those, the signals that could carry a verdict alone: a bare tool name witnesses
+    # nothing even when it lands off an echo line -- `[prettier]`, printed beside a file the
+    # formatter left unchanged, is not evidence that anything failed. Used only to break ties.
+    carrying = {
+        failure_class: [pattern for pattern in seen if pattern not in NON_FAILURE_PATTERNS]
+        for failure_class, seen in witnessing.items()
     }
 
     # Stricter than unwitnessed: a rule every one of whose signals landed on a line that only
@@ -1692,7 +1732,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     def carried_by_noise_alone(rule: dict[str, Any], signals: list[str]) -> bool:
         return _is_non_failure_only(signals) or rule["failure_class"] in unwitnessed
 
-    best_rule, best_signals = _highest_scoring_rule(scored)
+    best_rule, best_signals = _highest_scoring_rule(scored, carrying)
 
     # A broad "transient network" match built ENTIRELY from ambiguous signals
     # (dial tcp / connection refused / context deadline exceeded / i/o timeout …)
@@ -1711,7 +1751,8 @@ def classify_ci_log(text: str) -> dict[str, Any]:
                 (rule, signals)
                 for rule, signals in scored
                 if rule["failure_class"] != "network_transient_failure"
-            ]
+            ],
+            carrying,
         )
         if alternative_rule is not None:
             best_rule = alternative_rule
@@ -1727,7 +1768,8 @@ def classify_ci_log(text: str) -> dict[str, Any]:
                 (rule, signals)
                 for rule, signals in scored
                 if not carried_by_noise_alone(rule, signals)
-            ]
+            ],
+            carrying,
         )
         if alternative_rule is not None:
             best_rule = alternative_rule
