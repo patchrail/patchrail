@@ -1525,5 +1525,125 @@ class CpuFlagsAreNotATypeScriptCompiler(unittest.TestCase):
                 self.assertEqual(result["failure_class"], "typescript_typecheck")
 
 
+# Shaped after the real failing apache/airflow run 29314707915 ("Tests (AMD)"), which
+# runs pytest with `--color=yes`. Two things about it defeated the classifier at once:
+# the colour codes arrive from the GitHub log API with the ESC byte literalised as `^[`,
+# and the `if: failure()` cleanup step uploads container logs that do not exist.
+_AIRFLOW_COLOURED_TEST_FAILURE = (
+    "Run breeze testing providers-tests\n"
+    "^[[94mdocker compose --project-name breeze run -T --rm airflow providers/edge3/tests"
+    " --^[[0m^[[94mcolor^[[0m^[[94m=^[[0m^[[94myes^[[0m\n"
+    "plugins: asyncio-1.4.0, mock-3.15.1, xdist-3.8.0, rerunfailures-16.4\n"
+    "^[[31m========================= FAILURES =========================^[[0m\n"
+    "    ^[[0m^[[94massert^[[39;49;00m worker.maintenance_mode ^[[95mis^[[39;49;00m expected\n"
+    "^[[1m^[[31mE   assert True is False^[[0m\n"
+    "^[[31mFAILED^[[0m providers/edge3/tests/unit/edge3/cli/test_worker.py::"
+    "^[[1mTestEdgeWorker::test_adjust_maintenance_mode_based_on_sysinfo_exit^[[0m"
+    " - assert True is False\n"
+    "^[[31m===== ^[[31m^[[1m1 failed^[[0m, ^[[32m322 passed^[[0m, ^[[33m5 skipped^[[0m"
+    " in 15.81s^[[0m^[[31m =====^[[0m\n"
+    "Dumping logs on error\n"
+    "^[[31mTest failed with ^[[0m^[[1;31m1^[[0m^[[31m.^[[0m\n"
+    "Run ./.github/actions/post_tests_failure\n"
+    "Run actions/upload-artifact@v4\n"
+    "No files were found with the provided path: ./files/container_logs*."
+    " No artifacts will be uploaded.\n"
+    "##[error]Process completed with exit code 1.\n"
+)
+
+
+class ColourCodesDoNotHideTheFailure(unittest.TestCase):
+    def test_coloured_pytest_failure_from_the_github_log_api(self) -> None:
+        # The exact one-liner a maintainer runs:
+        #   gh run view <id> --log-failed | patchrail ci explain
+        # Before the fix this returned `artifact_or_cache_failure`: every coloured token
+        # was unmatchable, so the only signal `python_test_failure` could still see was
+        # the bare `pytest` invocation.
+        result = classify_ci_log(_gh_prefixed(_AIRFLOW_COLOURED_TEST_FAILURE))
+        self.assertEqual(result["failure_class"], "python_test_failure")
+        self.assertIn("FAILED .*::", result["signals"])
+        self.assertEqual(result["reproduction_command"], "python -m pytest -q")
+
+    def test_real_esc_byte_is_stripped_too(self) -> None:
+        # A log saved straight from a terminal keeps the actual ESC (0x1b) byte.
+        log = (
+            "Run pytest\n"
+            "\x1b[31mFAILED\x1b[0m tests/test_math.py::test_add - assert 4 == 5\n"
+            "\x1b[31m===== \x1b[1m1 failed\x1b[0m, \x1b[32m12 passed\x1b[0m =====\x1b[0m\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+        self.assertIn("FAILED .*::", result["signals"])
+
+    def test_colour_classifies_identically_to_the_uncoloured_log(self) -> None:
+        plain = (
+            "Run pytest\n"
+            "FAILED tests/test_math.py::test_add - assert 4 == 5\n"
+            "===== 1 failed, 12 passed =====\n"
+        )
+        coloured = (
+            "Run pytest\n"
+            "^[[31mFAILED^[[0m tests/test_math.py::test_add - assert 4 == 5\n"
+            "^[[31m===== ^[[1m1 failed^[[0m, ^[[32m12 passed^[[0m =====^[[0m\n"
+        )
+        self.assertEqual(classify_ci_log(coloured), classify_ci_log(plain))
+
+    def test_bracketed_error_codes_survive_the_strip(self) -> None:
+        # The strip is anchored to the ESC/`^[` introducer: `error[E0277]`, `[ERROR]` and
+        # ordinary indexing must pass through untouched, or it would break every rule
+        # that matches a bracketed code.
+        log = (
+            "error[E0277]: the trait bound `Binder<TyCtxt<'_>>: SliceLike` is not satisfied\n"
+            "   --> compiler/rustc_middle/src/ty/sty.rs:812:9\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "rust_test_failure")
+        self.assertIn(r"error\[E\d{4}\]", result["signals"])
+
+
+class PostFailureArtifactNoiseIsNotTheCause(unittest.TestCase):
+    def test_upload_artifact_warning_does_not_mask_the_failing_test(self) -> None:
+        # The commonest shape in CI: a test fails, and the `if: failure()` step that
+        # uploads logs/screenshots for diagnosis finds nothing to upload and warns. The
+        # cleanup running after the failure is not the cause of it.
+        #
+        # The suite is driven through `make test`, so the word "pytest" never appears and
+        # the real cause is carried by a single signal -- while the cleanup noise carries
+        # two. This is where the deferral actually decides: on raw score the artifact rule
+        # wins 2-1.
+        log = (
+            "Run make test\n"
+            "FAILED tests/test_worker.py::test_maintenance - assert True is False\n"
+            "Run actions/upload-artifact@v4\n"
+            "No files were found with the provided path: ./files/container_logs*."
+            " No artifacts will be uploaded.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "python_test_failure")
+
+    def test_a_genuine_artifact_failure_still_wins(self) -> None:
+        # A real artifact failure trips a terminal signal, which is not in the deferral
+        # sets -- it must still win, at full confidence.
+        log = (
+            "Run actions/upload-artifact@v4\n"
+            "Failed to CreateArtifact: Received non-retryable error: Conflict:"
+            " an artifact with this name already exists\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "artifact_or_cache_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_artifact_warning_alone_still_classifies_as_artifact(self) -> None:
+        # When the warning is all the log gave us, it stands: there is nothing to defer
+        # to, and `unknown` would be less useful than the one lead available.
+        log = (
+            "Run actions/upload-artifact@v4\n"
+            "No files were found with the provided path: dist/*.whl."
+            " No artifacts will be uploaded.\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "artifact_or_cache_failure")
+
+
 if __name__ == "__main__":
     unittest.main()
