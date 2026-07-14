@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A container killed for memory is no longer reported as the *runner* running out of it.**
+  `runner_resource_exhaustion` is about the CI machine hitting a host limit — free disk, raise the
+  runner class. But `OOMKilled`, `Out of memory` and `exit code 137` describe a process killed for
+  memory without saying *whose*, and a container runtime's own tests trip all three on purpose: a
+  test that provokes the OOM killer, an exec that exits 137 by design, a *cgroup* reaching its
+  configured limit. On containerd/containerd's integration run 29358848438 a Go test failed
+  (`TestContainerCgroupWritable`) and PatchRail sent the maintainer to go watch runner memory and
+  disk. A resource verdict built *only* from those symptom signals now defers to the concrete cause
+  the log recorded — here `go_test_failure`, reproduced with `go test ./...` — and skips the equally
+  ambiguous `network_transient_failure` the same suite also trips (`connection refused` from an
+  upgrade test). A real exhaustion is unaffected: it also trips a terminal signal (the runner's own
+  `Process completed with exit code 137`, `No space left on device`, a build's `JavaScript heap out
+  of memory`), and keeps its verdict.
+
 ## 0.7.1 - 2026-07-14
 
 ### Fixed
