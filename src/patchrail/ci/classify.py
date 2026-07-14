@@ -884,6 +884,8 @@ RULES: list[dict[str, Any]] = [
             r"FAIL\t",
             r"--- FAIL:",
             r"undefined:",
+            r"not enough arguments in call to",
+            r"too many arguments in call to",
             r"panic: test timed out",
         ],
         "reproduction_command": "go test ./...",
@@ -1263,6 +1265,7 @@ _INVOCATION_LINE = re.compile(
         | \[command\]                  # Actions command echo: `[command]/usr/bin/git ...`
         | \#\#\[(?:group|command)\]    # Actions group header, which echoes the command
         | Run\ +\S                     # Actions step header: `Run mypy .`
+        | Running\ \[                  # bracketed echo: `Running [/path/golangci-lint run] in [/src]`
         | \$\ +\S                      # pnpm/turbo script echo: `$ tsc -b`
     )""",
     re.VERBOSE | re.IGNORECASE,
@@ -1301,6 +1304,16 @@ _MERE_MENTION_LINE = re.compile(
           (?:Collecting|Downloading|Using\ cached|Requirement\ already\ satisfied
            |Installing\ collected\ packages|Successfully\ installed)\b  # pip resolver
         | Download\ action\ repository\b   # runner pre-loading every action the job declares
+        | (?:                              # an action SHIPPING its tool: fetch, cache, probe,
+                                           # install, time it. golangci-lint-action prints all
+                                           # five before the linter inspects a single file, and
+                                           # each one names the tool.
+            Finding\ needed\ [\w.\-]+\ version
+          | Install(?:ing|ed)\ [\w.\-]+\ (?:binary|into)\b
+          | (?:Cache\ hit\ (?:for|occurred)|Restored\ cache\ for)\b
+          | Ran\ [\w.\-]+\ in\ \d+\s*m?s\b
+          )
+        | level=info\b                     # a structured log line that grades itself: not a failure
         | (?-i:                            # env dump -- case-sensitive, and never a severity
             (?!(?:ERROR|ERR|FAIL|FAILED|FAILURE|FATAL|PANIC|WARN|WARNING|CRITICAL)\b)
             [A-Z][A-Z0-9_]+ (?: = | \ {2,} ) \S      # `GRADLE_HOME=/usr/...`, `M2   C:\...`

@@ -6,12 +6,12 @@ number is worth exactly nothing to you: we wrote both the logs and the answers.
 This page is the other benchmark. Seven **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff — with their logs committed to this repo
 unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the output of
-a command you can run yourself, including **the two where PatchRail is still wrong**.
+a command you can run yourself, including **the one where PatchRail is still wrong**.
 
 ## Reproduce it
 
 ```bash
-# what PyPI serves today
+# the last release before these fixes
 pip install patchrail==0.6.1
 patchrail ci explain --log examples/real-world/pandas-29342614636.log --format json
 
@@ -25,9 +25,9 @@ working in ninety days is a claim, not evidence.
 
 ## Results
 
-`before` is patchrail 0.6.1, the version PyPI serves today. `after` is `main` at `68e552d`. (Both
-report `0.6.1` to `--version`; the version bumps at release, so the commit is what distinguishes
-them.)
+`before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
+serves 0.7.0 today, which ships every fix below except the grafana one — that one is on `main` and
+goes out with the next release.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -36,11 +36,11 @@ them.)
 | [svelte](https://github.com/sveltejs/svelte/actions/runs/29330826741) | Dependabot's updater died | `javascript_lint` 0.71 | `unknown` 0.15 | ✅ fixed |
 | [home-assistant](https://github.com/home-assistant/core/actions/runs/29350290194) | a pytest snapshot assertion | `python_test_failure` 0.95 | `python_test_failure` 0.95 | ✅ correct |
 | [prometheus](https://github.com/prometheus/prometheus/actions/runs/29348880303) | golangci-lint: file not gofmt'd | `go_lint` 0.89 | `go_lint` 0.89 | ✅ correct |
-| [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_lint` 0.71 | ⚠️ right job, wrong nature |
+| [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_test_failure` 0.53 | ✅ fixed |
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
 
-Four of the seven were classified identically before and after. That is the point of showing them:
-the three fixes below were narrow enough not to disturb the logs that already worked.
+Three of the seven were classified identically before and after. That is the point of showing them:
+the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
 
@@ -75,19 +75,7 @@ What changed is not that PatchRail got this log right. It's that a confident wro
 weak wrong one. That is worth something — 0.89 sends a maintainer to debug a healthy cache — but it
 is not a fix, and we are not going to describe it as one.
 
-### grafana — a compile error is not a lint failure
-
-PatchRail says `go_lint` at 0.71 and tells you to run `golangci-lint run ./...`. That command does
-reproduce the failure, and golangci-lint is genuinely what failed. But what it reported is:
-
-```
-pkg/services/frontend/request_config_test.go:22:34: not enough arguments in call to config.ApplyOverrides
-```
-
-The package does not compile. A maintainer reading "lint" may reach for a formatter when the real job
-is to fix a call site. Right job, wrong nature of the failure.
-
-## The three fixes, and the logs that forced them
+## The fixes, and the logs that forced them
 
 ### deno — `typescript_typecheck` → `rust_test_failure` ([#343](https://github.com/patchrail/patchrail/issues/343), `00d4f9e`)
 
@@ -129,6 +117,35 @@ A Dependabot security update that died inside the updater. The runner says so in
 PatchRail sent Svelte's maintainers to run `pnpm lint`. It now returns `unknown` and hands back that
 error line. `unknown` is not a diagnosis, and PatchRail has no class for a Dependabot updater
 failure. It is the honest answer, and honest beats confident.
+
+### grafana — `go_lint` → `go_test_failure` ([#352](https://github.com/patchrail/patchrail/issues/352))
+
+A compile error, reported by the linter, read as a lint failure — on evidence that was never
+evidence at all.
+
+Grafana's `lint-go` job did not fail a lint check. `config.ApplyOverrides` had grown a parameter and
+eight call sites in one test file had not:
+
+```
+##[error]pkg/services/frontend/request_config_test.go:22:34: not enough arguments in call to config.ApplyOverrides
+```
+
+There is no lint finding anywhere in that log — not one `(gofmt)`, `(revive)` or `(errcheck)`. Yet
+PatchRail answered `go_lint` at 0.71 and advised "apply the reported lint correction", because
+`golangci-lint-action` names its tool five times while merely *shipping* it: it looks the version
+up, hits its cache, installs the binary, echoes its own command line, and times the run. Both
+witnesses came off install lines. Any job that so much as declares the action got a confident lint
+verdict for free, whatever actually broke.
+
+Downloading a linter is not running one, and running one is not failing one. Those lines are now
+mere mentions, which carry nothing; the invocation echo still corroborates but cannot carry a rule
+on its own. What is left witnessing a failure is the Go compiler's own diagnostic, so the log lands
+on `go_test_failure`: reproduce with `go test ./...`, and make "the smallest compile or runtime fix
+in that package" — which is what the maintainers did.
+
+The cure did not eat the disease, and prometheus above is the proof: the same action, the same
+install lines, but a real `(gci)` finding on a real error line. It stays `go_lint` at 0.89 — and it
+now scores on the finding it was right about, which until this fix had matched no pattern at all.
 
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
