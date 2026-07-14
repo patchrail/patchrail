@@ -4,6 +4,25 @@
 
 ### Fixed
 
+- **npm's post-install audit tally is no longer read as a failed security scan.** Found
+  dogfooding against real failing runs: `withastro/astro`'s Windows smoke job was reported
+  as `security_scan_failure` at 0.71. The whole of the evidence was the block npm prints at
+  the end of a *successful* install — `1 high severity vulnerability`, `npm audit fix
+  --force`. No scan ran; `npm audit` was suggested, never invoked, and the tally counts
+  advisories in the dependency tree. The job had actually died in a build script, and the
+  runner said so: `##[error]@benchmark/timer#build: command … exited (-1073741502)`.
+
+  Two changes, one idea — *a tool that gets named is not a tool that failed*. npm's audit
+  summary no longer witnesses a failure, and a verdict left standing as a **last resort** —
+  one whose signals never watched anything fail — now yields to the runner's own annotation
+  when there is one. On this log that mattered twice: silencing the audit tally alone just
+  handed the verdict to `javascript_lint` at 0.89, on `eslint`, `biome` and `prettier` read
+  off pnpm's install listing. Both linters and scanners that genuinely run and genuinely
+  fail are untouched — they witness a failure off those lines and keep full confidence, and
+  a scanner's own finding (`High severity vulnerability found in openssl (CVE-…)`) is never
+  mistaken for npm's tally, which is matched only when the count is the whole line.
+  ([#327](https://github.com/patchrail/patchrail/issues/327))
+
 - **A proxy logging its own client disconnects is no longer read as a network outage.**
   Found dogfooding against real failing runs: `istio/istio`'s failing Dependabot job was
   reported as `network_transient_failure` at 0.53. The only evidence was `connection reset

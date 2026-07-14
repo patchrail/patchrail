@@ -327,5 +327,127 @@ class AProxyLoggingItsOwnClientDisconnectsIsNotAnOutage(unittest.TestCase):
         self.assertEqual(result["failure_class"], "network_transient_failure")
 
 
+class AnInstallSummaryIsNotAFailedSecurityScan(unittest.TestCase):
+    """npm's post-install audit tally is not a scanner, and a named tool is not a failure.
+
+    `withastro/astro` run 29312523125 dies in a build script on Windows -- the runner says
+    `##[error]@benchmark/timer#build: command ... exited (-1073741502)` -- and PatchRail
+    answered `security_scan_failure` at 0.71. The whole of the evidence was the block npm
+    prints at the end of a *successful* install:
+
+        1 high severity vulnerability
+        To address all issues, run:
+          npm audit fix --force
+
+    No scan ran. `npm audit` was suggested, never invoked, and the tally counts advisories
+    in the dependency tree -- it is what a green install looks like.
+
+    Silencing that block alone is not enough, and the log proves why: the verdict fell
+    straight through to `javascript_lint` at 0.89, on `eslint`, `biome` and `prettier` read
+    off pnpm's install listing (`+ eslint 10.4.0 (10.7.0 is available)`). Those linters were
+    downloaded, not run. A rule that never watched its tool fail is a last resort, and a last
+    resort is not worth making when the runner has already named what broke.
+    """
+
+    # Trimmed from the real `gh run view 29312523125 --repo withastro/astro --log-failed`,
+    # kept in `gh` wire form -- job/step columns and timestamp -- because that prefix is
+    # exactly what defeats a `^`-anchored pattern. Four things in order: npm's audit tally,
+    # pnpm's install listing, turbo's script echo, and the error the runner actually reported.
+    ASTRO_SMOKE_LOG = (
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:53:43.5Z "
+        "added 1 package, and audited 2 packages in 8s\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:53:43.5Z "
+        "1 high severity vulnerability\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:53:43.5Z "
+        "To address all issues, run:\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:53:43.5Z "
+        "  npm audit fix --force\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:53:43.5Z "
+        "Run `npm audit` for details.\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:55:01.1Z "
+        "+ @biomejs/biome 2.4.10 (2.5.3 is available)\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:55:01.1Z "
+        "+ eslint 10.4.0 (10.7.0 is available)\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:55:01.1Z "
+        "+ prettier 3.9.0 (3.9.5 is available)\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:56:12.3Z "
+        "##[group]@astrojs/yaml2ts:build\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:56:12.3Z $ tsc -b\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:57:09.4Z "
+        "##[error]@benchmark/timer#build: command (D:\\a\\astro\\astro\\benchmark\\packages"
+        "\\timer) pnpm.CMD run build exited (-1073741502)\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:57:09.5Z "
+        "[ELIFECYCLE] Command failed with exit code 3221225794.\n"
+        "Test (Smoke): windows-2025 (node@22)\tUNKNOWN STEP\t2026-07-14T06:57:09.5Z "
+        "##[error]Process completed with exit code 127.\n"
+    )
+
+    def test_the_real_astro_log_reports_the_error_the_runner_named(self) -> None:
+        result = classify_ci_log(self.ASTRO_SMOKE_LOG)
+
+        # Neither a failed scan nor a lint failure: nothing in this log ever ran either one.
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["signals"], [])
+
+        # The line the maintainer would have scrolled to, handed back instead. The runner's
+        # stock `exit code 127` line is boilerplate and stays filtered out.
+        self.assertEqual(
+            result["runner_errors"],
+            [
+                "@benchmark/timer#build: command (D:\\a\\astro\\astro\\benchmark\\packages"
+                "\\timer) pnpm.CMD run build exited (-1073741502)"
+            ],
+        )
+
+    def test_a_scan_that_really_ran_and_failed_keeps_its_verdict(self) -> None:
+        # The guard is for the tally, not for the scanners. Each of these is a scan that ran
+        # and failed -- off the install block, and with the runner annotating the job too --
+        # and each must still come back a failed scan.
+        for real in (
+            "Found known vulnerabilities in 3 packages",
+            "CRITICAL: Vulnerability found in openssl",
+            "trivy: Severity: HIGH  Package: libssl3",
+        ):
+            with self.subTest(real):
+                result = classify_ci_log(f"##[error]The job failed\n{real}\n")
+
+                self.assertEqual(result["failure_class"], "security_scan_failure")
+
+    def test_a_scanners_own_finding_is_not_mistaken_for_npms_tally(self) -> None:
+        # npm's tally is the whole line -- a count and nothing else. A scanner reporting a
+        # finding says more than that on the same line, and is still a failed scan at full
+        # confidence: the count line is anchored, so this never reads as the tally.
+        log = "##[error]The job failed\nHigh severity vulnerability found in openssl (CVE-2026-1234)\n"
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "security_scan_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_a_typecheck_that_really_failed_still_wins_over_the_annotation(self) -> None:
+        # The `$ tsc -b` echo is an invocation, so the rule may still stand on it as a last
+        # resort -- but when tsc actually fails, it witnesses off the echo and the runner's
+        # annotation cannot displace it.
+        log = (
+            "$ tsc -b\n"
+            "src/index.ts(3,7): error TS2345: Argument of type 'string' is not assignable.\n"
+            "##[error]Process completed with exit code 2.\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "typescript_typecheck")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_a_last_resort_verdict_still_stands_when_the_runner_named_nothing(self) -> None:
+        # The new guard defers to the runner, so with no annotation to defer to the last
+        # resort remains the best reading of the log -- it is the only thing the log gave us.
+        # Boilerplate names no error, so it cannot displace one either.
+        for tail in ("", "##[error]Process completed with exit code 1.\n"):
+            with self.subTest(tail=tail or "no annotation"):
+                log = "Run eslint .\n+ eslint 10.4.0\n" + tail
+                result = classify_ci_log(log)
+
+                self.assertEqual(result["failure_class"], "javascript_lint")
+
+
 if __name__ == "__main__":
     unittest.main()
