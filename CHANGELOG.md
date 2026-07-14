@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A proxy logging its own client disconnects is no longer read as a network outage.**
+  Found dogfooding against real failing runs: `istio/istio`'s failing Dependabot job was
+  reported as `network_transient_failure` at 0.53. The only evidence was `connection reset
+  by peer` — logged thirteen times by the MITM proxy Dependabot runs *by design*, at its
+  own client. Meanwhile the runner had said outright what went wrong, and PatchRail threw
+  it away: `##[error]Dependabot encountered an error performing the update`.
+
+  A transient-network verdict carried *only* by signals that cannot prove an outage on
+  their own (`connection reset by peer`, `dial tcp`, `i/o timeout`, `context deadline
+  exceeded`…) now yields to the runner's own annotation, and you get that line back under
+  *"the CI runner did annotate these lines as errors"* instead of a network red herring.
+  A genuine outage is untouched: it trips a terminal signal — DNS, TLS, rate limit,
+  gateway — outside that set, and keeps classifying at full confidence.
+  ([#326](https://github.com/patchrail/patchrail/issues/326))
+
 ## 0.6.1 - 2026-07-14
 
 ### Fixed

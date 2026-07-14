@@ -1674,6 +1674,27 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     if best_rule is not None and _is_mention_only(best_signals):
         best_rule, best_signals = None, []
 
+    # Last word on a transient-network verdict that only ambiguous signals ever carried: if
+    # the runner itself annotated the error, that annotation beats our guess. istio/istio's
+    # Dependabot job dies with `##[error]Dependabot encountered an error performing the
+    # update`; the sole network evidence is Dependabot's own MITM proxy logging `connection
+    # reset by peer` at its client, by design, dozens of times. The deferral above cannot
+    # catch this on its own -- it hands off to `node_dependency_install`, matched by the bare
+    # word `lockfile` inside the JSON config key `"gradle-lockfile-updater"`, and the noise
+    # guard then bounces that mention-only rule straight back here. So this runs last, once
+    # the verdict has settled, whatever route it took to get here. A genuine outage is
+    # untouched: it trips a terminal signal (DNS, TLS, rate limit, gateway) outside the
+    # ambiguous set and so never qualifies. Boilerplate annotations ("Process completed with
+    # exit code 1") are already filtered, so a surviving one is a message worth reading --
+    # and `unknown` hands it back under `runner_errors`.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] == "network_transient_failure"
+        and set(best_signals) <= AMBIGUOUS_NETWORK_PATTERNS
+        and _runner_error_annotations(text)
+    ):
+        best_rule, best_signals = None, []
+
     if best_rule is None or not best_signals:
         result = {
             "schema_version": "patchrail.ci_result.v1",
