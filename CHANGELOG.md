@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A Go job that fails to compile is no longer reported as a lint failure.** If your workflow
+  uses `golangci-lint-action`, the action names its tool five times just to *ship* it — it looks
+  the version up, hits its cache, installs the binary, echoes its own command line, and times the
+  run. PatchRail was reading those install lines as proof the linter had failed, so any Go job that
+  merely declared the action got a confident `go_lint` verdict — "apply the reported lint
+  correction" — whatever had actually broken. On grafana/grafana's `lint-go` run 27635190952 there
+  was no lint finding at all: a function had grown a parameter and eight call sites in one test file
+  had not. That log now answers `go_test_failure`, reproduces with `go test ./...`, and tells you to
+  fix the call site. A linter that really did report something (`(gofmt)`, `(gci)`, `(revive)`) is
+  still `go_lint` at full confidence.
+- **Go call-site mismatches are recognised.** `not enough arguments in call to` and `too many
+  arguments in call to` — the compiler's own words — no longer pass unread, alongside `undefined:`.
+
 ## 0.7.0 - 2026-07-14
 
 Nine misreadings, all of one kind. Every fix below started as a real failing run at a real
