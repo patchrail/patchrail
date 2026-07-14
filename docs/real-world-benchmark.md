@@ -3,10 +3,10 @@
 The fixture zoo (`examples/ci-triage`, 221 logs) says PatchRail is right 221 times out of 221. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Seven **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff — with their logs committed to this repo
-unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the output of
-a command you can run yourself, including **the one where PatchRail is still wrong**.
+This page is the other benchmark. Eight **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, Envoy — with their logs committed to this
+repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
+output of a command you can run yourself, including **the one where PatchRail is still wrong**.
 
 ## Reproduce it
 
@@ -26,8 +26,8 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves 0.7.0 today, which ships every fix below except the grafana one — that one is on `main` and
-goes out with the next release.
+serves 0.7.0 today, which ships every fix below except the grafana and Envoy ones — those two are on
+`main` and go out with the next release.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -38,8 +38,9 @@ goes out with the next release.
 | [prometheus](https://github.com/prometheus/prometheus/actions/runs/29348880303) | golangci-lint: file not gofmt'd | `go_lint` 0.89 | `go_lint` 0.89 | ✅ correct |
 | [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_test_failure` 0.53 | ✅ fixed |
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
+| [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
 
-Three of the seven were classified identically before and after. That is the point of showing them:
+Three of the eight were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
@@ -147,6 +148,41 @@ The cure did not eat the disease, and prometheus above is the proof: the same ac
 install lines, but a real `(gci)` finding on a real error line. It stays `go_lint` at 0.89 — and it
 now scores on the finding it was right about, which until this fix had matched no pattern at all.
 
+### envoy — `ci_job_timeout` → `code_coverage_threshold` ([#354](https://github.com/patchrail/patchrail/issues/354))
+
+A limit a job *declares* is not a limit a job *hit*.
+
+Envoy's coverage job ran for sixteen minutes under a 180-minute ceiling and failed a coverage gate.
+One directory out of 430 had slipped three tenths of a point:
+
+```
+FAILED: Directories not meeting coverage thresholds:
+  ✗ source/common/quic: 93.2% (threshold: 93.5%)
+Overall Coverage: 96.7%
+```
+
+PatchRail answered `ci_job_timeout` at 0.53 and sent the maintainer off to compare step durations
+against their time limit. Its one and only witness was a line Actions had echoed from the workflow
+config, before the job ran a single test:
+
+```
+  timeout-minutes: 180
+```
+
+Every other pattern in that class is a timeout that *happened* — `has exceeded the maximum execution
+time of 360 minutes`, `The operation was canceled`, `execution took longer than`. `timeout-minutes`
+is the field you write to *set* the budget, and the runner prints it on green runs too. Our own
+[fix guide](fix/ci-job-timeout.md) calls it the knob you raise *after* a timeout, which is exactly
+why it cannot be proof of one.
+
+The declaration no longer counts as a witness (a mention in prose still does). The log then lands on
+the class it had the evidence for all along — `coverage threshold`, right there in the failing line.
+Both classes had scored one pattern each, and the tie had been going to whichever rule was declared
+first.
+
+A job that really does run long is untouched: the runner says so in words, and those words are still
+`ci_job_timeout` at full confidence.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -164,7 +200,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. Today, for pandas, it doesn't.
-- Seven logs is not a statistic. It is a set of cases you can check by hand, chosen because they were
+- Eight logs is not a statistic. It is a set of cases you can check by hand, chosen because they were
   the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. When a fix
   lands for #347, this page changes with it.

@@ -4,6 +4,16 @@
 
 ### Fixed
 
+- **A job that declares `timeout-minutes` is no longer reported as a job that timed out.** Actions
+  echoes your step config into the log — `timeout-minutes: 180` — on green runs and red ones alike.
+  PatchRail was reading that declaration as evidence the limit had been *hit*, so a job that set a
+  timeout and then failed for an unrelated reason could be sent back with `ci_job_timeout` and told
+  to go raise it. On envoyproxy/envoy's coverage run 29363920524 the job never came near its
+  180-minute ceiling: one directory out of 430 had slipped three tenths of a point under its
+  coverage threshold. That log now answers `code_coverage_threshold` — the class its evidence
+  supported all along. A job that really did run long is unaffected: the runner says so in words
+  (`has exceeded the maximum execution time of 360 minutes`, `The operation was canceled`), and
+  those still land as `ci_job_timeout` at full confidence.
 - **A Go job that fails to compile is no longer reported as a lint failure.** If your workflow
   uses `golangci-lint-action`, the action names its tool five times just to *ship* it — it looks
   the version up, hits its cache, installs the binary, echoes its own command line, and times the
