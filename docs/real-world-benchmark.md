@@ -3,10 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 221 logs) says PatchRail is right 221 times out of 221. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Eight **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff, Envoy — with their logs committed to this
-repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
-output of a command you can run yourself, including **the one where PatchRail is still wrong**.
+This page is the other benchmark. Ten **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, Envoy, containerd, React — with their logs
+committed to this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict
+below is the output of a command you can run yourself, including **the one where PatchRail is still
+wrong**.
 
 ## Reproduce it
 
@@ -40,8 +41,9 @@ serves 0.7.0 today, which ships every fix below except the grafana and Envoy one
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
 | [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
 | [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
+| [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
 
-Three of the nine were classified identically before and after. That is the point of showing them:
+Three of the ten were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
@@ -209,6 +211,32 @@ the concrete cause the log recorded — the Go test — skipping the equally-amb
 the way. A real runner exhaustion is untouched: it trips a terminal signal (the runner's own
 `Process completed with exit code 137`, `No space left on device`, a build's `JavaScript heap out of
 memory`) outside the ambiguous set, and keeps its verdict.
+
+### React — `node_dependency_install` → `javascript_lint` ([#359](https://github.com/patchrail/patchrail/issues/359))
+
+A `yarn run` that failed is not a `yarn install` that failed.
+
+yarn classic ends every command with the same footer — `info Visit
+https://yarnpkg.com/en/docs/cli/<cmd> for documentation about this command.` — and
+`node_dependency_install` watched for the bare host `yarnpkg.com`. On React's "Run prettier" step
+(run 29335289512) a file simply was not formatted:
+
+```
+This project uses prettier to format all JavaScript code.
+    Please run yarn prettier-all and add changes to files listed below to your commit:
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+The subcommand in that footer is `run`, not `install`, but the pattern ignored the path — so a
+formatting diff scored a dependency verdict and the maintainer was told to reconcile a lockfile.
+`node_dependency_install` and `javascript_lint` each matched exactly one witness here (the footer vs
+`prettier`), and the dependency rule won the tie on rule order. Pinning the footer to `install` and
+`add` — the only two subcommands that *are* a dependency operation — drops the `run`/`lint`/`test`
+footers, so the `prettier` witness the log actually carries wins and it answers `javascript_lint`. A
+real `yarn install` failure is untouched: its `/cli/install` footer still matches, and it rarely
+rests on the footer alone — `yarn install v1.x`, `error An unexpected error occurred`, and the
+lockfile / registry messages carry it.
 
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 

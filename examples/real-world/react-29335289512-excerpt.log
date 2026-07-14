@@ -1,0 +1,11 @@
+Run prettier	UNKNOWN STEP	2026-07-14T13:09:46.1116231Z yarn run v1.22.22
+Run prettier	UNKNOWN STEP	2026-07-14T13:09:46.1361827Z $ node ./scripts/prettier/index.js
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4831420Z 
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4832433Z   This project uses prettier to format all JavaScript code.
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4833760Z     Please run yarn prettier-all and add changes to files listed below to your commit:
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4834397Z 
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4834420Z 
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:11.4844700Z packages/react-reconciler/src/__tests__/useEffectEvent-test.js
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:17.7428646Z error Command failed with exit code 1.
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:17.7430460Z info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Run prettier	UNKNOWN STEP	2026-07-14T13:10:17.7532537Z ##[error]Process completed with exit code 1.
