@@ -4,6 +4,38 @@
 
 ### Fixed
 
+- **A cache that could not save, and a tool the job merely installed, no longer decide the
+  verdict.** pandas-dev/pandas's doc build died on a Sphinx crash and PatchRail called it an
+  `artifact_or_cache_failure` at **0.89 confidence**, sending a maintainer to debug a cache
+  that was working perfectly. Three signals carried that verdict and not one of them had
+  witnessed a failure:
+
+  ```
+  Download action repository 'actions/upload-artifact@bbbca2dd...'
+  ##[warning]Failed to save: Unable to reserve cache with key micromamba-downloads--linux-64,
+      another job may be creating this cache.
+  ```
+
+  The first is the runner booting, printed by every run that uses the action — the green ones
+  too. The other two are `Post job cleanup`, 2,000 lines *after* the job had already died,
+  reporting that two matrix jobs raced for one cache key. `actions/cache` settles it in its
+  own source: `saveImpl` wraps the save in `try { … } catch { logWarning(…) }`, so a save
+  error goes out through `core.warning` and never `core.setFailed`. **A cache that failed to
+  save cannot be why a job failed.** Once the runner has annotated an error — proof that some
+  step exited non-zero — a rule carried by nothing but benign warnings now stands down.
+
+  The same log also named `mypy` six times without ever running it: as the `environment.yml`
+  spec, through conda's transaction table, `Linking mypy-1.17.1-…`, the package tables and
+  `conda list`. pip's half of this was already handled (`Collecting`, `Downloading`); conda's
+  was not, so a bare `mypy` read off an install plan was enough to return `python_type_check`.
+  A conda listing is a bill of materials, not an event.
+
+  Deliberately narrow, and the guards are pinned by tests: a genuine artifact or cache failure
+  still wins at full confidence (`Failed to CreateArtifact`, `Cache service responded with
+  500`, `an artifact with this name already exists`), a warning in a log with **no** runner
+  error at all is still the one lead available and still stands, and a `mypy` that actually
+  ran and failed is still a `python_type_check`. All 221 fixtures pass unchanged.
+
 - **A failed `npm audit` is now reported as a failed security scan, not a broken dependency
   install.** When a registry cannot serve audit requests — Artifactory, Verdaccio and GitHub
   Packages all commonly cannot, which is the ordinary reason this fails in CI — npm exits

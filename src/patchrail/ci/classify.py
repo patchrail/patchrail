@@ -1210,6 +1210,23 @@ def _strip_ansi_escapes(text: str) -> str:
 # non-fatal `warning:` about an invalid noqa directive, which is not in the list. Judge
 # the LINE a signal lands on instead: found nowhere but here, it never witnessed a failure.
 #
+# conda says all of this too, and louder. pandas-dev/pandas builds its docs in a conda env
+# whose `environment.yml` pins the whole dev toolchain, so a job that runs nothing but Sphinx
+# still prints `mypy` six times -- once as the spec (`- mypy=1.17.1`), then in the solver's
+# transaction table, then `Linking mypy-1.17.1-py311h49ec1c0_1`, then twice more in the
+# package tables, then in `conda list`. Not one of them RUNS it. pip's half of this is already
+# handled above (`Collecting`, `Downloading`); the conda half was not, so `\bmypy\b` witnessed
+# a "failure" on a line that was installing a package, and pandas's Sphinx crash came out
+# `python_type_check` at 0.53. A conda listing is a bill of materials, not an event.
+#
+# The table row is matched structurally rather than by name -- `<pkg> <version> [<build>
+# <channel>]`, columns to the end of the line, no severity word in front (the same guard the
+# env dump uses, and for the same reason). A real failure never has that shape: it carries
+# prose, a path, a code, a message. `FAILED tests/test_x.py::test_y - assert 1 == 2` is a
+# severity plus a path, `error: cannot find crate` is prose, and `1 failed, 322 passed`
+# begins with a bare number rather than a package name -- none of them are a two-column
+# listing that stops at the version.
+#
 # A runner's env dump and a CMake probe name tools the same way. The hosted images ship a
 # whole toolchain, so every Windows job that prints its environment advertises Gradle and
 # Maven it will never run: moby/moby (Go, `build-windows`) and apache/kafka (whose failing
@@ -1272,6 +1289,13 @@ _MERE_MENTION_LINE = re.compile(
           )
         | --\ +\S                          # CMake status line / capability probe
         | \s* " [^"]+ " \s* :              # a key in a pretty-printed JSON config blob
+        | \s* (?:Linking|Unlinking|Extracting|Downloading\ and\ Extracting)\ +\S  # conda link phase
+        | \s* -\ +[\w.\-]+ \s* [=<>!~]=? \s* [\d*]   # env.yml spec echo: `- mypy=1.17.1`
+        | (?-i:                            # conda/mamba package table -- see below
+            (?!(?:ERROR|ERR|FAIL|FAILED|FAILURE|FATAL|PANIC|WARN|WARNING|CRITICAL)\b)
+            \s* [+-]?\ * [\w.\-]+ (?: \s{2,} | \s*[=<>!~]=?\s* ) v?\d[\w.+!]*
+            (?: \s+\S+ )*? \s* $          # nothing but more columns to the end of the line
+          )
     )""",
     re.VERBOSE | re.IGNORECASE,
 )
@@ -1475,6 +1499,21 @@ def _announces_success(message: str) -> bool:
     )
 
 
+def _runner_annotated_a_failure(text: str) -> bool:
+    """True if the runner marked ANY genuine error -- boilerplate included.
+
+    Deliberately NOT ``bool(_runner_error_annotations(text))``. That function drops
+    ``Process completed with exit code 2`` because it is useless to *show* a maintainer, and
+    that is the right call for evidence. It is the wrong call for this question: unreadable
+    as it is, the line still proves that a step exited non-zero. A success announced through
+    the error channel proves nothing, so it is excluded here for the same reason it is there.
+    """
+    return any(
+        not _announces_success(message.strip())
+        for message in _RUNNER_ERROR_ANNOTATION.findall(text)
+    )
+
+
 def _runner_error_annotations(text: str) -> list[str]:
     """Error lines the CI runner annotated itself, redacted and de-duplicated."""
     found: list[str] = []
@@ -1618,9 +1657,29 @@ INVOCATION_ONLY_PATTERNS = frozenset(
 # ``artifact_or_cache_failure`` on exactly this pair. A genuine artifact or cache failure
 # is unaffected: it trips a terminal signal ("Failed to CreateArtifact", "Artifact upload
 # failed", "Cache service responded with 500"), none of which are in these sets.
+#
+# A cache SAVE failure is the same shape, and the action says so in its own source:
+# `actions/cache`'s `saveImpl` wraps the whole save in `try { ... } catch { logWarning(...) }`
+# -- every save error is reported through `core.warning`, never `core.setFailed`, so it
+# cannot be why a job failed. The runner agrees on the wire: pandas-dev/pandas emitted
+#
+#     ##[warning]Failed to save: Unable to reserve cache with key micromamba-downloads
+#     --linux-64, another job may be creating this cache.
+#
+# on the WARNING channel, and the job then ran on and died 2000 lines later on
+# `##[error]Process completed with exit code 2`. Two matrix jobs racing for one cache key is
+# the most ordinary event in a big CI matrix, and it is not a failure -- the message says as
+# much ("another job may be creating this cache").
+#
+# A genuine cache failure is untouched, and the toolkit draws the line in the same place:
+# "warning for most failures, info for benign concurrency races, ERROR for 5xx". The 5xx is
+# `Cache service responded with \d+`, which stays terminal, along with `getCacheEntry
+# failed`, `reserveCache failed` and `Cache upload failed`. None are in this set.
 BENIGN_WARNING_PATTERNS = frozenset(
     {
         r"No files were found with the provided path",
+        r"Failed to save:? .*[Cc]ache",
+        r"Unable to reserve cache",
     }
 )
 
@@ -1802,6 +1861,37 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # not watched anything fail either -- so, like the above, it cannot stand as a last
     # resort. An invocation at least proves the tool ran; a mention does not even prove that.
     if best_rule is not None and _is_mention_only(best_signals):
+        best_rule, best_signals = None, []
+
+    # Nor can a rule that only ever WARNED -- once the runner has told us a step exited
+    # non-zero. The deferral above hands off to the best rule that saw a real error, but when
+    # nothing else matched it lets the noise-carried rule stand, on the grounds that it is
+    # "the only thing the log gave us". That holds for a warning in an otherwise quiet log:
+    # there is no failure to explain, and one lead beats none.
+    #
+    # It inverts the moment the runner annotates an error. Then a step provably exited
+    # non-zero -- and a benign warning provably did not cause it. `actions/cache` settles that
+    # in its own source: `saveImpl` wraps the save in `try { ... } catch { logWarning(...) }`,
+    # so a save error goes out through `core.warning` and never `core.setFailed`. It cannot
+    # fail a job. Whatever did is elsewhere, and we did not find it.
+    #
+    # pandas-dev/pandas's doc build died on a Sphinx crash and was handed
+    # `artifact_or_cache_failure` at 0.89 on nothing but the runner booting
+    # `actions/upload-artifact` and two `##[warning]Failed to save: Unable to reserve cache`
+    # lines -- emitted from `Post job cleanup`, 2000 lines AFTER the job had already died,
+    # because two matrix jobs raced for one cache key. The maintainer was sent to debug a
+    # cache that was working. `unknown` at 0.15 says the true thing instead.
+    #
+    # A genuine artifact or cache failure is untouched: it trips a terminal signal (`Failed to
+    # CreateArtifact`, `Cache service responded with 500`, `an artifact with this name already
+    # exists`) outside these sets, so it never reaches here. A pure invocation-only match, and
+    # a warning in a log with no runner error at all, both still stand exactly as before.
+    if (
+        best_rule is not None
+        and _is_non_failure_only(best_signals)
+        and any(signal in BENIGN_WARNING_PATTERNS for signal in best_signals)
+        and _runner_annotated_a_failure(text)
+    ):
         best_rule, best_signals = None, []
 
     # Last word on a transient-network verdict that only ambiguous signals ever carried: if
