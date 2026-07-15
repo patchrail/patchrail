@@ -5,6 +5,7 @@ import subprocess
 import sys
 import time
 import unittest
+from pathlib import Path
 
 from patchrail.ci.classify import classify_ci_log, redact_ci_log
 
@@ -1462,6 +1463,41 @@ class GitHubActionsLogPrefixNormalization(unittest.TestCase):
         )
         stripped = classify_ci_log(_raw_actions_prefixed(log))
         self.assertEqual(stripped["failure_class"], "go_lint")
+
+    def test_every_fixture_in_the_zoo_is_prefix_invariant(self) -> None:
+        # The three cases above cover go_lint / node_test / python_test by hand. This
+        # is the data-driven guard for the whole fixture zoo: every saved log must
+        # classify identically -- same class AND same confidence -- whether it is read
+        # raw or piped through `gh run view --log-failed` (job/step columns + ISO-8601
+        # timestamp, BOM on the first line) or a raw Actions download (bare timestamp).
+        # A new rule or fixture that quietly leans on `^`-anchored content would regress
+        # the documented `gh run view --log-failed | patchrail ci explain` one-liner
+        # without ever tripping the hand-written cases; globbing the zoo keeps the guard
+        # in step with the fixtures as they grow.
+        fixtures = sorted(
+            (Path(__file__).resolve().parents[1] / "examples" / "ci-triage").glob("*.log")
+        )
+        self.assertGreater(len(fixtures), 100, "CI fixture zoo not found")
+        for fixture in fixtures:
+            log = fixture.read_text(encoding="utf-8", errors="replace")
+            raw = classify_ci_log(log)
+            for label, wrapped in (
+                ("gh", _gh_prefixed(log)),
+                ("gh-no-bom", _gh_prefixed(log, bom=False)),
+                ("raw-actions", _raw_actions_prefixed(log)),
+            ):
+                with self.subTest(fixture=fixture.name, prefix=label):
+                    got = classify_ci_log(wrapped)
+                    self.assertEqual(
+                        got["failure_class"],
+                        raw["failure_class"],
+                        f"{label} prefix changed the class for {fixture.name}",
+                    )
+                    self.assertEqual(
+                        got["confidence"],
+                        raw["confidence"],
+                        f"{label} prefix degraded confidence for {fixture.name}",
+                    )
 
 
 # The `flags :` line of /proc/cpuinfo, which perf-sensitive projects dump into the
