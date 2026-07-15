@@ -1,0 +1,12 @@
+Running with gitlab-runner 17.8.1 (abcdef12)
+  on shared-linux-runner runner-01
+
+$ cmake --build build --config Release
+[ 50%] Linking CXX executable sample-app
+/usr/bin/ld: CMakeFiles/sample-app.dir/src/main.cpp.o: in function `main':
+main.cpp:(.text+0x14): undefined reference to `bar()'
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [CMakeFiles/sample-app.dir/build.make:97: sample-app] Error 1
+make[1]: *** [CMakeFiles/Makefile2:83: CMakeFiles/sample-app.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
+ERROR: Job failed: exit code 1

@@ -11,7 +11,7 @@ access, repository write permissions, billing, or an external model call.
 
 ## Current Coverage
 
-The fixture zoo currently contains 222 cases. A representative slice of the
+The fixture zoo currently contains 223 cases. A representative slice of the
 covered root-cause families (run `patchrail ci classes` for the full list):
 
 - `github_actions_workflow`
