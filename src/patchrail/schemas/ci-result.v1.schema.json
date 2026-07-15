@@ -97,6 +97,10 @@
       },
       "maxItems": 5
     },
+    "likely_successful_run": {
+      "description": "True when the log announced a successful run and PatchRail found no failure to triage. Present only on an unknown result with no runner-annotated failure. PatchRail triages FAILED runs; point it at a failed run if you expected one.",
+      "type": "boolean"
+    },
     "requirements": {
       "type": "object",
       "required": [
