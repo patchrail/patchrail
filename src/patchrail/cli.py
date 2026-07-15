@@ -85,7 +85,13 @@ def _render_text(result: dict[str, Any]) -> str:
         lines.append(f"Redaction: {len(redactions)} categories redacted locally")
     for message in result.get("runner_errors") or []:
         lines.append(f"Runner reported: {message}")
-    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+    if result.get("likely_successful_run"):
+        lines.append(
+            "No failure detected: this log looks like a SUCCESSFUL run, so there is nothing to "
+            "triage. PatchRail explains FAILED runs — if you expected a failure, point it at the "
+            "failed run (e.g. `gh run view <run-id> --log-failed | patchrail ci explain`)."
+        )
+    elif result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
         lines.append(
             "Help improve PatchRail: this log did not match a known failure class. "
             "Open a CI failure fixture issue with a sanitized log so we can teach the "
@@ -152,7 +158,20 @@ def _render_markdown(result: dict[str, Any]) -> str:
         )
         for name, count in sorted(redactions.items()):
             lines.append(f"- `{name}`: `{count}`")
-    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+    if result.get("likely_successful_run"):
+        lines.extend(
+            [
+                "",
+                "## No failure detected",
+                "",
+                (
+                    "This log looks like a **successful** run, so there is nothing to triage. "
+                    "PatchRail explains FAILED runs — if you expected a failure, point it at the "
+                    "failed run (e.g. `gh run view <run-id> --log-failed | patchrail ci explain`)."
+                ),
+            ]
+        )
+    elif result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
         lines.extend(
             [
                 "",
@@ -3735,7 +3754,11 @@ def _ci_explain(args: argparse.Namespace) -> int:
             "local_only": True,
         }
     _write_or_print(_format_result(result, args.format), args.out)
-    if getattr(args, "fail_on_unknown", False) and result["failure_class"] == "unknown":
+    if (
+        getattr(args, "fail_on_unknown", False)
+        and result["failure_class"] == "unknown"
+        and not result.get("likely_successful_run")
+    ):
         return 1
     return 0
 
@@ -4896,7 +4919,7 @@ def _build_parser() -> argparse.ArgumentParser:
     explain.add_argument(
         "--fail-on-unknown",
         action="store_true",
-        help="Exit non-zero when the classifier could not recognize the failure (failure_class: unknown).",
+        help="Exit non-zero when the classifier could not recognize the failure (failure_class: unknown). A log that plainly reports a successful run is exempt: there is no failure to fail on.",
     )
     explain.set_defaults(func=_ci_explain)
 
@@ -4930,7 +4953,7 @@ def _build_parser() -> argparse.ArgumentParser:
     classify.add_argument(
         "--fail-on-unknown",
         action="store_true",
-        help="Exit non-zero when the classifier could not recognize the failure (failure_class: unknown).",
+        help="Exit non-zero when the classifier could not recognize the failure (failure_class: unknown). A log that plainly reports a successful run is exempt: there is no failure to fail on.",
     )
     classify.set_defaults(func=_ci_explain)
 

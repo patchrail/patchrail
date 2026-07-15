@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A passing CI log is no longer reported as an unrecognized failure that you should file a
+  fixture for.** A newcomer's first run is often a green one — they pipe in whatever `gh run view`
+  hands back, or try `patchrail ci explain` on a build that passed. That log matched no failure
+  rule, so it landed on `unknown` at 0.15 — the *same* answer a genuinely unrecognized failure gets,
+  down to "Open a CI failure fixture issue with a sanitized log." Nudging someone to open a fixture
+  issue for a build that never failed is worse than unhelpful: it invites non-failures into the
+  tracker. PatchRail now recognizes a log that plainly announces success and betrays no failure
+  (`BUILD SUCCESS`, `all checks passed`, `322 passed`, `process completed with exit code 0`, …),
+  flags it as `likely_successful_run` in the JSON result, and replies "No failure detected — point
+  me at the failed run" instead of the fixture invitation. The detection is conservative: it fires
+  only from the `unknown` path, still demands an explicit success announcement, and any failure tell
+  (a runner-annotated error, a non-zero exit, `3 failed`, a traceback) vetoes it — so a real failure
+  that slips past every rule keeps its plain `unknown` verdict and its fixture invitation.
+  `patchrail ci explain --fail-on-unknown` also stops exiting non-zero on a log that plainly passed:
+  there is no failure to fail on.
+
 ## 0.7.2 - 2026-07-15
 
 ### Fixed

@@ -1670,6 +1670,61 @@ def _runner_error_annotations(text: str) -> list[str]:
     return found
 
 
+# A maintainer's first run is often a GREEN one: they pipe in whatever `gh run view` hands
+# back, or point PatchRail at a build that passed, before they have a failure to triage. That
+# log matches no failure rule, so it lands on `unknown` at 0.15 -- the very same answer a
+# genuinely unrecognized *failure* gets, down to the invitation to open a CI failure fixture
+# issue. Nudging someone to file a fixture for a build that never failed is worse than
+# unhelpful: it pollutes the tracker with non-failures. When the log plainly announces success
+# and betrays no failure, say that instead.
+_SUCCESS_ANNOUNCEMENT = re.compile(
+    r"\bbuild succeeded\b"
+    r"|\bbuild successful\b"
+    r"|\bBUILD SUCCESS\b"
+    r"|\ball checks (?:have )?passed\b"
+    r"|\ball (?:\d+ )?tests? passed\b"
+    r"|\b[1-9]\d* passed\b"
+    r"|\b(?:job|run|pipeline|workflow|stage|suite) (?:succeeded|passed)\b"
+    r"|\b(?:completed|finished) successfully\b"
+    r"|\bsuccessfully (?:built|compiled|completed|finished|installed|published)\b"
+    r"|\bprocess completed with exit code 0\b"
+    r"|\bexit code:? 0\b",
+    re.IGNORECASE,
+)
+
+# Any of these vetoes the success reading. Counts are read numerically so `0 failed` and
+# `no errors` stay green while `3 failed` and `1 error` do not; the bare words `failed`/`error`
+# are far too common in benign lines (`0 failed`, `error-handling.ts`, `on error resume`) to
+# veto on their own.
+_FAILURE_TELL = re.compile(
+    r"\bprocess completed with exit code [1-9]"
+    r"|\bexit(?:ed)? (?:with )?code:? [1-9]"
+    r"|\bbuild (?:failed|failure)\b"
+    r"|\bBUILD FAILED\b"
+    r"|\b[1-9]\d* (?:tests? )?(?:failed|failing|failures?|errors?)\b"
+    r"|\btraceback \(most recent call last\)"
+    r"|\bpanic(?:ked)?\b"
+    r"|^\s*(?:fatal|error)[: ]",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def _looks_like_successful_run(text: str) -> bool:
+    """True when the log plainly reports success and betrays no failure.
+
+    Conservative on purpose: it is consulted only from the `unknown` path, where no rule
+    witnessed a failure, and it still demands an explicit success announcement AND the absence
+    of any failure tell (a runner-annotated error, a non-zero exit, a real failure count). A
+    failure that slips past every rule keeps its plain `unknown` verdict -- the invitation to
+    file a fixture is the right answer there.
+    """
+    if _runner_annotated_a_failure(text):
+        return False
+    if _FAILURE_TELL.search(text):
+        return False
+    return bool(_SUCCESS_ANNOUNCEMENT.search(text))
+
+
 def list_failure_classes() -> dict[str, Any]:
     """List every supported failure class in stable rule order.
 
@@ -2155,6 +2210,8 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         runner_errors = _runner_error_annotations(text)
         if runner_errors:
             result["runner_errors"] = runner_errors
+        elif _looks_like_successful_run(text):
+            result["likely_successful_run"] = True
         return result
 
     confidence = min(0.95, 0.35 + 0.18 * len(best_signals))
