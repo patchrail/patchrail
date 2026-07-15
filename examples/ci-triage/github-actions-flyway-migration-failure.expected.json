@@ -1,0 +1,4 @@
+{
+  "failure_class": "database_migration_failure",
+  "minimum_confidence": 0.7
+}

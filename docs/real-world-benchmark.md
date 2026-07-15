@@ -1,6 +1,6 @@
 # Real-world benchmark
 
-The fixture zoo (`examples/ci-triage`, 221 logs) says PatchRail is right 221 times out of 221. That
+The fixture zoo (`examples/ci-triage`, 222 logs) says PatchRail is right 222 times out of 222. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
 This page is the other benchmark. Ten **real failed CI runs from public repositories** — pandas,

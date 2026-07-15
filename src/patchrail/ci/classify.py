@@ -1062,6 +1062,8 @@ RULES: list[dict[str, Any]] = [
             r"\brails db:migrate\b|\brake db:migrate\b",
             r"ActiveRecord::(?:PendingMigrationError|IrreversibleMigration|StatementInvalid)",
             r"FlywayException|Migration checksum mismatch|Detected failed migration",
+            r"Migration\s+V\d+__[A-Za-z0-9_.-]+\.sql\s+failed",
+            r"^\s*SQL State\s*:\s*(?!00000\b)[0-9A-Z]{5}\s*$",
             r"\bprisma migrate (?:deploy|dev)\b",
             r"\bP3005\b|\bP3006\b|\bP3009\b",
             r"Drift detected",
@@ -1072,7 +1074,8 @@ RULES: list[dict[str, Any]] = [
         ),
         "minimal_repair_strategy": (
             "Confirm the failure is a schema migration issue rather than an application code "
-            "defect, then resolve the reported revision/history conflict or checksum mismatch "
+            "defect, then resolve the reported revision/history conflict, checksum mismatch, "
+            "or SQL error "
             "and rerun the same migration command against a disposable database copy."
         ),
     },

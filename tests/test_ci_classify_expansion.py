@@ -1038,6 +1038,25 @@ class DatabaseMigrationFailureClassification(unittest.TestCase):
         self.assertEqual(result["failure_class"], "database_migration_failure")
         self.assertGreaterEqual(result["confidence"], 0.7)
 
+    def test_flyway_runtime_migration_failure_classifies_as_database_migration_failure(
+        self,
+    ) -> None:
+        log = (
+            "Run flyway migrate\n"
+            "Flyway Community Edition 10.4.1 by Redgate\n"
+            'Migrating schema "public" to version "2 - add users"\n'
+            "ERROR: Migration V2__add_users.sql failed\n"
+            "SQL State  : 42S01\n"
+            "Message    : ERROR: Table users already exists\n"
+        )
+        result = classify_ci_log(log)
+        self.assertEqual(result["failure_class"], "database_migration_failure")
+        self.assertGreaterEqual(result["confidence"], 0.7)
+
+    def test_incidental_successful_sql_state_is_not_a_migration_failure(self) -> None:
+        log = "psql: connected. SQL State: 00000. All migrations already applied.\n"
+        self.assertNotEqual(classify_ci_log(log)["failure_class"], "database_migration_failure")
+
 
 class KubernetesDeployFailureClassification(unittest.TestCase):
     def test_immutable_field_classifies_as_kubernetes_deploy_failure(self) -> None:
