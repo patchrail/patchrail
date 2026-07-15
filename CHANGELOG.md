@@ -1,9 +1,19 @@
 # Changelog
 
-## Unreleased
+## 0.7.2 - 2026-07-15
 
 ### Fixed
 
+- **A Flyway migration that fails at runtime is now recognised as a database migration failure, not
+  `unknown`.** `database_migration_failure` advertised Flyway support, but only for checksum and
+  validation errors — a migration that reached the database and failed *there* fell through to
+  `unknown` at 0.15, so `patchrail ci explain` had nothing to say about the most common Flyway
+  failure of all. On a `flyway migrate` step that hit `ERROR: Migration V2__add_users.sql failed`
+  with `SQL State : 42S01` (table already exists), the log now answers `database_migration_failure`
+  at 0.71 and points you at the SQL error to fix. It reads two witnesses the driver prints on a real
+  failure — the `Migration V<n>__<name>.sql failed` line and a non-success `SQL State` code — and a
+  successful run is unaffected: the `SQL State : 00000` success code is explicitly excluded. Thanks
+  to @hkJerryLeung for the fix (#361, closing #265) — PatchRail's first merged external contribution.
 - **A failed `yarn` script — `prettier`, `lint`, `test` — is no longer reported as a dependency
   install.** yarn classic ends *every* command with `info Visit https://yarnpkg.com/en/docs/cli/<cmd>
   for documentation about this command.`, and `node_dependency_install` was matching the bare host —
