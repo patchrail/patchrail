@@ -14,6 +14,18 @@ from pathlib import Path
 from patchrail.cli import main
 
 
+class _InteractiveTtyStdin(StringIO):
+    """A stdin stand-in that reports itself as an interactive terminal.
+
+    A plain ``StringIO`` has ``isatty() -> False``, which models a pipe. This
+    reports ``isatty() -> True`` so tests can exercise the "no --log and an
+    interactive terminal" path without spawning a real pseudo-terminal.
+    """
+
+    def isatty(self) -> bool:
+        return True
+
+
 class PatchRailCITests(unittest.TestCase):
     def test_ci_adoption_event_reviews_workflow_signal_without_counting_adoption(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -2927,6 +2939,67 @@ class PatchRailCITests(unittest.TestCase):
         payload = json.loads(stdout.getvalue())
         self.assertEqual(payload["schema_version"], "patchrail.ci_result.v1")
         self.assertNotEqual(payload["failure_class"], "")
+
+    def test_ci_explain_interactive_tty_no_log_fails_fast(self) -> None:
+        # A first-timer who runs `patchrail ci explain` in a terminal (forgetting
+        # --log, with nothing piped in) used to hit a blocking sys.stdin.read()
+        # that hung forever with zero output -- the program looked frozen/crashed.
+        # With an interactive TTY on stdin and no --log it must fail fast with an
+        # actionable hint and exit code 2, never block.
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = _InteractiveTtyStdin("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        err = stderr.getvalue()
+        self.assertIn("no log to read from stdin", err)
+        self.assertIn("--log", err)
+        self.assertIn("pipe", err)
+        self.assertIn("explain", err)
+        self.assertNotIn("Traceback (most recent call last)", err)
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_classify_interactive_tty_no_log_fails_fast(self) -> None:
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = _InteractiveTtyStdin("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "classify"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        err = stderr.getvalue()
+        self.assertIn("no log to read from stdin", err)
+        self.assertIn("classify", err)
+        self.assertNotIn("Traceback (most recent call last)", err)
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_redact_interactive_tty_no_log_fails_fast(self) -> None:
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = _InteractiveTtyStdin("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["redact"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        err = stderr.getvalue()
+        self.assertIn("no log to read from stdin", err)
+        self.assertIn("redact", err)
+        self.assertNotIn("Traceback (most recent call last)", err)
+        self.assertEqual(stdout.getvalue(), "")
 
 
 if __name__ == "__main__":

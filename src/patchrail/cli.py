@@ -56,18 +56,29 @@ from patchrail.queue.status import (
 
 
 class LogReadError(Exception):
-    """A ``--log`` path could not be read as a CI log file.
+    """A log could not be obtained from ``--log`` or stdin.
 
     Carries a user-facing, actionable message. Callers catch this and print
     ``patchrail <command>: {message}`` to stderr with exit code 2, so a bad
-    path (missing file, a directory, an unreadable file) never leaks a raw
-    Python traceback to a first-time user.
+    path (missing file, a directory, an unreadable file) or a missing input
+    (no ``--log`` and an interactive terminal on stdin) never leaks a raw
+    Python traceback -- or an indefinite hang -- to a first-time user.
     """
 
 
 def _read_log(path: Path | None) -> str:
     if path is None:
-        return sys.stdin.read()
+        stdin = sys.stdin
+        # No --log and an interactive terminal on stdin means there is nothing
+        # to pipe in: sys.stdin.read() would block forever with no output, so a
+        # first-timer who forgot --log just sees a frozen screen. Fail fast with
+        # an actionable hint instead of hanging.
+        if stdin is None or (hasattr(stdin, "isatty") and stdin.isatty()):
+            raise LogReadError(
+                "no log to read from stdin: pass --log <file>, or pipe a CI log in "
+                "(e.g. `gh run view <run-id> --log-failed | patchrail ci explain`)"
+            )
+        return stdin.read()
     try:
         return path.read_text(encoding="utf-8", errors="replace")
     except FileNotFoundError:
