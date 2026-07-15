@@ -55,10 +55,32 @@ from patchrail.queue.status import (
 )
 
 
+class LogReadError(Exception):
+    """A ``--log`` path could not be read as a CI log file.
+
+    Carries a user-facing, actionable message. Callers catch this and print
+    ``patchrail <command>: {message}`` to stderr with exit code 2, so a bad
+    path (missing file, a directory, an unreadable file) never leaks a raw
+    Python traceback to a first-time user.
+    """
+
+
 def _read_log(path: Path | None) -> str:
     if path is None:
         return sys.stdin.read()
-    return path.read_text(encoding="utf-8", errors="replace")
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        raise LogReadError(f"log file not found: {path}") from None
+    except IsADirectoryError:
+        raise LogReadError(
+            f"log path is a directory, not a file: {path} (point --log at a single CI log file)"
+        ) from None
+    except PermissionError:
+        raise LogReadError(f"log file is not readable (permission denied): {path}") from None
+    except OSError as exc:
+        detail = exc.strerror or exc.__class__.__name__
+        raise LogReadError(f"could not read log file {path}: {detail}") from None
 
 
 _CI_TRIAGE_ACTION_BASE = "https://github.com/patchrail/ci-triage-action"
@@ -3728,10 +3750,8 @@ def _ci_classes(args: argparse.Namespace) -> int:
 def _ci_explain(args: argparse.Namespace) -> int:
     try:
         raw_log = _read_log(args.log)
-    except FileNotFoundError as exc:
-        print(
-            f"patchrail ci {args.ci_command}: log file not found: {exc.filename}", file=sys.stderr
-        )
+    except LogReadError as exc:
+        print(f"patchrail ci {args.ci_command}: {exc}", file=sys.stderr)
         return 2
     if not raw_log.strip():
         source = f"--log {args.log}" if args.log is not None else "stdin"
@@ -3904,8 +3924,8 @@ def _render_pilot_summary_markdown(payload: dict[str, Any]) -> str:
 def _ci_pilot_pack(args: argparse.Namespace) -> int:
     try:
         raw_log = _read_log(args.log)
-    except FileNotFoundError as exc:
-        print(f"patchrail ci pilot-pack: log file not found: {exc.filename}", file=sys.stderr)
+    except LogReadError as exc:
+        print(f"patchrail ci pilot-pack: {exc}", file=sys.stderr)
         return 2
     out_dir = args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -4512,8 +4532,8 @@ def _ci_adoption_event(args: argparse.Namespace) -> int:
 def _redact(args: argparse.Namespace) -> int:
     try:
         raw_log = _read_log(args.log)
-    except FileNotFoundError as exc:
-        print(f"patchrail redact: log file not found: {exc.filename}", file=sys.stderr)
+    except LogReadError as exc:
+        print(f"patchrail redact: {exc}", file=sys.stderr)
         return 2
     redaction = redact_ci_log(raw_log)
     if args.format == "json":
