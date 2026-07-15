@@ -4,6 +4,14 @@
 
 ### Fixed
 
+- **Pointing `--log` at a directory (or an unreadable file) now fails with a clear message instead
+  of a Python traceback.** A first run often means tab-completing a path, and it's easy to land on a
+  folder — `patchrail ci explain --log logs/` — or a file the shell can't read. Only a missing file
+  was handled; a directory raised a raw `IsADirectoryError` and a permission problem raised
+  `PermissionError`, both leaking a stack trace and exiting 1. `explain`, `classify`, `pilot-pack`
+  and `redact` now report `log path is a directory, not a file: logs/ (point --log at a single CI
+  log file)` — or `log file is not readable (permission denied): …` — on stderr and exit 2, the same
+  clean contract as the missing-file case.
 - **A passing CI log is no longer reported as an unrecognized failure that you should file a
   fixture for.** A newcomer's first run is often a green one — they pipe in whatever `gh run view`
   hands back, or try `patchrail ci explain` on a build that passed. That log matched no failure

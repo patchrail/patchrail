@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -2790,6 +2791,70 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertIn("log file not found", stderr.getvalue())
         self.assertIn(str(missing_path), stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_explain_log_path_is_directory_fails_clearly(self) -> None:
+        # A first-timer who tab-completes a folder (e.g. `--log logs/`) used to hit a
+        # raw IsADirectoryError traceback and exit 1. It must read as a clean, actionable
+        # error with exit code 2 instead.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain", "--log", tmpdir])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("is a directory", stderr.getvalue())
+        self.assertIn(tmpdir, stderr.getvalue())
+        # No raw Python traceback leaks to the user.
+        self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_classify_log_path_is_directory_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "classify", "--log", tmpdir])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("is a directory", stderr.getvalue())
+        self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_redact_log_path_is_directory_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["redact", "--log", tmpdir])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("is a directory", stderr.getvalue())
+        self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_explain_unreadable_log_file_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "locked.log"
+            log_path.write_text("boom\n", encoding="utf-8")
+            os.chmod(log_path, 0o000)
+            if os.access(log_path, os.R_OK):
+                # Running as root (or a filesystem that ignores the mode bits) can still
+                # read a 0o000 file; the permission path is untestable there.
+                self.skipTest("cannot make the log file unreadable in this environment")
+
+            stdout = StringIO()
+            stderr = StringIO()
+            try:
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    exit_code = main(["ci", "explain", "--log", str(log_path)])
+            finally:
+                os.chmod(log_path, 0o644)
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("permission denied", stderr.getvalue())
+        self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
         self.assertEqual(stdout.getvalue(), "")
 
     def test_ci_classify_whitespace_only_log_fails_clearly(self) -> None:
