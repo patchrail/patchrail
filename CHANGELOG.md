@@ -4,6 +4,16 @@
 
 ### Fixed
 
+- **`patchrail ci explain` with no `--log` in a terminal no longer hangs on a frozen screen.** When
+  `--log` is omitted PatchRail reads the log from stdin, which is right for the piped one-liner
+  (`gh run view <run-id> --log-failed | patchrail ci explain`). But a first-timer who just runs
+  `patchrail ci explain` in a terminal — forgetting `--log`, with nothing piped in — used to hit a
+  blocking `stdin.read()` that waited forever with zero output: the program looked frozen or
+  crashed, with no hint that it wanted input. `explain`, `classify`, `pilot-pack` and `redact` now
+  detect an interactive terminal on stdin and fail fast with `no log to read from stdin: pass --log
+  <file>, or pipe a CI log in (e.g. \`gh run view <run-id> --log-failed | patchrail ci explain\`)`
+  on stderr and exit 2 — the same clean contract as the other bad-input cases. A real pipe or file
+  redirect is untouched (its stdin is not a TTY), so the documented one-liner keeps working.
 - **Pointing `--log` at a directory (or an unreadable file) now fails with a clear message instead
   of a Python traceback.** A first run often means tab-completing a path, and it's easy to land on a
   folder — `patchrail ci explain --log logs/` — or a file the shell can't read. Only a missing file
