@@ -1,0 +1,7 @@
+Run flyway migrate
+Flyway Community Edition 10.4.1 by Redgate
+Migrating schema "public" to version "2 - add users"
+ERROR: Migration V2__add_users.sql failed
+SQL State  : 42S01
+Message    : ERROR: Table users already exists
+Process completed with exit code 1.
