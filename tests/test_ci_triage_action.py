@@ -181,8 +181,12 @@ def test_ci_triage_action_helper_exports_reusable_outputs(tmp_path: Path, monkey
     assert outputs["next-step"] in summary
     assert f"- Reproduce locally: `{outputs['reproduction-command']}`" in summary
     assert "- Redacted categories: `0`" in summary
-    assert "- Adoption key: `ci-triage:python-dependency-resolution`" in summary
-    assert "- Adoption event ID: `ci-triage:python-dependency-resolution`" in summary
+    # Adoption telemetry ships via the machine-readable action outputs, not the
+    # human-readable job summary.
+    assert outputs["adoption-key"] == "ci-triage:python-dependency-resolution"
+    assert outputs["adoption-event-id"] == "ci-triage:python-dependency-resolution"
+    assert "Adoption key" not in summary
+    assert "Adoption event ID" not in summary
     assert str(report_path) in summary
 
 
@@ -262,7 +266,9 @@ def test_ci_triage_action_helper_exports_workflow_context_when_available(tmp_pat
     helper.append_step_summary(result, Path("ci-report.md"), summary_path, workflow_context=context)
     summary = summary_path.read_text(encoding="utf-8")
 
-    assert "- Adoption event ID: `ci-triage-run:buyer/repo:123456:test:python-lint`" in summary
+    # The event ID is verified above via the machine outputs; it must not leak
+    # into the human-readable job summary.
+    assert "Adoption event ID" not in summary
     assert (
         "- Workflow run: https://github.enterprise.test/buyer/repo/actions/runs/123456" in summary
     )
@@ -283,10 +289,10 @@ def test_ci_triage_action_summary_shows_reproduction_command(tmp_path: Path) -> 
 
     # The runnable repro command is the most actionable output a maintainer sees
     # in the Actions job summary; it must appear as inline code, right after the
-    # next step and before the internal adoption keys.
+    # next step and before the redacted-categories and report lines.
     assert "- Reproduce locally: `python -m pytest -q`" in summary
     assert summary.index("- Next step:") < summary.index("- Reproduce locally:")
-    assert summary.index("- Reproduce locally:") < summary.index("- Adoption key:")
+    assert summary.index("- Reproduce locally:") < summary.index("- Redacted categories:")
 
 
 def test_ci_triage_action_summary_omits_empty_reproduction_command(tmp_path: Path) -> None:
@@ -343,9 +349,7 @@ def test_ci_triage_action_helper_counts_redacted_categories(tmp_path: Path) -> N
     assert "redacted-categories=2\n" in output_path.read_text(encoding="utf-8")
 
     helper.append_step_summary(result, Path("ci-report.md"), summary_path)
-    assert "- Adoption event ID: `ci-triage:python-test-failure`" in summary_path.read_text(
-        encoding="utf-8"
-    )
+    assert "Adoption event ID" not in summary_path.read_text(encoding="utf-8")
     assert "- Redacted categories: `2`" in summary_path.read_text(encoding="utf-8")
 
 
