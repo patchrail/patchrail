@@ -179,6 +179,7 @@ def test_ci_triage_action_helper_exports_reusable_outputs(tmp_path: Path, monkey
     assert "## PatchRail CI triage" in summary
     assert outputs["summary-line"] in summary
     assert outputs["next-step"] in summary
+    assert f"- Reproduce locally: `{outputs['reproduction-command']}`" in summary
     assert "- Redacted categories: `0`" in summary
     assert "- Adoption key: `ci-triage:python-dependency-resolution`" in summary
     assert "- Adoption event ID: `ci-triage:python-dependency-resolution`" in summary
@@ -265,6 +266,43 @@ def test_ci_triage_action_helper_exports_workflow_context_when_available(tmp_pat
     assert (
         "- Workflow run: https://github.enterprise.test/buyer/repo/actions/runs/123456" in summary
     )
+
+
+def test_ci_triage_action_summary_shows_reproduction_command(tmp_path: Path) -> None:
+    helper = _load_helper()
+    result = {
+        "failure_class": "python_test_failure",
+        "confidence": 0.9,
+        "minimal_repair_strategy": "Rerun the focused pytest node.",
+        "reproduction_command": "python -m pytest -q",
+    }
+
+    summary_path = tmp_path / "step-summary.md"
+    helper.append_step_summary(result, Path("ci-report.md"), summary_path)
+    summary = summary_path.read_text(encoding="utf-8")
+
+    # The runnable repro command is the most actionable output a maintainer sees
+    # in the Actions job summary; it must appear as inline code, right after the
+    # next step and before the internal adoption keys.
+    assert "- Reproduce locally: `python -m pytest -q`" in summary
+    assert summary.index("- Next step:") < summary.index("- Reproduce locally:")
+    assert summary.index("- Reproduce locally:") < summary.index("- Adoption key:")
+
+
+def test_ci_triage_action_summary_omits_empty_reproduction_command(tmp_path: Path) -> None:
+    helper = _load_helper()
+    result = {
+        "failure_class": "unknown",
+        "confidence": 0.15,
+        "minimal_repair_strategy": "Do not auto-repair until the failing subsystem is identified.",
+        "reproduction_command": "",
+    }
+
+    summary_path = tmp_path / "step-summary.md"
+    helper.append_step_summary(result, Path("ci-report.md"), summary_path)
+    summary = summary_path.read_text(encoding="utf-8")
+
+    assert "Reproduce locally" not in summary
 
 
 def test_ci_triage_action_helper_counts_redacted_categories(tmp_path: Path) -> None:

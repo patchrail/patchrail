@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **The PatchRail CI Triage action's job summary now shows the exact command to reproduce the
+  failure locally.** The GitHub Actions job summary is the surface a maintainer actually reads after
+  a failed run, and PatchRail already computes a `reproduction-command` output (e.g.
+  `python -m pytest -q`) — but the summary only printed the prose next step and internal adoption
+  keys, so the one runnable command was buried in the markdown report. The summary now renders
+  `- Reproduce locally: \`<command>\`` right after the next step (omitted when no command is
+  available), matching the `Reproduce:` line already in the markdown report.
+
 ## 0.7.3 - 2026-07-16
 
 ### Fixed
