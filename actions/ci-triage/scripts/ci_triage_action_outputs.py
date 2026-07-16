@@ -174,6 +174,11 @@ def append_step_summary(
         "",
         f"- Summary: {summary_line(result)}",
         f"- Next step: {result.get('minimal_repair_strategy') or 'Open the report for repair details.'}",
+    ]
+    reproduction_command = str(result.get("reproduction_command") or "").strip()
+    if reproduction_command:
+        lines.append(f"- Reproduce locally: `{reproduction_command}`")
+    lines += [
         f"- Adoption key: `{adoption_key(result, slug)}`",
         f"- Adoption event ID: `{event_id}`",
         f"- Redacted categories: `{redacted_category_count(result)}`",
