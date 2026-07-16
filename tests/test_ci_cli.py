@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr
 from contextlib import redirect_stdout
+from io import BytesIO
 from io import StringIO
 from pathlib import Path
 
@@ -24,6 +25,26 @@ class _InteractiveTtyStdin(StringIO):
 
     def isatty(self) -> bool:
         return True
+
+
+class _PipedBytesStdin:
+    """A stdin stand-in that models a real piped stream carrying raw bytes.
+
+    A piped ``sys.stdin`` is a text wrapper that exposes the underlying binary
+    stream as ``.buffer`` and reports ``isatty() -> False``. CI logs piped into
+    ``patchrail`` are frequently not clean UTF-8, so this lets tests push
+    arbitrary bytes through the same ``.buffer`` path the CLI reads in
+    production, without spawning a real subprocess.
+    """
+
+    def __init__(self, data: bytes) -> None:
+        self.buffer = BytesIO(data)
+
+    def isatty(self) -> bool:
+        return False
+
+    def read(self) -> str:  # pragma: no cover - the buffer path is used instead
+        return self.buffer.getvalue().decode("utf-8", errors="replace")
 
 
 class PatchRailCITests(unittest.TestCase):
@@ -2939,6 +2960,44 @@ class PatchRailCITests(unittest.TestCase):
         payload = json.loads(stdout.getvalue())
         self.assertEqual(payload["schema_version"], "patchrail.ci_result.v1")
         self.assertNotEqual(payload["failure_class"], "")
+
+    def test_ci_explain_non_utf8_stdin_pipe_matches_log_file(self) -> None:
+        # Regression: the headline `gh run view --log-failed | patchrail ci
+        # explain` pipes raw CI-log bytes to stdin, and real logs are often not
+        # clean UTF-8 (a latin-1 accent in a test name, ANSI/control bytes, a
+        # truncated multibyte sequence). A bare text-mode stdin.read() raised an
+        # uncaught UnicodeDecodeError and dumped a traceback on the primary
+        # documented flow, even though the --log file path decodes the same
+        # bytes fine. The stdin pipe must be just as forgiving (errors="replace")
+        # and reach the same verdict.
+        raw = (
+            b"FAILED tests/test_x.py::test_caf\xe9 - assert 1 == 2\n"
+            b"##[error]Process completed with exit code 1\n"
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "non-utf8.log"
+            log_path.write_bytes(raw)
+            file_stdout = StringIO()
+            with redirect_stdout(file_stdout):
+                file_exit = main(["ci", "classify", "--log", str(log_path), "--format", "json"])
+        file_class = json.loads(file_stdout.getvalue())["failure_class"]
+
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = _PipedBytesStdin(raw)
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                pipe_exit = main(["ci", "classify", "--format", "json"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(file_exit, 0)
+        self.assertEqual(pipe_exit, 0)
+        self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
+        pipe_class = json.loads(stdout.getvalue())["failure_class"]
+        self.assertEqual(pipe_class, file_class)
+        self.assertNotEqual(pipe_class, "unknown")
 
     def test_ci_explain_interactive_tty_no_log_fails_fast(self) -> None:
         # A first-timer who runs `patchrail ci explain` in a terminal (forgetting

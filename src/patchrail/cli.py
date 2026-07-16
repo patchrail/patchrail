@@ -78,6 +78,17 @@ def _read_log(path: Path | None) -> str:
                 "no log to read from stdin: pass --log <file>, or pipe a CI log in "
                 "(e.g. `gh run view <run-id> --log-failed | patchrail ci explain`)"
             )
+        # A piped CI log is raw bytes and is often not clean UTF-8 (latin-1
+        # accents in test names, ANSI/control bytes, truncated multibyte
+        # sequences). Decode the binary buffer with errors="replace" so the
+        # headline `gh run view --log-failed | patchrail ci explain` pipe is as
+        # forgiving as the --log file path below, instead of crashing a
+        # first-timer with a raw UnicodeDecodeError on one stray byte. Fall back
+        # to a plain text read when the stream exposes no binary buffer (e.g. a
+        # StringIO substituted for stdin in tests).
+        buffer = getattr(stdin, "buffer", None)
+        if buffer is not None:
+            return buffer.read().decode("utf-8", errors="replace")
         return stdin.read()
     try:
         return path.read_text(encoding="utf-8", errors="replace")

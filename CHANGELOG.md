@@ -4,6 +4,16 @@
 
 ### Fixed
 
+- **Piping a CI log that isn't clean UTF-8 no longer crashes with a raw `UnicodeDecodeError`.** The
+  headline one-liner `gh run view <run-id> --log-failed | patchrail ci explain` feeds raw log bytes
+  to stdin, and real CI logs frequently carry bytes that aren't valid UTF-8 — a latin-1 accent in a
+  test name, stray ANSI/control bytes, a truncated multibyte sequence. Reading stdin in text mode
+  decoded those with the strict locale codec, so a single stray byte raised an uncaught
+  `UnicodeDecodeError` and dumped a Python traceback on the *primary documented flow* — even though
+  the exact same bytes passed via `--log <file>` classified fine (that path already decoded with
+  `errors="replace"`). `explain`, `classify`, `pilot-pack` and `redact` now read the stdin pipe as
+  bytes and decode it with `errors="replace"` too, so the piped one-liner is as forgiving as the
+  file path and reaches the same verdict instead of crashing a first-timer.
 - **`patchrail ci explain` with no `--log` in a terminal no longer hangs on a frozen screen.** When
   `--log` is omitted PatchRail reads the log from stdin, which is right for the piped one-liner
   (`gh run view <run-id> --log-failed | patchrail ci explain`). But a first-timer who just runs
