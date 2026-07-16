@@ -167,8 +167,6 @@ def append_step_summary(
     path: Path,
     workflow_context: dict[str, str] | None = None,
 ) -> None:
-    slug = failure_slug(result)
-    event_id = adoption_event_id(result, slug, workflow_context)
     lines = [
         "## PatchRail CI triage",
         "",
@@ -178,9 +176,10 @@ def append_step_summary(
     reproduction_command = str(result.get("reproduction_command") or "").strip()
     if reproduction_command:
         lines.append(f"- Reproduce locally: `{reproduction_command}`")
+    # Adoption key / event ID are internal telemetry (also exported as the
+    # `adoption-*` action outputs); they are noise in the human-readable job
+    # summary, so the summary keeps only what a maintainer acts on.
     lines += [
-        f"- Adoption key: `{adoption_key(result, slug)}`",
-        f"- Adoption event ID: `{event_id}`",
         f"- Redacted categories: `{redacted_category_count(result)}`",
         f"- Report: `{report_path}`",
     ]
