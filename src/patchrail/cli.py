@@ -262,9 +262,18 @@ def _format_result(result: dict[str, Any], output_format: str) -> str:
 
 
 def _write_or_print(text: str, out: Path | None) -> None:
+    # Write OR print, never both. When --out is given the report belongs in the
+    # file, not also echoed to stdout: a first-timer running
+    # `patchrail ci explain --log ci.log --out report.md` does not expect the
+    # whole report dumped to their terminal too, and a CI script that captures
+    # stdout while using --out (or pipes it onward) would otherwise get the
+    # report duplicated into the pipe. Match the `-o`/`--out` convention every
+    # other tool follows (`curl -o`, `gcc -o`, `openssl ... -out` are all silent
+    # on stdout) and this helper's own name.
     if out is not None:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(text, encoding="utf-8")
+        return
     print(text, end="")
 
 

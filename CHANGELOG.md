@@ -47,6 +47,14 @@
   that slips past every rule keeps its plain `unknown` verdict and its fixture invitation.
   `patchrail ci explain --fail-on-unknown` also stops exiting non-zero on a log that plainly passed:
   there is no failure to fail on.
+- **`--out` now writes only to the file instead of also dumping the report to stdout.** Every command
+  that takes `--out` (`ci explain`/`classify`/`classes`, `redact`, `evidence …`, and the rest) shares
+  one helper that, despite being named `_write_or_print`, wrote the file *and* still printed the whole
+  report to stdout. So `patchrail ci explain --log ci.log --out report.md` flooded the terminal with
+  the report a first-timer had just asked to send to a file, and a CI script capturing stdout while
+  using `--out` got the report duplicated into its pipe. `--out` is now silent on stdout — matching
+  `curl -o`, `gcc -o`, `openssl … -out` and the helper's own name — while running without `--out`
+  prints to stdout exactly as before.
 
 ## 0.7.2 - 2026-07-15
 
