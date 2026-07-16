@@ -2798,6 +2798,32 @@ class PatchRailCITests(unittest.TestCase):
         self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
         self.assertEqual(stdout.getvalue(), "")
 
+    def test_ci_explain_out_writes_file_without_teeing_stdout(self) -> None:
+        # `--out` writes the report to the file and stays silent on stdout, like
+        # every other tool's `-o`/`--out` (curl, gcc, openssl). A first-timer
+        # redirecting to a file should not also get the whole report dumped to
+        # their terminal, and a CI script capturing stdout while using --out
+        # should not see the report duplicated into the pipe.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "ci.log"
+            log_path.write_text(
+                "##[error]npm ERR! code ELIFECYCLE\nnpm ERR! Test failed.\n",
+                encoding="utf-8",
+            )
+            out_path = Path(tmpdir) / "report.md"
+
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain", "--log", str(log_path), "--out", str(out_path)])
+
+            self.assertEqual(exit_code, 0)
+            # Nothing is echoed to stdout when --out is set.
+            self.assertEqual(stdout.getvalue(), "")
+            # The full report landed in the file.
+            self.assertTrue(out_path.exists())
+            self.assertIn("PatchRail CI Report", out_path.read_text(encoding="utf-8"))
+
     def test_ci_classify_missing_log_file_fails_clearly(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             missing_path = Path(tmpdir) / "does-not-exist.log"
