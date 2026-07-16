@@ -2867,6 +2867,65 @@ class PatchRailCITests(unittest.TestCase):
         self.assertNotIn("Traceback (most recent call last)", stderr.getvalue())
         self.assertEqual(stdout.getvalue(), "")
 
+    def test_redact_empty_stdin_fails_clearly(self) -> None:
+        # Regression: `redact` used to silently print nothing and exit 0 on empty
+        # input, unlike `ci explain`. A maintainer piping an expired
+        # `gh run view --log-failed` must get the same oriented error, not a
+        # silent no-op that looks like success.
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = StringIO("")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["redact"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 2)
+        err = stderr.getvalue()
+        self.assertIn("log input is empty", err)
+        self.assertIn("stdin", err)
+        self.assertIn("gh run view --log-failed", err)
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_redact_whitespace_only_log_fails_clearly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "blank.log"
+            log_path.write_text("   \n\t\n  ", encoding="utf-8")
+
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["redact", "--log", str(log_path)])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("log input is empty", stderr.getvalue())
+        self.assertIn("redact", stderr.getvalue())
+        self.assertEqual(stdout.getvalue(), "")
+
+    def test_ci_pilot_pack_empty_stdin_fails_clearly(self) -> None:
+        # `pilot-pack` shared the same gap: an empty log produced a bogus pack
+        # (an empty redacted log + `unknown` classification) with exit 0.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out_dir = Path(tmpdir) / "pilot-pack"
+            stdout = StringIO()
+            stderr = StringIO()
+            original_stdin = sys.stdin
+            sys.stdin = StringIO("")
+            try:
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    exit_code = main(["ci", "pilot-pack", "--out-dir", str(out_dir)])
+            finally:
+                sys.stdin = original_stdin
+
+            self.assertEqual(exit_code, 2)
+            self.assertIn("log input is empty", stderr.getvalue())
+            self.assertIn("pilot-pack", stderr.getvalue())
+            self.assertEqual(stdout.getvalue(), "")
+            # A no-op run must not leave a half-written pack behind.
+            self.assertFalse(out_dir.exists())
+
     def test_ci_explain_unreadable_log_file_fails_clearly(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log_path = Path(tmpdir) / "locked.log"

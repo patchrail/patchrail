@@ -105,6 +105,28 @@ def _read_log(path: Path | None) -> str:
         raise LogReadError(f"could not read log file {path}: {detail}") from None
 
 
+def _empty_log_exit(raw_log: str, log_path: Path | None, command: str) -> int | None:
+    """Return exit code 2 (after printing an actionable error) for an empty CI log.
+
+    Every command that reads a CI log -- ``ci explain``/``classify``, ``redact``
+    and ``ci pilot-pack`` -- shares this guard so none silently succeeds with
+    exit 0 on empty or whitespace-only input. A first-timer piping an expired
+    ``gh run view --log-failed`` (which prints nothing when the run's logs have
+    aged out or the run never failed) gets an oriented error instead of a silent
+    no-op. Returns ``None`` when the log has real content.
+    """
+    if raw_log.strip():
+        return None
+    source = f"--log {log_path}" if log_path is not None else "stdin"
+    print(f"patchrail {command}: log input is empty (checked {source})", file=sys.stderr)
+    print(
+        "hint: if you piped `gh run view --log-failed`, the run's logs may have "
+        "expired or the run has not failed — point it at a RECENT failed run.",
+        file=sys.stderr,
+    )
+    return 2
+
+
 _CI_TRIAGE_ACTION_BASE = "https://github.com/patchrail/ci-triage-action"
 _CI_TRIAGE_MARKETPLACE_BASE = "https://github.com/marketplace/actions/patchrail-ci-triage"
 
@@ -3775,18 +3797,9 @@ def _ci_explain(args: argparse.Namespace) -> int:
     except LogReadError as exc:
         print(f"patchrail ci {args.ci_command}: {exc}", file=sys.stderr)
         return 2
-    if not raw_log.strip():
-        source = f"--log {args.log}" if args.log is not None else "stdin"
-        print(
-            f"patchrail ci {args.ci_command}: log input is empty (checked {source})",
-            file=sys.stderr,
-        )
-        print(
-            "hint: if you piped `gh run view --log-failed`, the run's logs may have "
-            "expired or the run has not failed — point it at a RECENT failed run.",
-            file=sys.stderr,
-        )
-        return 2
+    empty_exit = _empty_log_exit(raw_log, args.log, f"ci {args.ci_command}")
+    if empty_exit is not None:
+        return empty_exit
     result = classify_ci_log(raw_log)
     if args.redact:
         redaction = redact_ci_log(raw_log)
@@ -3949,6 +3962,9 @@ def _ci_pilot_pack(args: argparse.Namespace) -> int:
     except LogReadError as exc:
         print(f"patchrail ci pilot-pack: {exc}", file=sys.stderr)
         return 2
+    empty_exit = _empty_log_exit(raw_log, args.log, "ci pilot-pack")
+    if empty_exit is not None:
+        return empty_exit
     out_dir = args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -4557,6 +4573,9 @@ def _redact(args: argparse.Namespace) -> int:
     except LogReadError as exc:
         print(f"patchrail redact: {exc}", file=sys.stderr)
         return 2
+    empty_exit = _empty_log_exit(raw_log, args.log, "redact")
+    if empty_exit is not None:
+        return empty_exit
     redaction = redact_ci_log(raw_log)
     if args.format == "json":
         text = json.dumps(redaction, indent=2, sort_keys=True) + "\n"
