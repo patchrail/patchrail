@@ -1,0 +1,86 @@
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7933612Z       baseShim5:                                                                                                                       OK
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7939231Z       baseShim6:                                                                                                                       OK
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7940649Z       baseShim7:                                                                                                                       FAIL (expected: #9467)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7948512Z         Unexpected error:
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7957650Z         Could not resolve dependencies:
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7963979Z         [__0] trying: A-1 (user goal)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7971395Z         [__1] next goal: A.base (dependency of A)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7973964Z         [__1] rejecting: A.base-4/installed-inst (conflict: A => A.base==3)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7983594Z         [__1] rejecting: A.base-3/installed-inst (conflict: A => A.base==4)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7986287Z         [__1] fail (backjumping, conflict set: A, A.base)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7987657Z         After searching the rest of the dependency tree exhaustively, these were the goals I've had most trouble fulfilling: A, A.base (expected failure)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7988686Z       baseShim7-simple:                                                                                                                FAIL (expected: #9467)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7989244Z         Unexpected error:
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.7995582Z         Could not resolve dependencies:
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8004303Z         [__0] trying: A-1 (user goal)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8006534Z         [__1] next goal: A.base (dependency of A)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8007236Z         [__1] rejecting: A.base-4/installed-inst (conflict: A => A.base==3)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8007840Z         [__1] rejecting: A.base-3/installed-inst (conflict: A => A.base==4)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8008366Z         [__1] fail (backjumping, conflict set: A, A.base)
+Validate windows-latest ghc-9.10.3	UNKNOWN STEP	2026-07-17T08:00:02.8014824Z         After searching the rest of the dependency tree exhaustively, these were the goals I've had most trouble fulfilling: A, A.base (expected failure)
+      ...
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6833580Z creating /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6834650Z creating /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/cache
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6835890Z creating /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6837970Z copy /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/./Setup.hs to /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/./cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6842990Z Running: /Users/runner/.ghcup/bin/ghc '-package-env=-' --make -fbuilding-cabal-package -odir cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup -hidir cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup -i -i. -optP-include -optPcabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup_macros.h -hide-all-packages -no-user-package-db -package-db /Users/runner/work/cabal/cabal/testdb/intree/store/ghc-9.6.7/package.db -package-db /Users/runner/work/cabal/cabal/testdb/intree/dist-newstyle/packagedb/ghc-9.6.7 -package-db /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/home/.cabal/store/ghc-9.6.7/package.db -package-db /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/./dist/packagedb/ghc-9.6.7 -package-id Cabal-3.17.0.0-inplace -package-id base-4.18.3.0 -package-id filepath-1.4.301.0 -package-id prcss-1.6.30.0-fa57c20d cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs -o cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup -threaded
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6847600Z [1 of 2] Compiling Main             ( cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs, cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/Main.o )
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6848570Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6848990Z cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs:44:13: error: [GHC-88464]
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6850420Z ##[error]    Data constructor not in scope: PreProcessorCustom :: FilePath -> t1
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6858030Z    |
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6859720Z 44 |           , PreProcessorCustom progPath
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6860030Z    |             ^^^^^^^^^^^^^^^^^^
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6860240Z -----BEGIN CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6860430Z Error: [Cabal-7125]
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6860590Z -----END CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6860780Z -----BEGIN CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6861200Z Failed to build internal-preprocessor-test-0.1.0.0-inplace. The failure occurred during the configure step.
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6861620Z -----END CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6861800Z CallStack (from HasCallStack):
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6862430Z   dieWithException, called at src/Distribution/Client/ProjectOrchestration.hs:1382:21 in cabal-install-3.17.0.0-inplace:Distribution.Client.ProjectOrchestration
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6862930Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6862990Z stderr:
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6864620Z *** Exception: Command /Users/runner/work/cabal/cabal/dist-newstyle-validate-ghc-9.6.7/build/aarch64-osx/ghc-9.6.7/cabal-install-3.17.0.0/x/cabal/build/cabal/cabal v2-build '-vverbose +markoutput +nowrap' --builddir /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/./dist -j1 '--package-db=/Users/runner/work/cabal/cabal/testdb/intree/store/ghc-9.6.7/package.db' '--package-db=/Users/runner/work/cabal/cabal/testdb/intree/dist-newstyle/packagedb/ghc-9.6.7' failed.
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6866190Z Output:
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6866430Z Warning: this is a debug build of cabal-install with assertions enabled.
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6866750Z Project settings changed, reconfiguring...
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6867250Z Monitor existing: /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.project
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6868360Z Monitor nonexistent: /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.project.freeze
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6869120Z Monitor nonexistent: /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.project.local
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6869810Z creating /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/dist
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6870460Z creating /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work
+      ...
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6923950Z copy /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/./Setup.hs to /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/./cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6928890Z Running: /Users/runner/.ghcup/bin/ghc '-package-env=-' --make -fbuilding-cabal-package -odir cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup -hidir cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup -i -i. -optP-include -optPcabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup_macros.h -hide-all-packages -no-user-package-db -package-db /Users/runner/work/cabal/cabal/testdb/intree/store/ghc-9.6.7/package.db -package-db /Users/runner/work/cabal/cabal/testdb/intree/dist-newstyle/packagedb/ghc-9.6.7 -package-db /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/home/.cabal/store/ghc-9.6.7/package.db -package-db /private/var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/cabal-testsuite-5531260/cabal.dist/work/./dist/packagedb/ghc-9.6.7 -package-id Cabal-3.17.0.0-inplace -package-id base-4.18.3.0 -package-id filepath-1.4.301.0 -package-id prcss-1.6.30.0-fa57c20d cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs -o cabal.dist/work/./dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup -threaded
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6933300Z [1 of 2] Compiling Main             ( cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs, cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/Main.o )
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6933970Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6934370Z cabal.dist/work/dist/build/aarch64-osx/ghc-9.6.7/internal-preprocessor-test-0.1.0.0/setup/setup.hs:44:13: error: [GHC-88464]
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6935750Z ##[error]    Data constructor not in scope: PreProcessorCustom :: FilePath -> t1
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6936760Z    |
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6936940Z 44 |           , PreProcessorCustom progPath
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6937170Z    |             ^^^^^^^^^^^^^^^^^^
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6937370Z -----BEGIN CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6937550Z Error: [Cabal-7125]
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6937710Z -----END CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6937890Z -----BEGIN CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6938320Z Failed to build internal-preprocessor-test-0.1.0.0-inplace. The failure occurred during the configure step.
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6938740Z -----END CABAL OUTPUT-----
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6938930Z CallStack (from HasCallStack):
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6939530Z   dieWithException, called at src/Distribution/Client/ProjectOrchestration.hs:1382:21 in cabal-install-3.17.0.0-inplace:Distribution.Client.ProjectOrchestration
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6940310Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6940310Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6940320Z 
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:15:11.6940500Z *** unexpected failure for PackageTests/CustomPreProcess/cabal.test.hs
+      ...
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.1793340Z UNEXPECTED FAIL: PackageTests/PreProcess/Basic/setup.test.hs PackageTests/CustomPreProcess/cabal.test.hs PackageTests/CustomPreProcess/setup.test.hs PackageTests/PreProcessExtraSources/setup.test.hs PackageTests/AutogenModulesToggling/cabal.test.hs PackageTests/Regression/T5309/cabal.test.hs
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.1948390Z Failed with exit code 1 after 36:51.52: /Users/runner/work/cabal/cabal/dist-newstyle-validate-ghc-9.6.7/build/aarch64-osx/ghc-9.6.7/cabal-testsuite-3/build/cabal-tests/cabal-tests --builddir=/Users/runner/work/cabal/cabal/dist-newstyle-validate-ghc-9.6.7/build/aarch64-osx/ghc-9.6.7/cabal-testsuite-3 --with-cabal=/Users/runner/work/cabal/cabal/dist-newstyle-validate-ghc-9.6.7/build/aarch64-osx/ghc-9.6.7/cabal-install-3.17.0.0/x/cabal/build/cabal/cabal --with-ghc=ghc --intree-cabal-lib=/Users/runner/work/cabal/cabal --test-tmp=/Users/runner/work/cabal/cabal/testdb -j 2
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.1951360Z Total time so far: 36:52.24
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.1952440Z cli-suite failed after 36:52.01
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.1952850Z Total time so far: 36:52.24
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.2308400Z End cli-suite
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.2310770Z ##[endgroup]
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.2311040Z Some tests failed
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:25.2311540Z ##[group]Validate solver-tests
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:26.4561250Z Some tests failed
+Validate macos-latest ghc-9.6.7	UNKNOWN STEP	2026-07-17T08:28:26.4700050Z ##[error]Process completed with exit code 1.

@@ -743,7 +743,15 @@ RULES: list[dict[str, Any]] = [
             r"Failed to execute goal",
             r"Execution failed for task",
             r"Could not resolve all files",
-            r"Could not resolve dependencies",
+            # Maven's own phrasing is "Could not resolve dependencies for project
+            # <group>:<artifact>:jar:<version>". The bare "Could not resolve
+            # dependencies:" (trailing colon, no "for project") is Cabal's -- and
+            # pip's, and npm's -- so keep the Maven-specific suffix or a Haskell
+            # `cabal build` failure reads as a JVM build. haskell/cabal's Validate
+            # job (run 29562439929, GHC compile errors + a cabal-testsuite that
+            # UNEXPECTED FAIL'd, no mvn/gradle/jvm token anywhere) came out
+            # java_build_failure at 0.53 on this one line before the suffix.
+            r"Could not resolve dependencies for project\b",
             r"Could not determine java version",
             r"Unsupported class file major version",
             r"No tests found for given includes",

@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Nineteen **real failed CI runs from public repositories** — pandas,
+This page is the other benchmark. Twenty **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
-Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats and riverpod — with their logs committed to
+Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod and cabal — with their logs committed to
 this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
-output of a command you can run yourself — including the seven where the honest answer is **`unknown`**,
+output of a command you can run yourself — including the eight where the honest answer is **`unknown`**,
 one of them because the failure never made it into the log.
 
 ## Reproduce it
@@ -28,12 +28,12 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the four most recent: the pandas fix (#347),
-the Symfony fix (#377), the Discourse fix and the riverpod fix landed on `main` after 0.7.3 was cut and
-ship in the next release, so they are the four rows where `main` is ahead of `pip install patchrail`
-(`0.7.3` returns the old verdict on all four). On the other fifteen logs, re-measured 2026-07-17, `0.7.3`
-and `main` return the identical verdict, and the CLI and action changes merged since (#364–#373) moved
-none of them.
+serves **0.7.3** today and ships every fix below except the five most recent: the pandas fix (#347),
+the Symfony fix (#377), the Discourse fix (#379), the riverpod fix and the cabal fix landed on `main`
+after 0.7.3 was cut and ship in the next release, so they are the five rows where `main` is ahead of
+`pip install patchrail` (`0.7.3` returns the old verdict on all five). On the other fifteen logs,
+re-measured 2026-07-17, `0.7.3` and `main` return the identical verdict, and the CLI and action changes
+merged since (#364–#373) moved none of them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -56,8 +56,9 @@ none of them.
 | [Jellyfin](https://github.com/jellyfin/jellyfin/actions/runs/29544616523) | a C# compile error (`CS0117`) in a test project, buried among 30+ passing suites | `dotnet_build_failure` 0.89 | `dotnet_build_failure` 0.89 | ✅ correct |
 | [cats](https://github.com/typelevel/cats/actions/runs/29545595453) | an sbt test run failed (`sbt.TestsFailedException`) | `java_build_failure` 0.71 | `java_build_failure` 0.71 | ✅ correct |
 | [riverpod](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) | `flutter analyze` reported 4 lints, exit 1 — a Dart run, not a JVM build | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
+| [cabal](https://github.com/haskell/cabal/actions/runs/29562439929) | a GHC compile error failed Cabal's own test suite (`Some tests failed`, exit 1) — a Haskell build, not a JVM one | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 
-Eight of the nineteen were classified identically before and after. Three — Home Assistant, Prometheus and
+Eight of the twenty were classified identically before and after. Three — Home Assistant, Prometheus and
 ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Five —
 Mastodon, Phoenix, Signal-Android, Jellyfin and cats — because Ruby/RSpec, Elixir/ExUnit, Kotlin/Gradle,
 .NET and Scala/sbt were never misread here in the first place; they are in the table to show the tool holds
@@ -65,10 +66,10 @@ across ecosystems it was already right about, not only the ones that forced a fi
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the nineteen is confidently wrong. Seven answer `unknown` — ruff, svelte,
-Symfony, Discourse and riverpod because PatchRail has no class for what broke, pytorch because a lint runner
-never wrote the report its `jq` step then failed to read, and pandas because the failure is not in the log
-at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
+As of this measurement, none of the twenty is confidently wrong. Eight answer `unknown` — ruff, svelte,
+Symfony, Discourse, riverpod and cabal because PatchRail has no class for what broke, pytorch because a lint
+runner never wrote the report its `jq` step then failed to read, and pandas because the failure is not in the
+log at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
 
 ### pandas — a package list is not a test run ([#347](https://github.com/patchrail/patchrail/issues/347))
 
@@ -373,6 +374,39 @@ found nowhere else now witnesses nothing. PatchRail has no Dart/Flutter class, s
 above trips `Execution failed for task` and `BUILD FAILED` on their own lines and still lands
 `java_build_failure` at 0.89.
 
+### cabal — `java_build_failure` → `unknown`
+
+A dependency-resolver diagnostic printed by a test is not a Maven build.
+
+haskell/cabal is Cabal itself — a Haskell project. Its `Validate` job died on GHC: a `setup.hs`
+would not compile, so Cabal's own test suite recorded `UNEXPECTED FAIL` and the job exited 1:
+
+```
+setup.hs:44:13: error: [GHC-88464]
+##[error]    Data constructor not in scope: PreProcessorCustom :: FilePath -> t1
+Failed to build internal-preprocessor-test-0.1.0.0-inplace. ... during the configure step.
+UNEXPECTED FAIL: PackageTests/PreProcess/Basic/setup.test.hs ...
+Some tests failed
+##[error]Process completed with exit code 1.
+```
+
+There is no `mvn`, `gradle`, `sbt` or JVM token anywhere in the 141k-line log. PatchRail answered
+`java_build_failure` at 0.53, and its one and only witness was a line buried inside a cabal-testsuite
+*golden output*, where the solver's diagnostic is the text the test expects to see:
+
+```
+Could not resolve dependencies:
+[__0] trying: A-1 (user goal)
+[__1] fail (backjumping, conflict set: A, A.base)
+```
+
+Maven's phrasing is `Could not resolve dependencies for project <group>:<artifact>:jar:<version>`; the
+bare `Could not resolve dependencies:` — trailing colon, no "for project" — is Cabal's, and pip's, and
+npm's. The rule now keys on the Maven suffix, so Cabal's line carries nothing. PatchRail has no Haskell
+class, so the honest answer is `unknown`, the ceiling ruff, svelte, Symfony, Discourse and riverpod share.
+A real Maven failure is untouched: `Could not resolve dependencies for project com.example:app:jar:1.0`
+still lands `java_build_failure`.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -390,7 +424,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
-- Nineteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+- Twenty logs is not a statistic. It is a set of cases you can check by hand, chosen because they
   were the failed runs sitting in these repos on 2026-07-14 (and Symfony, Discourse, Mastodon, Phoenix,
-  Signal-Android, Jellyfin, cats and riverpod on 2026-07-17), not because they flattered the tool.
+  Signal-Android, Jellyfin, cats, riverpod and cabal on 2026-07-17), not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.
