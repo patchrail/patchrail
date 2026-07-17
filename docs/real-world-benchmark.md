@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Twelve **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony —
-with their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
-Every verdict below is the output of a command you can run yourself — including the five where the
-honest answer is **`unknown`**, one of them because the failure never made it into the log.
+This page is the other benchmark. Thirteen **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
+Discourse — with their logs committed to this repo unmodified, exactly as `gh run view --log-failed`
+returned them. Every verdict below is the output of a command you can run yourself — including the six
+where the honest answer is **`unknown`**, one of them because the failure never made it into the log.
 
 ## Reproduce it
 
@@ -27,11 +27,11 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the two most recent: the pandas fix (#347)
-and the Symfony fix landed on `main` after 0.7.3 was cut and ship in the next release, so they are
-the two rows where `main` is ahead of `pip install patchrail` (`0.7.3` returns the old verdict on
-both). On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main` return the identical
-verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
+serves **0.7.3** today and ships every fix below except the three most recent: the pandas fix (#347),
+the Symfony fix (#377) and the Discourse fix landed on `main` after 0.7.3 was cut and ship in the next
+release, so they are the three rows where `main` is ahead of `pip install patchrail` (`0.7.3` returns
+the old verdict on all three). On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main` return
+the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -47,16 +47,17 @@ verdict, and the CLI and action changes merged since (#364–#373) moved none of
 | [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
 | [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
 | [Symfony](https://github.com/symfony/symfony/actions/runs/29551386048) | a PHPUnit assertion in `ErrorHandler`, after `composer` had succeeded | `php_composer_failure` 0.95 | `unknown` 0.15 | ✅ fixed ([#377](https://github.com/patchrail/patchrail/issues/377)) |
+| [Discourse](https://github.com/discourse/discourse/actions/runs/29572043439) | six QUnit chat tests timed out (`# fail  6`) | `secrets_or_permissions_failure` 0.53 | `unknown` 0.15 | ✅ fixed ([#379](https://github.com/patchrail/patchrail/issues/379)) |
 
-Three of the twelve were classified identically before and after. That is the point of showing them:
+Three of the thirteen were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the twelve is confidently wrong. Five answer `unknown` — ruff, svelte
-and Symfony because PatchRail has no class for what broke, pytorch because a lint runner never wrote
-the report its `jq` step then failed to read, and pandas because the failure is not in the log at all.
-`unknown` there is a limit, not a diagnosis, and the honest thing to say.
+As of this measurement, none of the thirteen is confidently wrong. Six answer `unknown` — ruff, svelte,
+Symfony and Discourse because PatchRail has no class for what broke, pytorch because a lint runner never
+wrote the report its `jq` step then failed to read, and pandas because the failure is not in the log at
+all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
 
 ### pandas — a package list is not a test run ([#347](https://github.com/patchrail/patchrail/issues/347))
 
@@ -309,6 +310,28 @@ so `unknown` is the honest ceiling, the same one ruff and svelte land on. A real
 untouched — `Your requirements could not be resolved`, `requires php`, the lockfile-drift warning all
 still carry the rule at full confidence, and the five committed composer fixtures still pass.
 
+### Discourse — `secrets_or_permissions_failure` → `unknown` ([#379](https://github.com/patchrail/patchrail/issues/379))
+
+A phrase in the title of a test that PASSED is not a secret the job was missing.
+
+Discourse's `Plugins QUnit` job ran 1,559 browser assertions; six chat components timed out at 60s
+each and the suite ended `# fail  6`. PatchRail answered `secrets_or_permissions_failure` at 0.53. Its
+one and only witness was a test that went green:
+
+```
+ok 1523 [564 ms] - poll - Acceptance: Poll Builder - polls are disabled: regular user - insufficient permissions
+```
+
+`insufficient permissions` is the scenario that poll test asserts the UI handles gracefully — the
+description on an `ok` line, TAP for "this passed." Read verbatim it sent a maintainer to audit their
+repository secrets over the title of a passing test. A TAP report prints one `ok N` line per passing
+assertion, and its description is application vocabulary, not a runner diagnostic; a phrase matched only
+there now witnesses nothing. The run's real failures start `not ok` and carry nothing this rule keys
+on, so — with no browser-QUnit test class — the log answers `unknown`, the same ceiling ruff, svelte and
+Symfony land on. A genuine permissions failure is untouched: `insufficient permissions` on an error line,
+`Resource not accessible by integration`, a `Permission … denied to github-actions` all still carry the
+rule, because none of them arrives on a green TAP line.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -326,7 +349,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
-- Twelve logs is not a statistic. It is a set of cases you can check by hand, chosen because they
-  were the failed runs sitting in these repos on 2026-07-14 (and Symfony on 2026-07-17), not because
-  they flattered the tool.
+- Thirteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+  were the failed runs sitting in these repos on 2026-07-14 (and Symfony and Discourse on 2026-07-17),
+  not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.

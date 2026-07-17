@@ -1520,12 +1520,31 @@ _DEPENDABOT_UPDATER_RECORD = re.compile(
 )
 
 
+# A TAP report prints one `ok N` line per assertion that PASSED, and the assertion's
+# description is whatever the test named itself -- application vocabulary, not a runner
+# diagnostic. discourse/discourse's `Plugins QUnit` suite (run 29572043439) failed on six
+# `not ok` chat-component timeouts, but its ONE witness for a secrets failure, at 0.53, was a
+# test that GREEN-passed:
+#
+#     ok 1523 [564 ms] - poll - Acceptance: Poll Builder - polls are disabled:
+#       regular user - insufficient permissions
+#
+# `insufficient permissions` is the scenario that test asserts the UI handles gracefully, not a
+# credential the job lacked -- and it lands on a line that begins `ok `, TAP for "this passed".
+# Read verbatim it sent a maintainer to `gh secret list` over the title of a passing test. A
+# real permissions failure is untouched: it does not announce itself on a green TAP line, and
+# the run's actual failures start `not ok` (so `.match` at line-start skips them) and carry
+# nothing this rule keys on -- with no browser-QUnit class, `unknown` is the honest ceiling.
+_TAP_PASSING_LINE = re.compile(r"ok \d+\b")
+
+
 def _mention_only_bounds(text: str) -> list[tuple[int, int]]:
     """Character spans of the lines where a tool is named but never actually run."""
     return (
         _line_bounds(text, _MERE_MENTION_LINE)
         + _line_bounds(text, _AUDIT_SUMMARY_LINE)
         + _line_bounds(text, _DEPENDABOT_UPDATER_RECORD)
+        + _line_bounds(text, _TAP_PASSING_LINE)
         + _path_token_bounds(text)
     )
 

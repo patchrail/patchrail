@@ -1,0 +1,23 @@
+plugins frontend	Plugins QUnit	﻿2026-07-17T10:03:27.6774717Z ##[group]Run bin/rake 'plugin:qunit[*]'
+plugins frontend	Plugins QUnit	2026-07-17T10:03:27.6774971Z ^[[36;1mbin/rake 'plugin:qunit[*]'^[[0m
+plugins frontend	Plugins QUnit	2026-07-17T10:03:27.6775268Z shell: bash --noprofile --norc -e -o pipefail {0}
+plugins frontend	Plugins QUnit	2026-07-17T10:03:27.6775496Z env:
+plugins frontend	Plugins QUnit	2026-07-17T10:03:27.6775656Z   RAILS_ENV: test
+plugins frontend	Plugins QUnit	2026-07-17T10:03:27.6775816Z   PGUSER: discourse
+plugins frontend	Plugins QUnit	2026-07-17T10:03:59.7440016Z ^[[32m^[[39m[chat] [error] Unhandled request in test environment: /chat/api/channels/1/memberships?limit=5 (GET)
+plugins frontend	Plugins QUnit	2026-07-17T10:04:59.7109394Z [chat] [warn] ℹ️ Hint: when the assertion failed, the Ember runloop was not in a settled state. Maybe you missed an `await` further up the test? Or maybe you need to manually add `await settled()` before your assertion? (hasPendingRequests, pending requests: 1)
+plugins frontend	Plugins QUnit	2026-07-17T10:04:59.7517639Z ^[[32m^[[39m^[[31mnot ok 818 [60064 ms] - chat - Component | ChatChannel | screen reader announcements: announces a caption together with its image^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:05:58.5093209Z ^[[32m^[[39m^[[32mok 1523 [564 ms] - poll - Acceptance: Poll Builder - polls are disabled: regular user - insufficient permissions^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:06:01.3851440Z [chat] [warn] ℹ️ Hint: when the assertion failed, the Ember runloop was not in a settled state. Maybe you missed an `await` further up the test? Or maybe you need to manually add `await settled()` before your assertion? (hasPendingRequests, pending requests: 1)
+plugins frontend	Plugins QUnit	2026-07-17T10:06:01.4272146Z ^[[31mnot ok 1541 [60057 ms] - chat - Unit | Components | presence gating: own messages still follow while unfocused^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:07:01.5886391Z ^[[31mnot ok 1547 [60053 ms] - chat - Component | ChatChannel | screen reader announcements: announces an image-only message as an image^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:08:02.0363965Z ^[[31mnot ok 1553 [60058 ms] - chat - Unit | Components | presence gating: pending manager tracks messages across contexts^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.2980226Z ^[[31mnot ok 1558 [60079 ms] - chat - Acceptance: Chat | New message: fetches a channel from the server when its slug is not in the sidebar cache^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3147543Z ^[[36m^[[39m^[[31mnot ok 1559 Chrome 150.0 - [undefined ms] - Global error: Error: Assertion occurred after test finished.^[[39m
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3156210Z ^[[36m^[[39m[chat] [error] Error: Assertion occurred after test finished.
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3700995Z # tests 1559
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3701204Z # pass  1551
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3701347Z # skip  2
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3701483Z # todo  0
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3701914Z # fail  6
+plugins frontend	Plugins QUnit	2026-07-17T10:09:02.3701985Z 
