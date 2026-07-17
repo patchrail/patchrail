@@ -24,9 +24,21 @@ code 2`), outvoted by post-failure cleanup noise.
 
 from __future__ import annotations
 
+import json
 import unittest
+from pathlib import Path
+
+import jsonschema
 
 from patchrail.ci.classify import classify_ci_log
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+
+_SCHEMA = json.loads(
+    (_REPO_ROOT / "src" / "patchrail" / "schemas" / "ci-result.v1.schema.json").read_text(
+        encoding="utf-8"
+    )
+)
 
 # The pandas run, in the shape `gh run view --log-failed` serves it: the runner boots and
 # echoes the actions it will use, Sphinx crashes, the job dies, and the cache steps run in
@@ -201,6 +213,70 @@ sphinx.errors.ExtensionError: Could not import extension numpydoc
         result = classify_ci_log(log)
 
         self.assertEqual(result["failure_class"], "python_type_check")
+
+
+class TheCommittedRealWorldExcerptIsTruncatedBeforeTheCrash(unittest.TestCase):
+    """The synthetic logs above include the `##[error]` line; the committed one does not.
+
+    `examples/real-world/pandas-29342614636.log` is a verbatim capture that GitHub cut at
+    400 KB -- mid `Post job cleanup`, thousands of lines before the Sphinx crash the job
+    actually died on. So the whole excerpt is a green-looking micromamba env build: it ends
+    `Successfully built`, carries no runner-annotated error, and its only "failure" signals
+    are the two benign cache-reserve warnings and pytest/mypy read off the conda transaction
+    table. The synthetic `PANDAS_DOC_BUILD` above keeps the `##[error]` and so was always
+    caught by the runner-annotated guard; this real file slipped past it and came out
+    `python_test_failure` at 0.53 (issue #347), then `artifact_or_cache_failure` at 0.89 once
+    the pytest package-spec match was fixed. Both are confident-wrong. `unknown` is the honest
+    verdict for a log that captured no failure at all.
+    """
+
+    def _classify(self) -> dict[str, object]:
+        log = (_REPO_ROOT / "examples" / "real-world" / "pandas-29342614636.log").read_text(
+            encoding="utf-8"
+        )
+        return classify_ci_log(log)
+
+    def test_the_truncated_excerpt_is_unknown_not_a_confident_wrong_class(self) -> None:
+        result = self._classify()
+
+        # Neither confident-wrong verdict this excerpt has worn.
+        self.assertNotEqual(result["failure_class"], "python_test_failure")
+        self.assertNotEqual(result["failure_class"], "artifact_or_cache_failure")
+        self.assertEqual(result["failure_class"], "unknown")
+        self.assertEqual(result["signals"], [])
+        jsonschema.validate(result, _SCHEMA)
+
+    def test_it_reads_as_a_run_with_no_captured_failure(self) -> None:
+        # `Successfully built`, no runner error, no failure tell: the truthful thing to say
+        # is that this slice of the log shows no failure -- not to invent one.
+        result = self._classify()
+
+        self.assertTrue(result.get("likely_successful_run"))
+
+    def test_pytest_installed_as_a_dependency_does_not_carry_a_test_failure(self) -> None:
+        # The exact package-spec shapes the excerpt throws off, in isolation: a plugin
+        # package and a version-pinned constraint are dependencies, never an invocation.
+        for spec in (
+            "  create-args: pytest<9.1\n",
+            "   - pytest-cov\n",
+            "   + pytest-xdist                                  3.8.0  pyhd8ed1ab_0\n",
+        ):
+            with self.subTest(spec=spec.strip()):
+                result = classify_ci_log(spec)
+
+                self.assertNotEqual(result["failure_class"], "python_test_failure")
+
+    def test_pytest_that_actually_ran_and_failed_is_still_a_test_failure(self) -> None:
+        # The guard: the spec forms are dropped, a real invocation and its verdict are not.
+        log = (
+            "Run python -m pytest -q\n"
+            "FAILED tests/test_frame.py::test_repr - AssertionError\n"
+            "1 failed, 412 passed in 8.20s\n"
+        )
+
+        result = classify_ci_log(log)
+
+        self.assertEqual(result["failure_class"], "python_test_failure")
 
 
 if __name__ == "__main__":

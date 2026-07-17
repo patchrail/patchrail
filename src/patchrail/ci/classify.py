@@ -314,7 +314,19 @@ RULES: list[dict[str, Any]] = [
         "failure_class": "python_test_failure",
         "likely_subsystem": "Python tests",
         "patterns": [
-            r"\bpytest\b",
+            # A bare `pytest` is a defensible last-resort invocation (see below), but only
+            # when the word is the tool being RUN. `\b` also treats `-`, `<`, `>`, `=`, `~`
+            # as boundaries, so it read `pytest` off every dependency SPEC a Python job
+            # installs -- the plugin package `pytest-cov`/`pytest-xdist` and the version
+            # constraint `pytest<9.1`/`pytest>=8.3.4`. pandas-dev/pandas's Doc Build job
+            # (issue #347) never runs pytest at all; it installs it via micromamba, and its
+            # env dump (`create-args: pytest<9.1`, `- pytest-cov`, `+ pytest 9.0.3 ...`) was
+            # the rule's entire case -- `python_test_failure` at 0.53, sending the maintainer
+            # to debug tests that never ran. A run that actually invokes pytest writes
+            # `pytest`, `pytest -q`, `python -m pytest`; none of those is followed by a
+            # version operator or a `-plugin` suffix, so the guard costs a real invocation
+            # nothing and drops the package-spec mentions the install phase throws off.
+            r"\bpytest\b(?![-<>=~])",
             r"FAILED .*::",
             r"AssertionError",
             r"ModuleNotFoundError",
@@ -2125,34 +2137,40 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     if best_rule is not None and _is_mention_only(best_signals):
         best_rule, best_signals = None, []
 
-    # Nor can a rule that only ever WARNED -- once the runner has told us a step exited
-    # non-zero. The deferral above hands off to the best rule that saw a real error, but when
-    # nothing else matched it lets the noise-carried rule stand, on the grounds that it is
-    # "the only thing the log gave us". That holds for a warning in an otherwise quiet log:
-    # there is no failure to explain, and one lead beats none.
+    # Nor can a rule that only ever WARNED -- once we can see the warning was not the cause.
+    # The deferral above hands off to the best rule that saw a real error, but when nothing
+    # else matched it lets the noise-carried rule stand, on the grounds that it is "the only
+    # thing the log gave us". That holds for a warning in an otherwise quiet log whose outcome
+    # we cannot read: there may be a failure to explain, and one lead beats none.
     #
-    # It inverts the moment the runner annotates an error. Then a step provably exited
-    # non-zero -- and a benign warning provably did not cause it. `actions/cache` settles that
-    # in its own source: `saveImpl` wraps the save in `try { ... } catch { logWarning(...) }`,
-    # so a save error goes out through `core.warning` and never `core.setFailed`. It cannot
-    # fail a job. Whatever did is elsewhere, and we did not find it.
+    # It inverts the moment the log settles that outcome, in either direction. A benign
+    # warning provably did not cause the job to fail, so once we know a failure happened
+    # ELSEWHERE -- or that none happened at all -- the warning is not a lead worth handing back.
     #
-    # pandas-dev/pandas's doc build died on a Sphinx crash and was handed
-    # `artifact_or_cache_failure` at 0.89 on nothing but the runner booting
-    # `actions/upload-artifact` and two `##[warning]Failed to save: Unable to reserve cache`
-    # lines -- emitted from `Post job cleanup`, 2000 lines AFTER the job had already died,
-    # because two matrix jobs raced for one cache key. The maintainer was sent to debug a
-    # cache that was working. `unknown` at 0.15 says the true thing instead.
+    #   * The runner annotates an error: a step provably exited non-zero, and it was not this
+    #     save. `actions/cache` settles that in its own source: `saveImpl` wraps the save in
+    #     `try { ... } catch { logWarning(...) }`, so a save error goes out through
+    #     `core.warning`, never `core.setFailed`. Whatever failed is elsewhere; we did not find it.
+    #   * The log plainly announces success and betrays no failure (`_looks_like_successful_run`
+    #     -- an explicit success line, no runner error, no failure tell): there is no failure at
+    #     all for the warning to be. pandas-dev/pandas's Doc Build (issue #347) is this case in a
+    #     log truncated before the crash -- all we captured is a micromamba env build that ends
+    #     `Successfully built`, then `Post job cleanup` racing two matrix jobs for one cache key
+    #     (`##[warning]Failed to save: Unable to reserve cache ... another job may be creating
+    #     this cache`). Handed back verbatim that was `artifact_or_cache_failure` at 0.89 --
+    #     sending the maintainer to debug a cache that was working. `unknown` at 0.15 (with
+    #     `likely_successful_run`) says the true thing: this log shows no failure.
     #
     # A genuine artifact or cache failure is untouched: it trips a terminal signal (`Failed to
     # CreateArtifact`, `Cache service responded with 500`, `an artifact with this name already
-    # exists`) outside these sets, so it never reaches here. A pure invocation-only match, and
-    # a warning in a log with no runner error at all, both still stand exactly as before.
+    # exists`) outside these sets, so it never reaches here. A pure invocation-only match still
+    # stands; so does a benign warning in a log that neither announces success nor shows a
+    # runner error -- an unrecognized failure keeps its one lead.
     if (
         best_rule is not None
         and _is_non_failure_only(best_signals)
         and any(signal in BENIGN_WARNING_PATTERNS for signal in best_signals)
-        and _runner_annotated_a_failure(text)
+        and (_runner_annotated_a_failure(text) or _looks_like_successful_run(text))
     ):
         best_rule, best_signals = None, []
 
