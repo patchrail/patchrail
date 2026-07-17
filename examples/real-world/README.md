@@ -1,9 +1,9 @@
 # Real-world CI logs
 
 Failed CI runs from public repositories, fetched with `gh run view <id> --repo <repo> --log-failed`
-on 2026-07-14 (Symfony, Mastodon, Phoenix and Signal-Android on 2026-07-17) and committed
-**unmodified** — the one exception is ANSI color codes, which `gh` returned in caret notation for
-Symfony and Phoenix, stripped for legibility. They are the evidence behind
+on 2026-07-14 (Symfony, Mastodon, Phoenix, Signal-Android, Jellyfin, cats and riverpod on 2026-07-17)
+and committed **unmodified** — the one exception is ANSI color codes, which `gh` returned in caret
+notation for Symfony, Phoenix, cats and riverpod, stripped for legibility. They are the evidence behind
 [docs/real-world-benchmark.md](../../docs/real-world-benchmark.md), where each one is measured
 against the version PyPI serves and against `main`.
 
@@ -25,6 +25,9 @@ against the version PyPI serves and against `main`.
 | `mastodon-29561949942-excerpt.log` | mastodon/mastodon | [29561949942](https://github.com/mastodon/mastodon/actions/runs/29561949942) (excerpt: the `End to End testing (3.3)` RSpec run — the streaming system spec that timed out and the `26 examples, 1 failure` summary — kept verbatim; classified correctly, drove no fix) |
 | `phoenix-28866117635-excerpt.log` | phoenixframework/phoenix | [28866117635](https://github.com/phoenixframework/phoenix/actions/runs/28866117635) (excerpt: the `test-elixir (1.12.1, …)` `mix test` run — the ExUnit failures and the `819 tests, 4 failures` summary — kept verbatim, ANSI color codes stripped; classified correctly, drove no fix) |
 | `signal-android-28969358490-excerpt.log` | signalapp/Signal-Android | [28969358490](https://github.com/signalapp/Signal-Android/actions/runs/28969358490) (excerpt: the Gradle `build` job — the `validateDebugScreenshotTest` task that FAILED and `BUILD FAILED` — kept verbatim; classified correctly, drove no fix) |
+| `jellyfin-29544616523-excerpt.log` | jellyfin/jellyfin | [29544616523](https://github.com/jellyfin/jellyfin/actions/runs/29544616523) (excerpt: the `run-tests (ubuntu-latest)` `dotnet test` job — dozens of `Passed!` suites and the one buried `error CS0117` that failed the build — kept verbatim; classified correctly, drove no fix) |
+| `cats-29545595453-excerpt.log` | typelevel/cats | [29545595453](https://github.com/typelevel/cats/actions/runs/29545595453) (excerpt: the `catsNative` sbt run — the `welcome to sbt` banner and the `sbt.TestsFailedException` that ended it — kept verbatim, ANSI color codes stripped; classified correctly, drove no fix) |
+| `riverpod-29573819047-excerpt.log` | rrousselGit/riverpod | [29573819047](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) (excerpt: the `flutter_riverpod` build job — Flutter's `precache` artifact listing including `[2/10] Gradle Wrapper` and the `flutter analyze` lint failure — kept verbatim, ANSI color codes stripped, and pinned by `tests/test_flutter_precache_not_gradle.py`) |
 
 These are **not** fixtures. They carry no expected-class labels and are not scored by
 `patchrail ci benchmark`, which runs against the sanitized zoo in `examples/ci-triage/`. They exist

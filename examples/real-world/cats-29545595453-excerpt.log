@@ -1,0 +1,26 @@
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:07.1308496Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/8.0.492-9/x64
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:07.1309030Z   JAVA_HOME_8_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/8.0.492-9/x64
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:07.1309451Z   MAVEN_ARGS: -ntp
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:07.1309666Z ##[endgroup]
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:08.8167626Z [info] welcome to sbt 1.12.14 (Temurin Java 1.8.0_492)
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:09.7764041Z [info] loading settings for project cats-build from plugins.sbt...
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:10.5149781Z [info] loading project definition from /home/runner/work/cats/cats/project
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:12.6411034Z [info] loading settings for project cats from build.sbt, mima.sbt...
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:13.2354858Z [info] resolving key references (41811 settings) ...
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:15.4035989Z [info] set scmInfo to https://github.com/typelevel/cats
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:36:15.6746545Z [info] looking for workflow definition in /home/runner/work/cats/cats/.github/workflows
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1377125Z [error] 	cats.tests.ApplicativeErrorSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1378010Z [error] 	cats.tests.FunctionKLiftSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1378841Z [error] 	cats.tests.KleisliSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1379640Z [error] 	cats.tests.BitraverseSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1380520Z [error] 	cats.tests.TraverseSuiteAdditional
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1381398Z [error] 	cats.tests.FoldableIdTSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1382457Z [error] 	cats.tests.EqSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:43:49.1383229Z [error] 	cats.tests.FunctionSuite
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:04.1589893Z cats.kernel.laws.Tests: finished 131.846s
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:04.1591119Z Test run cats.kernel.laws.Tests finished: 0 failed, 0 ignored, 1693 total 131.846s
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:04.2203175Z [info] Passed: Total 1701, Failed 0, Errors 0, Passed 1701, Ignored 1
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:04.3110930Z [error] (testsNative / Test / test) sbt.TestsFailedException: Tests unsuccessful
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:05.2496080Z [error] Total time: 136 s (0:02:16.0), completed Jul 17, 2026 6:45:04 AM
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:05.6639388Z ^[[0J
+Test (ubuntu-22.04, 2.12, temurin@8, catsNative)	UNKNOWN STEP	2026-07-17T06:45:05.6650824Z ##[error]Process completed with exit code 1.

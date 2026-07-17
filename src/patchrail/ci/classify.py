@@ -1364,6 +1364,14 @@ _MERE_MENTION_LINE = re.compile(
             \s* [+-]?\ * [\w.\-]+ (?: \s{2,} | \s*[=<>!~]=?\s* ) v?\d[\w.+!]*
             (?: \s+\S+ )*? \s* $          # nothing but more columns to the end of the line
           )
+        | [\ \t│├└─]* \[\d+/\d+\]\s        # the Flutter tool's `precache` artifact listing, one
+            [^\n]*? \d+(?:\.\d+)?\s*m?s \s* $  # timed line per bundled artifact it CACHED: `[2/10]
+                                           # Gradle Wrapper   7ms`. rrousselGit/riverpod (a Dart
+                                           # monorepo whose `flutter analyze` reported 4 lints,
+                                           # run 29573819047) said java_build_failure at 0.53 on
+                                           # that ONE line -- the only line in 972 to say gradle --
+                                           # the way apache/kafka's GRADLE_HOME env dump did. A
+                                           # cached artifact is not a build tool that ran.
     )""",
     re.VERBOSE | re.IGNORECASE,
 )

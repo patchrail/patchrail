@@ -3,12 +3,12 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Sixteen **real failed CI runs from public repositories** — pandas,
+This page is the other benchmark. Nineteen **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
-Discourse, Mastodon, Phoenix and Signal-Android — with their logs committed to this repo unmodified,
-exactly as `gh run view --log-failed` returned them. Every verdict below is the output of a command
-you can run yourself — including the six where the honest answer is **`unknown`**, one of them because
-the failure never made it into the log.
+Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats and riverpod — with their logs committed to
+this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
+output of a command you can run yourself — including the seven where the honest answer is **`unknown`**,
+one of them because the failure never made it into the log.
 
 ## Reproduce it
 
@@ -28,11 +28,12 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the three most recent: the pandas fix (#347),
-the Symfony fix (#377) and the Discourse fix landed on `main` after 0.7.3 was cut and ship in the next
-release, so they are the three rows where `main` is ahead of `pip install patchrail` (`0.7.3` returns
-the old verdict on all three). On the other thirteen logs, re-measured 2026-07-17, `0.7.3` and `main`
-return the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
+serves **0.7.3** today and ships every fix below except the four most recent: the pandas fix (#347),
+the Symfony fix (#377), the Discourse fix and the riverpod fix landed on `main` after 0.7.3 was cut and
+ship in the next release, so they are the four rows where `main` is ahead of `pip install patchrail`
+(`0.7.3` returns the old verdict on all four). On the other fifteen logs, re-measured 2026-07-17, `0.7.3`
+and `main` return the identical verdict, and the CLI and action changes merged since (#364–#373) moved
+none of them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -52,19 +53,22 @@ return the identical verdict, and the CLI and action changes merged since (#364�
 | [Mastodon](https://github.com/mastodon/mastodon/actions/runs/29561949942) | one RSpec system spec timed out (`26 examples, 1 failure`) | `ruby_bundle_failure` 0.71 | `ruby_bundle_failure` 0.71 | ✅ correct |
 | [Phoenix](https://github.com/phoenixframework/phoenix/actions/runs/28866117635) | four ExUnit assertions failed, `mix test` exit 1 (`819 tests, 4 failures`) | `elixir_mix_failure` 0.71 | `elixir_mix_failure` 0.71 | ✅ correct |
 | [Signal-Android](https://github.com/signalapp/Signal-Android/actions/runs/28969358490) | a Gradle screenshot-test task failed (`BUILD FAILED`) | `java_build_failure` 0.89 | `java_build_failure` 0.89 | ✅ correct |
+| [Jellyfin](https://github.com/jellyfin/jellyfin/actions/runs/29544616523) | a C# compile error (`CS0117`) in a test project, buried among 30+ passing suites | `dotnet_build_failure` 0.89 | `dotnet_build_failure` 0.89 | ✅ correct |
+| [cats](https://github.com/typelevel/cats/actions/runs/29545595453) | an sbt test run failed (`sbt.TestsFailedException`) | `java_build_failure` 0.71 | `java_build_failure` 0.71 | ✅ correct |
+| [riverpod](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) | `flutter analyze` reported 4 lints, exit 1 — a Dart run, not a JVM build | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 
-Six of the sixteen were classified identically before and after. Three — Home Assistant, Prometheus and
-ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Three —
-Mastodon, Phoenix and Signal-Android — because Ruby/RSpec, Elixir/ExUnit and Kotlin/Gradle were never
-misread here in the first place; they are in the table to show the tool holds across ecosystems it was
-already right about, not only the ones that forced a fix.
+Eight of the nineteen were classified identically before and after. Three — Home Assistant, Prometheus and
+ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Five —
+Mastodon, Phoenix, Signal-Android, Jellyfin and cats — because Ruby/RSpec, Elixir/ExUnit, Kotlin/Gradle,
+.NET and Scala/sbt were never misread here in the first place; they are in the table to show the tool holds
+across ecosystems it was already right about, not only the ones that forced a fix.
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the sixteen is confidently wrong. Six answer `unknown` — ruff, svelte,
-Symfony and Discourse because PatchRail has no class for what broke, pytorch because a lint runner never
-wrote the report its `jq` step then failed to read, and pandas because the failure is not in the log at
-all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
+As of this measurement, none of the nineteen is confidently wrong. Seven answer `unknown` — ruff, svelte,
+Symfony, Discourse and riverpod because PatchRail has no class for what broke, pytorch because a lint runner
+never wrote the report its `jq` step then failed to read, and pandas because the failure is not in the log
+at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
 
 ### pandas — a package list is not a test run ([#347](https://github.com/patchrail/patchrail/issues/347))
 
@@ -339,6 +343,36 @@ Symfony land on. A genuine permissions failure is untouched: `insufficient permi
 `Resource not accessible by integration`, a `Permission … denied to github-actions` all still carry the
 rule, because none of them arrives on a green TAP line.
 
+### riverpod — `java_build_failure` → `unknown`
+
+The word "gradle" in a progress bar is not a Gradle build.
+
+rrousselGit/riverpod is a Dart/Flutter monorepo. Its `build` job ran `flutter analyze`, which reported
+four lint findings and exited 1:
+
+```
+Analyzing flutter_riverpod...
+   info • Unnecessary use of 'unawaited'. ...
+4 issues found. (ran in 32.6s)
+##[error]Process completed with exit code 1.
+```
+
+That is a Dart analyzer run. PatchRail answered `java_build_failure` at 0.53, and its one and only
+witness in 972 lines was a single line from Flutter's `precache` step, which lists the SDK artifacts the
+tool downloads and caches before it does anything:
+
+```
+[2/10] Gradle Wrapper                                                7ms
+```
+
+The Gradle Wrapper is one of those artifacts — cached in 7ms, never run. This is the same failure mode
+as apache/kafka's env dump exporting `GRADLE_HOME`: a tool named in passing, on a line that reports it
+being fetched, not failing. A `[N/M] … <time>` line is a completed step in a progress listing; a signal
+found nowhere else now witnesses nothing. PatchRail has no Dart/Flutter class, so the honest answer is
+`unknown`, the ceiling ruff, svelte and Symfony share. A real Gradle failure is untouched: Signal-Android
+above trips `Execution failed for task` and `BUILD FAILED` on their own lines and still lands
+`java_build_failure` at 0.89.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -356,7 +390,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
-- Sixteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
-  were the failed runs sitting in these repos on 2026-07-14 (and Symfony, Discourse, Mastodon, Phoenix
-  and Signal-Android on 2026-07-17), not because they flattered the tool.
+- Nineteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+  were the failed runs sitting in these repos on 2026-07-14 (and Symfony, Discourse, Mastodon, Phoenix,
+  Signal-Android, Jellyfin, cats and riverpod on 2026-07-17), not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.

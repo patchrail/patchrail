@@ -4,6 +4,18 @@
 
 ### Fixed
 
+- **A "Gradle Wrapper" cached by Flutter's `precache` no longer reads as a Gradle build.** The
+  `java_build_failure` rule matched the bare word `gradle`, and Flutter's `precache` step lists the
+  SDK artifacts it downloads one per line — including `[2/10] Gradle Wrapper   7ms`. rrousselGit/riverpod's
+  `build` run (29573819047) — a Dart/Flutter monorepo whose `flutter analyze` reported four lints and
+  exited 1 — answered `java_build_failure` at 0.53 on that single line, the only one in 972 to say
+  gradle, sending a Dart maintainer to `./gradlew`. A `[N/M] … <time>` progress line reports a step
+  that completed, not a tool that failed, so a signal found nowhere else now witnesses nothing and the
+  log lands on `unknown` — the honest ceiling, since PatchRail has no Dart/Flutter class. A real Gradle
+  failure is untouched: it trips `Execution failed for task` / `BUILD FAILED` on their own lines
+  (signalapp/Signal-Android still classifies at 0.89). Same shape as the apache/kafka `GRADLE_HOME`
+  env-dump guard.
+
 - **A phrase in the title of a passing test no longer reads as a missing-secret failure.** A TAP
   report prints one `ok N` line per assertion that passed, and that line's description is whatever the
   test named itself. discourse/discourse's `Plugins QUnit` run (29572043439) failed on six `not ok`
