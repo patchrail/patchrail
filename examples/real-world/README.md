@@ -1,9 +1,9 @@
 # Real-world CI logs
 
 Failed CI runs from public repositories, fetched with `gh run view <id> --repo <repo> --log-failed`
-on 2026-07-14 (Symfony, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod and cabal on 2026-07-17)
+on 2026-07-14 (Symfony, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod, cabal and crystal on 2026-07-17)
 and committed **unmodified** — the one exception is ANSI color codes, which `gh` returned in caret
-notation for Symfony, Phoenix, cats and riverpod, stripped for legibility. They are the evidence behind
+notation for Symfony, Phoenix, cats, riverpod, cabal and crystal, stripped for legibility. They are the evidence behind
 [docs/real-world-benchmark.md](../../docs/real-world-benchmark.md), where each one is measured
 against the version PyPI serves and against `main`.
 
@@ -29,6 +29,7 @@ against the version PyPI serves and against `main`.
 | `cats-29545595453-excerpt.log` | typelevel/cats | [29545595453](https://github.com/typelevel/cats/actions/runs/29545595453) (excerpt: the `catsNative` sbt run — the `welcome to sbt` banner and the `sbt.TestsFailedException` that ended it — kept verbatim, ANSI color codes stripped; classified correctly, drove no fix) |
 | `riverpod-29573819047-excerpt.log` | rrousselGit/riverpod | [29573819047](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) (excerpt: the `flutter_riverpod` build job — Flutter's `precache` artifact listing including `[2/10] Gradle Wrapper` and the `flutter analyze` lint failure — kept verbatim, ANSI color codes stripped, and pinned by `tests/test_flutter_precache_not_gradle.py`) |
 | `cabal-29562439929-excerpt.log` | haskell/cabal | [29562439929](https://github.com/haskell/cabal/actions/runs/29562439929) (excerpt: the `Validate` matrix — a cabal-testsuite solver's `Could not resolve dependencies:` golden output that misfired, plus the GHC compile error and `cabal-tests` UNEXPECTED FAIL that actually failed the job — kept verbatim, ANSI color codes stripped, and pinned by `tests/test_cabal_resolve_not_maven.py`) |
+| `crystal-29501393259-excerpt.log` | crystal-lang/crystal | [29501393259](https://github.com/crystal-lang/crystal/actions/runs/29501393259) (excerpt: the `test-std` matrix — a stdlib spec that errored on a `Socket::BindError`, whose RSpec-format summary (`18017 examples, 0 failures, 1 errors`) and `make: *** [Makefile:140: std_spec] Error 1` were the whole case for a C/C++ then Ruby verdict — kept verbatim, ANSI color codes stripped, and pinned by `tests/test_crystal_spec_make_not_cpp.py`) |
 
 These are **not** fixtures. They carry no expected-class labels and are not scored by
 `patchrail ci benchmark`, which runs against the sanitized zoo in `examples/ci-triage/`. They exist
