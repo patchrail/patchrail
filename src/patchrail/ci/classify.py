@@ -1848,6 +1848,40 @@ AMBIGUOUS_RESOURCE_PATTERNS = frozenset(
 )
 
 
+# The generic GNU make recipe-failure line -- `make: *** [Makefile:140: std_spec] Error 1`
+# -- in ``cpp_build_failure``. It says a make TARGET failed, and nothing about what the
+# target does: make drives test suites, doc builds, linters and packaging in every language.
+# The zoo alone has it firing under Sphinx docs, a Go integration test and a shellcheck lint;
+# crystal-lang/crystal's stdlib specs fail through `make std_spec` on a `Socket::BindError`,
+# and that recipe line was the ENTIRE case for a `cpp_build_failure` 0.53 -- handing a Crystal
+# maintainer `cmake --build build` for a socket bind in a spec. A genuine C/C++ build also
+# trips a real toolchain signal (`CMake Error`, `undefined reference`, `clang: error`,
+# `cc1plus`, a missing `.h`), none of which are in this set, so it keeps winning -- the recipe
+# line rides along as corroboration but never carries the verdict alone.
+AMBIGUOUS_MAKE_PATTERNS = frozenset(
+    {
+        r"g?make(?:\[\d+\])?: \*\*\* \[[^\]]*\] Error \d+",
+    }
+)
+
+
+# The RSpec-style summary line -- `18017 examples, 0 failures, 1 errors, 30 pending` -- in
+# ``ruby_bundle_failure``. RSpec is not the only framework that prints it: Crystal's built-in
+# Spec copies RSpec's output verbatim, so crystal-lang/crystal's `make std_spec` run emitted
+# exactly this line off a `Socket::BindError` and scored `ruby_bundle_failure` 0.53 once the
+# make line above deferred -- handing a Crystal maintainer `bundle exec rake test`. The line
+# witnesses that a spec suite reported failures; it does not pin the ecosystem to Ruby. Every
+# genuine RSpec fixture and the mastodon real-world log ALSO trip a Ruby-exclusive signal
+# (`bundle exec`, `rake aborted!`, the `rspec ./<path>_spec.rb` rerun line whose `.rb` Crystal's
+# `crystal spec spec/...cr` never matches), so a real Ruby failure keeps winning; the summary
+# line rides along as corroboration but never carries the Ruby verdict alone.
+AMBIGUOUS_SPEC_SUMMARY_PATTERNS = frozenset(
+    {
+        r"\b\d+ examples?, (?:\d+ \w+, )*\d+ failures?\b",
+    }
+)
+
+
 # Patterns that prove a tool RAN, not that it failed. `docker build` shows up in
 # every job that builds a container as a setup step; `cargo test` and `clippy` show
 # up in the command line of every Rust CI job, passing or not. They are useful
@@ -2000,6 +2034,10 @@ def _is_ambiguous_noise_match(rule: dict[str, Any], signals: list[str]) -> bool:
         return bool(signals) and set(signals) <= AMBIGUOUS_NETWORK_PATTERNS
     if failure_class == "runner_resource_exhaustion":
         return bool(signals) and set(signals) <= AMBIGUOUS_RESOURCE_PATTERNS
+    if failure_class == "cpp_build_failure":
+        return bool(signals) and set(signals) <= AMBIGUOUS_MAKE_PATTERNS
+    if failure_class == "ruby_bundle_failure":
+        return bool(signals) and set(signals) <= AMBIGUOUS_SPEC_SUMMARY_PATTERNS
     return False
 
 
@@ -2146,6 +2184,48 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         if alternative_rule is not None:
             best_rule = alternative_rule
             best_signals = alternative_signals
+
+    # A "C/C++ build failed" match built ENTIRELY from the generic GNU make recipe line
+    # (`make: *** [target] Error N`) has established only that SOME make target failed. Defer
+    # to the best rule that saw a real error. Unlike the network/resource symptoms above,
+    # which at least name their own category, the bare recipe line names no ecosystem -- make
+    # drives specs, docs and linters in every language -- so when nothing else matched the
+    # honest answer is `unknown`, not a C/C++ verdict on a project (crystal-lang/crystal's
+    # `make std_spec`) that never compiled one. A genuine C/C++ build keeps winning: it also
+    # trips a toolchain signal outside this set, so its match is never ambiguous-only.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] == "cpp_build_failure"
+        and set(best_signals) <= AMBIGUOUS_MAKE_PATTERNS
+    ):
+        best_rule, best_signals = _highest_scoring_rule(
+            [
+                (rule, signals)
+                for rule, signals in scored
+                if not _is_ambiguous_noise_match(rule, signals)
+            ],
+            carrying,
+        )
+
+    # A "Ruby suite failed" match built ENTIRELY from the RSpec-style summary line has
+    # established only that SOME spec framework reported failures -- Crystal's Spec prints the
+    # identical line. Defer to the best rule that saw a Ruby-specific error; when nothing else
+    # matched, the honest answer is `unknown`, not `bundle exec rake test` for a language whose
+    # specs live in `.cr` files. A genuine RSpec failure keeps winning: it also trips a
+    # Ruby-exclusive signal outside this set, so its match is never summary-only.
+    if (
+        best_rule is not None
+        and best_rule["failure_class"] == "ruby_bundle_failure"
+        and set(best_signals) <= AMBIGUOUS_SPEC_SUMMARY_PATTERNS
+    ):
+        best_rule, best_signals = _highest_scoring_rule(
+            [
+                (rule, signals)
+                for rule, signals in scored
+                if not _is_ambiguous_noise_match(rule, signals)
+            ],
+            carrying,
+        )
 
     # Same rule, different noise: a match built ENTIRELY from invocation or benign-warning
     # signals says a step ran or warned, not that it failed. Defer to the best rule that

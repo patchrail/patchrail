@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Twenty **real failed CI runs from public repositories** — pandas,
+This page is the other benchmark. Twenty-one **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
-Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod and cabal — with their logs committed to
+Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod, cabal and crystal — with their logs committed to
 this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
-output of a command you can run yourself — including the eight where the honest answer is **`unknown`**,
+output of a command you can run yourself — including the nine where the honest answer is **`unknown`**,
 one of them because the failure never made it into the log.
 
 ## Reproduce it
@@ -28,10 +28,10 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the five most recent: the pandas fix (#347),
-the Symfony fix (#377), the Discourse fix (#379), the riverpod fix and the cabal fix landed on `main`
-after 0.7.3 was cut and ship in the next release, so they are the five rows where `main` is ahead of
-`pip install patchrail` (`0.7.3` returns the old verdict on all five). On the other fifteen logs,
+serves **0.7.3** today and ships every fix below except the six most recent: the pandas fix (#347),
+the Symfony fix (#377), the Discourse fix (#379), the riverpod fix, the cabal fix and the crystal fix
+landed on `main` after 0.7.3 was cut and ship in the next release, so they are the six rows where
+`main` is ahead of `pip install patchrail` (`0.7.3` returns the old verdict on all six). On the other fifteen logs,
 re-measured 2026-07-17, `0.7.3` and `main` return the identical verdict, and the CLI and action changes
 merged since (#364–#373) moved none of them.
 
@@ -57,6 +57,7 @@ merged since (#364–#373) moved none of them.
 | [cats](https://github.com/typelevel/cats/actions/runs/29545595453) | an sbt test run failed (`sbt.TestsFailedException`) | `java_build_failure` 0.71 | `java_build_failure` 0.71 | ✅ correct |
 | [riverpod](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) | `flutter analyze` reported 4 lints, exit 1 — a Dart run, not a JVM build | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 | [cabal](https://github.com/haskell/cabal/actions/runs/29562439929) | a GHC compile error failed Cabal's own test suite (`Some tests failed`, exit 1) — a Haskell build, not a JVM one | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
+| [crystal](https://github.com/crystal-lang/crystal/actions/runs/29501393259) | a Crystal stdlib spec errored on a socket bind (`Socket::BindError`), `make std_spec` exit 1 — a Crystal spec, not a C/C++ compile | `cpp_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 
 Eight of the twenty were classified identically before and after. Three — Home Assistant, Prometheus and
 ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Five —

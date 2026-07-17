@@ -4,6 +4,21 @@
 
 ### Fixed
 
+- **A Crystal spec driven by `make` no longer reads as a C/C++ (then Ruby) failure.** The
+  `cpp_build_failure` rule counted the generic GNU make recipe line `make: *** [target] Error N`,
+  which says a make *target* failed and nothing about what it built — make drives specs, docs and
+  linters in every language (the zoo alone has it firing under Sphinx, a Go test and a shellcheck
+  lint). crystal-lang/crystal's `Linux CI` run (29501393259) fails its stdlib specs through
+  `make std_spec` on a `Socket::BindError`, and that recipe line was the entire case for
+  `cpp_build_failure` at 0.53 — `cmake --build build` for a socket bind in a spec. Demoting it then
+  exposed a second misfire: Crystal's Spec framework prints RSpec's summary verbatim
+  (`18017 examples, 0 failures, 1 errors`), which alone scored `ruby_bundle_failure` — `bundle exec
+  rake test` for a language whose specs live in `.cr` files. Both witnesses are now ecosystem-ambiguous:
+  each still corroborates a genuine C/C++ or Ruby failure (which also trips a real toolchain signal or
+  the `rspec ./<path>_spec.rb` rerun line) but no longer carries the verdict alone, so the Crystal run
+  lands on `unknown` — the honest ceiling, since PatchRail has no Crystal class. Real CMake/gcc builds
+  and real RSpec failures are untouched.
+
 - **Cabal's `Could not resolve dependencies:` no longer reads as a Maven build.** The
   `java_build_failure` rule matched the bare phrase `Could not resolve dependencies`, but Maven's own
   wording is `Could not resolve dependencies for project <group>:<artifact>:jar:<version>` — the bare
