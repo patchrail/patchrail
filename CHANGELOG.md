@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### Fixed
+
+- **A doc build that merely *installs* pytest is no longer reported as a failing pytest run.** The
+  `python_test_failure` signal `\bpytest\b` treated `-`, `<`, `>` and `=` as word boundaries, so it
+  matched `pytest` inside every dependency spec a Python job installs — the plugin package
+  `pytest-cov`/`pytest-xdist` and the version pin `pytest<9.1`. pandas-dev/pandas's `Doc Build and
+  Upload` (issue #347) never runs pytest at all; it installs it via micromamba, and that conda
+  package table was the rule's entire case — `python_test_failure` at 0.53, sending a maintainer to
+  debug tests that never ran. The signal now ignores a `pytest` that is immediately followed by a
+  version operator or a `-plugin` suffix, so a dependency listing carries nothing while a real
+  `pytest`/`pytest -q`/`python -m pytest` invocation still classifies exactly as before.
+- **A benign cache-save warning no longer produces a confident `artifact_or_cache_failure` on a log
+  that shows no failure at all.** `actions/cache` reports a failed save through `core.warning`, never
+  `core.setFailed`, so it can't be why a job failed — PatchRail already suppressed it when the runner
+  had annotated a *different* error. It now also suppresses it when the log plainly reports success
+  and betrays no failure (an explicit success line, no runner error, no failure tell). The pandas doc
+  build above is that case in a log GitHub truncated before the crash: all that was captured is a
+  green micromamba env build ending `Successfully built`, then two matrix jobs racing for one cache
+  key in `Post job cleanup`. It now answers `unknown` with `likely_successful_run` instead of
+  `artifact_or_cache_failure` at 0.89. A genuine cache/artifact failure (a 5xx, `Failed to
+  CreateArtifact`, a duplicate artifact name) trips a terminal signal and is untouched.
+
 ### Added
 
 - **The PatchRail CI Triage action's job summary now shows the exact command to reproduce the

@@ -6,8 +6,8 @@ number is worth exactly nothing to you: we wrote both the logs and the answers.
 This page is the other benchmark. Eleven **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React — with
 their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
-Every verdict below is the output of a command you can run yourself, including **the one where
-PatchRail is still wrong**.
+Every verdict below is the output of a command you can run yourself — including the three where the
+honest answer is **`unknown`**, one of them because the failure never made it into the log.
 
 ## Reproduce it
 
@@ -27,14 +27,15 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below — grafana and Envoy included, which the previous
-version of this page still had waiting on `main`. Re-measured 2026-07-17: `0.7.3` and `main` return
-the identical verdict on all eleven logs, and the CLI and action changes merged since (#364–#373)
-moved none of them — so `after` is exactly what `pip install patchrail` gives you now.
+serves **0.7.3** today and ships every fix below except the most recent: the pandas fix (#347) landed
+on `main` after 0.7.3 was cut and ships in the next release, so it is the one row where `main` is
+ahead of `pip install patchrail`. On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main`
+return the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of
+them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
-| [pandas](https://github.com/pandas-dev/pandas/actions/runs/29342614636) | nothing legible — the log has no error line at all | `artifact_or_cache_failure` 0.89 | `python_test_failure` 0.53 | ⚠️ still wrong ([#347](https://github.com/patchrail/patchrail/issues/347)) |
+| [pandas](https://github.com/pandas-dev/pandas/actions/runs/29342614636) | nothing legible — the log has no error line at all | `artifact_or_cache_failure` 0.89 | `unknown` 0.15 | ✅ fixed ([#347](https://github.com/patchrail/patchrail/issues/347)) |
 | deno (29349357779) | Rust harness panic, exit code 101 | `typescript_typecheck` 0.89 | `rust_test_failure` 0.71 | ✅ fixed |
 | [svelte](https://github.com/sveltejs/svelte/actions/runs/29330826741) | Dependabot's updater died | `javascript_lint` 0.71 | `unknown` 0.15 | ✅ fixed |
 | [home-assistant](https://github.com/home-assistant/core/actions/runs/29350290194) | a pytest snapshot assertion | `python_test_failure` 0.95 | `python_test_failure` 0.95 | ✅ correct |
@@ -49,38 +50,42 @@ moved none of them — so `after` is exactly what `pip install patchrail` gives 
 Three of the eleven were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
-## Where PatchRail is still wrong
+## Where PatchRail stops at `unknown`
 
-### pandas — a package list is not a test run
+As of this measurement, none of the eleven is confidently wrong. Three answer `unknown` — ruff and
+svelte because PatchRail has no class for what broke, and pandas because the failure is not in the
+log at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
+
+### pandas — a package list is not a test run ([#347](https://github.com/patchrail/patchrail/issues/347))
 
 `Doc Build and Upload` failed. The log GitHub hands back for it contains **zero** `##[error]` lines,
-zero tracebacks and zero `exit code` lines. The failure is simply not in it.
+zero tracebacks and zero `exit code` lines — the excerpt is cut off mid-`Post job cleanup`, `Successfully
+built`, having captured only the micromamba env build. The failure is simply not in it.
 
-0.6.1 answered `artifact_or_cache_failure` at **0.89** anyway, on the strength of this:
+Two different rules mistook that env build for a failure, and PatchRail wore both verdicts in turn:
 
-```
-##[warning]Failed to save: Unable to reserve cache with key micromamba-environment--linux-64-test
-```
-
-That is a warning, emitted during `Post job cleanup`, long after the job was already dead. In
-`actions/cache`, a failed save is reported through `core.warning` and never `core.setFailed` — a
-cache that could not be saved *cannot* be why a job failed. `eb355b7` fixed that.
-
-Today `main` says `python_test_failure` at **0.53**, and that is still not the right answer. Its one
-signal is `\bpytest\b`, and every line it matches looks like this:
+0.6.1 answered `artifact_or_cache_failure` at **0.89**, on a `Post job cleanup` warning
+(`##[warning]Failed to save: Unable to reserve cache with key ...`). That is a warning, long after the
+job was already dead; in `actions/cache`, a failed save is reported through `core.warning` and never
+`core.setFailed`, so a cache that could not be saved *cannot* be why a job failed. With that suppressed,
+the next-loudest match took over: `python_test_failure` at **0.53**, whose one signal `\bpytest\b`
+matched the conda solver's package table —
 
 ```
   pytest                            9.0.3              pyhc364b38_1          conda-forge
   pytest-cov                        7.1.0              pyhcf101f3_0          conda-forge
 ```
 
-A conda package table. There is no pytest invocation anywhere in the log, and PatchRail still tells
-you to run `python -m pytest -q`. The correct answer is `unknown`, which would at least hand back the
-runner's own error lines. Tracked in [#347](https://github.com/patchrail/patchrail/issues/347).
+— a `pytest` installed as a doc-build dependency, never run. `\b` treats `-`, `<`, `>`, `=` as
+boundaries, so the same signal also read `pytest-cov` and the `pytest<9.1` version pin as invocations.
+The pattern now requires that a `pytest` match not be a package spec, so the dependency listing carries
+nothing; and a benign cache warning is suppressed not only when the runner annotated a *different* error
+but also when the log plainly reports success and shows no failure at all — which is exactly this
+truncated excerpt.
 
-What changed is not that PatchRail got this log right. It's that a confident wrong answer became a
-weak wrong one. That is worth something — 0.89 sends a maintainer to debug a healthy cache — but it
-is not a fix, and we are not going to describe it as one.
+Left with no real signal, `main` answers `unknown` at **0.15** with `likely_successful_run`, and hands
+the log back. That is the honest ceiling: PatchRail cannot diagnose a failure it was never given, and
+now says so instead of inventing one.
 
 ## The fixes, and the logs that forced them
 
@@ -287,8 +292,7 @@ that matched a real error.
   public CI output; GitHub masks secrets in logs at write time.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
-  happens. Today, for pandas, it doesn't.
+  happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
 - Eleven logs is not a statistic. It is a set of cases you can check by hand, chosen because they
   were the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
-- Every number here is the output of a command in this page, against a file in this repo. When a fix
-  lands for #347, this page changes with it.
+- Every number here is the output of a command in this page, against a file in this repo. Re-run them.
