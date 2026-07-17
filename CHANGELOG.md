@@ -4,6 +4,17 @@
 
 ### Fixed
 
+- **A failing PHPUnit assertion is no longer reported as a Composer dependency failure.** The
+  `php_composer_failure` rule carried PHPUnit's own verdict markers — `FAILURES!`, `Failed asserting`,
+  the `Tests: … Failures:` summary — plus the bare `composer install`/`composer update` commands that
+  run green in nearly every PHP job. symfony/symfony's `Unit Tests (8.3)` run (29551386048) installed
+  its dependencies cleanly and then failed one assertion in `ErrorHandler`; PatchRail answered
+  `php_composer_failure` at 0.95, sending a maintainer to debug an installation that had succeeded.
+  The rule now witnesses only genuine dependency errors (`Your requirements could not be resolved`, a
+  platform mismatch, a drifted lockfile) and the autoload `Class … not found`; a plain test failure
+  carries nothing and lands on `unknown` — the honest ceiling, since PatchRail has no PHP
+  test-failure class. Real composer failures are untouched (issue #377; committed real-world log and
+  benchmark row in `docs/real-world-benchmark.md`).
 - **A doc build that merely *installs* pytest is no longer reported as a failing pytest run.** The
   `python_test_failure` signal `\bpytest\b` treated `-`, `<`, `>` and `=` as word boundaries, so it
   matched `pytest` inside every dependency spec a Python job installs — the plugin package
