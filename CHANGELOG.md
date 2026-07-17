@@ -4,6 +4,19 @@
 
 ### Fixed
 
+- **Cabal's `Could not resolve dependencies:` no longer reads as a Maven build.** The
+  `java_build_failure` rule matched the bare phrase `Could not resolve dependencies`, but Maven's own
+  wording is `Could not resolve dependencies for project <group>:<artifact>:jar:<version>` — the bare
+  form (trailing colon, no "for project") belongs to Cabal, pip and npm. haskell/cabal's `Validate` run
+  (29562439929) — Cabal itself, a Haskell project with no `mvn`/`gradle`/`sbt`/JVM token anywhere in
+  141k lines — died on a GHC compile error that failed its own test suite (`Some tests failed`, exit 1),
+  yet answered `java_build_failure` at 0.53 on a single line buried in a cabal-testsuite *golden output*,
+  where the solver's diagnostic is the expected text. That sent a Haskell maintainer to
+  `./gradlew test || mvn test || sbt test`. The rule now keys on the Maven `for project` suffix, so the
+  log lands on `unknown` — the honest ceiling, since PatchRail has no Haskell class. A real Maven
+  resolution failure is untouched: `Could not resolve dependencies for project …` still classifies as
+  `java_build_failure`.
+
 - **A "Gradle Wrapper" cached by Flutter's `precache` no longer reads as a Gradle build.** The
   `java_build_failure` rule matched the bare word `gradle`, and Flutter's `precache` step lists the
   SDK artifacts it downloads one per line — including `[2/10] Gradle Wrapper   7ms`. rrousselGit/riverpod's
