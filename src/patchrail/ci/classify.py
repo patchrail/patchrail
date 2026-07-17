@@ -2231,12 +2231,30 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     # signals says a step ran or warned, not that it failed. Defer to the best rule that
     # matched a real error. If nothing else matched, it stands -- it is the only thing the
     # log gave us.
+    #
+    # The handoff must not resurrect a rule the make/summary deferrals above already ruled
+    # unable to carry a verdict alone. Those deferrals only run while such a rule is best, so a
+    # benign-warning rule that outscored one slips past them: ocaml/dune's `make: *** [test]
+    # Error 1` (its cram suite, not a C/C++ compile) matches `cpp_build_failure` once, while a
+    # two-line `Unable to reserve cache` save-warning gives `artifact_or_cache_failure` the
+    # higher count -- so the make-defer never sees cpp as best, then this handoff would hand
+    # the verdict straight back to that same make-only rule. Re-excluding it here keeps the
+    # deferral honest whatever the route: the save-warning stays best and the benign-warning
+    # guard below settles it to `unknown`. Only the ecosystem-blind lines qualify (the bare
+    # make recipe, the RSpec-style summary); the resource/network symptoms name their own
+    # category and can still stand as a last resort, so they remain eligible here -- a
+    # buildkite job OOM-killed at `exit code 137` keeps `runner_resource_exhaustion`. A genuine
+    # C/C++ build is untouched: it trips a real toolchain signal, so it is never make-only.
     if best_rule is not None and carried_by_noise_alone(best_rule, best_signals):
         alternative_rule, alternative_signals = _highest_scoring_rule(
             [
                 (rule, signals)
                 for rule, signals in scored
                 if not carried_by_noise_alone(rule, signals)
+                and not (
+                    rule["failure_class"] in ("cpp_build_failure", "ruby_bundle_failure")
+                    and _is_ambiguous_noise_match(rule, signals)
+                )
             ],
             carrying,
         )

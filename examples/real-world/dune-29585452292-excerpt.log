@@ -1,0 +1,42 @@
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:02:41.7770330Z Clearing logs
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:02:41.7917350Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/dune/dune --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:02:46.3029550Z ##[warning]Cache reservation failed: You have reached your configured budget, your cache is now read only to prevent additional charges.
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:02:46.3033610Z ##[warning]Failed to save: Unable to reserve cache with key v3-setup-ocaml-opam-37da8345ecd1d84fd5cba7d91d36d58b3372018e030f5b4cbbcf2c8c6ab90152, another job may be creating this cache.
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8387140Z dune-rpc-lwt is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8419070Z dune-rpc is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8428330Z dune-site is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8438240Z dune is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8449040Z dyn is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8473100Z fs-io is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8482940Z ocamlc-loc is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8493480Z ordering is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:03:36.8507460Z stdune is now pinned to ^[[01mgit+file:///Users/runner/work/dune/dune#HEAD^[[0m (version ^[[01m3.25.0^[[0m)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:11:47.0024130Z ##[endgroup]
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:11:47.2652800Z ./_boot/dune.exe runtest
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9404100Z ^[[2m(cd _build/default/otherlibs/stdune/src && /usr/bin/cc -O2 -fno-strict-aliasing -fwrapv -pthread -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /Users/runner/work/dune/dune/_opam/lib/ocaml -I /Users/runner/work/dune/dune/_opam/lib/csexp -I /Users/runner/work/dune/dune/_opam/lib/ocaml/threads -I /Users/runner/work/dune/dune/_opam/lib/ocaml/unix -I /Users/runner/work/dune/dune/_opam/lib/pp -I ../../dyn -I ../../fs-io -I ../../ordering -I ../../top-closure -o spawn_stubs.o -c spawn_stubs.c)^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9510640Z ^[[1mspawn_stubs.c:296:13: ^[[0m^[[1;35mwarning: ^[[0m^[[1munused function 'subprocess' [-Wunused-function]^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9638130Z   296 | ^[[34mstatic^[[0m ^[[34mvoid^[[0m subprocess(^[[34mint^[[0m failure_fd, ^[[34mstruct^[[0m spawn_info *info)
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9696740Z       | ^[[1;32m            ^~~~~~~~~~^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9797470Z ^[[1mspawn_stubs.c:358:13: ^[[0m^[[1;35mwarning: ^[[0m^[[1munused function 'raise_subprocess_failure' [-Wunused-function]^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9900140Z   358 | ^[[34mstatic^[[0m ^[[34mvoid^[[0m raise_subprocess_failure(^[[34mstruct^[[0m subprocess_failure* failure,
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:14.9975170Z       | ^[[1;32m            ^~~~~~~~~~~~~~~~~~~~~~~~^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:12:15.0077430Z 2 warnings generated.
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2186690Z ^[[0;1mFile "test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t", line 1, characters 0-0:^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2300520Z ^[[2m/opt/homebrew/bin/git --no-pager diff --no-index --color=always -u _build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t _build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t.corrected^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2409840Z ^[[1mdiff --git a/_build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t b/_build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t.corrected^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2517560Z ^[[1mindex 7f85cb7..052a11f 100644^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2579380Z ^[[1m--- a/_build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2655800Z ^[[1m+++ b/_build/default/test/blackbox-tests/test-cases/pkg/bin-narrowing/lockdir-deps.t.corrected^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2675020Z ^[[36m@@ -163,7 +163,7 @@^[[0m the PATH.
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2795000Z    15 |  ; Check that the binary can be found on PATH
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.2910500Z    16 |  (action
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3020160Z    17 |    (with-stdout-to system-mybin-output (system mybin))))
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3065840Z ^[[31m-  $SH: mybin: not found^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3087360Z ^[[32m+^[[0m^[[32m  /bin/sh: mybin: not found^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3137750Z    File "dune", line 10, characters 37-49:
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3143800Z    10 |    (with-stdout-to mybin-output (run %{bin:mybin}))))
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:17:12.3245090Z                                              ^^^^^^^^^^^^
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:18:29.3150840Z ^[[2m(cd _build/.sandbox/1f6439b6fd836c626af4fb5058669e68/default/test/blackbox-tests/test-cases && /bin/bash -uo pipefail /var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/dune_cram_f930ae_.cram.sh/main.sh)^[[0m
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:18:29.3571190Z /var/folders/8j/sfr9qqcj73j4p6nhwcfpr0th0000gn/T/dune_cram_f930ae_.cram.sh/main.sh: line 110: 28132 Terminated: 15          dune_cmd hold-rpc-client _build/.rpc/dune "$CLIENT_CONNECTED"
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:23:58.3394420Z make: *** [test] Error 1
+Build (opam) (5.4.x, 5.4.x, macos-latest, true)	UNKNOWN STEP	2026-07-17T14:23:58.3527880Z ##[error]Process completed with exit code 2.

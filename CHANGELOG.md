@@ -4,6 +4,21 @@
 
 ### Fixed
 
+- **A make-driven OCaml test suite no longer reads as a C/C++ build when a cache warning outscores
+  the make line.** The Crystal fix above demotes the bare `make: *** [target] Error N` recipe line
+  while `cpp_build_failure` is the best match — but that deferral never runs if a benign warning
+  first outscores it. ocaml/dune's `CI` run (29585452292) fails its own cram/blackbox tests through
+  `make test` (a test-case diff, `make: *** [test] Error 1`, no C/C++ error anywhere), while the same
+  job twice logs the benign cache save-warning `Failed to save: Unable to reserve cache …`, giving
+  `artifact_or_cache_failure` two matched signals to cpp's one. So the make-recipe deferral was
+  skipped, and the downstream benign-warning handoff — which yields to the best rule that saw a real
+  error — then resurrected that same make-only `cpp_build_failure` as the verdict (`cmake --build
+  build` for a cram test diff). The handoff now refuses to hand a verdict to a rule that is itself
+  ambiguous-only (the bare make recipe or the RSpec-style summary line), so the save-warning stays
+  best and the run settles on `unknown`. The resource/network symptoms name their own category and
+  remain eligible, so a buildkite job OOM-killed at `exit code 137` still lands
+  `runner_resource_exhaustion`; a genuine C/C++ build trips a real toolchain signal and is untouched.
+
 - **A Crystal spec driven by `make` no longer reads as a C/C++ (then Ruby) failure.** The
   `cpp_build_failure` rule counted the generic GNU make recipe line `make: *** [target] Error N`,
   which says a make *target* failed and nothing about what it built — make drives specs, docs and
