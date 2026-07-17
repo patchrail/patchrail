@@ -16,7 +16,11 @@ MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 CI_TRIAGE_LOG_PATH_RE = re.compile(r"examples/ci-triage/[A-Za-z0-9_.-]+\.log")
 PIPX_INSTALL_COMMAND = "pipx install patchrail"
 GITHUB_SOURCE_COMMAND = "uvx --from git+https://github.com/patchrail/patchrail patchrail"
-PYPI_INSTALL_COMMAND = "python -m pip install patchrail==0.1.1"
+# Forward-looking install docs point at the *current* published package, so they stay
+# correct across releases instead of pinning a version that goes stale on the next tag.
+PYPI_INSTALL_COMMAND = "python -m pip install patchrail"
+# The dated 2026-06-12 clean-install evidence records the then-current published pin.
+HISTORICAL_PYPI_INSTALL_COMMAND = "python -m pip install patchrail==0.1.1"
 PYPI_PROJECT_URL = "https://pypi.org/project/patchrail/0.1.1/"
 WHEEL_VENV_COMMAND = "python3 -m venv .patchrail-wheel-smoke"
 
@@ -225,7 +229,7 @@ def test_pypi_install_verification_is_recorded_without_download_or_adoption_clai
     assert "clean `/tmp` context" not in combined
     assert "5d335368476b9c8739c01ffc16ba74d18d10b259" not in combined
     assert PYPI_PROJECT_URL in combined
-    assert PYPI_INSTALL_COMMAND in combined
+    assert HISTORICAL_PYPI_INSTALL_COMMAND in combined
     assert "python_test_failure" in combined
     assert WHEEL_VENV_COMMAND in combined
     assert "PyPI download telemetry" in combined
