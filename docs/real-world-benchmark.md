@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Ten **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff, Envoy, containerd, React — with their logs
-committed to this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict
-below is the output of a command you can run yourself, including **the one where PatchRail is still
-wrong**.
+This page is the other benchmark. Eleven **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, pytorch, Envoy, containerd, React — with
+their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
+Every verdict below is the output of a command you can run yourself, including **the one where
+PatchRail is still wrong**.
 
 ## Reproduce it
 
@@ -27,8 +27,9 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves 0.7.0 today, which ships every fix below except the grafana and Envoy ones — those two are on
-`main` and go out with the next release.
+serves **0.7.3** today, and `main` is 0.7.3: every fix below has shipped — including the grafana and
+Envoy ones — so the `after` column is also what a plain `pip install patchrail` gives you.
+Re-measured on 2026-07-17, all eleven logs classify identically on 0.7.3 and `main`.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -39,11 +40,12 @@ serves 0.7.0 today, which ships every fix below except the grafana and Envoy one
 | [prometheus](https://github.com/prometheus/prometheus/actions/runs/29348880303) | golangci-lint: file not gofmt'd | `go_lint` 0.89 | `go_lint` 0.89 | ✅ correct |
 | [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_test_failure` 0.53 | ✅ fixed |
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
+| [pytorch](https://github.com/pytorch/pytorch/actions/runs/29361968044) | lintrunner exited 1 without writing its report | `secrets_or_permissions_failure` 0.53 | `unknown` 0.15 | ✅ fixed ([#349](https://github.com/patchrail/patchrail/issues/349)) |
 | [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
 | [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
 | [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
 
-Three of the ten were classified identically before and after. That is the point of showing them:
+Three of the eleven were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
@@ -121,6 +123,28 @@ A Dependabot security update that died inside the updater. The runner says so in
 PatchRail sent Svelte's maintainers to run `pnpm lint`. It now returns `unknown` and hands back that
 error line. `unknown` is not a diagnosis, and PatchRail has no class for a Dependabot updater
 failure. It is the honest answer, and honest beats confident.
+
+### pytorch — `secrets_or_permissions_failure` → `unknown` ([#349](https://github.com/patchrail/patchrail/issues/349))
+
+A CMake policy that is *not set* is not a repository secret that is not set.
+
+pytorch's `lintrunner` job failed before it could write its report — `jq: error: Could not open file
+lint.json`, then `+ exit 1`. The log GitHub hands back for it carries no lint finding at all. 0.6.1
+answered `secrets_or_permissions_failure` at **0.53** anyway, on a single witness:
+
+```
+CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.
+```
+
+`SCREAMING_CASE is not set` is how a job announces a missing credential, so the rule watched for it —
+but CMake announces its *policies* the same way, and a policy id (`CMP0148`) is shaped exactly like an
+environment variable. The warning's own closing line reads *"This warning is for project developers.
+Use -Wno-dev to suppress it."* — yet PatchRail would have sent a maintainer to audit their repository
+secrets over it. A policy CMake names is never a credential, so it no longer witnesses; with that
+false signal gone the log carries nothing, and it answers `unknown` and hands the failure back. A
+token that really is unset (`GITHUB_TOKEN is not set`) still classifies at full confidence.
 
 ### grafana — `go_lint` → `go_test_failure` ([#352](https://github.com/patchrail/patchrail/issues/352))
 
@@ -255,7 +279,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. Today, for pandas, it doesn't.
-- Eight logs is not a statistic. It is a set of cases you can check by hand, chosen because they were
+- Eleven logs is not a statistic. It is a set of cases you can check by hand, chosen because they were
   the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. When a fix
   lands for #347, this page changes with it.
