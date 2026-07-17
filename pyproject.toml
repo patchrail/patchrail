@@ -10,18 +10,33 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{ name = "Pablo Guillén" }]
-keywords = ["ci", "open-source", "maintenance", "github-actions", "triage"]
+keywords = [
+  "ci",
+  "continuous-integration",
+  "github-actions",
+  "devops",
+  "triage",
+  "log-analysis",
+  "failure-analysis",
+  "open-source",
+  "maintenance",
+  "cli",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
   "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Build Tools",
   "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities",
 ]
 
 [project.urls]

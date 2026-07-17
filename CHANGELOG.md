@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Changed
+
+- **PyPI search metadata now reflects how maintainers actually search for a CI-triage tool.** The
+  package `keywords` were a five-term list (`ci`, `open-source`, `maintenance`, `github-actions`,
+  `triage`) and the trove `classifiers` omitted several standard, applicable facets, so the project
+  surfaced for fewer honest queries on PyPI search — the one non-login discovery surface a dev
+  browses. `keywords` now also include `continuous-integration`, `devops`, `log-analysis`,
+  `failure-analysis` and `cli`, each describing what the tool genuinely is (a cross-platform CLI
+  that analyses CI/test failure logs), and the classifiers add
+  `Intended Audience :: System Administrators`, `Operating System :: OS Independent`,
+  `Topic :: Software Development :: Testing` and `Topic :: Utilities`. Pure metadata with no
+  behaviour change; `twine check` passes and the next release will carry it to PyPI.
+
 ### Fixed
 
 - **The quickstart and pilot docs now install the *current* PyPI package instead of a long-stale
