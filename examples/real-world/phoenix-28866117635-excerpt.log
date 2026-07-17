@@ -1,0 +1,98 @@
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:47.4475195Z                +test | Compiling 5 files (.ex)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:47.5900526Z                +test | Generated phoenix_view app
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:47.6450631Z                +test | --> COPY --dir assets config installer lib integration_test priv test ./
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:47.7192227Z                +test | --> RUN mix test
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:48.3990821Z                +test | ==> phx_new
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:48.3992198Z                +test | Compiling 11 files (.ex)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:49.2365791Z                +test | Generated phx_new app
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:49.2947829Z                +test | ==> phoenix
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:49.2948535Z                +test | Compiling 69 files (.ex)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:51.6040624Z                +test | Generated phoenix app
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:51.8108823Z                +test | .
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:52.8283455Z                +test | .........................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:53.8430990Z                +test | .............................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.8971139Z                +test | ............................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9266118Z                +test | .................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9269399Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9271011Z                +test |   1) test telemetry invokes log level callback from Plug.Telemetry (Phoenix.LoggerTest)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9275816Z                +test |      test/phoenix/logger_test.exs:79
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9277245Z                +test |      Assertion with =~ failed
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9279381Z                +test |      code:  assert ExUnit.CaptureLog.capture_log(fn -> Plug.Telemetry.call(conn(:get, "/any"), opts) end) =~ "[info] GET /any"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9281120Z                +test |      left:  "\n12:29:54.901 [info]  GET /any\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9281931Z                +test |      right: "[info] GET /any"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9282576Z                +test |      stacktrace:
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9283316Z                +test |        test/phoenix/logger_test.exs:98: (test)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9283782Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9283813Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9283818Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9284825Z                +test |   2) test telemetry invokes log level from Plug.Telemetry (Phoenix.LoggerTest)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9286688Z                +test |      test/phoenix/logger_test.exs:103
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9287963Z                +test |      Assertion with =~ failed
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9289123Z                +test |      code:  assert ExUnit.CaptureLog.capture_log(fn ->
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9290268Z                +test |               opts = Plug.Telemetry.init(event_prefix: [:phoenix, :endpoint])
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9291333Z                +test |               Plug.Telemetry.call(conn(:get, "/"), opts)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9292173Z                +test |             end) =~ "[info] GET /"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9292943Z                +test |      left:  "\n12:29:54.902 [info]  GET /\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9293698Z                +test |      right: "[info] GET /"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9294333Z                +test |      stacktrace:
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9295070Z                +test |        test/phoenix/logger_test.exs:104: (test)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9295538Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:54.9295761Z                +test | .
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:55.9583645Z                +test | ...........................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.3266320Z                +test | ....................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8442759Z                +test | ............................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8444048Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8445619Z                +test |   3) test logging logs custom level when log is set to a 1-arity function (Phoenix.Router.RoutingTest)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8447198Z                +test |      test/phoenix/router/routing_test.exs:276
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8448033Z                +test |      Assertion with =~ failed
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8451048Z                +test |      code:  assert capture_log(fn -> call(Router, :get, "/fun_log", level: "info") end) =~ "[info] Processing with Phoenix.Router.RoutingTest.SomePlug"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8453094Z                +test |      left:  "\n12:29:57.841 [info]  Processing with Phoenix.Router.RoutingTest.SomePlug\n  Parameters: %{\"level\" => \"info\"}\n  Pipelines: []\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8454666Z                +test |      right: "[info] Processing with Phoenix.Router.RoutingTest.SomePlug"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8455829Z                +test |      stacktrace:
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8456623Z                +test |        test/phoenix/router/routing_test.exs:277: (test)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8457899Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8460965Z                +test | .
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8467936Z                +test | ..................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8468531Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8473050Z                +test |   4) test logging logs plug with pipeline and custom level (Phoenix.Router.RoutingTest)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8474241Z                +test |      test/phoenix/router/routing_test.exs:258
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8475000Z                +test |      Assertion with =~ failed
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8476574Z                +test |      code:  assert capture_log(fn -> call(Router, :get, "/plug") end) =~ "[info] Processing with Phoenix.Router.RoutingTest.SomePlug\n  Parameters: %{}\n  Pipelines: [:noop]\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8479066Z                +test |      left:  "\n12:29:57.845 [info]  Processing with Phoenix.Router.RoutingTest.SomePlug\n  Parameters: %{}\n  Pipelines: [:noop]\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8480852Z                +test |      right: "[info] Processing with Phoenix.Router.RoutingTest.SomePlug\n  Parameters: %{}\n  Pipelines: [:noop]\n"
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8481969Z                +test |      stacktrace:
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8482903Z                +test |        test/phoenix/router/routing_test.exs:259: (test)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8483628Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:57.8484223Z                +test | ....
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:29:58.8477811Z                +test | ...................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:00.0081208Z                +test | ................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:01.7140198Z                +test | .............................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:02.8712786Z                +test | ......................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:08.4606026Z                +test | ......................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:13.6191706Z                +test | ..............................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:19.1507917Z                +test | .................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:23.8765025Z                +test | ..................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:28.8068220Z                +test | ....................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:29.8271548Z                +test | ......................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:30.8593777Z                +test | ................................................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:32.0457233Z                +test | .....................................................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:33.2069796Z                +test | ...........................................................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:34.3661886Z                +test | ................................................................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3203195Z                +test | .......................................................................................................................................................................................................................................................................................................................................................................
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3204573Z                +test | 12:30:35.319 [warn]  Description: 'Authenticity is not established by certificate path validation'
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3205349Z                +test |      Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3205714Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3309382Z                +test | .
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3892632Z                +test | ....
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3893234Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3894650Z                +test | Finished in 43.6 seconds (7.1s async, 36.5s sync)
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3896343Z                +test | 11 doctests, 819 tests, 4 failures
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3896986Z 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.3897302Z                +test | Randomized with seed 683238
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4051002Z                +test | Command /bin/sh -c 'mix test' failed with exit code 1
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4051748Z                +test | 
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4575036Z                +test | ERROR: Command exited with non-zero code: RUN mix test
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4627234Z Repeating the output of the command that caused the failure
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4628076Z ================================ FAILURE [main] ================================
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4628871Z                +test *failed* | --> RUN mix test
+test-elixir (1.12.1, 24.0.2, 1)	UNKNOWN STEP	2026-07-07T12:30:35.4629576Z                +test *failed* | ==> phx_new

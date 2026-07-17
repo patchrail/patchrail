@@ -1,0 +1,42 @@
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:01.5685125Z ##[endgroup]
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:15.9394480Z Run options:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:15.9395299Z   include {:streaming=>true, :js=>true}
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:15.9395833Z   exclude {:search=>true}
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:15.9396202Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:10:15.9396709Z Randomized with seed 58358
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1286796Z .........................F
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1496018Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1496987Z Failures:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1497553Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1498710Z   1) Channel Subscriptions when the access token has insufficient scope to read statuses cannot subscribe to the public:local channel
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1500097Z      Failure/Error:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1502706Z              Timeout.timeout(timeout) do
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1503478Z                loop do
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1504147Z                  event = dequeue_event
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1504869Z        
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1505601Z                  return nil if event.nil? && @events_queue.closed?
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1506706Z                  return event[:payload] unless event.nil? || event[:event] != expected_event
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1508121Z                end
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1509122Z              end
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1512207Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1512681Z      Timeout::Error:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1513369Z        execution expired
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1514239Z      # ./spec/support/streaming_client.rb:92:in `wait_for_event'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1515290Z      # ./spec/support/streaming_client.rb:163:in `wait_for_message'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1516686Z      # ./spec/system/streaming/channel_subscriptions_spec.rb:27:in `block (3 levels) in <main>'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1518005Z      # ./spec/rails_helper.rb:115:in `block (2 levels) in <top (required)>'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1519280Z      # ./spec/support/streaming_server_manager.rb:117:in `block (3 levels) in <main>'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1520818Z      # ./spec/support/streaming_server_manager.rb:106:in `block (2 levels) in <main>'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1522072Z      # ------------------
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1522660Z      # --- Caused by: ---
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1523212Z      # Timeout::ExitException:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1523924Z      #   execution expired
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1524747Z      #   ./spec/support/streaming_client.rb:116:in `dequeue_event'
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1525517Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1526236Z Finished in 1 minute 11.31 seconds (files took 13.68 seconds to load)
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1527874Z 26 examples, 1 failure
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1528357Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1528777Z Failed examples:
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1529163Z 
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1530828Z rspec ./spec/system/streaming/channel_subscriptions_spec.rb:20 # Channel Subscriptions when the access token has insufficient scope to read statuses cannot subscribe to the public:local channel
+End to End testing (3.3)	UNKNOWN STEP	2026-07-17T07:11:27.1532987Z 

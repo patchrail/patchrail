@@ -58,6 +58,16 @@
   `- Reproduce locally: \`<command>\`` right after the next step (omitted when no command is
   available), matching the `Reproduce:` line already in the markdown report.
 
+### Documentation
+
+- **The real-world benchmark now spans three more ecosystems it was already right about.** Added three
+  fresh public CI logs — mastodon/mastodon (RSpec system spec timeout → `ruby_bundle_failure`),
+  phoenixframework/phoenix (`mix test` ExUnit failures → `elixir_mix_failure`), and
+  signalapp/Signal-Android (Gradle `validateDebugScreenshotTest` → `java_build_failure`) — committed as
+  excerpts and measured against 0.6.1, 0.7.3 and `main`. All three classify correctly and identically
+  across versions, so they forced no code change; they extend `docs/real-world-benchmark.md` from
+  thirteen to sixteen logs and give Ruby, Elixir and JVM/Android their first real-world rows.
+
 ## 0.7.3 - 2026-07-16
 
 ### Fixed

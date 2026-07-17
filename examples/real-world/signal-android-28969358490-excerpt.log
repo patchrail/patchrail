@@ -1,0 +1,72 @@
+build	UNKNOWN STEP	2026-07-08T19:30:40.8219418Z 
+build	UNKNOWN STEP	2026-07-08T19:30:40.8220147Z > Task :demo:registration:lintReportDebug
+build	UNKNOWN STEP	2026-07-08T19:30:40.8221502Z Wrote HTML report to file:///home/runner/work/Signal-Android/Signal-Android/demo/registration/build/reports/lint-results-debug.html
+build	UNKNOWN STEP	2026-07-08T19:30:43.4219431Z 
+build	UNKNOWN STEP	2026-07-08T19:30:43.4220160Z > Task :feature:registration:validateDebugScreenshotTest
+build	UNKNOWN STEP	2026-07-08T19:30:43.4220906Z 
+build	UNKNOWN STEP	2026-07-08T19:30:43.4221800Z org.signal.registration.screens.aepentry.EnterAepScreenScreenshotTests > EnterAepScreenPreview > EnterAepScreenPreview > EnterAepScreenPreview_rtl_{locale=ar} FAILED
+build	UNKNOWN STEP	2026-07-08T19:30:43.4225908Z     com.android.tools.screenshot.differ.ImageComparisonAssertionError
+build	UNKNOWN STEP	2026-07-08T19:31:56.4219543Z 
+build	UNKNOWN STEP	2026-07-08T19:31:56.4220685Z > Task :Signal-Android:processPlayProdDebugJavaRes
+build	UNKNOWN STEP	2026-07-08T19:32:05.0331996Z ##[warning]/home/runner/work/Signal-Android/Signal-Android/app/src/main/java/org/thoughtcrime/securesms/jobmanager/migrations/PushDecryptMessageJobEnvelopeMigration.java:14: warning: [dep-ann] deprecated item is not annotated with @Deprecated
+build	UNKNOWN STEP	2026-07-08T19:32:05.0344219Z public class PushDecryptMessageJobEnvelopeMigration extends JobMigration {
+build	UNKNOWN STEP	2026-07-08T19:32:05.0344949Z        ^
+build	UNKNOWN STEP	2026-07-08T19:32:05.0345144Z 
+build	UNKNOWN STEP	2026-07-08T19:32:05.0345421Z > Task :Signal-Android:compilePlayProdDebugJavaWithJavac
+build	UNKNOWN STEP	2026-07-08T19:32:07.9220037Z Note: Some input files use or override a deprecated API.
+build	UNKNOWN STEP	2026-07-08T19:32:07.9220700Z Note: Recompile with -Xlint:deprecation for details.
+build	UNKNOWN STEP	2026-07-08T19:32:07.9221327Z Note: Some input files use unchecked or unsafe operations.
+build	UNKNOWN STEP	2026-07-08T19:32:07.9221932Z Note: Recompile with -Xlint:unchecked for details.
+build	UNKNOWN STEP	2026-07-08T19:32:07.9222404Z 1 warning
+build	UNKNOWN STEP	2026-07-08T19:32:12.8219080Z 
+build	UNKNOWN STEP	2026-07-08T19:32:12.8233754Z > Task :Signal-Android:bundlePlayProdDebugClassesToCompileJar
+build	UNKNOWN STEP	2026-07-08T19:32:12.9219496Z > Task :Signal-Android:bundlePlayProdDebugClassesToRuntimeJar
+build	UNKNOWN STEP	2026-07-08T19:32:15.0251704Z > Task :Signal-Android:generatePlayProdDebugUnitTestLintModel
+build	UNKNOWN STEP	2026-07-08T19:32:15.1230559Z > Task :Signal-Android:generatePlayProdDebugLintReportModel
+build	UNKNOWN STEP	2026-07-08T19:32:16.1241684Z > Task :Signal-Android:generatePlayProdDebugAndroidTestLintModel
+build	UNKNOWN STEP	2026-07-08T19:32:37.3271766Z > Task :Signal-Android:compilePlayProdDebugAndroidTestKotlin
+build	UNKNOWN STEP	2026-07-08T19:32:41.5231531Z > Task :Signal-Android:compilePlayProdDebugAndroidTestJavaWithJavac
+build	UNKNOWN STEP	2026-07-08T19:32:41.5257768Z > Task :Signal-Android:compilePlayProdDebugAndroidTestSources
+build	UNKNOWN STEP	2026-07-08T19:32:42.0221584Z > Task :Signal-Android:lintAnalyzePlayProdDebug
+build	UNKNOWN STEP	2026-07-08T19:32:42.8233912Z > Task :Signal-Android:compilePlayProdDebugUnitTestKotlin
+build	UNKNOWN STEP	2026-07-08T19:32:42.8316373Z > Task :Signal-Android:lintAnalyzePlayProdDebugAndroidTest
+build	UNKNOWN STEP	2026-07-08T19:32:42.9247568Z > Task :Signal-Android:lintAnalyzePlayProdDebugUnitTest
+build	UNKNOWN STEP	2026-07-08T19:32:50.6241407Z > Task :Signal-Android:processPlayProdDebugUnitTestJavaRes
+build	UNKNOWN STEP	2026-07-08T19:32:52.5242025Z Note: Some input files use or override a deprecated API.
+build	UNKNOWN STEP	2026-07-08T19:32:52.5242555Z 
+build	UNKNOWN STEP	2026-07-08T19:32:52.5251422Z Note: Recompile with -Xlint:deprecation for details.
+build	UNKNOWN STEP	2026-07-08T19:32:52.5281102Z Note: Some input files use unchecked or unsafe operations.
+build	UNKNOWN STEP	2026-07-08T19:32:52.5281910Z > Task :Signal-Android:compilePlayProdDebugUnitTestJavaWithJavac
+build	UNKNOWN STEP	2026-07-08T19:32:52.5311163Z Note: Recompile with -Xlint:unchecked for details.
+build	UNKNOWN STEP	2026-07-08T19:33:09.7222571Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:33:10.3219678Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:33:23.7230877Z 
+build	UNKNOWN STEP	2026-07-08T19:33:23.7242425Z > Task :Signal-Android:testPlayProdDebugUnitTest
+build	UNKNOWN STEP	2026-07-08T19:33:25.2242019Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:33:25.2242965Z 
+build	UNKNOWN STEP	2026-07-08T19:33:31.9221029Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:34:14.2220222Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:34:54.6224427Z 
+build	UNKNOWN STEP	2026-07-08T19:34:54.6231202Z 
+build	UNKNOWN STEP	2026-07-08T19:34:54.6231850Z > Task :feature:registration:validateDebugScreenshotTest
+build	UNKNOWN STEP	2026-07-08T19:34:54.6261740Z 286 tests completed, 1 failed
+build	UNKNOWN STEP	2026-07-08T19:34:59.4243308Z 
+build	UNKNOWN STEP	2026-07-08T19:34:59.4271612Z > Task :feature:registration:validateDebugScreenshotTest FAILED
+build	UNKNOWN STEP	2026-07-08T19:37:01.6220611Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:37:09.2220946Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+build	UNKNOWN STEP	2026-07-08T19:42:33.6220775Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1783538470395.json
+build	UNKNOWN STEP	2026-07-08T19:42:33.6221823Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6221839Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6225124Z FAILURE: Build failed with an exception.
+build	UNKNOWN STEP	2026-07-08T19:42:33.6226271Z [Incubating] Problems report is available at: file:///home/runner/work/Signal-Android/Signal-Android/build/reports/problems/problems-report.html
+build	UNKNOWN STEP	2026-07-08T19:42:33.6227290Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6227578Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6227798Z * What went wrong:
+build	UNKNOWN STEP	2026-07-08T19:42:33.6228433Z Execution failed for task ':feature:registration:validateDebugScreenshotTest'.
+build	UNKNOWN STEP	2026-07-08T19:42:33.6230169Z > There were failing tests. See the report at: file:///home/runner/work/Signal-Android/Signal-Android/feature/registration/build/reports/screenshotTest/preview/debug/index.html
+build	UNKNOWN STEP	2026-07-08T19:42:33.6231578Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6231707Z * Try:
+build	UNKNOWN STEP	2026-07-08T19:42:33.6232261Z > Run with --scan to get full insights from a Build Scan (powered by Develocity).
+build	UNKNOWN STEP	2026-07-08T19:42:33.6232943Z 
+build	UNKNOWN STEP	2026-07-08T19:42:33.6233123Z BUILD FAILED in 21m 37s
+build	UNKNOWN STEP	2026-07-08T19:42:33.6261219Z Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.

@@ -1,8 +1,9 @@
 # Real-world CI logs
 
 Failed CI runs from public repositories, fetched with `gh run view <id> --repo <repo> --log-failed`
-on 2026-07-14 (Symfony on 2026-07-17) and committed **unmodified** (Symfony's ANSI color codes, which
-`gh` returned in caret notation, were the one exception, stripped for legibility). They are the evidence behind
+on 2026-07-14 (Symfony, Mastodon, Phoenix and Signal-Android on 2026-07-17) and committed
+**unmodified** — the one exception is ANSI color codes, which `gh` returned in caret notation for
+Symfony and Phoenix, stripped for legibility. They are the evidence behind
 [docs/real-world-benchmark.md](../../docs/real-world-benchmark.md), where each one is measured
 against the version PyPI serves and against `main`.
 
@@ -20,6 +21,10 @@ against the version PyPI serves and against `main`.
 | `containerd-29358848438-excerpt.log` | containerd/containerd | [29358848438](https://github.com/containerd/containerd/actions/runs/29358848438) (excerpt: the log is 9MB; the Go test that failed, the three provoked container-OOM/exit-137/cgroup lines, and the `make` error that ended the job are kept verbatim, and pinned by `tests/test_container_runtime_oom_noise.py`) |
 | `react-29335289512-excerpt.log` | facebook/react | [29335289512](https://github.com/facebook/react/actions/runs/29335289512) (excerpt: the failing "Run prettier" step — the formatting message, the unformatted file, and the `yarn run` footer that carried the wrong verdict — kept verbatim, and pinned by `tests/test_yarn_run_footer_notice.py`) |
 | `symfony-29551386048-excerpt.log` | symfony/symfony | [29551386048](https://github.com/symfony/symfony/actions/runs/29551386048) (excerpt: the 2.3MB `Unit Tests (8.3)` log's `composer update` success and the `ErrorHandler` assertion that actually failed kept verbatim, ANSI color codes stripped, and pinned by `tests/test_php_test_failure_not_composer.py`) |
+| `discourse-29572043439-excerpt.log` | discourse/discourse | [29572043439](https://github.com/discourse/discourse/actions/runs/29572043439) (excerpt: the `Plugins QUnit` run's passing `ok` line with `insufficient permissions` in its title and the six `not ok` timeouts kept verbatim, and pinned by `tests/test_tap_pass_line_not_secrets.py`) |
+| `mastodon-29561949942-excerpt.log` | mastodon/mastodon | [29561949942](https://github.com/mastodon/mastodon/actions/runs/29561949942) (excerpt: the `End to End testing (3.3)` RSpec run — the streaming system spec that timed out and the `26 examples, 1 failure` summary — kept verbatim; classified correctly, drove no fix) |
+| `phoenix-28866117635-excerpt.log` | phoenixframework/phoenix | [28866117635](https://github.com/phoenixframework/phoenix/actions/runs/28866117635) (excerpt: the `test-elixir (1.12.1, …)` `mix test` run — the ExUnit failures and the `819 tests, 4 failures` summary — kept verbatim, ANSI color codes stripped; classified correctly, drove no fix) |
+| `signal-android-28969358490-excerpt.log` | signalapp/Signal-Android | [28969358490](https://github.com/signalapp/Signal-Android/actions/runs/28969358490) (excerpt: the Gradle `build` job — the `validateDebugScreenshotTest` task that FAILED and `BUILD FAILED` — kept verbatim; classified correctly, drove no fix) |
 
 These are **not** fixtures. They carry no expected-class labels and are not scored by
 `patchrail ci benchmark`, which runs against the sanitized zoo in `examples/ci-triage/`. They exist
