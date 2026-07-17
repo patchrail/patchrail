@@ -4,6 +4,19 @@
 
 ### Fixed
 
+- **A phrase in the title of a passing test no longer reads as a missing-secret failure.** A TAP
+  report prints one `ok N` line per assertion that passed, and that line's description is whatever the
+  test named itself. discourse/discourse's `Plugins QUnit` run (29572043439) failed on six `not ok`
+  chat-component timeouts (`# fail  6`), but PatchRail answered `secrets_or_permissions_failure` at
+  0.53 on its one witness: `ok 1523 … polls are disabled: regular user - insufficient permissions` — a
+  test that passed, whose scenario is an "insufficient permissions" UI case, not a credential the job
+  lacked. Read verbatim it sent a maintainer to audit repository secrets over the title of a green
+  test. A signal matched only inside a passing TAP line now witnesses nothing, so the log lands on
+  `unknown` — the honest ceiling, since PatchRail has no browser-QUnit test class. A genuine
+  permissions failure is untouched: `insufficient permissions` on an error line, `Resource not
+  accessible by integration`, and the workflow-permission signals all still carry the rule, because
+  none of them arrives on a green `ok` line. ([#379](https://github.com/patchrail/patchrail/issues/379))
+
 - **A failing PHPUnit assertion is no longer reported as a Composer dependency failure.** The
   `php_composer_failure` rule carried PHPUnit's own verdict markers — `FAILURES!`, `Failed asserting`,
   the `Tests: … Failures:` summary — plus the bare `composer install`/`composer update` commands that
