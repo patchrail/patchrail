@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Ten **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff, Envoy, containerd, React — with their logs
-committed to this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict
-below is the output of a command you can run yourself, including **the one where PatchRail is still
-wrong**.
+This page is the other benchmark. Eleven **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React — with
+their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
+Every verdict below is the output of a command you can run yourself, including **the one where
+PatchRail is still wrong**.
 
 ## Reproduce it
 
@@ -27,8 +27,10 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves 0.7.0 today, which ships every fix below except the grafana and Envoy ones — those two are on
-`main` and go out with the next release.
+serves **0.7.3** today and ships every fix below — grafana and Envoy included, which the previous
+version of this page still had waiting on `main`. Re-measured 2026-07-17: `0.7.3` and `main` return
+the identical verdict on all eleven logs, and the CLI and action changes merged since (#364–#373)
+moved none of them — so `after` is exactly what `pip install patchrail` gives you now.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -39,11 +41,12 @@ serves 0.7.0 today, which ships every fix below except the grafana and Envoy one
 | [prometheus](https://github.com/prometheus/prometheus/actions/runs/29348880303) | golangci-lint: file not gofmt'd | `go_lint` 0.89 | `go_lint` 0.89 | ✅ correct |
 | [grafana](https://github.com/grafana/grafana/actions/runs/27635190952) | the package does not compile | `go_lint` 0.71 | `go_test_failure` 0.53 | ✅ fixed |
 | [ruff](https://github.com/astral-sh/ruff/actions/runs/29349828924) | the repo's own `grep`-based gate | `unknown` 0.15 | `unknown` 0.15 | ✅ honest |
+| [pytorch](https://github.com/pytorch/pytorch/actions/runs/29361968044) | lintrunner's `jq` step — `lint.json` was never written | `secrets_or_permissions_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 | [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
 | [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
 | [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
 
-Three of the ten were classified identically before and after. That is the point of showing them:
+Three of the eleven were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail is still wrong
@@ -238,6 +241,36 @@ real `yarn install` failure is untouched: its `/cli/install` footer still matche
 rests on the footer alone — `yarn install v1.x`, `error An unexpected error occurred`, and the
 lockfile / registry messages carry it.
 
+### pytorch — `secrets_or_permissions_failure` → `unknown` ([#349](https://github.com/patchrail/patchrail/issues/349), `e6ff9c6`)
+
+A warning a compiler prints for developers to ignore is not a missing repository secret.
+
+PyTorch's `lintrunner-clang-all` job failed for a reason with nothing to do with credentials:
+lintrunner never wrote its report, so the `jq` step that reads it died —
+
+```
+jq: error: Could not open file lint.json: No such file or directory
+##[error]Process completed with exit code 1.
+```
+
+— and PatchRail answered `secrets_or_permissions_failure` at 0.53. `SCREAMING_CASE is not set` is how
+a job reports a missing credential, so the rule watched for it; but CMake announces its policies the
+same way, and a policy id is shaped exactly like an environment variable:
+
+```
+CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+```
+
+Its own last line is "Use `-Wno-dev` to suppress it," it comes from a vendored third-party
+`CMakeLists.txt`, and it was the whole case for auditing PyTorch's secrets. The fix pins the rule so
+the subject of `is not set` may not be a policy CMake introduced — `Policy CMP0148` no longer
+matches, while a token that really is unset (`GITHUB_TOKEN is not set`) still does, because nothing
+precedes it. Left with no witness, the log answers `unknown` and hands the `jq` failure back: honest,
+because PatchRail has no class for a lint runner that never produced its report.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -255,7 +288,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. Today, for pandas, it doesn't.
-- Eight logs is not a statistic. It is a set of cases you can check by hand, chosen because they were
-  the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
+- Eleven logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+  were the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. When a fix
   lands for #347, this page changes with it.
