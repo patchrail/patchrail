@@ -3,11 +3,12 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Thirteen **real failed CI runs from public repositories** — pandas,
+This page is the other benchmark. Sixteen **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
-Discourse — with their logs committed to this repo unmodified, exactly as `gh run view --log-failed`
-returned them. Every verdict below is the output of a command you can run yourself — including the six
-where the honest answer is **`unknown`**, one of them because the failure never made it into the log.
+Discourse, Mastodon, Phoenix and Signal-Android — with their logs committed to this repo unmodified,
+exactly as `gh run view --log-failed` returned them. Every verdict below is the output of a command
+you can run yourself — including the six where the honest answer is **`unknown`**, one of them because
+the failure never made it into the log.
 
 ## Reproduce it
 
@@ -30,8 +31,8 @@ working in ninety days is a claim, not evidence.
 serves **0.7.3** today and ships every fix below except the three most recent: the pandas fix (#347),
 the Symfony fix (#377) and the Discourse fix landed on `main` after 0.7.3 was cut and ship in the next
 release, so they are the three rows where `main` is ahead of `pip install patchrail` (`0.7.3` returns
-the old verdict on all three). On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main` return
-the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
+the old verdict on all three). On the other thirteen logs, re-measured 2026-07-17, `0.7.3` and `main`
+return the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -48,13 +49,19 @@ the identical verdict, and the CLI and action changes merged since (#364–#373)
 | [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
 | [Symfony](https://github.com/symfony/symfony/actions/runs/29551386048) | a PHPUnit assertion in `ErrorHandler`, after `composer` had succeeded | `php_composer_failure` 0.95 | `unknown` 0.15 | ✅ fixed ([#377](https://github.com/patchrail/patchrail/issues/377)) |
 | [Discourse](https://github.com/discourse/discourse/actions/runs/29572043439) | six QUnit chat tests timed out (`# fail  6`) | `secrets_or_permissions_failure` 0.53 | `unknown` 0.15 | ✅ fixed ([#379](https://github.com/patchrail/patchrail/issues/379)) |
+| [Mastodon](https://github.com/mastodon/mastodon/actions/runs/29561949942) | one RSpec system spec timed out (`26 examples, 1 failure`) | `ruby_bundle_failure` 0.71 | `ruby_bundle_failure` 0.71 | ✅ correct |
+| [Phoenix](https://github.com/phoenixframework/phoenix/actions/runs/28866117635) | four ExUnit assertions failed, `mix test` exit 1 (`819 tests, 4 failures`) | `elixir_mix_failure` 0.71 | `elixir_mix_failure` 0.71 | ✅ correct |
+| [Signal-Android](https://github.com/signalapp/Signal-Android/actions/runs/28969358490) | a Gradle screenshot-test task failed (`BUILD FAILED`) | `java_build_failure` 0.89 | `java_build_failure` 0.89 | ✅ correct |
 
-Three of the thirteen were classified identically before and after. That is the point of showing them:
-the fixes below were narrow enough not to disturb the logs that already worked.
+Six of the sixteen were classified identically before and after. Three — Home Assistant, Prometheus and
+ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Three —
+Mastodon, Phoenix and Signal-Android — because Ruby/RSpec, Elixir/ExUnit and Kotlin/Gradle were never
+misread here in the first place; they are in the table to show the tool holds across ecosystems it was
+already right about, not only the ones that forced a fix.
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the thirteen is confidently wrong. Six answer `unknown` — ruff, svelte,
+As of this measurement, none of the sixteen is confidently wrong. Six answer `unknown` — ruff, svelte,
 Symfony and Discourse because PatchRail has no class for what broke, pytorch because a lint runner never
 wrote the report its `jq` step then failed to read, and pandas because the failure is not in the log at
 all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
@@ -349,7 +356,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
-- Thirteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
-  were the failed runs sitting in these repos on 2026-07-14 (and Symfony and Discourse on 2026-07-17),
-  not because they flattered the tool.
+- Sixteen logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+  were the failed runs sitting in these repos on 2026-07-14 (and Symfony, Discourse, Mastodon, Phoenix
+  and Signal-Android on 2026-07-17), not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.
