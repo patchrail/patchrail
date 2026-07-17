@@ -3,11 +3,11 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Twenty-one **real failed CI runs from public repositories** — pandas,
+This page is the other benchmark. Twenty-two **real failed CI runs from public repositories** — pandas,
 deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony,
-Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod, cabal and crystal — with their logs committed to
+Discourse, Mastodon, Phoenix, Signal-Android, Jellyfin, cats, riverpod, cabal, crystal and dune — with their logs committed to
 this repo unmodified, exactly as `gh run view --log-failed` returned them. Every verdict below is the
-output of a command you can run yourself — including the nine where the honest answer is **`unknown`**,
+output of a command you can run yourself — including the ten where the honest answer is **`unknown`**,
 one of them because the failure never made it into the log.
 
 ## Reproduce it
@@ -58,6 +58,7 @@ merged since (#364–#373) moved none of them.
 | [riverpod](https://github.com/rrousselGit/riverpod/actions/runs/29573819047) | `flutter analyze` reported 4 lints, exit 1 — a Dart run, not a JVM build | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 | [cabal](https://github.com/haskell/cabal/actions/runs/29562439929) | a GHC compile error failed Cabal's own test suite (`Some tests failed`, exit 1) — a Haskell build, not a JVM one | `java_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
 | [crystal](https://github.com/crystal-lang/crystal/actions/runs/29501393259) | a Crystal stdlib spec errored on a socket bind (`Socket::BindError`), `make std_spec` exit 1 — a Crystal spec, not a C/C++ compile | `cpp_build_failure` 0.53 | `unknown` 0.15 | ✅ fixed |
+| [dune](https://github.com/ocaml/dune/actions/runs/29585452292) | a cram test-case diff failed dune's own `make test` (`make: *** [test] Error 1`) — an OCaml test run; 0.6.1 blamed a benign cache-budget warning, later builds the bare make line | `artifact_or_cache_failure` 0.71 | `unknown` 0.15 | ✅ fixed |
 
 Eight of the twenty were classified identically before and after. Three — Home Assistant, Prometheus and
 ruff — because the fixes below were narrow enough not to disturb the logs that already worked. Five —
@@ -67,8 +68,8 @@ across ecosystems it was already right about, not only the ones that forced a fi
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the twenty is confidently wrong. Eight answer `unknown` — ruff, svelte,
-Symfony, Discourse, riverpod and cabal because PatchRail has no class for what broke, pytorch because a lint
+As of this measurement, none is confidently wrong. Ten answer `unknown` — ruff, svelte,
+Symfony, Discourse, riverpod, cabal, crystal and dune because PatchRail has no class for what broke, pytorch because a lint
 runner never wrote the report its `jq` step then failed to read, and pandas because the failure is not in the
 log at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
 
@@ -427,5 +428,5 @@ that matched a real error.
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
 - Twenty logs is not a statistic. It is a set of cases you can check by hand, chosen because they
   were the failed runs sitting in these repos on 2026-07-14 (and Symfony, Discourse, Mastodon, Phoenix,
-  Signal-Android, Jellyfin, cats, riverpod and cabal on 2026-07-17), not because they flattered the tool.
+  Signal-Android, Jellyfin, cats, riverpod, cabal, crystal and dune on 2026-07-17), not because they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.
