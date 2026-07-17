@@ -66,7 +66,7 @@ Or install the current PyPI package in an isolated virtual environment:
 ```bash
 python3 -m venv .patchrail-wheel-smoke
 . .patchrail-wheel-smoke/bin/activate
-python -m pip install patchrail==0.1.1
+python -m pip install patchrail
 patchrail --help
 ```
 

@@ -41,7 +41,7 @@ Run a local PatchRail pilot on one failed CI log:
    uvx --from git+https://github.com/patchrail/patchrail patchrail --help
    python3 -m venv .patchrail-wheel-smoke
    . .patchrail-wheel-smoke/bin/activate
-   python -m pip install patchrail==0.1.1
+   python -m pip install patchrail
    ```
 
 2. Check the safety posture:

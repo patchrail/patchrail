@@ -4,6 +4,15 @@
 
 ### Fixed
 
+- **The quickstart and pilot docs now install the *current* PyPI package instead of a long-stale
+  pin.** The isolated-venv examples were written as `python -m pip install patchrail==0.1.1` back
+  when `0.1.1` was the published release and never bumped since, so a maintainer copy-pasting the
+  quickstart's "install the current PyPI package" step actually got a six-release-old classifier
+  that no longer matches the README's `# patchrail 0.7.3`. They now run the unpinned
+  `python -m pip install patchrail`, which resolves to whatever PyPI currently serves and stays
+  correct across future releases. The dated `2026-06-12` clean-install evidence records keep their
+  historical `0.1.1` pin, since they document what was actually verified on that date.
+
 - **A make-driven OCaml test suite no longer reads as a C/C++ build when a cache warning outscores
   the make line.** The Crystal fix above demotes the bare `make: *** [target] Error N` recipe line
   while `cpp_build_failure` is the best match — but that deferral never runs if a benign warning
