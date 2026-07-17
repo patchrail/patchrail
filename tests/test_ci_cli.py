@@ -1372,7 +1372,8 @@ class PatchRailCITests(unittest.TestCase):
                 "java_build_failure": {"failed": 0, "passed": 10, "total_cases": 10},
                 "javascript_lint": {"failed": 0, "passed": 11, "total_cases": 11},
                 "node_dependency_install": {"failed": 0, "passed": 22, "total_cases": 22},
-                "php_composer_failure": {"failed": 0, "passed": 6, "total_cases": 6},
+                "php_composer_failure": {"failed": 0, "passed": 5, "total_cases": 5},
+                "unknown": {"failed": 0, "passed": 1, "total_cases": 1},
                 "python_dependency_resolution": {"failed": 0, "passed": 28, "total_cases": 28},
                 "python_test_failure": {"failed": 0, "passed": 11, "total_cases": 11},
                 "ruby_bundle_failure": {"failed": 0, "passed": 12, "total_cases": 12},
@@ -1412,6 +1413,7 @@ class PatchRailCITests(unittest.TestCase):
                 "javascript_lint",
                 "node_dependency_install",
                 "php_composer_failure",
+                "unknown",
                 "python_dependency_resolution",
                 "python_test_failure",
                 "ruby_bundle_failure",
@@ -1547,7 +1549,7 @@ class PatchRailCITests(unittest.TestCase):
             failure["failure_class"]: failure
             for failure in fail_payload["coverage_gate"]["failures"]
         }
-        self.assertEqual(failing_classes["php_composer_failure"]["total_cases"], 6)
+        self.assertEqual(failing_classes["php_composer_failure"]["total_cases"], 5)
         self.assertEqual(failing_classes["php_composer_failure"]["minimum_cases"], 7)
 
     def test_ci_benchmark_rejects_negative_coverage_gate(self) -> None:

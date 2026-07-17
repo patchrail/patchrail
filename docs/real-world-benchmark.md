@@ -3,10 +3,10 @@
 The fixture zoo (`examples/ci-triage`, 223 logs) says PatchRail is right 223 times out of 223. That
 number is worth exactly nothing to you: we wrote both the logs and the answers.
 
-This page is the other benchmark. Eleven **real failed CI runs from public repositories** — pandas,
-deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React — with
-their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
-Every verdict below is the output of a command you can run yourself — including the three where the
+This page is the other benchmark. Twelve **real failed CI runs from public repositories** — pandas,
+deno, svelte, Home Assistant, Prometheus, Grafana, ruff, PyTorch, Envoy, containerd, React, Symfony —
+with their logs committed to this repo unmodified, exactly as `gh run view --log-failed` returned them.
+Every verdict below is the output of a command you can run yourself — including the five where the
 honest answer is **`unknown`**, one of them because the failure never made it into the log.
 
 ## Reproduce it
@@ -27,11 +27,11 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the most recent: the pandas fix (#347) landed
-on `main` after 0.7.3 was cut and ships in the next release, so it is the one row where `main` is
-ahead of `pip install patchrail`. On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main`
-return the identical verdict, and the CLI and action changes merged since (#364–#373) moved none of
-them.
+serves **0.7.3** today and ships every fix below except the two most recent: the pandas fix (#347)
+and the Symfony fix landed on `main` after 0.7.3 was cut and ship in the next release, so they are
+the two rows where `main` is ahead of `pip install patchrail` (`0.7.3` returns the old verdict on
+both). On the other ten logs, re-measured 2026-07-17, `0.7.3` and `main` return the identical
+verdict, and the CLI and action changes merged since (#364–#373) moved none of them.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
@@ -46,15 +46,17 @@ them.
 | [envoy](https://github.com/envoyproxy/envoy/actions/runs/29363920524) | one directory under its coverage threshold | `ci_job_timeout` 0.53 | `code_coverage_threshold` 0.53 | ✅ fixed |
 | [containerd](https://github.com/containerd/containerd/actions/runs/29358848438) | a Go integration test failed (`TestContainerCgroupWritable`) | `runner_resource_exhaustion` 0.89 | `go_test_failure` 0.71 | ✅ fixed |
 | [React](https://github.com/facebook/react/actions/runs/29335289512) | a file was not `prettier`-formatted | `node_dependency_install` 0.53 | `javascript_lint` 0.53 | ✅ fixed |
+| [Symfony](https://github.com/symfony/symfony/actions/runs/29551386048) | a PHPUnit assertion in `ErrorHandler`, after `composer` had succeeded | `php_composer_failure` 0.95 | `unknown` 0.15 | ✅ fixed ([#377](https://github.com/patchrail/patchrail/issues/377)) |
 
-Three of the eleven were classified identically before and after. That is the point of showing them:
+Three of the twelve were classified identically before and after. That is the point of showing them:
 the fixes below were narrow enough not to disturb the logs that already worked.
 
 ## Where PatchRail stops at `unknown`
 
-As of this measurement, none of the eleven is confidently wrong. Three answer `unknown` — ruff and
-svelte because PatchRail has no class for what broke, and pandas because the failure is not in the
-log at all. `unknown` there is a limit, not a diagnosis, and the honest thing to say.
+As of this measurement, none of the twelve is confidently wrong. Five answer `unknown` — ruff, svelte
+and Symfony because PatchRail has no class for what broke, pytorch because a lint runner never wrote
+the report its `jq` step then failed to read, and pandas because the failure is not in the log at all.
+`unknown` there is a limit, not a diagnosis, and the honest thing to say.
 
 ### pandas — a package list is not a test run ([#347](https://github.com/patchrail/patchrail/issues/347))
 
@@ -276,6 +278,37 @@ matches, while a token that really is unset (`GITHUB_TOKEN is not set`) still do
 precedes it. Left with no witness, the log answers `unknown` and hands the `jq` failure back: honest,
 because PatchRail has no class for a lint runner that never produced its report.
 
+### Symfony — `php_composer_failure` → `unknown` ([#377](https://github.com/patchrail/patchrail/issues/377))
+
+A PHPUnit assertion that failed is not a Composer that failed.
+
+Symfony's `Unit Tests (8.3)` job locked, installed and autoloaded its dependencies cleanly, ran the
+suite, and one assertion in `src/Symfony/Component/ErrorHandler` came out wrong:
+
+```
+Testing src/Symfony/Component/ErrorHandler
+There was 1 failure:
+1) Symfony\Component\ErrorHandler\Tests\Error\FatalErrorTest::testGetTraceWithoutTraceArgs
+Failed asserting that an array has the key 'args'.
+FAILURES!
+Tests: 128, Assertions: 379, Failures: 1, Skipped: 2.
+##[error]KO src/Symfony/Component/ErrorHandler
+```
+
+PatchRail answered `php_composer_failure` at **0.95** — telling a maintainer whose `composer update`
+had gone green to go debug dependency installation. The rule was carrying PHPUnit's own verdict
+markers — `FAILURES!`, `Failed asserting`, the `Tests: … Failures:` summary — as if a failing test
+were a failing install, and it also counted the bare `composer install` / `composer update` commands,
+which nearly every PHP job runs whether or not anything breaks (Symfony echoes both as setup).
+
+None of those is a Composer failure. The rule now witnesses only genuine dependency errors — an
+unresolvable requirement, a platform mismatch, a lockfile that has drifted — and the autoload
+`Class … not found`. With the test-verdict markers and the setup commands gone, a plain assertion
+failure carries nothing here and the log answers `unknown`: PatchRail has no PHP test-failure class,
+so `unknown` is the honest ceiling, the same one ruff and svelte land on. A real composer failure is
+untouched — `Your requirements could not be resolved`, `requires php`, the lockfile-drift warning all
+still carry the rule at full confidence, and the five committed composer fixtures still pass.
+
 ### httpx and prefect — pytest's own verdict ([#320](https://github.com/patchrail/patchrail/pull/320), `93b6391`)
 
 Not in the table above (we no longer hold those logs), but the same shape and the reason two of the
@@ -293,6 +326,7 @@ that matched a real error.
 - `--log-failed` returns the failed job's steps, and — as pandas shows — sometimes the failure is not
   in them. PatchRail cannot classify what it was not given, and should say `unknown` when that
   happens. For pandas, it now does ([#347](https://github.com/patchrail/patchrail/issues/347)).
-- Eleven logs is not a statistic. It is a set of cases you can check by hand, chosen because they
-  were the failed runs sitting in these repos on 2026-07-14, not because they flattered the tool.
+- Twelve logs is not a statistic. It is a set of cases you can check by hand, chosen because they
+  were the failed runs sitting in these repos on 2026-07-14 (and Symfony on 2026-07-17), not because
+  they flattered the tool.
 - Every number here is the output of a command in this page, against a file in this repo. Re-run them.

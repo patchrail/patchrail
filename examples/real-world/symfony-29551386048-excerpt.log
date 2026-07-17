@@ -1,0 +1,34 @@
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:24.3475656Z   COMPOSER_UP: composer update --no-progress --ansi --ignore-platform-req=php+
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:24.3601203Z ##[group]composer update
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6173708Z   - Installing sebastian/comparator (4.0.10): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6176483Z   - Installing sebastian/object-reflector (2.0.4): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6179307Z   - Installing sebastian/global-state (5.0.8): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6182121Z   - Installing sebastian/object-enumerator (4.0.4): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6184842Z   - Installing sebastian/resource-operations (3.0.4): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6187670Z   - Installing sebastian/type (3.2.1): Extracting archive
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.6204185Z   - Installing symfony/phpunit-bridge (9.6.99): Symlinking from ../../vendor/symfony/phpunit-bridge
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:33.9561240Z Generating optimized autoload files
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:02:34.0881132Z 25 packages you are using are looking for funding.
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7845567Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7858537Z Testing /home/runner/work/symfony/symfony/src/Symfony/Component/ErrorHandler
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7876543Z ...S.......................F..............S....................  63 / 128 ( 49%)
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7905758Z ............................................................... 126 / 128 ( 98%)
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7935755Z ..                                                              128 / 128 (100%)
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7965413Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.7995725Z Time: 00:02.721, Memory: 16.00 MB
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8055409Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8085875Z There was 1 failure:
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8115402Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8151857Z 1) Symfony\Component\ErrorHandler\Tests\Error\FatalErrorTest::testGetTraceWithoutTraceArgs
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8175751Z Failed asserting that an array has the key 'args'.
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8205392Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8236058Z /home/runner/work/symfony/symfony/src/Symfony/Component/ErrorHandler/Tests/Error/FatalErrorTest.php:38
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8265968Z /home/runner/work/symfony/symfony/src/Symfony/Component/ErrorHandler/Tests/Error/FatalErrorTest.php:37
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8295447Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8326803Z FAILURES!
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8327679Z Tests: 128, Assertions: 379, Failures: 1, Skipped: 2.
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8328450Z Job exited with: 1
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8328657Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8374181Z ##[error]KO src/Symfony/Component/ErrorHandler
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:03:17.8383969Z 
+Unit Tests (8.3)	UNKNOWN STEP	2026-07-17T03:04:07.7921791Z ##[error]Process completed with exit code 1.

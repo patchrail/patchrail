@@ -884,26 +884,30 @@ RULES: list[dict[str, Any]] = [
     },
     {
         "failure_class": "php_composer_failure",
-        "likely_subsystem": "PHP Composer dependency installation or PHPUnit lifecycle",
+        "likely_subsystem": "PHP Composer dependency resolution or autoload",
+        # PHPUnit running and reporting a failed assertion is not a Composer failure.
+        # `FAILURES!`, `Failed asserting` and the `Tests: ... Failures:` summary are the
+        # verdict of tests that ran; folding them in here labelled a symfony/symfony run
+        # whose `composer update` step SUCCEEDED as `php_composer_failure` at 0.95 --
+        # sending the maintainer to debug dependency installation for a failed assertion in
+        # src/Symfony/Component/ErrorHandler. The bare `composer install`/`composer update`
+        # commands run green in nearly every PHP job (symfony echoes both as setup), so
+        # their presence is not a failure either. This rule now witnesses only genuine
+        # resolution/lock/platform errors and the autoload `Class ... not found`; a plain
+        # PHPUnit test failure carries no signal here and lands on `unknown`, the honest
+        # ceiling until PatchRail has a PHP test-failure class.
         "patterns": [
-            r"\bcomposer install\b",
-            r"\bcomposer update\b",
             r"Your requirements could not be resolved to an installable set of packages",
             r"requires php",
             r"Problem \d+",
             r"lock file is not up to date",
             r"not present in the lock file",
-            r"\bvendor/bin/phpunit\b",
-            r"\bphpunit\b",
-            r"FAILURES!",
-            r"Tests: .*Failures?:",
-            r"Failed asserting",
             r"Class .* not found",
         ],
         "reproduction_command": "composer install && vendor/bin/phpunit",
         "minimal_repair_strategy": (
-            "Reproduce the failing Composer or PHPUnit command, then fix the narrow "
-            "composer.json, lockfile, PHP platform, autoload, or test drift before rerunning it."
+            "Reproduce the failing Composer command, then fix the narrow composer.json, "
+            "lockfile, PHP platform, or autoload map before rerunning it."
         ),
     },
     {

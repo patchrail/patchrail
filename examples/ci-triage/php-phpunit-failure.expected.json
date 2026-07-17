@@ -1,4 +1,4 @@
 {
-  "failure_class": "php_composer_failure",
-  "minimum_confidence": 0.85
+  "failure_class": "unknown",
+  "minimum_confidence": 0.15
 }
