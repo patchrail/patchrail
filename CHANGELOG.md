@@ -4,6 +4,11 @@
 
 ### Changed
 
+- **`patchrail --help` now points to the project home.** A dev who installed the CLI from PyPI (the
+  common path — most installs arrive through CI, not a repo visit) had no in-tool pointer back to
+  the source: `--help` carried no link and `--version` prints only the version string. The
+  top-level help now ends with `Project home: https://github.com/patchrail/patchrail`, standard CLI
+  practice and a neutral line with no promotional language. Help text only; no behaviour change.
 - **PyPI search metadata now reflects how maintainers actually search for a CI-triage tool.** The
   package `keywords` were a five-term list (`ci`, `open-source`, `maintenance`, `github-actions`,
   `triage`) and the trove `classifiers` omitted several standard, applicable facets, so the project

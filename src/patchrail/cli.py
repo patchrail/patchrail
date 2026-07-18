@@ -4959,6 +4959,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="patchrail",
         description="Local-first maintainer automation for open-source projects.",
+        epilog="Project home: https://github.com/patchrail/patchrail",
     )
     parser.add_argument(
         "-V",

@@ -861,6 +861,18 @@ class PatchRailCITests(unittest.TestCase):
                 self.assertEqual(ctx.exception.code, 0)
                 self.assertEqual(stdout.getvalue().strip(), f"patchrail {__version__}")
 
+    def test_help_points_to_project_home(self) -> None:
+        # A dev evaluating the tool from `pip install` should be able to find
+        # where it lives without a browser; the top-level help epilog carries
+        # the project URL (standard CLI practice, no promotional language).
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            with self.assertRaises(SystemExit) as ctx:
+                main(["--help"])
+
+        self.assertEqual(ctx.exception.code, 0)
+        self.assertIn("https://github.com/patchrail/patchrail", stdout.getvalue())
+
     def test_ci_classify_emits_json_without_external_requirements(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             log = Path(tmpdir) / "failed.log"
