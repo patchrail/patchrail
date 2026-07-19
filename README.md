@@ -46,6 +46,15 @@ PatchRail is published on PyPI:
 pipx install patchrail
 ```
 
+Prefer not to install anything? With [uv](https://docs.astral.sh/uv/) you can run the
+same triage straight from PyPI — no install step, and it also reads from stdin:
+
+```bash
+uvx patchrail ci explain --log failed-ci.log
+# or pipe a run that just failed, no download step:
+gh run view <run-id> --log-failed --repo <owner/repo> | uvx patchrail ci explain
+```
+
 Confirm which release you have:
 
 ```bash
