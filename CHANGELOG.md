@@ -22,6 +22,19 @@
 
 ### Fixed
 
+- **A `Gateway Timeout (504)` with the status code in parentheses now reads as a transient network
+  failure instead of `unknown`.** expressjs/express's coverage step posts to coveralls.io, and its
+  run 29218121905 hit an upstream outage: `Posting coverage data to https://coveralls.io/... ` →
+  `HTTP error:` → `Error: Gateway Timeout (504)`. The `network_transient_failure` class already
+  carried a `504 Gateway Timeout` pattern, but that only matches the HTTP status-line ordering
+  (code first); the coveralls reporter — like many HTTP clients — prints the reason phrase first
+  with the code trailing in parentheses, so a textbook 504 matched nothing and fell through to
+  `unknown` (0.15). PatchRail now also recognises the reverse-order `Gateway Timeout (504)` (and its
+  `Bad Gateway (502)` / `Service Unavailable (503)` siblings), which are just as terminal, so the
+  run settles on `network_transient_failure` (0.53) with the re-run-and-probe-endpoint reproduction.
+  These are unambiguous upstream 5xx phrasings, so no existing fixture changes class. Regression
+  excerpt at `examples/real-world/express-29218121905-excerpt.log`.
+
 - **A `mypy` declared in a pixi/conda dependency manifest no longer reads as a type-check failure.**
   pandas-dev/pandas resolves its dev toolchain per environment with `pixi`, which prints one
   bill-of-materials line per environment — `Dependencies: python, numpy, ..., mypy, scipy-stubs,
