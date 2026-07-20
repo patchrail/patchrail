@@ -1367,6 +1367,18 @@ _MERE_MENTION_LINE = re.compile(
         | \s* " [^"]+ " \s* :              # a key in a pretty-printed JSON config blob
         | \s* (?:Linking|Unlinking|Extracting|Downloading\ and\ Extracting)\ +\S  # conda link phase
         | \s* -\ +[\w.\-]+ \s* [=<>!~]=? \s* [\d*]   # env.yml spec echo: `- mypy=1.17.1`
+        | \s* (?:\w+\ )? Dependencies \s* :   # pixi/rattler env resolve prints one bill-of-materials
+            \s* [\w.\-]+ (?: \s*,\s* [\w.\-]+ )* \s* $  # line per environment: `Dependencies: python,
+                                           # numpy, ..., mypy, ...` (and `PyPI Dependencies: ...`).
+                                           # pandas-dev/pandas resolves ~20 of these before any job runs;
+                                           # its `Pyarrow Nightly` env update (run 29719453153) died in
+                                           # `pixi` (`Failed to update PyPI packages`), and `mypy` is one
+                                           # declared dev dependency in the list -- never invoked. That
+                                           # ONE line was `\bmypy\b`'s only witness, so the pixi failure
+                                           # came out python_type_check at 0.53. Matched only when the
+                                           # whole tail is a comma-list of package tokens: a real resolver
+                                           # error carries prose (`could not resolve x because ...`), a
+                                           # path, or a code -- never a bare manifest.
         | (?-i:                            # conda/mamba package table -- see below
             (?!(?:ERROR|ERR|FAIL|FAILED|FAILURE|FATAL|PANIC|WARN|WARNING|CRITICAL)\b)
             \s* [+-]?\ * [\w.\-]+ (?: \s{2,} | \s*[=<>!~]=?\s* ) v?\d[\w.+!]*

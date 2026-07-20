@@ -1,0 +1,9 @@
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:52.0190200Z ^[[1m       Dependencies^[[0m: python, numpy, pytest, pytest-xdist, hypothesis, pytest-cov, pyarrow, adbc-driver-postgresql, adbc-driver-sqlite, beautifulsoup4, blosc, bottleneck, fastparquet, fsspec, html5lib, gcsfs, jinja2, lxml, matplotlib, numba, numexpr, odfpy, openpyxl, psycopg2, pyiceberg, pymysql, pyreadstat, pytables, python-calamine, pytz, pyxlsb, s3fs, scipy, sqlalchemy, tabulate, xarray, xlrd, xlsxwriter, zstandard, pre-commit, ipython, mypy, scipy-stubs, types-python-dateutil, types-PyMySQL, types-pytz, types-PyYAML, c-compiler, cxx-compiler, versioneer, cython, meson, meson-python, pip, python-dateutil
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3704970Z Error:   ^[[31m×^[[0m Failed to update PyPI packages for environment '^[[35mpyarrow-nightly^[[0m'
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3705939Z ^[[31m  ├─▶ ^[[0mFailed to prepare distributions
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3706595Z ^[[31m  ├─▶ ^[[0mFailed to download `pyarrow==26.0.0.dev1`
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3708215Z ^[[31m  ├─▶ ^[[0mFailed to fetch: `https://pypi.anaconda.org/scientific-python-nightly-wheels/simple/pyarrow/26.0.0.dev1/pyarrow-26.0.0.dev1-cp313-cp313-manylinux_2_28_x86_64.whl`
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3710694Z ^[[31m  ╰─▶ ^[[0mHTTP status client error (404 Not Found) for url (https://pypi.anaconda.org/scientific-python-nightly-wheels/simple/pyarrow/26.0.0.dev1/pyarrow-26.0.0.dev1-cp313-cp313-manylinux_2_28_x86_64.whl)
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3711985Z 
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3733537Z ##[endgroup]
+Pyarrow Nightly	UNKNOWN STEP	2026-07-20T05:35:56.3757387Z ##[error]The process '/home/runner/.pixi/bin/pixi' failed with exit code 1

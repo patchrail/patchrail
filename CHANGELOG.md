@@ -22,6 +22,21 @@
 
 ### Fixed
 
+- **A `mypy` declared in a pixi/conda dependency manifest no longer reads as a type-check failure.**
+  pandas-dev/pandas resolves its dev toolchain per environment with `pixi`, which prints one
+  bill-of-materials line per environment — `Dependencies: python, numpy, ..., mypy, scipy-stubs,
+  ...` — before any job runs. Its `Pyarrow Nightly` env update (run 29719453153) died inside `pixi`
+  (`Failed to update PyPI packages for environment 'pyarrow-nightly'`, a 404 on a nightly wheel),
+  but `mypy` sitting in that manifest was `\bmypy\b`'s only witness, so PatchRail reported
+  `python_type_check` at 0.53 and pointed a maintainer at `mypy . || pyright` for a dependency
+  download that never ran the type checker. The classifier already discounts conda's `- mypy=1.17.1`
+  env.yml spec and its package table as bills of materials; it now also discounts the pixi/rattler
+  `Dependencies:` / `PyPI Dependencies:` listing — matched only when the whole tail is a
+  comma-separated list of package tokens, so a real resolver error (which carries prose, a path or a
+  code) is untouched. With mypy only ever declared, the run now settles on `unknown` (decline to
+  auto-repair). A `mypy` that actually ran and failed still trips `python_type_check` on its real
+  diagnostic. Regression excerpt at `examples/real-world/pandas-29719453153-excerpt.log`.
+
 - **The quickstart and pilot docs now install the *current* PyPI package instead of a long-stale
   pin.** The isolated-venv examples were written as `python -m pip install patchrail==0.1.1` back
   when `0.1.1` was the published release and never bumped since, so a maintainer copy-pasting the
