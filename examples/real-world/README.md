@@ -10,6 +10,7 @@ against the version PyPI serves and against `main`.
 | file | repo | run |
 |---|---|---|
 | `pandas-29342614636.log` | pandas-dev/pandas | [29342614636](https://github.com/pandas-dev/pandas/actions/runs/29342614636) |
+| `express-29218121905-excerpt.log` | expressjs/express | [29218121905](https://github.com/expressjs/express/actions/runs/29218121905) (excerpt: the `ci / coverage` job's coveralls upload — the `Posting coverage data` line and the `Error: Gateway Timeout (504)` that ended it — kept verbatim, caret-notation ANSI stripped, and pinned by `tests/test_gateway_timeout_parens_is_network_transient.py`) |
 | `deno-29349357779-excerpt.log` | denoland/deno | 29349357779 (deleted by GitHub; excerpt pinned by `tests/test_assertion_report_noise.py`) |
 | `svelte-29330826741.log` | sveltejs/svelte | [29330826741](https://github.com/sveltejs/svelte/actions/runs/29330826741) |
 | `home-assistant-29350290194.log` | home-assistant/core | [29350290194](https://github.com/home-assistant/core/actions/runs/29350290194) |

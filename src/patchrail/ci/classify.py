@@ -115,6 +115,14 @@ RULES: list[dict[str, Any]] = [
             r"503 Service Unavailable",
             r"502 Bad Gateway",
             r"504 Gateway Time-?out",
+            # HTTP clients that print the reason phrase with the code trailing in
+            # parentheses -- `Error: Gateway Timeout (504)` from the coveralls
+            # reporter (expressjs/express run 29218121905) -- never matched the
+            # status-line ordering above, so a textbook upstream 504 fell through
+            # to `unknown`. The reverse-order form is just as terminal.
+            r"Gateway Time-?out \(504\)",
+            r"Bad Gateway \(502\)",
+            r"Service Unavailable \(503\)",
             r"The remote end hung up unexpectedly",
             r"RPC failed",
             r"fetch-pack: unexpected disconnect",
