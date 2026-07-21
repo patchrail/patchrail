@@ -28,12 +28,12 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.3** today and ships every fix below except the six most recent: the pandas fix (#347),
-the Symfony fix (#377), the Discourse fix (#379), the riverpod fix, the cabal fix and the crystal fix
-landed on `main` after 0.7.3 was cut and ship in the next release, so they are the six rows where
-`main` is ahead of `pip install patchrail` (`0.7.3` returns the old verdict on all six). On the other fifteen logs,
-re-measured 2026-07-17, `0.7.3` and `main` return the identical verdict, and the CLI and action changes
-merged since (#364–#373) moved none of them.
+serves **0.7.4** today and ships every fix below. The six that `main` still held when this table was
+last measured — the pandas fix (#347), the Symfony fix (#377), the Discourse fix (#379), the riverpod
+fix, the cabal fix and the crystal fix — were cut into 0.7.4 on 2026-07-22, so no row is a case where
+`main` is ahead of `pip install patchrail`. The `after` column was measured against `main` on
+2026-07-17; the classifier fixes merged since (#390–#395, each of which removes a false positive on a
+log that is not in this table) have not been re-measured here.
 
 | repo (run) | what actually failed | before | after | |
 |---|---|---|---|---|
