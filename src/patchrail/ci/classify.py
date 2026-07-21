@@ -1457,6 +1457,50 @@ def _runner_script_echo_bounds(raw: str, text: str) -> list[tuple[int, int]]:
     return bounds
 
 
+# `git checkout <ref>` prints `error: pathspec '<ref>' did not match any file(s) known to git`
+# when the ref is not present -- and CI scripts trip that benignly all the time, then recover.
+# A fork/enterprise dual-checkout tries the PR branch in the counterpart repo, misses, and falls
+# back: grafana/grafana's lint-knip job (run 29806261731) logs
+#
+#     error: pathspec 'hugoh/add-enable-disable-app-plugin-e2e-tests' did not match ...
+#     Already on 'main'
+#     checked out main
+#     Checkout succeeded, breaking retry loop
+#
+# and the job then ran on and died 1200 lines later on `knip`. A pathspec miss the log goes on
+# to RECOVER from -- git confirms the checkout right after (`Already on`, `Switched to`, `HEAD is
+# now at`) or a retry wrapper announces it (`Checkout succeeded`, `checked out`) -- is not why
+# the job failed, so it should not carry `git_checkout_failure` on its own. Only this one
+# non-fatal `error:` recovers; the terminal git failures (`fatal: reference is not a tree`,
+# `fatal: repository ... not found`, a `smudge filter lfs failed`) do not print a recovery line
+# after them, so a genuine checkout failure still witnesses. Scoring is untouched -- the pathspec
+# still corroborates a real checkout failure that also tripped a fatal signal.
+_PATHSPEC_MISS_LINE = re.compile(r"error: pathspec '.*' did not match", re.IGNORECASE)
+_CHECKOUT_RECOVERED_LINE = re.compile(
+    r"Checkout succeeded|checked out\b|Already on |Switched to |HEAD is now at ",
+    re.IGNORECASE,
+)
+_CHECKOUT_RECOVERY_WINDOW = 8
+
+
+def _recovered_checkout_bounds(text: str) -> list[tuple[int, int]]:
+    """Spans of `pathspec did not match` lines the log then recovers the checkout from."""
+    lines = text.splitlines(keepends=True)
+    starts = []
+    offset = 0
+    for line in lines:
+        starts.append(offset)
+        offset += len(line)
+    bounds = []
+    for index, line in enumerate(lines):
+        if not _PATHSPEC_MISS_LINE.search(line):
+            continue
+        window = lines[index + 1 : index + 1 + _CHECKOUT_RECOVERY_WINDOW]
+        if any(_CHECKOUT_RECOVERED_LINE.search(following) for following in window):
+            bounds.append((starts[index], starts[index] + len(line)))
+    return bounds
+
+
 def _line_bounds(text: str, pattern: re.Pattern[str]) -> list[tuple[int, int]]:
     """Character spans of the lines in ``text`` that ``pattern`` matches."""
     bounds = []
@@ -2008,6 +2052,20 @@ BENIGN_WARNING_PATTERNS = frozenset(
         r"No files were found with the provided path",
         r"Failed to save:? .*[Cc]ache",
         r"Unable to reserve cache",
+        # Yarn Berry tags EVERY line it prints -- success, info, warning, error -- with a
+        # `YNxxxx` code, so the bare code witnesses that yarn spoke, not that the install broke.
+        # `YN0000` is literally "Done"/"Completed"; the peer-dependency family (`YN0002` missing
+        # peer dep, `YN0060` incompatible dependency, `YN0086` peer deps incorrectly met) are
+        # warnings it prints while installing perfectly well. grafana/grafana's lint-knip job
+        # (run 29806261731) installed cleanly (`YN0000: Done with warnings`) and then failed on
+        # `knip` (unused dependencies) and a `yarn constraints` check -- yet `YN\d{4}`, read off
+        # those peer warnings and joined by `peer dep`, scored it `node_dependency_install` at
+        # 0.71 and handed the maintainer `corepack pnpm install` (the wrong package manager too)
+        # as the way to reproduce a working install. A genuine install failure is untouched: it
+        # trips a terminal signal (`YN0028`'s "lockfile would have been modified by this
+        # install", `ERESOLVE`, "error An unexpected error occurred") that stays a verdict on its
+        # own, so the code rides along only as corroboration -- like `peer dep` beside it.
+        r"YN\d{4}",
     }
 )
 
@@ -2134,6 +2192,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         _non_failure_line_bounds(text)
         + _runner_script_echo_bounds(raw, text)
         + _assertion_report_bounds(text)
+        + _recovered_checkout_bounds(text)
     )
     witnessing = {
         rule["failure_class"]: _signals_witnessing_failure(text, signals, noise)
