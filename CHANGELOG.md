@@ -22,6 +22,20 @@
 
 ### Fixed
 
+- **`debconf: (TERM is not set, ...)` and other unset terminal/locale variables no longer read as a
+  missing repository secret.** `secrets_or_permissions_failure` watches for `SCREAMING_CASE is not
+  set` because that is how a job reports a missing credential — but standard terminal and locale
+  environment variables (`TERM`, `DEBIAN_FRONTEND`, `LANG`, `LC_*`, …) announce themselves the same
+  way, and headless runners leave them unset by design. rails/rails run 29648807728 failed on a Ruby
+  `SyntaxError`, yet its one secrets witness (0.53) was `debconf: (TERM is not set, so the dialog
+  frontend is not usable.)`, printed while `apt` provisioned the build image — so PatchRail would
+  have sent a maintainer hunting for a missing token over a cosmetic apt notice. Those terminal and
+  locale variable names are now excluded by name, so the benign tooling chatter carries no secrets
+  witness, while a credential that really is unset (`GITHUB_TOKEN is not set`,
+  `STRIPE_SECRET_KEY is not set`) still matches. The `Policy CMP0148 is not set` (CMake) guard is
+  unchanged, no benchmark fixture changes class, and a prefix collision like `TERMINUS_TOKEN is not
+  set` is untouched.
+
 - **A `Gateway Timeout (504)` with the status code in parentheses now reads as a transient network
   failure instead of `unknown`.** expressjs/express's coverage step posts to coveralls.io, and its
   run 29218121905 hit an upstream outage: `Posting coverage data to https://coveralls.io/... ` →
