@@ -644,7 +644,20 @@ RULES: list[dict[str, Any]] = [
             # never a credential, so the subject may not be one CMake introduced; a token that
             # really is unset (`GITHUB_TOKEN is not set`) is untouched, because nothing precedes
             # it. Left with no witness, the log answers `unknown` and hands the failure back.
-            r"\b(?<!Policy )(?-i:[A-Z][A-Z0-9_]{2,})\s+is not set\b",
+            #
+            # Standard terminal/locale environment variables report themselves the same way, and
+            # headless runners leave them unset by design -- they are never repository secrets.
+            # rails/rails run 29648807728 printed `debconf: (TERM is not set, so the dialog
+            # frontend is not usable.)` while apt provisioned the build image; on that lone
+            # witness we answered `secrets_or_permissions_failure` at 0.53 and would have sent a
+            # maintainer hunting for a missing credential over a cosmetic apt/debconf notice.
+            # `TERM`, `DEBIAN_FRONTEND`, and their siblings are excluded by name so the benign
+            # tooling chatter carries no witness, while a real secret in SCREAMING_CASE
+            # (`GITHUB_TOKEN is not set`, `STRIPE_SECRET_KEY is not set`) still matches.
+            r"\b(?<!Policy )"
+            r"(?!(?-i:(?:TERM|DEBIAN_FRONTEND|DISPLAY|COLORTERM|LANG|LANGUAGE|LC_[A-Z]+|TZ|"
+            r"PAGER|GIT_PAGER|EDITOR|VISUAL|SHELL|TMPDIR|NO_COLOR)\b))"
+            r"(?-i:[A-Z][A-Z0-9_]{2,})\s+is not set\b",
             r"secret .* (?:is )?(?:not set|missing|empty|required)",
             r"\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}",
             r"context access might be invalid",
