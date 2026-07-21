@@ -22,6 +22,19 @@
 
 ### Fixed
 
+- **A verdict held up by nothing but invocations no longer reports diagnosis-level confidence.**
+  An invocation proves a tool ran; it never proves the tool failed. When every signal behind the
+  winning class is an invocation, the classifier has already looked for a rule that witnessed a
+  real error and found none — so it is handing back the name of the tool that happened to be
+  running when the job died. The count-based score said otherwise: rails/rails run 29648807728
+  dies on a Ruby `SyntaxError` that aborts `bin/rails`, no failure class covers it, and the three
+  Bundler invocations in the log (`bundle install`, which succeeded, `bundle exec`, `bundler`)
+  produced `ruby_bundle_failure` at **0.89** — sending a maintainer to debug a Gemfile that is
+  fine. Such a verdict now caps at **0.3**: still printed, because one lead beats none, but no
+  longer sold as an answer. The guard is on the mechanism, not on any ecosystem — a rule that
+  actually watched something fail matches a signal outside the invocation set and is untouched,
+  so legitimate last resorts (a bare `pytest` invocation, for one) keep both their class and
+  their confidence. All 223 fixtures classify identically, class and confidence alike.
 - **A yarn install that finishes with warnings is no longer read as a broken dependency install,
   and a `git checkout` that recovers is no longer read as a checkout failure.** yarn Berry tags
   every line it prints — success, info, warning, error — with a `YNxxxx` code, so `node_dependency_install`

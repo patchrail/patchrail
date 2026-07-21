@@ -2101,6 +2101,11 @@ MENTION_ONLY_PATTERNS = frozenset(
 # that it failed.
 NON_FAILURE_PATTERNS = INVOCATION_ONLY_PATTERNS | BENIGN_WARNING_PATTERNS | MENTION_ONLY_PATTERNS
 
+# What a verdict is worth when invocations are the only thing holding it up: a lead, printed
+# below every fixture floor in the zoo (0.7), and plainly above the 0.15 of a decline. See the
+# guard next to the confidence computation in `classify_ci_log`.
+_INVOCATION_ONLY_CONFIDENCE = 0.3
+
 
 def _is_non_failure_only(signals: list[str]) -> bool:
     return bool(signals) and set(signals) <= NON_FAILURE_PATTERNS
@@ -2461,7 +2466,26 @@ def classify_ci_log(text: str) -> dict[str, Any]:
             result["likely_successful_run"] = True
         return result
 
+    # An invocation proves a tool RAN. It never proves the tool FAILED. A verdict every one of
+    # whose signals is an invocation therefore survived only as a LAST RESORT: the deferral
+    # above already looked for a rule that witnessed a real error and found none, so what we
+    # are handing back is the name of the tool that happened to be running when the job died.
+    # That is a lead worth printing -- it is the only thing the log gave us -- but it is not a
+    # diagnosis, and seeing the same command echoed three times does not make it one. The
+    # count-based score says otherwise: rails/rails run 29648807728 dies on a Ruby
+    # `SyntaxError` (`bin/rails aborted!`) that no class covers, and the only matches are
+    # `bundle install` (which succeeded), `bundle exec` and `bundler` -- three invocations,
+    # `ruby_bundle_failure` at 0.89, sending the maintainer to debug a Gemfile that is fine.
+    #
+    # So the class stands and the confidence tells the truth about what carried it. The guard
+    # is on the MECHANISM, not on any log: nothing here mentions Ruby, and every legitimate
+    # last resort keeps its verdict -- apache/airflow's bare `pytest` still answers
+    # `python_test_failure`, just at the confidence a naming-only match earns. Any rule that
+    # actually watched something fail trips a signal outside INVOCATION_ONLY_PATTERNS and never
+    # reaches here, so no genuine verdict loses confidence.
     confidence = min(0.95, 0.35 + 0.18 * len(best_signals))
+    if all(signal in INVOCATION_ONLY_PATTERNS for signal in best_signals):
+        confidence = min(confidence, _INVOCATION_ONLY_CONFIDENCE)
     return {
         "schema_version": "patchrail.ci_result.v1",
         "failure_class": best_rule["failure_class"],
