@@ -1,0 +1,1164 @@
+check-pr-labels	UNKNOWN STEP	﻿2026-07-21T06:05:50.7568599Z Current runner version: '2.335.1'
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7594156Z ##[group]Runner Image Provisioner
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7595007Z Hosted Compute Agent
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7595666Z Version: 20260707.563
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7596280Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7596976Z Build Date: 2026-07-07T19:33:50Z
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7597715Z Worker ID: {be0f596a-bed4-489b-b950-05dafdc6b5a8}
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7598686Z Azure Region: eastus
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7599283Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7601126Z ##[group]Operating System
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7601759Z Ubuntu
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7602349Z 24.04.4
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7602876Z LTS
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7603400Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7604011Z ##[group]Runner Image
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7604665Z Image: ubuntu-24.04
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7605319Z Version: 20260714.240.1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7606677Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260714.240/images/ubuntu/Ubuntu2404-Readme.md
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7608761Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260714.240
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7609746Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7613033Z ##[group]GITHUB_TOKEN Permissions
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7615327Z Actions: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7616030Z ArtifactMetadata: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7616634Z Attestations: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7617214Z Checks: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7617830Z CodeQuality: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7618711Z Contents: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7619362Z CopilotRequests: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7619937Z Deployments: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7620545Z Discussions: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7621122Z Drives: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7621613Z Issues: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7622202Z Metadata: read
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7622822Z Models: read
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7623380Z Packages: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7623958Z Pages: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7624573Z PullRequests: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7625199Z RepositoryProjects: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7625796Z SecurityEvents: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7626337Z Statuses: write
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7626965Z VulnerabilityAlerts: read
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7627606Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7630236Z Secret source: Actions
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7631004Z Prepare workflow directory
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7952512Z Prepare all required actions
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:50.7990711Z Getting action download info
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.0240446Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.3534220Z Complete job name: check-pr-labels
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4214225Z ##[group]Run printenv
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4214778Z ^[[36;1mprintenv^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4291547Z shell: /usr/bin/bash -e {0}
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4292331Z env:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4425858Z   GITHUB_CONTEXT: {
+check-pr-labels	UNKNOWN STEP	  "token": "***",
+check-pr-labels	UNKNOWN STEP	  "job": "check-pr-labels",
+check-pr-labels	UNKNOWN STEP	  "ref": "refs/heads/trunk",
+check-pr-labels	UNKNOWN STEP	  "sha": "01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666",
+check-pr-labels	UNKNOWN STEP	  "repository": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	  "repository_owner": "apache",
+check-pr-labels	UNKNOWN STEP	  "repository_owner_id": "47359",
+check-pr-labels	UNKNOWN STEP	  "repositoryUrl": "git://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	  "run_id": "29805964231",
+check-pr-labels	UNKNOWN STEP	  "run_number": "50944",
+check-pr-labels	UNKNOWN STEP	  "retention_days": "90",
+check-pr-labels	UNKNOWN STEP	  "run_attempt": "1",
+check-pr-labels	UNKNOWN STEP	  "artifact_cache_size_limit": "10",
+check-pr-labels	UNKNOWN STEP	  "repository_visibility": "public",
+check-pr-labels	UNKNOWN STEP	  "actor_id": "6234750",
+check-pr-labels	UNKNOWN STEP	  "actor": "chia7712",
+check-pr-labels	UNKNOWN STEP	  "workflow": "Workflow Requested",
+check-pr-labels	UNKNOWN STEP	  "head_ref": "",
+check-pr-labels	UNKNOWN STEP	  "base_ref": "",
+check-pr-labels	UNKNOWN STEP	  "event_name": "workflow_run",
+check-pr-labels	UNKNOWN STEP	  "server_url": "https://github.com",
+check-pr-labels	UNKNOWN STEP	  "api_url": "https://api.github.com",
+check-pr-labels	UNKNOWN STEP	  "graphql_url": "https://api.github.com/graphql",
+check-pr-labels	UNKNOWN STEP	  "ref_name": "trunk",
+check-pr-labels	UNKNOWN STEP	  "ref_protected": true,
+check-pr-labels	UNKNOWN STEP	  "ref_type": "branch",
+check-pr-labels	UNKNOWN STEP	  "secret_source": "Actions",
+check-pr-labels	UNKNOWN STEP	  "event": {
+check-pr-labels	UNKNOWN STEP	    "action": "requested",
+check-pr-labels	UNKNOWN STEP	    "enterprise": {
+check-pr-labels	UNKNOWN STEP	      "avatar_url": "https://avatars.githubusercontent.com/b/212555?v=4",
+check-pr-labels	UNKNOWN STEP	      "created_at": "2024-08-17T07:54:05Z",
+check-pr-labels	UNKNOWN STEP	      "description": null,
+check-pr-labels	UNKNOWN STEP	      "html_url": "https://github.com/enterprises/the-asf",
+check-pr-labels	UNKNOWN STEP	      "id": 212555,
+check-pr-labels	UNKNOWN STEP	      "name": "The ASF",
+check-pr-labels	UNKNOWN STEP	      "node_id": "E_kgDOAAM-Sw",
+check-pr-labels	UNKNOWN STEP	      "slug": "the-asf",
+check-pr-labels	UNKNOWN STEP	      "updated_at": "2026-07-12T11:35:24Z",
+check-pr-labels	UNKNOWN STEP	      "website_url": null
+check-pr-labels	UNKNOWN STEP	    },
+check-pr-labels	UNKNOWN STEP	    "organization": {
+check-pr-labels	UNKNOWN STEP	      "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	      "description": "",
+check-pr-labels	UNKNOWN STEP	      "events_url": "https://api.github.com/orgs/apache/events",
+check-pr-labels	UNKNOWN STEP	      "hooks_url": "https://api.github.com/orgs/apache/hooks",
+check-pr-labels	UNKNOWN STEP	      "id": 47359,
+check-pr-labels	UNKNOWN STEP	      "issues_url": "https://api.github.com/orgs/apache/issues",
+check-pr-labels	UNKNOWN STEP	      "login": "apache",
+check-pr-labels	UNKNOWN STEP	      "members_url": "https://api.github.com/orgs/apache/members{/member}",
+check-pr-labels	UNKNOWN STEP	      "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	      "public_members_url": "https://api.github.com/orgs/apache/public_members{/member}",
+check-pr-labels	UNKNOWN STEP	      "repos_url": "https://api.github.com/orgs/apache/repos",
+check-pr-labels	UNKNOWN STEP	      "url": "https://api.github.com/orgs/apache"
+check-pr-labels	UNKNOWN STEP	    },
+check-pr-labels	UNKNOWN STEP	    "repository": {
+check-pr-labels	UNKNOWN STEP	      "allow_forking": true,
+check-pr-labels	UNKNOWN STEP	      "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	      "archived": false,
+check-pr-labels	UNKNOWN STEP	      "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	      "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	      "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	      "clone_url": "https://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	      "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	      "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	      "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	      "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	      "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	      "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	      "created_at": "2011-08-15T18:06:16Z",
+check-pr-labels	UNKNOWN STEP	      "custom_properties": {},
+check-pr-labels	UNKNOWN STEP	      "default_branch": "trunk",
+check-pr-labels	UNKNOWN STEP	      "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	      "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	      "disabled": false,
+check-pr-labels	UNKNOWN STEP	      "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	      "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	      "fork": false,
+check-pr-labels	UNKNOWN STEP	      "forks": 15366,
+check-pr-labels	UNKNOWN STEP	      "forks_count": 15366,
+check-pr-labels	UNKNOWN STEP	      "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	      "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	      "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	      "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	      "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	      "git_url": "git://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	      "has_discussions": false,
+check-pr-labels	UNKNOWN STEP	      "has_downloads": true,
+check-pr-labels	UNKNOWN STEP	      "has_issues": false,
+check-pr-labels	UNKNOWN STEP	      "has_pages": false,
+check-pr-labels	UNKNOWN STEP	      "has_projects": true,
+check-pr-labels	UNKNOWN STEP	      "has_pull_requests": true,
+check-pr-labels	UNKNOWN STEP	      "has_wiki": false,
+check-pr-labels	UNKNOWN STEP	      "homepage": "https://kafka.apache.org/",
+check-pr-labels	UNKNOWN STEP	      "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	      "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	      "id": 2211243,
+check-pr-labels	UNKNOWN STEP	      "is_template": false,
+check-pr-labels	UNKNOWN STEP	      "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	      "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	      "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	      "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	      "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	      "language": "Java",
+check-pr-labels	UNKNOWN STEP	      "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	      "license": {
+check-pr-labels	UNKNOWN STEP	        "key": "apache-2.0",
+check-pr-labels	UNKNOWN STEP	        "name": "Apache License 2.0",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDc6TGljZW5zZTI=",
+check-pr-labels	UNKNOWN STEP	        "spdx_id": "Apache-2.0",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/licenses/apache-2.0"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	      "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	      "mirror_url": null,
+check-pr-labels	UNKNOWN STEP	      "name": "kafka",
+check-pr-labels	UNKNOWN STEP	      "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	      "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	      "open_issues": 450,
+check-pr-labels	UNKNOWN STEP	      "open_issues_count": 450,
+check-pr-labels	UNKNOWN STEP	      "owner": {
+check-pr-labels	UNKNOWN STEP	        "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	        "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	        "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	        "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	        "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	        "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	        "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	        "id": 47359,
+check-pr-labels	UNKNOWN STEP	        "login": "apache",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	        "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	        "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	        "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	        "site_admin": false,
+check-pr-labels	UNKNOWN STEP	        "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	        "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	        "type": "Organization",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	        "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "private": false,
+check-pr-labels	UNKNOWN STEP	      "pull_request_creation_policy": "all",
+check-pr-labels	UNKNOWN STEP	      "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	      "pushed_at": "2026-07-21T05:48:20Z",
+check-pr-labels	UNKNOWN STEP	      "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	      "size": 301029,
+check-pr-labels	UNKNOWN STEP	      "ssh_url": "git@github.com:apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	      "stargazers_count": 33297,
+check-pr-labels	UNKNOWN STEP	      "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	      "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	      "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	      "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	      "svn_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	      "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	      "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	      "topics": [
+check-pr-labels	UNKNOWN STEP	        "java",
+check-pr-labels	UNKNOWN STEP	        "kafka",
+check-pr-labels	UNKNOWN STEP	        "scala",
+check-pr-labels	UNKNOWN STEP	        "streaming"
+check-pr-labels	UNKNOWN STEP	      ],
+check-pr-labels	UNKNOWN STEP	      "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	      "updated_at": "2026-07-21T05:48:42Z",
+check-pr-labels	UNKNOWN STEP	      "url": "https://api.github.com/repos/apache/kafka",
+check-pr-labels	UNKNOWN STEP	      "visibility": "public",
+check-pr-labels	UNKNOWN STEP	      "watchers": 33297,
+check-pr-labels	UNKNOWN STEP	      "watchers_count": 33297,
+check-pr-labels	UNKNOWN STEP	      "web_commit_signoff_required": false
+check-pr-labels	UNKNOWN STEP	    },
+check-pr-labels	UNKNOWN STEP	    "sender": {
+check-pr-labels	UNKNOWN STEP	      "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	      "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	      "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	      "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	      "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	      "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	      "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	      "id": 6234750,
+check-pr-labels	UNKNOWN STEP	      "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	      "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	      "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	      "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	      "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	      "site_admin": false,
+check-pr-labels	UNKNOWN STEP	      "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	      "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	      "type": "User",
+check-pr-labels	UNKNOWN STEP	      "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	      "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	    },
+check-pr-labels	UNKNOWN STEP	    "workflow": {
+check-pr-labels	UNKNOWN STEP	      "badge_url": "https://github.com/apache/kafka/workflows/Pull%20Request%20Reviewed/badge.svg",
+check-pr-labels	UNKNOWN STEP	      "created_at": "2024-12-10T17:34:11.000Z",
+check-pr-labels	UNKNOWN STEP	      "html_url": "https://github.com/apache/kafka/blob/trunk/.github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	      "id": 132514342,
+check-pr-labels	UNKNOWN STEP	      "name": "Pull Request Reviewed",
+check-pr-labels	UNKNOWN STEP	      "node_id": "W_kwDOACG9q84H5gIm",
+check-pr-labels	UNKNOWN STEP	      "path": ".github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	      "state": "active",
+check-pr-labels	UNKNOWN STEP	      "updated_at": "2025-02-25T20:33:54.000Z",
+check-pr-labels	UNKNOWN STEP	      "url": "https://api.github.com/repos/apache/kafka/actions/workflows/132514342"
+check-pr-labels	UNKNOWN STEP	    },
+check-pr-labels	UNKNOWN STEP	    "workflow_run": {
+check-pr-labels	UNKNOWN STEP	      "actor": {
+check-pr-labels	UNKNOWN STEP	        "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	        "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	        "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	        "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	        "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	        "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	        "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	        "id": 6234750,
+check-pr-labels	UNKNOWN STEP	        "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	        "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	        "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	        "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	        "site_admin": false,
+check-pr-labels	UNKNOWN STEP	        "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	        "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	        "type": "User",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	        "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "artifacts_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/artifacts",
+check-pr-labels	UNKNOWN STEP	      "cancel_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/cancel",
+check-pr-labels	UNKNOWN STEP	      "check_suite_id": 80719216103,
+check-pr-labels	UNKNOWN STEP	      "check_suite_node_id": "CS_kwDOACG9q88AAAASyz195w",
+check-pr-labels	UNKNOWN STEP	      "check_suite_url": "https://api.github.com/repos/apache/kafka/check-suites/80719216103",
+check-pr-labels	UNKNOWN STEP	      "conclusion": "action_required",
+check-pr-labels	UNKNOWN STEP	      "created_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	      "display_title": "KAFKA-20553: Remove storage dependency on core test output",
+check-pr-labels	UNKNOWN STEP	      "event": "pull_request_review",
+check-pr-labels	UNKNOWN STEP	      "head_branch": "KAFKA-20553",
+check-pr-labels	UNKNOWN STEP	      "head_commit": {
+check-pr-labels	UNKNOWN STEP	        "author": {
+check-pr-labels	UNKNOWN STEP	          "email": "dino2895un@gmail.com",
+check-pr-labels	UNKNOWN STEP	          "name": "dino2895"
+check-pr-labels	UNKNOWN STEP	        },
+check-pr-labels	UNKNOWN STEP	        "committer": {
+check-pr-labels	UNKNOWN STEP	          "email": "dino2895un@gmail.com",
+check-pr-labels	UNKNOWN STEP	          "name": "dino2895"
+check-pr-labels	UNKNOWN STEP	        },
+check-pr-labels	UNKNOWN STEP	        "id": "b8937bb3364218f645973ba97dae20ffaf34e7a9",
+check-pr-labels	UNKNOWN STEP	        "message": "KAFKA-20553: Simplify remote log test configuration setup",
+check-pr-labels	UNKNOWN STEP	        "timestamp": "2026-07-21T01:26:22Z",
+check-pr-labels	UNKNOWN STEP	        "tree_id": "66feb744e0e81e7df7330d2838377220e3f3f907"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "head_repository": {
+check-pr-labels	UNKNOWN STEP	        "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	        "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	        "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	        "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	        "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	        "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	        "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	        "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	        "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	        "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	        "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	        "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	        "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	        "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	        "fork": false,
+check-pr-labels	UNKNOWN STEP	        "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	        "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	        "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	        "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	        "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	        "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	        "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	        "id": 2211243,
+check-pr-labels	UNKNOWN STEP	        "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	        "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	        "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	        "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	        "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	        "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	        "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	        "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	        "name": "kafka",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	        "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	        "owner": {
+check-pr-labels	UNKNOWN STEP	          "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	          "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	          "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	          "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	          "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	          "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	          "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	          "id": 47359,
+check-pr-labels	UNKNOWN STEP	          "login": "apache",
+check-pr-labels	UNKNOWN STEP	          "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	          "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	          "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	          "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	          "site_admin": false,
+check-pr-labels	UNKNOWN STEP	          "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	          "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	          "type": "Organization",
+check-pr-labels	UNKNOWN STEP	          "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	          "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	        },
+check-pr-labels	UNKNOWN STEP	        "private": false,
+check-pr-labels	UNKNOWN STEP	        "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	        "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	        "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	        "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	        "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	        "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	        "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	        "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	        "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/repos/apache/kafka"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "head_sha": "b8937bb3364218f645973ba97dae20ffaf34e7a9",
+check-pr-labels	UNKNOWN STEP	      "html_url": "https://github.com/apache/kafka/actions/runs/29805962109",
+check-pr-labels	UNKNOWN STEP	      "id": 29805962109,
+check-pr-labels	UNKNOWN STEP	      "jobs_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/jobs",
+check-pr-labels	UNKNOWN STEP	      "logs_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/logs",
+check-pr-labels	UNKNOWN STEP	      "name": "Pull Request Reviewed",
+check-pr-labels	UNKNOWN STEP	      "node_id": "WFR_kwLOACG9q88AAAAG8JLjfQ",
+check-pr-labels	UNKNOWN STEP	      "path": ".github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	      "previous_attempt_url": null,
+check-pr-labels	UNKNOWN STEP	      "pull_requests": [],
+check-pr-labels	UNKNOWN STEP	      "referenced_workflows": [],
+check-pr-labels	UNKNOWN STEP	      "repository": {
+check-pr-labels	UNKNOWN STEP	        "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	        "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	        "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	        "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	        "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	        "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	        "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	        "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	        "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	        "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	        "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	        "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	        "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	        "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	        "fork": false,
+check-pr-labels	UNKNOWN STEP	        "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	        "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	        "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	        "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	        "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	        "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	        "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	        "id": 2211243,
+check-pr-labels	UNKNOWN STEP	        "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	        "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	        "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	        "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	        "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	        "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	        "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	        "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	        "name": "kafka",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	        "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	        "owner": {
+check-pr-labels	UNKNOWN STEP	          "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	          "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	          "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	          "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	          "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	          "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	          "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	          "id": 47359,
+check-pr-labels	UNKNOWN STEP	          "login": "apache",
+check-pr-labels	UNKNOWN STEP	          "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	          "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	          "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	          "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	          "site_admin": false,
+check-pr-labels	UNKNOWN STEP	          "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	          "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	          "type": "Organization",
+check-pr-labels	UNKNOWN STEP	          "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	          "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	        },
+check-pr-labels	UNKNOWN STEP	        "private": false,
+check-pr-labels	UNKNOWN STEP	        "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	        "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	        "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	        "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	        "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	        "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	        "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	        "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	        "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/repos/apache/kafka"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "rerun_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/rerun",
+check-pr-labels	UNKNOWN STEP	      "run_attempt": 1,
+check-pr-labels	UNKNOWN STEP	      "run_number": 32149,
+check-pr-labels	UNKNOWN STEP	      "run_started_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	      "status": "completed",
+check-pr-labels	UNKNOWN STEP	      "triggering_actor": {
+check-pr-labels	UNKNOWN STEP	        "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	        "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	        "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	        "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	        "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	        "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	        "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	        "id": 6234750,
+check-pr-labels	UNKNOWN STEP	        "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	        "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	        "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	        "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	        "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	        "site_admin": false,
+check-pr-labels	UNKNOWN STEP	        "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	        "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	        "type": "User",
+check-pr-labels	UNKNOWN STEP	        "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	        "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	      },
+check-pr-labels	UNKNOWN STEP	      "updated_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	      "url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109",
+check-pr-labels	UNKNOWN STEP	      "workflow_id": 132514342,
+check-pr-labels	UNKNOWN STEP	      "workflow_url": "https://api.github.com/repos/apache/kafka/actions/workflows/132514342"
+check-pr-labels	UNKNOWN STEP	    }
+check-pr-labels	UNKNOWN STEP	  },
+check-pr-labels	UNKNOWN STEP	  "workflow_ref": "apache/kafka/.github/workflows/workflow-requested.yml@refs/heads/trunk",
+check-pr-labels	UNKNOWN STEP	  "workflow_sha": "01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666",
+check-pr-labels	UNKNOWN STEP	  "repository_id": "2211243",
+check-pr-labels	UNKNOWN STEP	  "triggering_actor": "chia7712",
+check-pr-labels	UNKNOWN STEP	  "workspace": "/home/runner/work/kafka/kafka",
+check-pr-labels	UNKNOWN STEP	  "action": "__run"
+check-pr-labels	UNKNOWN STEP	}
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4542724Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4700310Z SHELL=/bin/bash
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4701113Z SELENIUM_JAR_PATH=/usr/share/java/selenium-server.jar
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4701829Z CONDA=/usr/share/miniconda
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4702374Z GITHUB_WORKSPACE=/home/runner/work/kafka/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4703047Z JAVA_HOME_11_X64=/usr/lib/jvm/temurin-11-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4703702Z JAVA_HOME_25_X64=/usr/lib/jvm/temurin-25-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4704666Z GITHUB_PATH=/home/runner/work/_temp/_runner_file_commands/add_path_3b51a4f3-f898-4ab5-be1f-ec9dff34c95c
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4705800Z GITHUB_ACTION=__run
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4706303Z JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4706877Z GITHUB_RUN_NUMBER=50944
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4707353Z RUNNER_NAME=GitHub Actions 1023323902
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4708312Z GRADLE_HOME=/usr/share/gradle-9.6.1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4709040Z GITHUB_REPOSITORY_OWNER_ID=47359
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4709679Z ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE=/opt/actionarchivecache
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4710380Z XDG_CONFIG_HOME=/home/runner/.config
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4710986Z MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4711623Z DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4712150Z ANT_HOME=/usr/share/ant
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4712657Z JAVA_HOME_8_X64=/usr/lib/jvm/temurin-8-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4713260Z GITHUB_TRIGGERING_ACTOR=chia7712
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4713772Z GITHUB_REF_TYPE=branch
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4714261Z HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=3650
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4714876Z ACTIONS_RUNNER_RETURN_JOB_RESULT_FOR_HOSTED=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4715561Z ANDROID_NDK=/usr/local/lib/android/sdk/ndk/27.3.13750724
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4716208Z BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4716826Z ***
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4717239Z PIPX_BIN_DIR=/opt/pipx_bin
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4717719Z LOGNAME=runner
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4718553Z GITHUB_REPOSITORY_ID=2211243
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4719048Z GITHUB_ACTIONS=true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4719496Z USE_BAZEL_FALLBACK_VERSION=silent:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4720337Z ANDROID_NDK_LATEST_HOME=/usr/local/lib/android/sdk/ndk/29.0.14206865
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4721040Z SYSTEMD_EXEC_PID=2017
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4721564Z GITHUB_SHA=01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4722472Z GITHUB_WORKFLOW_REF=apache/kafka/.github/workflows/workflow-requested.yml@refs/heads/trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4723390Z POWERSHELL_DISTRIBUTION_CHANNEL=GitHub-Actions-Linux
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4724023Z RUNNER_ENVIRONMENT=github-hosted
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4724545Z DOTNET_MULTILEVEL_LOOKUP=0
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4725032Z GITHUB_REF=refs/heads/trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4725503Z RUNNER_OS=Linux
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4725934Z GITHUB_REF_PROTECTED=true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4726396Z HOME=/home/runner
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4726849Z GITHUB_API_URL=https://api.github.com
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4727383Z LANG=C.UTF-8
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4728062Z GOROOT_1_25_X64=/opt/hostedtoolcache/go/1.25.12/x64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4728807Z RUNNER_TRACKING_ID=github_e850cdde-59d8-41c2-8013-a7ce61865a90
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4729471Z RUNNER_ARCH=X64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4730218Z MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/system.slice/hosted-compute-agent.service/memory.pressure
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4731107Z RUNNER_TEMP=/home/runner/work/_temp
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4731997Z GITHUB_STATE=/home/runner/work/_temp/_runner_file_commands/save_state_3b51a4f3-f898-4ab5-be1f-ec9dff34c95c
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4732948Z EDGEWEBDRIVER=/usr/local/share/edge_driver
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4733565Z JAVA_HOME_21_X64=/usr/lib/jvm/temurin-21-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4734547Z GITHUB_ENV=/home/runner/work/_temp/_runner_file_commands/set_env_3b51a4f3-f898-4ab5-be1f-ec9dff34c95c
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4735594Z GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4736341Z INVOCATION_ID=278fd53ad54c43f88f1198a3e658f544
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4736931Z GITHUB_EVENT_NAME=workflow_run
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4737426Z GITHUB_RUN_ID=29805964231
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4738148Z JAVA_HOME_17_X64=/usr/lib/jvm/temurin-17-jdk-amd64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4738890Z ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4739971Z GITHUB_STEP_SUMMARY=/home/runner/work/_temp/_runner_file_commands/step_summary_3b51a4f3-f898-4ab5-be1f-ec9dff34c95c
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4740943Z HOMEBREW_NO_AUTO_UPDATE=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4741413Z GITHUB_ACTOR=chia7712
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4741865Z NVM_DIR=/home/runner/.nvm
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4742318Z SGX_AESM_ADDR=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4742731Z GITHUB_RUN_ATTEMPT=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4743192Z ANDROID_HOME=/usr/local/lib/android/sdk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4743925Z GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4744525Z ACCEPT_EULA=Y
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4744920Z USER=runner
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4745967Z PSModulePath=/root/.local/share/powershell/Modules:/usr/local/share/powershell/Modules:/opt/microsoft/powershell/7/Modules:/usr/share/az_15.6.1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4747166Z GITHUB_SERVER_URL=https://github.com
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4747704Z PIPX_HOME=/opt/pipx
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4748461Z GECKOWEBDRIVER=/usr/local/share/gecko_driver
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4749175Z CHROMEWEBDRIVER=/usr/local/share/chromedriver-linux64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4749779Z SHLVL=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4750209Z ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4750826Z VCPKG_INSTALLATION_ROOT=/usr/local/share/vcpkg
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4751413Z GITHUB_ACTOR_ID=6234750
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4752162Z ACTIONS_ORCHESTRATION_ID=7eff11b2-64d5-45e0-a235-ed5f6a7c6603.check-pr-labels.__default
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4753011Z RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4753551Z ImageVersion=20260714.240.1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4754022Z DOTNET_NOLOGO=1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4754431Z GITHUB_CONTEXT={
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4758358Z   "token": "***",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4758830Z   "job": "check-pr-labels",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4759319Z   "ref": "refs/heads/trunk",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4759854Z   "sha": "01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4760458Z   "repository": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4761108Z   "repository_owner": "apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4761602Z   "repository_owner_id": "47359",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4762191Z   "repositoryUrl": "git://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4762797Z   "run_id": "29805964231",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4763251Z   "run_number": "50944",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4763702Z   "retention_days": "90",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4764160Z   "run_attempt": "1",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4764607Z   "artifact_cache_size_limit": "10",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4765141Z   "repository_visibility": "public",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4765657Z   "actor_id": "6234750",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4766108Z   "actor": "chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4766562Z   "workflow": "Workflow Requested",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4767062Z   "head_ref": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4767467Z   "base_ref": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4768164Z   "event_name": "workflow_run",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4769078Z   "server_url": "https://github.com",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4769788Z   "api_url": "https://api.github.com",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4770406Z   "graphql_url": "https://api.github.com/graphql",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4771009Z   "ref_name": "trunk",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4771494Z   "ref_protected": true,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4772042Z   "ref_type": "branch",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4772506Z   "secret_source": "Actions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4772989Z   "event": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4773404Z     "action": "requested",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4773866Z     "enterprise": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4774461Z       "avatar_url": "https://avatars.githubusercontent.com/b/212555?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4775220Z       "created_at": "2024-08-17T07:54:05Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4775941Z       "description": null,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4776637Z       "html_url": "https://github.com/enterprises/the-asf",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4777334Z       "id": 212555,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4777757Z       "name": "The ASF",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4778478Z       "node_id": "E_kgDOAAM-Sw",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4778972Z       "slug": "the-asf",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4779447Z       "updated_at": "2026-07-12T11:35:24Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4779995Z       "website_url": null
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4780436Z     },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4780817Z     "organization": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4781406Z       "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4782093Z       "description": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4782659Z       "events_url": "https://api.github.com/orgs/apache/events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4783443Z       "hooks_url": "https://api.github.com/orgs/apache/hooks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4784047Z       "id": 47359,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4784715Z       "issues_url": "https://api.github.com/orgs/apache/issues",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4785361Z       "login": "apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4785969Z       "members_url": "https://api.github.com/orgs/apache/members{/member}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4786708Z       "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4787512Z       "public_members_url": "https://api.github.com/orgs/apache/public_members{/member}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4788649Z       "repos_url": "https://api.github.com/orgs/apache/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4789322Z       "url": "https://api.github.com/orgs/apache"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4789873Z     },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4790252Z     "repository": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4790680Z       "allow_forking": true,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4791377Z       "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4792139Z       "archived": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4792806Z       "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4793725Z       "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4794642Z       "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4795457Z       "clone_url": "https://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4796381Z       "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4797584Z       "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4798754Z       "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4799707Z       "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4800685Z       "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4801640Z       "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4802412Z       "created_at": "2011-08-15T18:06:16Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4802954Z       "custom_properties": {},
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4803454Z       "default_branch": "trunk",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4804142Z       "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4805061Z       "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4805792Z       "disabled": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4806414Z       "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4807261Z       "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4808146Z       "fork": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4808578Z       "forks": 15366,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4809008Z       "forks_count": 15366,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4809602Z       "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4810273Z       "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4810996Z       "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4811941Z       "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4812831Z       "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4813604Z       "git_url": "git://github.com/apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4814184Z       "has_discussions": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4814672Z       "has_downloads": true,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4815139Z       "has_issues": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4815688Z       "has_pages": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4816155Z       "has_projects": true,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4816621Z       "has_pull_requests": true,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4817108Z       "has_wiki": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4817603Z       "homepage": "https://kafka.apache.org/",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4818547Z       "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4819406Z       "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4819986Z       "id": 2211243,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4820410Z       "is_template": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4821146Z       "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4822213Z       "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4823195Z       "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4824079Z       "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4824947Z       "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4825653Z       "language": "Java",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4826307Z       "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4827004Z       "license": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4827427Z         "key": "apache-2.0",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4828149Z         "name": "Apache License 2.0",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4828701Z         "node_id": "MDc6TGljZW5zZTI=",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4829231Z         "spdx_id": "Apache-2.0",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4829793Z         "url": "https://api.github.com/licenses/apache-2.0"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4830381Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4830909Z       "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4831814Z       "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4832723Z       "mirror_url": null,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4833165Z       "name": "kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4833664Z       "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4834664Z       "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4835579Z       "open_issues": 450,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4836037Z       "open_issues_count": 450,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4836498Z       "owner": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4837065Z         "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4838182Z         "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4839068Z         "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4839972Z         "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4840873Z         "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4841567Z         "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4842066Z         "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4842612Z         "id": 47359,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4843039Z         "login": "apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4843545Z         "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4844271Z         "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4845176Z         "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4846028Z         "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4846658Z         "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4847334Z         "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4848531Z         "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4849273Z         "type": "Organization",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4849812Z         "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4850400Z         "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4850871Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4851249Z       "private": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4851727Z       "pull_request_creation_policy": "all",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4852451Z       "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4853174Z       "pushed_at": "2026-07-21T05:48:20Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4854024Z       "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4854746Z       "size": 301029,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4855228Z       "ssh_url": "git@github.com:apache/kafka.git",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4855819Z       "stargazers_count": 33297,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4856516Z       "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4857436Z       "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4858647Z       "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4859603Z       "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4860411Z       "svn_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4861102Z       "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4861875Z       "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4862524Z       "topics": [
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4862928Z         "java",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4863323Z         "kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4863722Z         "scala",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4864124Z         "streaming"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4864523Z       ],
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4865090Z       "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4865829Z       "updated_at": "2026-07-21T05:48:42Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4866427Z       "url": "https://api.github.com/repos/apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4867170Z       "visibility": "public",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4867651Z       "watchers": 33297,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4868374Z       "watchers_count": 33297,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4868895Z       "web_commit_signoff_required": false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4869410Z     },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4869783Z     "sender": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4870353Z       "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4871214Z       "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4872086Z       "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4872992Z       "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4873897Z       "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4874582Z       "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4875074Z       "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4875634Z       "id": 6234750,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4876062Z       "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4876539Z       "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4877227Z       "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4878346Z       "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4879216Z       "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4879864Z       "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4880537Z       "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4881492Z       "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4882220Z       "type": "User",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4882714Z       "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4883303Z       "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4883781Z     },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4884163Z     "workflow": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4884879Z       "badge_url": "https://github.com/apache/kafka/workflows/Pull%20Request%20Reviewed/badge.svg",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4885748Z       "created_at": "2024-12-10T17:34:11.000Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4886579Z       "html_url": "https://github.com/apache/kafka/blob/trunk/.github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4887388Z       "id": 132514342,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4888034Z       "name": "Pull Request Reviewed",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4888580Z       "node_id": "W_kwDOACG9q84H5gIm",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4889315Z       "path": ".github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4889895Z       "state": "active",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4890369Z       "updated_at": "2025-02-25T20:33:54.000Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4891125Z       "url": "https://api.github.com/repos/apache/kafka/actions/workflows/132514342"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4891848Z     },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4892230Z     "workflow_run": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4892654Z       "actor": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4893241Z         "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4894110Z         "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4894976Z         "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4895892Z         "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4896805Z         "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4897491Z         "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4898242Z         "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4898815Z         "id": 6234750,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4899254Z         "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4899751Z         "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4900446Z         "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4901350Z         "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4902356Z         "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4902998Z         "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4903674Z         "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4904626Z         "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4905364Z         "type": "User",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4905860Z         "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4906449Z         "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4906936Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4907642Z       "artifacts_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/artifacts",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4909005Z       "cancel_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/cancel",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4909817Z       "check_suite_id": 80719216103,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4910396Z       "check_suite_node_id": "CS_kwDOACG9q88AAAASyz195w",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4911259Z       "check_suite_url": "https://api.github.com/repos/apache/kafka/check-suites/80719216103",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4912084Z       "conclusion": "action_required",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4912620Z       "created_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4913373Z       "display_title": "KAFKA-20553: Remove storage dependency on core test output",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4914133Z       "event": "pull_request_review",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4914664Z       "head_branch": "KAFKA-20553",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4915175Z       "head_commit": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4915603Z         "author": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4916042Z           "email": "dino2895un@gmail.com",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4916616Z           "name": "dino2895"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4917076Z         },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4917455Z         "committer": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4918112Z           "email": "dino2895un@gmail.com",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4918651Z           "name": "dino2895"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4919109Z         },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4919558Z         "id": "b8937bb3364218f645973ba97dae20ffaf34e7a9",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4920323Z         "message": "KAFKA-20553: Simplify remote log test configuration setup",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4921061Z         "timestamp": "2026-07-21T01:26:22Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4921656Z         "tree_id": "66feb744e0e81e7df7330d2838377220e3f3f907"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4922239Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4922628Z       "head_repository": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4923452Z         "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4924448Z         "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4925394Z         "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4926337Z         "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4927401Z         "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4928675Z         "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4929603Z         "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4930558Z         "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4931529Z         "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4932491Z         "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4933446Z         "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4934401Z         "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4935299Z         "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4936157Z         "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4936966Z         "fork": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4937528Z         "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4938429Z         "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4939168Z         "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4940122Z         "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4941031Z         "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4941873Z         "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4942598Z         "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4943174Z         "id": 2211243,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4943885Z         "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4944955Z         "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4945937Z         "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4946814Z         "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4947680Z         "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4948814Z         "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4949677Z         "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4950583Z         "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4951353Z         "name": "kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4951849Z         "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4952812Z         "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.4953722Z         "owner": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5015618Z           "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5016697Z           "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5017583Z           "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5018644Z           "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5019548Z           "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5020426Z           "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5020964Z           "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5021527Z           "id": 47359,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5021958Z           "login": "apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5022493Z           "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5023236Z           "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5024153Z           "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5025018Z           "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5025665Z           "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5026348Z           "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5027297Z           "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5028174Z           "type": "Organization",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5028738Z           "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5029344Z           "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5029843Z         },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5030244Z         "private": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5030896Z         "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5031804Z         "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5032896Z         "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5033848Z         "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5034783Z         "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5035732Z         "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5036597Z         "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5037384Z         "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5038395Z         "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5039181Z         "url": "https://api.github.com/repos/apache/kafka"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5039768Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5040233Z       "head_sha": "b8937bb3364218f645973ba97dae20ffaf34e7a9",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5041013Z       "html_url": "https://github.com/apache/kafka/actions/runs/29805962109",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5041715Z       "id": 29805962109,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5042403Z       "jobs_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/jobs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5043418Z       "logs_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/logs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5044201Z       "name": "Pull Request Reviewed",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5044752Z       "node_id": "WFR_kwLOACG9q88AAAAG8JLjfQ",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5045353Z       "path": ".github/workflows/pr-reviewed.yml",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5045953Z       "previous_attempt_url": null,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5046472Z       "pull_requests": [],
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5046944Z       "referenced_workflows": [],
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5047433Z       "repository": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5048235Z         "archive_url": "https://api.github.com/repos/apache/kafka/{archive_format}{/ref}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5049220Z         "assignees_url": "https://api.github.com/repos/apache/kafka/assignees{/user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5050148Z         "blobs_url": "https://api.github.com/repos/apache/kafka/git/blobs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5051064Z         "branches_url": "https://api.github.com/repos/apache/kafka/branches{/branch}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5052121Z         "collaborators_url": "https://api.github.com/repos/apache/kafka/collaborators{/collaborator}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5053168Z         "comments_url": "https://api.github.com/repos/apache/kafka/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5054212Z         "commits_url": "https://api.github.com/repos/apache/kafka/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5055164Z         "compare_url": "https://api.github.com/repos/apache/kafka/compare/{base}...{head}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5056140Z         "contents_url": "https://api.github.com/repos/apache/kafka/contents/{+path}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5057090Z         "contributors_url": "https://api.github.com/repos/apache/kafka/contributors",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5058160Z         "deployments_url": "https://api.github.com/repos/apache/kafka/deployments",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5059100Z         "description": "Apache Kafka - A distributed event streaming platform",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5060009Z         "downloads_url": "https://api.github.com/repos/apache/kafka/downloads",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5060860Z         "events_url": "https://api.github.com/repos/apache/kafka/events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5061529Z         "fork": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5062095Z         "forks_url": "https://api.github.com/repos/apache/kafka/forks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5062779Z         "full_name": "apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5063519Z         "git_commits_url": "https://api.github.com/repos/apache/kafka/git/commits{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5064463Z         "git_refs_url": "https://api.github.com/repos/apache/kafka/git/refs{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5065366Z         "git_tags_url": "https://api.github.com/repos/apache/kafka/git/tags{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5066221Z         "hooks_url": "https://api.github.com/repos/apache/kafka/hooks",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5067075Z         "html_url": "https://github.com/apache/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5067655Z         "id": 2211243,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5068502Z         "issue_comment_url": "https://api.github.com/repos/apache/kafka/issues/comments{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5069582Z         "issue_events_url": "https://api.github.com/repos/apache/kafka/issues/events{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5070559Z         "issues_url": "https://api.github.com/repos/apache/kafka/issues{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5071475Z         "keys_url": "https://api.github.com/repos/apache/kafka/keys{/key_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5072354Z         "labels_url": "https://api.github.com/repos/apache/kafka/labels{/name}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5073240Z         "languages_url": "https://api.github.com/repos/apache/kafka/languages",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5074087Z         "merges_url": "https://api.github.com/repos/apache/kafka/merges",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5074992Z         "milestones_url": "https://api.github.com/repos/apache/kafka/milestones{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5075769Z         "name": "kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5076262Z         "node_id": "MDEwOlJlcG9zaXRvcnkyMjExMjQz",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5077226Z         "notifications_url": "https://api.github.com/repos/apache/kafka/notifications{?since,all,participating}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5078288Z         "owner": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5078867Z           "avatar_url": "https://avatars.githubusercontent.com/u/47359?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5079722Z           "events_url": "https://api.github.com/users/apache/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5080578Z           "followers_url": "https://api.github.com/users/apache/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5081490Z           "following_url": "https://api.github.com/users/apache/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5082411Z           "gists_url": "https://api.github.com/users/apache/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5083097Z           "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5083614Z           "html_url": "https://github.com/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5084178Z           "id": 47359,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5084606Z           "login": "apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5085127Z           "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ3MzU5",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5085859Z           "organizations_url": "https://api.github.com/users/apache/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5086764Z           "received_events_url": "https://api.github.com/users/apache/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5087614Z           "repos_url": "https://api.github.com/users/apache/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5088493Z           "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5089182Z           "starred_url": "https://api.github.com/users/apache/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5090114Z           "subscriptions_url": "https://api.github.com/users/apache/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5090855Z           "type": "Organization",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5091410Z           "url": "https://api.github.com/users/apache",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5091990Z           "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5092481Z         },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5092869Z         "private": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5093495Z         "pulls_url": "https://api.github.com/repos/apache/kafka/pulls{/number}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5094390Z         "releases_url": "https://api.github.com/repos/apache/kafka/releases{/id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5095297Z         "stargazers_url": "https://api.github.com/repos/apache/kafka/stargazers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5096210Z         "statuses_url": "https://api.github.com/repos/apache/kafka/statuses/{sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5097149Z         "subscribers_url": "https://api.github.com/repos/apache/kafka/subscribers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5098211Z         "subscription_url": "https://api.github.com/repos/apache/kafka/subscription",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5099079Z         "tags_url": "https://api.github.com/repos/apache/kafka/tags",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5099853Z         "teams_url": "https://api.github.com/repos/apache/kafka/teams",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5100690Z         "trees_url": "https://api.github.com/repos/apache/kafka/git/trees{/sha}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5101602Z         "url": "https://api.github.com/repos/apache/kafka"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5102178Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5102813Z       "rerun_url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109/rerun",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5103600Z       "run_attempt": 1,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5104043Z       "run_number": 32149,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5104528Z       "run_started_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5105079Z       "status": "completed",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5105555Z       "triggering_actor": {
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5106185Z         "avatar_url": "https://avatars.githubusercontent.com/u/6234750?v=4",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5107050Z         "events_url": "https://api.github.com/users/chia7712/events{/privacy}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5108026Z         "followers_url": "https://api.github.com/users/chia7712/followers",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5108949Z         "following_url": "https://api.github.com/users/chia7712/following{/other_user}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5109874Z         "gists_url": "https://api.github.com/users/chia7712/gists{/gist_id}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5110560Z         "gravatar_id": "",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5111075Z         "html_url": "https://github.com/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5111630Z         "id": 6234750,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5112058Z         "login": "chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5112540Z         "node_id": "MDQ6VXNlcjYyMzQ3NTA=",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5113228Z         "organizations_url": "https://api.github.com/users/chia7712/orgs",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5114138Z         "received_events_url": "https://api.github.com/users/chia7712/received_events",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5114990Z         "repos_url": "https://api.github.com/users/chia7712/repos",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5115630Z         "site_admin": false,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5116297Z         "starred_url": "https://api.github.com/users/chia7712/starred{/owner}{/repo}",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5117229Z         "subscriptions_url": "https://api.github.com/users/chia7712/subscriptions",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5118113Z         "type": "User",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5118611Z         "url": "https://api.github.com/users/chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5119198Z         "user_view_type": "public"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5119673Z       },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5120068Z       "updated_at": "2026-07-21T06:05:45Z",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5120787Z       "url": "https://api.github.com/repos/apache/kafka/actions/runs/29805962109",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5121511Z       "workflow_id": 132514342,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5122394Z       "workflow_url": "https://api.github.com/repos/apache/kafka/actions/workflows/132514342"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5123181Z     }
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5123533Z   },
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5124184Z   "workflow_ref": "apache/kafka/.github/workflows/workflow-requested.yml@refs/heads/trunk",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5125102Z   "workflow_sha": "01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5125734Z   "repository_id": "2211243",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5126216Z   "triggering_actor": "chia7712",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5126762Z   "workspace": "/home/runner/work/kafka/kafka",
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5127317Z   "action": "__run"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5127717Z }
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5128367Z GITHUB_WORKFLOW_SHA=01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5129089Z GOROOT_1_24_X64=/opt/hostedtoolcache/go/1.24.13/x64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5129668Z GITHUB_REF_NAME=trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5130106Z GITHUB_JOB=check-pr-labels
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5130581Z XDG_RUNTIME_DIR=/run/user/1001
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5131101Z AZURE_EXTENSION_DIR=/opt/az/azcliextensions
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5131708Z GOROOT_1_26_X64=/opt/hostedtoolcache/go/1.26.5/x64
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5132304Z GITHUB_REPOSITORY=apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5132899Z ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/27.3.13750724
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5133554Z CHROME_BIN=/usr/bin/google-chrome
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5134087Z GITHUB_RETENTION_DAYS=90
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5134534Z JOURNAL_STREAM=9:14758
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5135127Z RUNNER_WORKSPACE=/home/runner/work/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5135665Z GITHUB_ACTION_REPOSITORY=
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5136128Z HCA_CLOUD_PROVIDER=azure
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5137929Z PATH=/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5139671Z GITHUB_BASE_REF=
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5140107Z GHCUP_INSTALL_BASE_PREFIX=/usr/local
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5140616Z CI=true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5141005Z SWIFT_PATH=/usr/share/swift/usr/bin
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5141495Z ImageOS=ubuntu24
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5141914Z GITHUB_REPOSITORY_OWNER=apache
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5142381Z GITHUB_HEAD_REF=
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5142781Z GITHUB_ACTION_REF=
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5143208Z ENABLE_RUNNER_TRACING=true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5143672Z GITHUB_WORKFLOW=Workflow Requested
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5144184Z DEBIAN_FRONTEND=noninteractive
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5145045Z GITHUB_OUTPUT=/home/runner/work/_temp/_runner_file_commands/set_output_3b51a4f3-f898-4ab5-be1f-ec9dff34c95c
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5145983Z AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5146528Z _=/usr/bin/printenv
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5348311Z ##[group]Run actions/checkout@v5
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5348874Z with:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5349272Z   persist-credentials: false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5349760Z   repository: apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5353322Z   token: ***
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5353717Z   ssh-strict: true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5354120Z   ssh-user: git
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5354504Z   clean: true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5354910Z   sparse-checkout-cone-mode: true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5355399Z   fetch-depth: 1
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5355793Z   fetch-tags: false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5356203Z   show-progress: true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5356623Z   lfs: false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5357001Z   submodules: false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5357416Z   set-safe-directory: true
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5358058Z   allow-unsafe-pr-checkout: false
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.5358547Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6258655Z Syncing repository: apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6260691Z ##[group]Getting Git version info
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6261455Z Working directory is '/home/runner/work/kafka/kafka'
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6262386Z [command]/usr/bin/git version
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6343373Z git version 2.54.0
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6395733Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6409440Z Temporarily overriding HOME='/home/runner/work/_temp/a9dde6f8-d97d-4ff0-9576-143afc615c90' before making global git config changes
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6410953Z Adding repository directory to the temporary git global config as a safe directory
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6414434Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/kafka/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6462134Z Deleting the contents of '/home/runner/work/kafka/kafka'
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6466245Z ##[group]Initializing the repository
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6470704Z [command]/usr/bin/git init /home/runner/work/kafka/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6579271Z hint: Using 'master' as the name for the initial branch. This default branch name
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6580965Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6582251Z hint: to use in all of your new repositories, which will suppress this warning,
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6583901Z hint: call:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6584816Z hint:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6585530Z hint: 	git config --global init.defaultBranch <name>
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6586558Z hint:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6587181Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6588527Z hint: 'development'. The just-created branch can be renamed via this command:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6589331Z hint:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6589957Z hint: 	git branch -m <name>
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6590656Z hint:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6591268Z hint: Disable this message with "git config set advice.defaultBranchName false"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6592525Z Initialized empty Git repository in /home/runner/work/kafka/kafka/.git/
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6594799Z [command]/usr/bin/git remote add origin https://github.com/apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6636652Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6637412Z ##[group]Disabling automatic garbage collection
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6642054Z [command]/usr/bin/git config --local gc.auto 0
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6670289Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6671608Z ##[group]Setting up auth
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6677256Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.6709996Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7069305Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7100639Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7334870Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7366905Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7585098Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7619280Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7620642Z ##[group]Fetching the repository
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:51.7630252Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666:refs/remotes/origin/trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4207070Z From https://github.com/apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4210261Z  * [new ref]         01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666 -> origin/trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4567503Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4569950Z ##[group]Determining the checkout info
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4574958Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4576206Z [command]/usr/bin/git sparse-checkout disable
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4632302Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4718122Z ##[group]Checking out the ref
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:56.4721444Z [command]/usr/bin/git checkout --progress --force -B trunk refs/remotes/origin/trunk
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0866440Z Switched to a new branch 'trunk'
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0868250Z branch 'trunk' set up to track 'origin/trunk'.
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0895543Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0944463Z [command]/usr/bin/git log -1 --format=%H
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0966546Z 01ba1b2d4db7ce14dd4df7bc71dbb97db75e2666
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0976354Z ##[group]Removing auth
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.0980800Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1009285Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1232481Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1257707Z http.https://github.com/.extraheader
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1265888Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1296679Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1517643Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1547012Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1765235Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1902420Z ##[group]Run set +e
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1902777Z ^[[36;1mset +e^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1903050Z ^[[36;1mPR_NUMBER=$(gh api \^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1903438Z ^[[36;1m  -H "Accept: application/vnd.github+json" \^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1903862Z ^[[36;1m  -H "X-GitHub-Api-Version: 2022-11-28" \^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1904288Z ^[[36;1m  /repos/$REPO/pulls?head=$HEAD_REPO:$HEAD_BRANCH \^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1904699Z ^[[36;1m  --jq '.[0].number')^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1905009Z ^[[36;1mif [ -z "$PR_NUMBER" ]; then^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1905434Z ^[[36;1m  echo "Could not find the PR that triggered this workflow request";^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1905857Z ^[[36;1m  exit 1;^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1906106Z ^[[36;1mfi^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1906498Z ^[[36;1mgh pr view $PR_NUMBER --json labels -q '.labels[].name' | grep -q 'ci-approved'^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1906976Z ^[[36;1mexitcode="$?"^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1907266Z ^[[36;1mif [ $exitcode -ne 0 ]; then^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1907786Z ^[[36;1m  echo "No ci-approved label set on PR #$PR_NUMBER. Will not auto-approve.";^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1908771Z ^[[36;1m  exit 0;^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1909040Z ^[[36;1melse^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1909476Z ^[[36;1m  echo "Found 'ci-approved' label on PR #$PR_NUMBER. Auto-approving workflow run $RUN_ID.";^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1909964Z ^[[36;1mfi^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1910253Z ^[[36;1mecho "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1910639Z ^[[36;1mecho "RUN_ID=$RUN_ID" >> "$GITHUB_ENV"^[[0m
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1967741Z shell: /usr/bin/bash -e {0}
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1968341Z env:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1970859Z   GH_TOKEN: ***
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1971139Z   REPO: apache/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1971409Z   RUN_ID: 29805962109
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1971686Z   HEAD_BRANCH: KAFKA-20553
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1971971Z   HEAD_REPO: apache
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.1972226Z ##[endgroup]
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.5998796Z Could not find the PR that triggered this workflow request
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.6010855Z ##[error]Process completed with exit code 1.
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.6192082Z Post job cleanup.
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.6987119Z [command]/usr/bin/git version
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7022036Z git version 2.54.0
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7059052Z Temporarily overriding HOME='/home/runner/work/_temp/7fc988ae-3e50-415c-95d9-6f16825a8529' before making global git config changes
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7060546Z Adding repository directory to the temporary git global config as a safe directory
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7063948Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/kafka/kafka
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7099133Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7131319Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7361904Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7393658Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7615607Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7645391Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+check-pr-labels	UNKNOWN STEP	2026-07-21T06:05:57.7990593Z Cleaning up orphan processes
