@@ -22,6 +22,22 @@
 
 ### Fixed
 
+- **A yarn install that finishes with warnings is no longer read as a broken dependency install,
+  and a `git checkout` that recovers is no longer read as a checkout failure.** yarn Berry tags
+  every line it prints — success, info, warning, error — with a `YNxxxx` code, so `node_dependency_install`
+  matched `YN\d{4}` off benign peer-dependency *warnings* (`YN0002`, `YN0060`, `YN0086`) even when the
+  install said `YN0000: Done with warnings`. grafana/grafana's lint-knip job (run 29806261731)
+  installed cleanly and failed on `knip` and a `yarn constraints` check, yet PatchRail called it
+  `node_dependency_install` at 0.71 and handed the maintainer `corepack pnpm install` (the wrong
+  package manager) to reproduce a working tree. The same log also missed a PR branch in a
+  fork/enterprise dual-checkout (`error: pathspec '…' did not match`) and fell back to `main`
+  (`Checkout succeeded, breaking retry loop`) — a recovered checkout that scored `git_checkout_failure`.
+  A bare `YNxxxx` code is now a benign warning that cannot stand once the runner annotated a failure
+  or the run announced success, and a pathspec miss the log recovers from no longer witnesses — so
+  the run declines to `unknown` and hands back the runner's own verdict (`Yarn constraints check
+  failed`). A genuine yarn install failure (`YN0028`'s "lockfile would have been modified",
+  `ERESOLVE`) and a genuine checkout failure (a pathspec miss with no recovery, `fatal: reference is
+  not a tree`) both still land; no benchmark fixture changes class.
 - **`debconf: (TERM is not set, ...)` and other unset terminal/locale variables no longer read as a
   missing repository secret.** `secrets_or_permissions_failure` watches for `SCREAMING_CASE is not
   set` because that is how a job reports a missing credential — but standard terminal and locale
