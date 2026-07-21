@@ -14,6 +14,10 @@ loudly if a future rule change drifts one of them.
     PR missing a required label, not a build or a test -- so the honest answer is a low-
     confidence ``unknown`` decline rather than a hallucinated class. Declining safely on a
     governance failure is exactly the behaviour worth locking down.
+  * rails/rails run 29648807728 (Ruby): a ``SyntaxError`` in ``actionpack`` aborts
+    ``bin/rails``, and no failure class covers it -- the only signals in the log are Bundler
+    INVOCATIONS. The class still reads ``ruby_bundle_failure``, but the confidence must stay
+    in the low band: an invocation proves a tool ran, never that it failed.
 
 These live under ``tests/data/realworld/`` on purpose: they are *not* part of the
 ``examples/ci-triage`` fixture zoo and must never be counted by ``ci benchmark`` (still 223).
@@ -64,6 +68,26 @@ class RealWorldMainstreamLogTests(unittest.TestCase):
         self.assertEqual(result["failure_class"], "unknown")
         # A safe decline stays in the low-confidence band -- never a confident wrong class.
         self.assertLessEqual(result["confidence"], 0.30)
+
+    def test_rails_invocation_only_verdict_is_not_confident(self) -> None:
+        """A verdict held up by invocations alone must read as a lead, not a diagnosis."""
+        result = _classify("rails-29648807728.log")
+
+        # What actually broke is a Ruby ``SyntaxError`` in ``actionpack`` that blows up
+        # ``bin/rails aborted!`` -- no failure class covers it, and inventing one would be
+        # breadth-farming. Bundler is the only thing we recognise, and only because the job
+        # RAN it: ``bundle install`` (which succeeded), ``bundle exec``, ``bundler``. So the
+        # verdict is unchanged and openly a guess. This pins the confidence, not the class.
+        self.assertEqual(result["failure_class"], "ruby_bundle_failure")
+        self.assertLessEqual(
+            result["confidence"],
+            0.35,
+            "an invocation-only verdict must not be sold at diagnosis confidence",
+        )
+        self.assertTrue(
+            all("bundle" in signal or "bundler" in signal for signal in result["signals"]),
+            "the guard is about invocation-only evidence; these signals are the evidence",
+        )
 
 
 if __name__ == "__main__":
