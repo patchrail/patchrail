@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A low-confidence verdict now reads like one.** 0.7.4 stopped a class carried by nothing but
+  tool invocations from claiming diagnosis-level confidence, but the reports still printed
+  `Root cause: <class>` / `Confidence: 0.3` in exactly the same shape as a 0.95 — so a maintainer
+  read "root cause" and went off to fix a dependency file that was fine. The number dropped; the
+  message didn't. Both human-facing renderers now add an explicit caveat below a configurable
+  threshold (`LOW_CONFIDENCE_THRESHOLD = 0.35`): that this is a hint rather than a proven cause,
+  that the signals behind it only show a tool *ran* and not that it failed, and that the next
+  useful step is the raw log — plus the existing CI failure fixture issue template if the real
+  cause turns out to be something PatchRail cannot classify yet. The guard keys on confidence
+  alone, never on a class or ecosystem; `unknown` keeps its own existing message instead of being
+  told twice. Presentation only: the class, the confidence, the exit code and the `--format json`
+  payload the GitHub Action consumes are unchanged, and a high-confidence report is byte-identical
+  to before.
+
 ## 0.7.4 - 2026-07-22
 
 ### Changed

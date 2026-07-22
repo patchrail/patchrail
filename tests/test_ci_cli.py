@@ -2128,6 +2128,79 @@ class PatchRailCITests(unittest.TestCase):
                 self.assertNotIn(fixture_url, report)
                 self.assertNotIn("CI failure fixture issue", report)
 
+    def test_ci_explain_text_frames_a_low_confidence_verdict_as_a_hint(self) -> None:
+        # rails/rails run 29648807728: the class is carried by Bundler INVOCATIONS only, so the
+        # classifier caps it at 0.3. Printed like any other verdict, `Root cause:
+        # ruby_bundle_failure` sends a maintainer to debug a Gemfile that is fine -- the text
+        # report has to say, in prose, that this is a hint.
+        rails_log = Path(__file__).resolve().parents[1] / "tests" / "data" / "realworld"
+        rails_log = rails_log / "rails-29648807728.log"
+
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            exit_code = main(["ci", "explain", "--log", str(rails_log), "--format", "text"])
+        report = stdout.getvalue()
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Root cause: ruby_bundle_failure", report)
+        self.assertIn("Confidence: 0.3", report)
+        self.assertIn("Low confidence:", report)
+        self.assertIn("hint, not a proven cause", report)
+        # The honest mechanism, and a next step that is not "edit your dependency file".
+        self.assertIn("only show that a tool RAN, not that it failed", report)
+        self.assertIn("Read the raw log", report)
+        self.assertIn(
+            "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md",
+            report,
+        )
+
+    def test_ci_explain_markdown_frames_a_low_confidence_verdict_as_a_hint(self) -> None:
+        rails_log = Path(__file__).resolve().parents[1] / "tests" / "data" / "realworld"
+        rails_log = rails_log / "rails-29648807728.log"
+
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            exit_code = main(["ci", "explain", "--log", str(rails_log), "--format", "markdown"])
+        report = stdout.getvalue()
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("- Root cause: `ruby_bundle_failure`", report)
+        self.assertIn("- Confidence: `0.3`", report)
+        self.assertIn("> **Low confidence (`0.3`).**", report)
+        self.assertIn("hint, not a proven cause", report)
+        self.assertIn("[open a CI failure fixture issue]", report)
+        # The caveat has to land before the evidence, where the verdict is read.
+        self.assertLess(report.index("Low confidence"), report.index("## Evidence signals"))
+
+        # Presentation only: the JSON contract the Action consumes is untouched.
+        stdout = StringIO()
+        with redirect_stdout(stdout):
+            exit_code = main(["ci", "explain", "--log", str(rails_log), "--format", "json"])
+        payload = json.loads(stdout.getvalue())
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["failure_class"], "ruby_bundle_failure")
+        self.assertEqual(payload["confidence"], 0.3)
+        self.assertNotIn("Low confidence", json.dumps(payload))
+
+    def test_ci_explain_confident_result_keeps_its_verdict_unqualified(self) -> None:
+        # The guard is a confidence threshold, not a mood: a well-evidenced verdict must read
+        # exactly as it did before, in both renderers.
+        springboot_log = Path(__file__).resolve().parents[1] / "tests" / "data" / "realworld"
+        springboot_log = springboot_log / "springboot-29780604983.log"
+
+        for output_format in ("text", "markdown"):
+            stdout = StringIO()
+            with redirect_stdout(stdout):
+                exit_code = main(
+                    ["ci", "explain", "--log", str(springboot_log), "--format", output_format]
+                )
+            report = stdout.getvalue()
+            self.assertEqual(exit_code, 0)
+            self.assertIn("java_build_failure", report)
+            self.assertIn("0.89", report)
+            self.assertNotIn("Low confidence", report)
+            self.assertNotIn("hint, not a proven cause", report)
+
     def test_module_entrypoint_runs_public_cli(self) -> None:
         proc = subprocess.run(
             [sys.executable, "-m", "patchrail", "ci", "classify"],
