@@ -187,6 +187,13 @@ def _render_text(result: dict[str, Any]) -> str:
         lines.append(f"Redaction: {len(redactions)} categories redacted locally")
     for message in result.get("runner_errors") or []:
         lines.append(f"Runner reported: {message}")
+    log_tail = list(result.get("log_tail") or [])
+    if log_tail:
+        lines.append(
+            "Could not name the cause. This is where the log ends — the last lines that "
+            "carried output before the job stopped. Raw log, not a diagnosis; read it yourself."
+        )
+        lines.extend(f"Log ends with: {line}" for line in log_tail)
     if result.get("likely_successful_run"):
         lines.append(
             "No failure detected: this log looks like a SUCCESSFUL run, so there is nothing to "
@@ -253,6 +260,24 @@ def _render_markdown(result: dict[str, Any]) -> str:
             ]
         )
         lines.extend(f"- `{message}`" for message in runner_errors)
+    log_tail = list(result.get("log_tail") or [])
+    if log_tail:
+        lines.extend(
+            [
+                "",
+                "## Where the log ends",
+                "",
+                (
+                    "No rule matched this log and the runner annotated nothing, so PatchRail "
+                    "cannot name the cause. These are the last lines that carried output before "
+                    "the job stopped — raw log, **not** a diagnosis. Read them yourself:"
+                ),
+                "",
+                "```",
+            ]
+        )
+        lines.extend(log_tail)
+        lines.append("```")
     lines.extend(
         [
             "",

@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **An `unknown` verdict now shows you where the log ends.** Piping 1,164 lines of apache/kafka
+  run 29805964231 into `patchrail ci explain` used to answer `unknown`, `0.15`, "No high-confidence
+  local signal found." — and not one line of the log. The cause was sitting one line above the
+  runner's boilerplate exit-code annotation (`Could not find the PR that triggered this workflow
+  request`), three seconds of scrolling away. When no rule matches, the runner annotated nothing
+  worth showing and the log does not announce success, PatchRail now hands back the last lines
+  that carried output, under a heading that says exactly what they are: raw log, not a diagnosis.
+  The heuristic is positional, not lexical — it asks where the log stopped, a question that has
+  the same answer in every ecosystem, including the ones no rule covers. Optional `log_tail` key
+  in `ci-result.v1` (max 5 lines, each redacted through `redact_ci_log` and capped at 300
+  characters); `failure_class`, `confidence` and `signals` are untouched, and a log that
+  classifies produces byte-identical output to 0.7.5.
+
 ## 0.7.5 - 2026-07-22
 
 ### Fixed
