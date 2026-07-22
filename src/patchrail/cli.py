@@ -136,11 +136,47 @@ _CI_FIXTURE_ISSUE_URL = (
     "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md"
 )
 
+# A verdict under this confidence was carried by evidence too thin to name a cause. The
+# classifier's invocation-only guard lands such verdicts at 0.3, while any rule that actually
+# watched something fail starts at 0.53 -- so this threshold separates "we recognized the tool"
+# from "we recognized the failure" without naming a single class or ecosystem.
+#
+# The number alone does not do that job: printed as `Root cause: X / Confidence: 0.3`, a 0.3 reads
+# exactly like a 0.95, and a maintainer goes off to fix a dependency file that is fine. So the
+# renderers say in prose what the number means. `unknown` declines at 0.15 and already has its own
+# message; it is excluded here so it is not told the same thing twice.
+LOW_CONFIDENCE_THRESHOLD = 0.35
+
+_LOW_CONFIDENCE_TEXT = (
+    "Treat this as a hint, not a proven cause: the signals that carried this class only show "
+    "that a tool RAN, not that it failed, so the real failure may be something PatchRail does "
+    "not recognize yet. Read the raw log before changing anything — and if the cause is clear "
+    "there, open a CI failure fixture issue with a sanitized log so PatchRail learns it: "
+    f"{_CI_FIXTURE_ISSUE_URL}"
+)
+
+
+def _is_low_confidence(result: dict[str, Any]) -> bool:
+    """Report whether a verdict is too weakly evidenced to be read as a diagnosis."""
+    if result.get("likely_successful_run"):
+        return False
+    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+        return False
+    try:
+        confidence = float(result["confidence"])
+    except (KeyError, TypeError, ValueError):
+        return False
+    return confidence < LOW_CONFIDENCE_THRESHOLD
+
 
 def _render_text(result: dict[str, Any]) -> str:
     lines = [
         f"Root cause: {result['failure_class']}",
         f"Confidence: {result['confidence']}",
+    ]
+    if _is_low_confidence(result):
+        lines.append(f"Low confidence: {_LOW_CONFIDENCE_TEXT}")
+    lines += [
         f"Subsystem: {result['likely_subsystem']}",
         f"Reproduce: {result['reproduction_command']}",
         f"Suggested action: {result['minimal_repair_strategy']}",
@@ -176,9 +212,27 @@ def _render_markdown(result: dict[str, Any]) -> str:
         f"- Reproduce: `{result['reproduction_command']}`",
         f"- Suggested action: {result['minimal_repair_strategy']}",
         "",
-        "## Evidence signals",
-        "",
     ]
+    if _is_low_confidence(result):
+        lines.extend(
+            [
+                f"> **Low confidence (`{result['confidence']}`).** "
+                "Treat this as a hint, not a proven cause: the signals that carried this class "
+                "only show that a tool **ran**, not that it failed, so the real failure may be "
+                "something PatchRail does not recognize yet.",
+                ">",
+                "> Read the raw log before changing anything — and if the cause is clear there, "
+                f"[open a CI failure fixture issue]({_CI_FIXTURE_ISSUE_URL}) with a sanitized "
+                "log so PatchRail learns it.",
+                "",
+            ]
+        )
+    lines.extend(
+        [
+            "## Evidence signals",
+            "",
+        ]
+    )
     signals = list(result.get("signals") or [])
     if signals:
         lines.extend(f"- `{signal}`" for signal in signals)
