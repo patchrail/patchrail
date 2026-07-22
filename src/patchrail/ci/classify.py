@@ -1812,6 +1812,13 @@ def _runner_error_annotations(text: str) -> list[str]:
 # output -- and deliberately so. A lexical version ("look for `Could not find the PR`") would fix
 # apache/kafka and no other log in the world; where the log stops is the same question in every
 # ecosystem, including the ones no rule will ever cover.
+#
+# `unknown` is not the only answer that leaves a maintainer with nothing to read. A verdict under
+# LOW_CONFIDENCE_THRESHOLD names a class it cannot prove -- rails/rails run 29648807728 comes back
+# `ruby_bundle_failure` at 0.3 off three `bundle` invocations, and the report says out loud that
+# this is a hint and the raw log is the thing to read. Saying "go read the log" while showing none
+# of it is the same dead end as `unknown`, so the tail covers both. Same extraction, same cap, same
+# redaction: only the condition that turns it on is wider.
 _MAX_LOG_TAIL_LINES = 5
 _MAX_LOG_TAIL_CHARS = 300
 
@@ -1877,6 +1884,48 @@ def _log_tail(raw: str, text: str) -> list[str]:
         if len(collected) == _MAX_LOG_TAIL_LINES:
             break
     return list(reversed(collected))
+
+
+# A verdict under this confidence was carried by evidence too thin to name a cause. The
+# invocation-only guard lands such verdicts at 0.3, while any rule that actually watched something
+# fail starts at 0.53 -- so the threshold separates "we recognized the tool" from "we recognized
+# the failure" without naming a single class or ecosystem. It lives here, next to the confidence
+# scale it reads, and the renderers import it: one number, one meaning.
+LOW_CONFIDENCE_THRESHOLD = 0.35
+
+
+def is_low_confidence(result: dict[str, Any]) -> bool:
+    """Report whether a verdict is too weakly evidenced to be read as a diagnosis.
+
+    `unknown` declines outright at 0.15 and a green log never diagnosed anything, so neither is
+    "low confidence" in this sense -- both have their own answer to give.
+    """
+    if result.get("likely_successful_run"):
+        return False
+    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
+        return False
+    try:
+        confidence = float(result["confidence"])
+    except (KeyError, TypeError, ValueError):
+        return False
+    return confidence < LOW_CONFIDENCE_THRESHOLD
+
+
+def _attach_log_tail(result: dict[str, Any], raw: str, text: str) -> None:
+    """Give the report the end of the log whenever the verdict cannot stand on its own.
+
+    Two verdicts qualify and they fail the reader the same way: `unknown`, which names nothing,
+    and a sub-threshold class, which names something it cannot prove. Neither leaves anything to
+    read. A runner annotation outranks the tail -- the runner naming the error beats us pointing
+    at where output stopped -- and a successful run has no failure to point at.
+    """
+    if result.get("runner_errors") or result.get("likely_successful_run"):
+        return
+    if result.get("failure_class") != UNKNOWN_FAILURE_CLASS and not is_low_confidence(result):
+        return
+    tail = _log_tail(raw, text)
+    if tail:
+        result["log_tail"] = tail
 
 
 # A maintainer's first run is often a GREEN one: they pipe in whatever `gh run view` hands
@@ -2545,12 +2594,9 @@ def classify_ci_log(text: str) -> dict[str, Any]:
             result["runner_errors"] = runner_errors
         elif _looks_like_successful_run(text):
             result["likely_successful_run"] = True
-        else:
-            # Last resort, and only here: no rule matched, the runner annotated nothing worth
-            # showing, and the log does not announce success. Without this the answer is a shrug.
-            log_tail = _log_tail(raw, text)
-            if log_tail:
-                result["log_tail"] = log_tail
+        # Last resort: no rule matched, the runner annotated nothing worth showing, and the log
+        # does not announce success. Without this the answer is a shrug.
+        _attach_log_tail(result, raw, text)
         return result
 
     # An invocation proves a tool RAN. It never proves the tool FAILED. A verdict every one of
@@ -2573,7 +2619,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
     confidence = min(0.95, 0.35 + 0.18 * len(best_signals))
     if all(signal in INVOCATION_ONLY_PATTERNS for signal in best_signals):
         confidence = min(confidence, _INVOCATION_ONLY_CONFIDENCE)
-    return {
+    result = {
         "schema_version": "patchrail.ci_result.v1",
         "failure_class": best_rule["failure_class"],
         "likely_subsystem": best_rule["likely_subsystem"],
@@ -2583,3 +2629,7 @@ def classify_ci_log(text: str) -> dict[str, Any]:
         "signals": best_signals,
         "requirements": _requirements(),
     }
+    # Only a verdict that admits it is a hint reaches past this guard; a confident class is
+    # returned exactly as it was.
+    _attach_log_tail(result, raw, text)
+    return result

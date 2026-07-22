@@ -25,6 +25,7 @@ from patchrail.ci import (
     list_failure_classes,
     redact_ci_log,
 )
+from patchrail.ci.classify import is_low_confidence
 from patchrail.queue import (
     DEFAULT_QUEUE_PATH,
     add_proposal,
@@ -136,17 +137,12 @@ _CI_FIXTURE_ISSUE_URL = (
     "https://github.com/patchrail/patchrail/issues/new?template=ci_failure_fixture.md"
 )
 
-# A verdict under this confidence was carried by evidence too thin to name a cause. The
-# classifier's invocation-only guard lands such verdicts at 0.3, while any rule that actually
-# watched something fail starts at 0.53 -- so this threshold separates "we recognized the tool"
-# from "we recognized the failure" without naming a single class or ecosystem.
-#
-# The number alone does not do that job: printed as `Root cause: X / Confidence: 0.3`, a 0.3 reads
-# exactly like a 0.95, and a maintainer goes off to fix a dependency file that is fine. So the
-# renderers say in prose what the number means. `unknown` declines at 0.15 and already has its own
-# message; it is excluded here so it is not told the same thing twice.
-LOW_CONFIDENCE_THRESHOLD = 0.35
-
+# The confidence number alone does not tell the reader what it means: printed as `Root cause: X /
+# Confidence: 0.3`, a 0.3 reads exactly like a 0.95, and a maintainer goes off to fix a dependency
+# file that is fine. So the renderers say in prose what the number means. The threshold and the
+# predicate belong to the classifier (`ci.classify`), which owns the confidence scale; they are
+# imported rather than restated so the report and the classifier can never disagree about which
+# verdicts are hints.
 _LOW_CONFIDENCE_TEXT = (
     "Treat this as a hint, not a proven cause: the signals that carried this class only show "
     "that a tool RAN, not that it failed, so the real failure may be something PatchRail does "
@@ -156,25 +152,12 @@ _LOW_CONFIDENCE_TEXT = (
 )
 
 
-def _is_low_confidence(result: dict[str, Any]) -> bool:
-    """Report whether a verdict is too weakly evidenced to be read as a diagnosis."""
-    if result.get("likely_successful_run"):
-        return False
-    if result.get("failure_class") == UNKNOWN_FAILURE_CLASS:
-        return False
-    try:
-        confidence = float(result["confidence"])
-    except (KeyError, TypeError, ValueError):
-        return False
-    return confidence < LOW_CONFIDENCE_THRESHOLD
-
-
 def _render_text(result: dict[str, Any]) -> str:
     lines = [
         f"Root cause: {result['failure_class']}",
         f"Confidence: {result['confidence']}",
     ]
-    if _is_low_confidence(result):
+    if is_low_confidence(result):
         lines.append(f"Low confidence: {_LOW_CONFIDENCE_TEXT}")
     lines += [
         f"Subsystem: {result['likely_subsystem']}",
@@ -190,8 +173,13 @@ def _render_text(result: dict[str, Any]) -> str:
     log_tail = list(result.get("log_tail") or [])
     if log_tail:
         lines.append(
-            "Could not name the cause. This is where the log ends — the last lines that "
-            "carried output before the job stopped. Raw log, not a diagnosis; read it yourself."
+            (
+                "Could not prove the cause. This is where the log ends"
+                if is_low_confidence(result)
+                else "Could not name the cause. This is where the log ends"
+            )
+            + " — the last lines that carried output before the job stopped. Raw log, not a "
+            "diagnosis; read it yourself."
         )
         lines.extend(f"Log ends with: {line}" for line in log_tail)
     if result.get("likely_successful_run"):
@@ -220,7 +208,7 @@ def _render_markdown(result: dict[str, Any]) -> str:
         f"- Suggested action: {result['minimal_repair_strategy']}",
         "",
     ]
-    if _is_low_confidence(result):
+    if is_low_confidence(result):
         lines.extend(
             [
                 f"> **Low confidence (`{result['confidence']}`).** "
@@ -268,9 +256,15 @@ def _render_markdown(result: dict[str, Any]) -> str:
                 "## Where the log ends",
                 "",
                 (
-                    "No rule matched this log and the runner annotated nothing, so PatchRail "
-                    "cannot name the cause. These are the last lines that carried output before "
-                    "the job stopped — raw log, **not** a diagnosis. Read them yourself:"
+                    (
+                        "The class above is a hint the evidence cannot prove, so here is the "
+                        "log itself."
+                        if is_low_confidence(result)
+                        else "No rule matched this log and the runner annotated nothing, so "
+                        "PatchRail cannot name the cause."
+                    )
+                    + " These are the last lines that carried output before the job stopped — "
+                    "raw log, **not** a diagnosis. Read them yourself:"
                 ),
                 "",
                 "```",
