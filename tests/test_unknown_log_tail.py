@@ -10,6 +10,10 @@ The tail is EXTRACTION, never classification: the class stays `unknown`, the con
 0.15, and the heuristic is positional (the last lines that carried output) rather than lexical.
 A rule for "Could not find the PR" would fix apache/kafka and no other log in the world.
 
+A sub-threshold verdict is the same dead end wearing a class name -- rails/rails at 0.3 tells the
+reader to go read the raw log while showing none of it -- so the same extraction covers it. One
+implementation, one cap, one redaction; only the condition that turns it on is wider.
+
 Two properties matter more than the feature itself and are pinned below: a log that DOES
 classify must come back untouched, and raw log printed for the first time must not carry a
 secret out with it.
@@ -113,6 +117,62 @@ class UnknownHandsBackTheEndOfTheLog(unittest.TestCase):
         self.assertIn("registry refused the upload for release 4.2.0", result["log_tail"])
 
 
+class ALowConfidenceVerdictAlsoShowsTheLog(unittest.TestCase):
+    """ "Go read the raw log" is not an answer while we show none of it.
+
+    rails/rails run 29648807728 answers `ruby_bundle_failure` at 0.3 -- carried by three `bundle`
+    invocations, none of which failed -- and the report already tells the reader to treat that as
+    a hint and go read the log. The tail is the same mechanism as `unknown`'s, turned on by the
+    same weakness of evidence.
+    """
+
+    # What actually broke: `assets:precompile`, inside a container build. Not the Gemfile the
+    # class points at.
+    RAILS_CAUSE = "./bin/rails assets:precompile"
+
+    def test_rails_keeps_its_verdict_and_gains_the_end_of_its_log(self) -> None:
+        result = _realworld("rails-29648807728.log")
+
+        # Extraction, not classification: the weak verdict is still exactly the weak verdict.
+        self.assertEqual(result["failure_class"], "ruby_bundle_failure")
+        self.assertEqual(result["confidence"], 0.3)
+
+        tail = result["log_tail"]
+        self.assertLessEqual(len(tail), 5)
+        self.assertIn(self.RAILS_CAUSE, "\n".join(tail))
+        jsonschema.validate(result, _SCHEMA)
+
+    def test_the_framing_does_not_claim_nothing_matched(self) -> None:
+        """A rule DID match here, so the `unknown` wording would be a lie."""
+        result = _realworld("rails-29648807728.log")
+
+        text = _render_text(result)
+        self.assertIn(self.RAILS_CAUSE, text)
+        self.assertIn("Could not prove the cause", text)
+        self.assertNotIn("Could not name the cause", text)
+
+        markdown = _render_markdown(result)
+        self.assertIn(self.RAILS_CAUSE, markdown)
+        self.assertIn("## Where the log ends", markdown)
+        self.assertIn("not** a diagnosis", markdown)
+        self.assertNotIn("No rule matched this log", markdown)
+
+    def test_the_tail_is_redacted_on_this_path_too(self) -> None:
+        """One implementation, so one redaction -- pinned on the wider condition as well."""
+        log = (
+            "run\tbundle\t2026-07-20T09:00:01.0Z bundle install\n"
+            "run\tbundle\t2026-07-20T09:00:02.0Z bundle exec rake release\n"
+            f"run\tbundle\t2026-07-20T09:00:03.0Z pushing with token {FAKE_TOKEN}\n"
+            "run\tbundle\t2026-07-20T09:00:04.0Z bundler could not push release 4.2.0\n"
+        )
+        result = classify_ci_log(log)
+
+        self.assertLess(float(result["confidence"]), 0.35)
+        rendered = "\n".join((json.dumps(result), _render_text(result), _render_markdown(result)))
+        self.assertNotIn(FAKE_TOKEN, rendered)
+        self.assertIn("<github-token>", rendered)
+
+
 class AClassifiedLogIsUntouched(unittest.TestCase):
     def test_a_confident_verdict_gains_no_tail_and_no_new_output(self) -> None:
         """spring-boot classifies. Nothing about its answer may change."""
@@ -123,14 +183,6 @@ class AClassifiedLogIsUntouched(unittest.TestCase):
         for rendered in (_render_text(result), _render_markdown(result)):
             self.assertNotIn("Log ends with:", rendered)
             self.assertNotIn("Where the log ends", rendered)
-
-    def test_a_low_confidence_verdict_is_also_untouched_for_now(self) -> None:
-        """rails keeps its class, its 0.3 and its framing: this change is for `unknown` only."""
-        result = _realworld("rails-29648807728.log")
-
-        self.assertEqual(result["failure_class"], "ruby_bundle_failure")
-        self.assertEqual(result["confidence"], 0.3)
-        self.assertNotIn("log_tail", result)
 
     def test_a_successful_run_is_told_it_passed_not_shown_a_tail(self) -> None:
         """A green log has no failure to point at; a tail would only muddy that answer."""
