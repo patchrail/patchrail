@@ -59,7 +59,7 @@ Confirm which release you have:
 
 ```bash
 patchrail --version   # or: patchrail -V
-# patchrail 0.7.4
+# patchrail 0.7.5
 ```
 
 Classify any failed CI log:
