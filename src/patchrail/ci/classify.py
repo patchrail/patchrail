@@ -1798,6 +1798,87 @@ def _runner_error_annotations(text: str) -> list[str]:
     return found
 
 
+# An `unknown` with no runner annotation is the emptiest answer PatchRail can give: no class, no
+# subsystem, no evidence -- `No high-confidence local signal found.` and nothing else. Declining is
+# the honest call, but a maintainer who pipes 1,164 lines in and gets a shrug back is worse off than
+# if they had scrolled to the bottom themselves, which is exactly what they do next. apache/kafka
+# run 29805964231 is the case: the job dies one line above the boilerplate exit-code annotation, on
+# `Could not find the PR that triggered this workflow request` -- three seconds of human scrolling,
+# and PatchRail printed none of it.
+#
+# So when we cannot name the cause, we hand back the place we could not name it from. This is
+# EXTRACTION, not classification: the class stays `unknown`, the confidence stays 0.15, and nothing
+# below is ever read for meaning. The heuristic is POSITIONAL -- the last few lines that carried
+# output -- and deliberately so. A lexical version ("look for `Could not find the PR`") would fix
+# apache/kafka and no other log in the world; where the log stops is the same question in every
+# ecosystem, including the ones no rule will ever cover.
+_MAX_LOG_TAIL_LINES = 5
+_MAX_LOG_TAIL_CHARS = 300
+
+# Where the step's output stops and the runner's epilogue begins. `Process completed with exit code
+# 1.` is the runner's own template -- the same string in every failing log there is, which is why
+# `_RUNNER_ERROR_BOILERPLATE` already refuses to show it -- and everything the runner prints after
+# it belongs to post-job cleanup, not to the job: caches saved, git config unwound, orphan processes
+# reaped. Reading the tail from the end of the FILE would return that plumbing in every GitHub
+# Actions log; reading it from here returns the last thing the step actually said.
+_LOG_TAIL_EPILOGUE = re.compile(
+    r"^##\[error\]\s*(?:process completed with exit code \d+\.?"
+    r"|workflow failed because one or more jobs failed\.?)$",
+    re.IGNORECASE,
+)
+
+# Lines that are structure, not output. The runner's fold markers (`##[group]`, `##[endgroup]`),
+# its debug channel, and the cleanup headings say only that a section began or ended. Printed under
+# "the log ends here" they push out lines a maintainer could have used.
+_LOG_TAIL_NOISE = re.compile(
+    r"^##\[(?:group|endgroup|section|debug)\]"
+    r"|^post job cleanup\.?$"
+    r"|^cleaning up orphan processes\.?$",
+    re.IGNORECASE,
+)
+
+
+def _log_tail(raw: str, text: str) -> list[str]:
+    """The last lines that carried output, redacted -- evidence of WHERE the log stopped.
+
+    ``text`` must already be prefix- and colour-normalized (as it is inside
+    :func:`classify_ci_log`); ``raw`` is needed only to find the colour-marked script echo, which
+    the normalization erases.
+    """
+    lines = text.splitlines()
+    # The runner echoes the step's own source before running it. Those lines are a listing of
+    # branches that may never have executed -- `exit 1;` inside an `if` that was not taken reads
+    # like a cause and is not one -- so they are as unwelcome here as they are in scoring.
+    echoed = {
+        index
+        for index, line in enumerate(_strip_ci_log_line_prefixes(raw).splitlines())
+        if _RUNNER_SCRIPT_ECHO_LINE.match(line)
+    }
+    end = len(lines)
+    for index in range(len(lines) - 1, -1, -1):
+        if _LOG_TAIL_EPILOGUE.match(lines[index].strip()):
+            end = index
+            break
+    collected: list[str] = []
+    for index in range(end - 1, -1, -1):
+        if index in echoed:
+            continue
+        # Raw log goes out for the first time here, so it goes through the same redaction the
+        # `redact` command applies. A log saved to disk still carries the token Actions would
+        # have masked on the way out, and a leaked secret would break the one promise -- local,
+        # nothing leaves the machine -- this product is built on.
+        line = redact_ci_log(lines[index])["text"].strip()
+        if not line or _LOG_TAIL_NOISE.match(line):
+            continue
+        if len(line) > _MAX_LOG_TAIL_CHARS:
+            line = line[: _MAX_LOG_TAIL_CHARS - 1].rstrip() + "…"
+        if line not in collected:
+            collected.append(line)
+        if len(collected) == _MAX_LOG_TAIL_LINES:
+            break
+    return list(reversed(collected))
+
+
 # A maintainer's first run is often a GREEN one: they pipe in whatever `gh run view` hands
 # back, or point PatchRail at a build that passed, before they have a failure to triage. That
 # log matches no failure rule, so it lands on `unknown` at 0.15 -- the very same answer a
@@ -2464,6 +2545,12 @@ def classify_ci_log(text: str) -> dict[str, Any]:
             result["runner_errors"] = runner_errors
         elif _looks_like_successful_run(text):
             result["likely_successful_run"] = True
+        else:
+            # Last resort, and only here: no rule matched, the runner annotated nothing worth
+            # showing, and the log does not announce success. Without this the answer is a shrug.
+            log_tail = _log_tail(raw, text)
+            if log_tail:
+                result["log_tail"] = log_tail
         return result
 
     # An invocation proves a tool RAN. It never proves the tool FAILED. A verdict every one of

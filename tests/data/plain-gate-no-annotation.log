@@ -1,0 +1,10 @@
+=== release gate ===
+reading policy from ops/policy.toml
+policy schema revision 3
+channel: stable
+bundle digest sha256:8f14e45fceea167a5a36dedd4bea2543
+verifying bundle digest against the manifest
+digest matches the manifest
+gate requires a signed changelog entry for every tagged release
+release 4.2.0 has no signed changelog entry
+gate refused to promote release 4.2.0
