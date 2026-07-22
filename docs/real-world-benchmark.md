@@ -28,7 +28,7 @@ working in ninety days is a claim, not evidence.
 ## Results
 
 `before` is patchrail 0.6.1, the last release that predates these fixes. `after` is `main`. PyPI
-serves **0.7.5** today and ships every fix below. The six that `main` still held when this table was
+serves **0.7.6** today and ships every fix below. The six that `main` still held when this table was
 last measured — the pandas fix (#347), the Symfony fix (#377), the Discourse fix (#379), the riverpod
 fix, the cabal fix and the crystal fix — were cut into 0.7.4 on 2026-07-22, so no row is a case where
 `main` is ahead of `pip install patchrail`. The `after` column was measured against `main` on

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.7.6 - 2026-07-22
 
 ### Added
 
@@ -16,6 +16,14 @@
   in `ci-result.v1` (max 5 lines, each redacted through `redact_ci_log` and capped at 300
   characters); `failure_class`, `confidence` and `signals` are untouched, and a log that
   classifies produces byte-identical output to 0.7.5.
+- **The same log tail now follows a verdict that is only a hint.** A class under the
+  `LOW_CONFIDENCE_THRESHOLD` of 0.35 already says in prose that it is a lead and that the raw log is
+  the thing to read — and then showed none of it. rails/rails run 29648807728 is the case: three
+  `bundle` invocations carry `ruby_bundle_failure` at 0.3, none of them failed, and the step that
+  actually broke (`./bin/rails assets:precompile`) sits in the last lines nobody was shown. Same
+  extraction, same 5-line cap, same redaction pass; only the condition widened, and the threshold now
+  lives beside the confidence scale it reads so the report and the classifier cannot disagree about
+  which verdicts are hints. A verdict at or above the threshold is unchanged.
 
 ## 0.7.5 - 2026-07-22
 
