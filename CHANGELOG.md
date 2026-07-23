@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **A Node test failure no longer reads as a Python one.** nodejs/node run 29943544407 fails on a
+  `parallel/test-repl-user-error-handler` test under `node:internal/test_runner`, which throws
+  Node's `AssertionError [ERR_ASSERTION]: ...`. The python-test rule matched the bare word
+  `AssertionError` and answered `python_test_failure` at `0.53` on a log with zero pytest and zero
+  Python — a confident verdict pointing a maintainer at the wrong ecosystem, which is worse than an
+  honest `unknown`. `[ERR_ASSERTION]` is an error code Python never emits, so the rule's
+  `AssertionError` pattern now skips Node's fully-qualified form; the same log now reads
+  `node_test_failure`, and a genuine pytest `AssertionError` is untouched. Benchmark stays 223/223.
+
 ## 0.7.6 - 2026-07-22
 
 ### Added
