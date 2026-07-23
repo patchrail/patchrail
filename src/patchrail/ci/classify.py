@@ -336,7 +336,15 @@ RULES: list[dict[str, Any]] = [
             # nothing and drops the package-spec mentions the install phase throws off.
             r"\bpytest\b(?![-<>=~])",
             r"FAILED .*::",
-            r"AssertionError",
+            # `AssertionError` is Python's, but it is also the class Node's built-in `assert`
+            # throws -- and Node stamps its own with an error code Python never emits:
+            # `AssertionError [ERR_ASSERTION]: ...` (nodejs/node run 29943544407, the
+            # `parallel/test-repl-user-error-handler` test under `node:internal/test_runner`).
+            # That one line was the rule's entire case -- `python_test_failure` at 0.53 on a
+            # log with zero pytest and zero Python, naming the wrong ecosystem with confidence.
+            # A real Python `AssertionError` is bare or `AssertionError:`, never `[ERR_ASSERTION]`,
+            # so the guard costs a genuine pytest failure nothing and drops Node's assert dumps.
+            r"AssertionError(?!\s*\[ERR_ASSERTION\])",
             r"ModuleNotFoundError",
             r"ImportError while loading conftest",
             r"\berrors? during collection\b",

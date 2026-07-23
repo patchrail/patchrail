@@ -1,0 +1,33 @@
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2428490Z .........................................
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2428867Z === release test-repl-user-error-handler ===
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2429170Z Path: parallel/test-repl-user-error-handler
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2429463Z --- stdout ---
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2429693Z Test failure: 'async: true, handleErrorReturn: ignore'
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2430068Z Location: test/parallel/test-repl-user-error-handler.js:25:3
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2430995Z AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2431357Z + actual - expected
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2431478Z 
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2431591Z + 'Inspector error -32000: Promise was collected'
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2431869Z - 'testerror'
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2431973Z 
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2432415Z     at TestContext.<anonymous> (/home/runner/work/_temp/node-v27.0.0-nightly2026-07-225007776292/test/parallel/test-repl-user-error-handler.js:54:12)
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2433088Z     at async Test.run (node:internal/test_runner/test:1404:7)
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2433518Z     at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2434261Z   generatedMessage: true,
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2434496Z   code: 'ERR_ASSERTION',
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2434803Z   actual: 'Inspector error -32000: Promise was collected',
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2435103Z   expected: 'testerror',
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2435309Z   operator: 'strictEqual',
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2435519Z   diff: 'simple'
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2435690Z }
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2436486Z Command: out/Release/node --test-reporter=./test/common/test-error-reporter.js --test-reporter-destination=stdout /home/runner/work/_temp/node-v27.0.0-nightly2026-07-225007776292/test/parallel/test-repl-user-error-handler.js
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437296Z 
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437359Z ===
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437515Z === 1 tests failed
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437683Z ===
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437769Z 
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2437841Z Failed tests:
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2438630Z out/Release/node --test-reporter=./test/common/test-error-reporter.js --test-reporter-destination=stdout /home/runner/work/_temp/node-v27.0.0-nightly2026-07-225007776292/test/parallel/test-repl-user-error-handler.js
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2610604Z make: *** [Makefile:645: test-ci] Error 1
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2611031Z make: Leaving directory '/home/runner/work/_temp/node-v27.0.0-nightly2026-07-225007776292'
+test-tarball-linux	UNKNOWN STEP	2026-07-22T18:31:51.2632192Z ##[error]Process completed with exit code 2.

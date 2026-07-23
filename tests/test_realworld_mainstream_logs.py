@@ -18,6 +18,11 @@ loudly if a future rule change drifts one of them.
     ``bin/rails``, and no failure class covers it -- the only signals in the log are Bundler
     INVOCATIONS. The class still reads ``ruby_bundle_failure``, but the confidence must stay
     in the low band: an invocation proves a tool ran, never that it failed.
+  * nodejs/node run 29943544407 (Node): a ``parallel/test-repl-user-error-handler`` test under
+    ``node:internal/test_runner`` throws Node's ``AssertionError [ERR_ASSERTION]``. That error
+    class is spelled the same as Python's, so the python-test rule used to eat it and answer
+    ``python_test_failure`` at 0.53 on a log with zero pytest -- a confident wrong ecosystem.
+    ``[ERR_ASSERTION]`` is a code Python never emits, so the honest class is ``node_test_failure``.
 
 These live under ``tests/data/realworld/`` on purpose: they are *not* part of the
 ``examples/ci-triage`` fixture zoo and must never be counted by ``ci benchmark`` (still 223).
@@ -88,6 +93,21 @@ class RealWorldMainstreamLogTests(unittest.TestCase):
             all("bundle" in signal or "bundler" in signal for signal in result["signals"]),
             "the guard is about invocation-only evidence; these signals are the evidence",
         )
+
+    def test_node_assertionerror_is_not_a_python_test_failure(self) -> None:
+        """Node's ``AssertionError [ERR_ASSERTION]`` is a Node test failure, not a pytest one."""
+        result = _classify("node-29943544407.log")
+
+        # The failing test runs under ``node:internal/test_runner`` and throws Node's assert
+        # error, stamped with ``[ERR_ASSERTION]`` -- a code Python never emits. Before the guard
+        # the python-test rule matched the bare word ``AssertionError`` and won at 0.53 on a log
+        # with zero pytest, naming the wrong ecosystem with confidence. The honest class is the
+        # Node test runner (which matches the same line via its own ``[ERR_ASSERTION]`` pattern).
+        self.assertEqual(result["failure_class"], "node_test_failure")
+        self.assertNotEqual(result["failure_class"], "python_test_failure")
+        # The *bare* python signal must be gone; Node's fully-qualified form may still carry.
+        self.assertNotIn("AssertionError", result["signals"])
+        self.assertIn("Node", result["likely_subsystem"])
 
 
 if __name__ == "__main__":
