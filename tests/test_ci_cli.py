@@ -3171,6 +3171,21 @@ class PatchRailCITests(unittest.TestCase):
         self.assertEqual(pipe_class, file_class)
         self.assertNotEqual(pipe_class, "unknown")
 
+    def test_ci_explain_log_dash_reads_stdin(self) -> None:
+        stdout = StringIO()
+        stderr = StringIO()
+        original_stdin = sys.stdin
+        sys.stdin = StringIO("sample log\n")
+        try:
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = main(["ci", "explain", "--log", "-"])
+        finally:
+            sys.stdin = original_stdin
+
+        self.assertEqual(exit_code, 0)
+        self.assertNotIn("log file not found: -", stderr.getvalue())
+        self.assertIn("sample log", stdout.getvalue())
+
     def test_ci_explain_interactive_tty_no_log_fails_fast(self) -> None:
         # A first-timer who runs `patchrail ci explain` in a terminal (forgetting
         # --log, with nothing piped in) used to hit a blocking sys.stdin.read()
