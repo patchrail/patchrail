@@ -68,7 +68,7 @@ class LogReadError(Exception):
 
 
 def _read_log(path: Path | None) -> str:
-    if path is None:
+    if path is None or path == Path("-"):
         stdin = sys.stdin
         # No --log and an interactive terminal on stdin means there is nothing
         # to pipe in: sys.stdin.read() would block forever with no output, so a
